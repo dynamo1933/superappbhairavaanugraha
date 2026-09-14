@@ -164,7 +164,7 @@ function initCommandPalette() {
     { title: "Ashtami · Krishna Paksha Inner Gateways", url: "/ashtami", tag: "Calendar" },
     { title: "Daiva Anugraha Videos · YouTube Discourses", url: "/#videos", tag: "Media" },
     { title: "Life Within or Without · Book & Teachings", url: "/#book", tag: "Book" },
-    { title: "Join Sacred Telegram Group", url: "https://t.me/+BhairavaAnugraha", tag: "Community", external: true },
+    { title: "Join Sacred Telegram Group", url: "https://t.me/+tM8pVCZWG8cxYjc1", tag: "Community", external: true },
     { title: "WhatsApp Direct Guidance (+91 62622 12153)", url: "https://wa.me/916262212153", tag: "Contact", external: true }
   ];
 
