@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Bhairava Loka · Sahasralinga Codex</title>
+  <meta name="description"
+    content="An interactive sacred codex of 324 Shiva Lingams arranged in a kinetic celestial spiral, preserving profound discourses on Bhairava Sadhana, Tantra, and Shiva Tattva." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Tiro+Devanagari+Sanskrit:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+
+  <!-- Master Stylesheet -->
+  <link rel="stylesheet" href="/static/css/style.css?v=20260908_150" />
+</head>
+
+<body>
+
+  <!-- Ambient Gold Flakes and Grain Layers -->
+  <div class="leaves-container">
+    <div class="leaf-flake"></div>
+    <div class="leaf-flake"></div>
+    <div class="leaf-flake"></div>
+    <div class="leaf-flake"></div>
+    <div class="leaf-flake"></div>
+  </div>
+  <div class="leaf-field"></div>
+  <div class="grain"></div>
+
+  <!-- ==================== STICKY CHROME HEADER ==================== -->
+  <header class="chrome" id="site-chrome">
+    <div class="chrome-inner">
+      <div class="left" style="display:flex; align-items:center; gap:10px;">
+        <a href="/" style="display:flex; align-items:center; gap:8px; text-decoration:none; color:inherit;">
+          <span class="om">ॐ</span>
+          <span class="b">Bhairava <em>Loka</em></span>
+          <span class="mono" style="font-size:9px; letter-spacing:0.18em; padding:2px 6px; background:rgba(212,166,74,0.15); color:var(--gold-3); border:1px solid rgba(212,166,74,0.35); border-radius:3px;">SUPER APP</span>
+        </a>
+      </div>
+
+      <nav class="nav" style="display:flex; align-items:center; gap:8px;">
+        <a href="/" style="padding:6px 12px; color:var(--ink-mute); font-size:15px; border-radius:4px; text-decoration:none;">Home</a>
+        <a href="/qna" style="padding:6px 12px; color:var(--gold-3); font-size:15px; border-radius:4px; border:1px solid rgba(212,166,74,0.3); background:rgba(212,166,74,0.08); text-decoration:none;">☸ QnA</a>
+        <a href="/bhairav-loka" style="padding:6px 12px; color:var(--gold-3); font-weight:600; font-size:15px; border-radius:4px; border-bottom:2px solid var(--gold); text-decoration:none;">✦ Bhairav Loka</a>
+        <a href="/sadhana-paddhati" style="padding:6px 12px; color:var(--ink-mute); font-size:15px; border-radius:4px; text-decoration:none;">Sādhana</a>
+      </nav>
+
+      <div class="nav-actions">
+        <div class="stat-badge">
+          <span class="dot"></span>
+          <span id="header-total-count">{{ total_posts }} Bhairav Swarupa</span>
+        </div>
+        <button class="audio-toggle" id="audio-toggle-btn" type="button" title="Toggle Temple Bell Chime">
+          <span>🔕 Audio Off</span>
+        </button>
+        <button class="search-btn" id="chrome-search-btn" type="button" aria-haspopup="dialog">
+          <span>Search Codex</span>
+          <span class="kbd">⌘K</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN APPLICATION CONTAINER ==================== -->
+  <div class="app-container">
+
+    <!-- Main Content Stream -->
+    <main class="main-content">
+
+
+      <!-- Toolbar, Search, Sort & Filter Row -->
+      <section class="toolbar-section">
+        <div class="toolbar-left">
+          <!-- Text Search Filter -->
+          <div class="filter-search-box">
+            <input type="text" id="filter-search-input" placeholder="Search discourses, mantras, or index #..."
+              autocomplete="off" />
+            <button type="button" class="clear-btn" id="clear-search-btn">✕</button>
+          </div>
+
+          <!-- Sort Select -->
+          <div class="sort-dropdown">
+            <label for="sort-select">Order By:</label>
+            <select id="sort-select">
+              <option value="date_desc" selected>🗓 Chronological (Newest)</option>
+              <option value="date_asc">🗓 Chronological (Oldest)</option>
+              <option value="index_asc">№ Sequence (1 → {{ total_posts }})</option>
+              <option value="index_desc">№ Sequence ({{ total_posts }} → 1)</option>
+              <option value="likes_desc">♥ Most Revered (Likes)</option>
+              <option value="length_desc">📜 Discourse Length</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="toolbar-right">
+          <!-- View Modes -->
+          <button type="button" class="view-mode-btn active" data-view="mandala" title="Kinetic Celestial Spiral">
+            <span>🌀 Celestial Spiral</span>
+          </button>
+          <button type="button" class="view-mode-btn" data-view="grid" title="Temple Grid">
+            <span>⚏ Grid</span>
+          </button>
+          <button type="button" class="view-mode-btn" data-view="dense" title="Dense {{ total_posts }} Matrix">
+            <span>▦ Matrix</span>
+          </button>
+          <button type="button" class="view-mode-btn" data-view="cards" title="Expanded Cards">
+            <span>🗂 Cards</span>
+          </button>
+        </div>
+      </section>
+
+
+      <!-- ==================== VIEW 1: KINETIC CELESTIAL SPIRAL VIEW ==================== -->
+      <div class="mandala-container" id="mandala-container">
+        <!-- Floating Overlay Controls -->
+        <div class="mandala-overlay-controls">
+          <!-- Play / Pause Motion Button -->
+          <button type="button" class="mandala-ctrl-btn active" id="motion-toggle-btn"
+            title="Pause or Resume Perpetual Spiral Motion (Spacebar)">
+            <span>⏸ Pause</span>
+          </button>
+
+          <!-- Speed Multiplier -->
+          <button type="button" class="mandala-ctrl-btn" id="speed-select-btn" title="Change Flow Velocity">
+            1x (1 min/pos)
+          </button>
+
+          <!-- Motion Status Indicator -->
+          <div class="mandala-motion-badge">
+            <span class="pulse-orbit"></span>
+            <span>1 min / position</span>
+          </div>
+
+          <!-- Zoom / Pan Controls -->
+          <button type="button" class="mandala-ctrl-btn" id="zoom-in-btn" title="Zoom In">+</button>
+          <button type="button" class="mandala-ctrl-btn" id="zoom-out-btn" title="Zoom Out">−</button>
+          <button type="button" class="mandala-ctrl-btn" id="zoom-reset-btn" title="Reset Center View"
+            style="width: auto; padding: 0 8px;">⤢ Reset</button>
+        </div>
+
+        <!-- Tooltip Hover Node -->
+        <div class="mandala-tooltip" id="mandala-tooltip"></div>
+
+        <!-- Pan / Zoom Viewport -->
+        <div class="mandala-viewport" id="mandala-viewport">
+          <div class="mandala-world" id="mandala-world">
+            <!-- Central Halo & Light Ray -->
+            <div class="mandala-center-glow"></div>
+
+            <!-- Background Glowing Spiral SVG Track -->
+            <svg class="mandala-rings-svg" id="mandala-rings-svg" viewBox="0 0 1600 1600"></svg>
+
+            <!-- Dynamic Shiva Lingam Spiral Nodes -->
+            <div id="mandala-nodes-container"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== VIEW 2: STANDARD / DENSE / CARDS GRID ==================== -->
+      <div class="lingam-grid" id="lingam-grid" style="display: none;">
+        <!-- Rendered dynamically by JavaScript when in Grid / Dense / Cards mode -->
+      </div>
+
+    </main>
+
+    <!-- Sidebar Backdrop Overlay for Mobile / Tablet Dismissal -->
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+    <!-- ==================== RIGHT DARSHAN SIDEBAR ==================== -->
+    <aside class="darshan-sidebar cartouche" id="darshan-sidebar">
+      <span class="corner tl"></span><span class="corner tr"></span>
+      <span class="corner bl"></span><span class="corner br"></span>
+
+      <!-- Sidebar Sticky Top Bar with Close Action -->
+      <div class="sidebar-top-bar">
+        <div class="index-indicator">№ 001 <span class="bullet">/</span> {{ total_posts }} DARSHAN</div>
+        <button type="button" class="close-sidebar-btn" id="close-sidebar-btn" title="Close Sidebar (Esc)"
+          aria-label="Close Darshan">✕</button>
+      </div>
+
+      <!-- Sidebar Scrollable Body -->
+      <div class="sidebar-scroll-body" id="sidebar-scroll-body">
+
+        <!-- Mobile Return Tap Banner -->
+        <div class="mobile-return-banner" id="mobile-return-banner" role="button" tabindex="0"
+          title="Return to Main View">
+          <span class="pull-bar"></span>
+          <span class="return-text">✕ Return to Mandala</span>
+        </div>
+
+        <!-- High-res Image Preview Frame -->
+        <div class="sidebar-media-frame">
+          <img src="" alt="Sacred Darshan" id="sidebar-image-elem" />
+          <span class="zoom-hint-badge">🔍 Expand</span>
+        </div>
+
+        <!-- Title & Sanskrit Inscription -->
+        <div class="sidebar-title-block">
+          <div class="skt-top-glyph">॥ ॐ भैरवाय नमः ॥</div>
+          <h2>Loading Darshan...</h2>
+        </div>
+
+        <!-- Metadata Badges -->
+        <div class="sidebar-stats-row">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Full Formatted Discourse / Caption -->
+        <div class="sidebar-discourse-body">
+          <!-- Text rendered here -->
+        </div>
+
+        <!-- Hashtags -->
+        <div class="sidebar-tags-container">
+          <!-- Tags rendered here -->
+        </div>
+
+      </div>
+
+      <!-- Fixed Bottom Navigation Footer -->
+      <div class="sidebar-footer-nav">
+        <button type="button" class="sidebar-nav-btn" id="prev-post-btn" title="Previous Darshan (←)">
+          <span>← Previous</span>
+        </button>
+
+        <div class="sidebar-action-group">
+          <button type="button" class="sidebar-icon-action" id="copy-caption-btn" title="Copy Discourse text">
+            <span>📋 Copy</span>
+          </button>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="sidebar-icon-action" id="insta-link-btn"
+            title="Open on Instagram">
+            <span>Instagram ↗</span>
+          </a>
+        </div>
+
+        <button type="button" class="sidebar-nav-btn" id="next-post-btn" title="Next Darshan (→)">
+          <span>Next →</span>
+        </button>
+      </div>
+
+    </aside>
+
+  </div>
+
+  <!-- ==================== COMMAND PALETTE MODAL (⌘K) ==================== -->
+  <div class="modal-overlay" id="palette-modal">
+    <div class="palette-box cartouche">
+      <span class="corner tl"></span><span class="corner tr"></span>
+      <span class="corner bl"></span><span class="corner br"></span>
+      <div class="palette-header">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="palette-input" id="palette-input"
+          placeholder="Search the 324 Sahasralinga entries..." />
+        <button type="button" id="close-palette-btn" style="color: var(--ink-dim); font-size: 16px;">✕</button>
+      </div>
+      <div class="palette-results-list" id="palette-results">
+        <!-- Results rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LIGHTBOX MODAL ==================== -->
+  <div class="lightbox-modal" id="lightbox-modal">
+    <button type="button" class="lightbox-close-btn" id="close-lightbox-btn" title="Close Lightbox (Esc)">✕</button>
+    <img src="" alt="Expanded Darshan" id="lightbox-img" />
+  </div>
+
+  <!-- ==================== SACRED TOAST NOTIFICATION ==================== -->
+  <div class="sacred-toast" id="sacred-toast"></div>
+
+  <!-- Inlined Initial Dataset for Instant 0ms Load -->
+  <script id="initial-posts-data" type="application/json">
+    {{ posts_json | safe }}
+  </script>
+
+  <!-- Master JavaScript Application -->
+  <script src="/static/js/app.js?v=20260908_150"></script>
+</body>
+
+</html>

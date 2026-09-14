@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>{% block title %}Bhairava Anugraha · Super App{% endblock %}</title>
+  <meta name="description" content="Explore Bhairava Consciousness with Bhairava Anugraha Super App. Reconnecting seekers through the sacred portals of QnA Codex, Sahasralinga Codex, and Divine Sādhana Paddhati." />
+  
+  <!-- Favicon -->
+  <link rel="icon" href="/static/images/logo.jpeg" type="image/jpeg" />
+
+  <!-- Sacred Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Tiro+Devanagari+Sanskrit:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Master Stylesheet -->
+  <link rel="stylesheet" href="/static/css/superapp.css?v=2" />
+  {% block extra_head %}{% endblock %}
+</head>
+
+<body>
+
+  <!-- Ambient Gold Dust Canvas & Subtle Grain -->
+  <canvas id="ambient-canvas"></canvas>
+  <div class="noise-overlay"></div>
+
+  <!-- ==================== UNIFIED CHROME HEADER ==================== -->
+  <header class="chrome" id="site-chrome">
+    <div class="chrome-inner">
+      <a class="left" href="/">
+        <span class="om">ॐ</span>
+        <span class="b">Bhairava <em>Anugraha</em></span>
+        <span class="badge-super">Super App</span>
+      </a>
+
+      <nav class="chrome-nav">
+        <a href="/" class="nav-item {% if active_page == 'home' %}is-active{% endif %}">Home</a>
+        <a href="/qna" class="nav-item nav-pill-super {% if active_page == 'qna' %}is-active{% endif %}" title="Open Bhairava QnA Codex">☸ QnA</a>
+        <a href="/bhairav-loka" class="nav-item nav-pill-super {% if active_page == 'bhairav_loka' %}is-active{% endif %}" title="Open Bhairav Loka Sahasralinga Codex">✦ Bhairav Loka</a>
+        <a href="/sadhana-paddhati" class="nav-item {% if active_page == 'sadhana' %}is-active{% endif %}">Sādhana Paddhati</a>
+        <a href="/ashtami" class="nav-item {% if active_page == 'ashtami' %}is-active{% endif %}">Ashtami</a>
+        <a href="/jnana-samvada" class="nav-item {% if active_page == 'jnana' %}is-active{% endif %}">Jnāna Samvāda</a>
+      </nav>
+
+      <div class="right">
+        <button type="button" class="audio-toggle-btn" id="audio-toggle-btn" title="Toggle Meditative Bell Chime">
+          <span>🔕 Audio Off</span>
+        </button>
+
+        <button type="button" class="search-btn" id="chrome-search" title="Search the Super App (⌘K)">
+          <span>Search</span>
+          <span class="kbd">⌘K</span>
+        </button>
+
+        <button type="button" class="mobile-toggle" id="mobile-menu-btn" aria-label="Open Navigation Menu">
+          ☰
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== ASHTAMI ALERT RIBBON ==================== -->
+  <div class="ashtami-banner">
+    <div class="ashtami-inner">
+      <span class="pulse-dot"></span>
+      <span class="ashtami-text">Next Krishna Paksha Ashtami: <strong>Oct 03, 8:00 AM – Oct 04, 5:52 AM IST</strong></span>
+      <a href="/ashtami" class="ashtami-link">Explore Sacred Gateways →</a>
+    </div>
+  </div>
+
+  <!-- ==================== MAIN CONTENT BLOCK ==================== -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- ==================== SACRED FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="om">ॐ</span>
+        <div class="brand-title">Bhairava Anugraha · Super App</div>
+        <p>A sacred sanctuary uniting seekers into the timeless grace of Maa Kamakhya, Guru Bhairava, and the esoteric lineages of Avadhutas and Siddhars.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Divine Portals</h4>
+        <ul class="footer-links">
+          <li><a href="/">Landing Sanctuary</a></li>
+          <li><a href="/qna">Bhairava QnA Codex</a></li>
+          <li><a href="/bhairav-loka">Bhairav Loka Sahasralinga</a></li>
+          <li><a href="/sadhana-paddhati">Sādhana Paddhati (Three Steps)</a></li>
+          <li><a href="/ashtami">Ashtami Sacred Gateways</a></li>
+          <li><a href="/jnana-samvada">Jnāna Samvāda (Inner FAQs)</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Sacred Connection</h4>
+        <ul class="footer-links">
+          <li><a href="https://t.me/+BhairavaAnugraha" target="_blank" rel="noopener">Sacred Telegram Group</a></li>
+          <li><a href="https://wa.me/916262212153" target="_blank" rel="noopener">Direct WhatsApp (+91 62622 12153)</a></li>
+          <li><a href="https://www.youtube.com/@BhairavaAnugraha" target="_blank" rel="noopener">YouTube (@BhairavaAnugraha)</a></li>
+          <li><a href="https://www.instagram.com/bhairavayuga?igsh=YTJoY25lcmU2Z2xx&utm_source=qr" target="_blank" rel="noopener">Instagram (@bhairavayuga)</a></li>
+          <li><a href="https://www.amazon.in/Life-Within-Without-Awakening-Consciousness-ebook/dp/B0HCLV9V27" target="_blank" rel="noopener">Book: Life Within and Without</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>Copyright © 2026 Bhairava Anugraha. All Rights Reserved.</div>
+      <div class="skt gold">॥ सर्वं भैरव स्वरूपम् ॥</div>
+    </div>
+  </footer>
+
+  <!-- ==================== COMMAND PALETTE MODAL (⌘K) ==================== -->
+  <div class="palette-backdrop" id="palette-backdrop">
+    <div class="palette-modal">
+      <div class="palette-header">
+        <span style="color:var(--gold)">🔍</span>
+        <input type="text" id="palette-input" class="palette-input" placeholder="Search pages, portals, discourses, or folios..." autocomplete="off" />
+        <span class="mono" style="color:var(--ink-dim)">ESC to close</span>
+      </div>
+      <div class="palette-results" id="palette-results"></div>
+    </div>
+  </div>
+
+  <!-- ==================== MOBILE MENU DRAWER ==================== -->
+  <div class="mobile-drawer" id="mobile-drawer">
+    <button class="drawer-close" id="drawer-close-btn">&times;</button>
+    <div class="skt gold" style="font-size: 28px; margin-bottom: 20px;">ॐ भैरवाय नमः</div>
+    <ul class="drawer-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/qna" style="color:var(--gold-3)">☸ QnA Codex</a></li>
+      <li><a href="/bhairav-loka" style="color:var(--gold-3)">✦ Bhairav Loka</a></li>
+      <li><a href="/sadhana-paddhati">Sādhana Paddhati</a></li>
+      <li><a href="/ashtami">Ashtami Portal</a></li>
+      <li><a href="/jnana-samvada">Jnāna Samvāda</a></li>
+      <li><a href="https://t.me/+BhairavaAnugraha" target="_blank">Join Telegram</a></li>
+      <li><a href="tel:+916262212153">Call: +91 62622 12153</a></li>
+    </ul>
+  </div>
+
+  <!-- Master Script -->
+  <script src="/static/js/superapp.js?v=2"></script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>
