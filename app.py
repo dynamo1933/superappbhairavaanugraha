@@ -11,7 +11,7 @@ import json
 import csv
 import re
 from datetime import datetime
-from flask import Flask, render_template, jsonify, request, send_from_directory, abort, Response
+from flask import Flask, render_template, jsonify, request, send_from_directory, abort, Response, redirect
 
 # ==============================================================================
 # PATH CONFIGURATION (Strictly Read-Only Access to Sub-Apps)
@@ -133,10 +133,15 @@ def index():
     """Main Landing Page - Recreated Bhairava Anugraha in Bhairva Dark-Gold Theme"""
     return render_template('index.html', active_page='home')
 
+@app.route('/jnana-samvada')
+def jnana_samvada_page():
+    """Jnāna Samvāda Codex Page (Bhairava QnA Codex from C:\\Users\\dynam\\Desktop\\Bhairva)"""
+    return render_template('qna.html', active_page='jnana_samvada')
+
 @app.route('/qna')
-def qna_page():
-    """Task 2: Bhairava QnA Codex Page (from C:\\Users\\dynam\\Desktop\\Bhairva)"""
-    return render_template('qna.html', active_page='qna')
+def qna_redirect():
+    """Redirect /qna to /jnana-samvada"""
+    return redirect('/jnana-samvada', code=302)
 
 @app.route('/bhairav-loka')
 def bhairav_loka_page():
@@ -152,11 +157,6 @@ def sadhana_paddhati_page():
 def ashtami_page():
     """Ashtami Lunar Gateways & Timings"""
     return render_template('ashtami.html', active_page='ashtami')
-
-@app.route('/jnana-samvada')
-def jnana_samvada_page():
-    """Jnāna Samvāda Spiritual FAQs"""
-    return render_template('jnana_samvada.html', active_page='jnana')
 
 # ==============================================================================
 # API ROUTES (Supporting QnA and Bhairav Loka Codex)

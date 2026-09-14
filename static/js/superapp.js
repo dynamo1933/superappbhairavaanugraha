@@ -158,11 +158,10 @@ function initCommandPalette() {
 
   const SEARCH_ITEMS = [
     { title: "Home · Sacred Portal", url: "/", tag: "Super App" },
-    { title: "QnA · Sacred Codex & Inquiry", url: "/qna", tag: "App" },
+    { title: "Jnāna Samvāda · Bhairava Codex & Inquiry", url: "/jnana-samvada", tag: "Codex" },
     { title: "Bhairav Loka · Sahasralinga Codex", url: "/bhairav-loka", tag: "App" },
     { title: "Sādhana Paddhati · Three Steps to Union", url: "/sadhana-paddhati", tag: "Discourse" },
     { title: "Ashtami · Krishna Paksha Inner Gateways", url: "/ashtami", tag: "Calendar" },
-    { title: "Jnāna Samvāda · Spiritual Inquiries", url: "/jnana-samvada", tag: "FAQ" },
     { title: "Daiva Anugraha Videos · YouTube Discourses", url: "/#videos", tag: "Media" },
     { title: "Life Within or Without · Book & Teachings", url: "/#book", tag: "Book" },
     { title: "Join Sacred Telegram Group", url: "https://t.me/+BhairavaAnugraha", tag: "Community", external: true },

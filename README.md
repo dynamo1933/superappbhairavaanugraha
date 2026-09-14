@@ -1,6 +1,6 @@
 # ॐ Super App Bhairava Anugraha (`superappbhairavaanugraha`)
 
-A unified sacred portal combining the recreation of [bhairavaanugraha.com](https://bhairavaanugraha.com/) in an elevated dark-gold temple codex aesthetic, seamlessly integrating the **Bhairava QnA Codex** and the **Bhairav Loka Sahasralinga Codex** with unified header navigation.
+A unified sacred portal combining the recreation of [bhairavaanugraha.com](https://bhairavaanugraha.com/) in an elevated dark-gold temple codex aesthetic, seamlessly integrating **Jnāna Samvāda** (the Bhairava Codex) and the **Bhairav Loka Sahasralinga Codex** with unified header navigation.
 
 ---
 
@@ -9,7 +9,7 @@ A unified sacred portal combining the recreation of [bhairavaanugraha.com](https
 - [Overview](#-overview)
 - [Key Features & Portals](#-key-features--portals)
   - [1. Recreated Landing Sanctuary (`/`)](#1-recreated-landing-sanctuary-)
-  - [2. Bhairava QnA Codex (`/qna`)](#2-bhairava-qna-codex-qna)
+  - [2. Jnāna Samvāda Codex (`/jnana-samvada`)](#2-jnāna-samvāda-codex-jnana-samvada)
   - [3. Bhairav Loka Sahasralinga Codex (`/bhairav-loka`)](#3-bhairav-loka-sahasralinga-codex-bhairav-loka)
   - [4. Dedicated Sādhana Subpages](#4-dedicated-sādhana-subpages)
 - [Architecture & Design System](#-architecture--design-system)
@@ -26,7 +26,7 @@ A unified sacred portal combining the recreation of [bhairavaanugraha.com](https
 `superappbhairavaanugraha` brings together the disparate dimensions of Bhairava Sādhana into a single, cohesive web application:
 
 1. **Recreated Official Website**: Faithfully recreates the authentic structure, text, media, and offerings of [bhairavaanugraha.com](https://bhairavaanugraha.com/) elevated with the sacred, parchment-and-gold design aesthetic of the Bhairva codex.
-2. **QnA Codex Integration**: Mounts the comprehensive Q&A archive containing 257+ verified answers by Guruji, categorized into sacred Folios with real-time fuzzy search.
+2. **Jnāna Samvāda Integration**: Mounts the comprehensive Q&A archive containing 257+ verified answers by Guruji, categorized into sacred Folios with real-time fuzzy search.
 3. **Bhairav Loka Integration**: Mounts the interactive 324 Shiva Lingam Sahasralinga Codex with a dynamic celestial spiral, media lightbox darshans, and tag filtering.
 4. **Unified Navigation Chrome**: A persistent header with glowing Devanagari ॐ, direct portal switches, meditative Web Audio API bell chime synthesizer, and universal `⌘K` command search.
 
@@ -37,15 +37,15 @@ A unified sacred portal combining the recreation of [bhairavaanugraha.com](https
 ### 1. Recreated Landing Sanctuary (`/`)
 - **Ashtami Alert Ribbon**: Live countdown and announcement bar for the upcoming Krishna Paksha Ashtami (*Oct 03, 8:00 AM – Oct 04, 5:52 AM IST*).
 - **Hero Section**: Traditional Devanagari invocation *॥ ॐ श्री महाकाल भैरवाय नमः ॥*, main title *"Journey into the Sacred Inner Realm"*, sacred taglines (*Sarvam Bhairava Swaroopam*), direct action CTAs, and framed deity cartouche.
-- **Unified Portals Showcase**: Feature cards pointing seekers to the QnA Codex, Bhairav Loka, Sādhana Paddhati, and Ashtami Gateways.
+- **Unified Portals Showcase**: Feature cards pointing seekers to Jnāna Samvāda, Bhairav Loka, Sādhana Paddhati, and Ashtami Gateways.
 - **One in His Essence**: Discourse on Maa Kamakhya, Guru Bhairava, and the lineage of Avadhutas and Siddhars.
 - **Daiva Anugraha Videos**: Responsive YouTube player embed (`https://youtube.com/embed/a8q-IcvZ2Gw`) with direct channel link to `@BhairavaAnugraha`.
 - **Life Within or Without**: Book presentation featuring 3D perspective cover art, Srinidhi Publications ordering information (`9972778646`), direct Amazon India order link, and Instagram Reel preview link.
 - **Reach Out to Us**: Dedicated community cards for the Sacred Telegram Channel and WhatsApp direct inquiry (`+91 62622 12153`).
 
-### 2. Bhairava QnA Codex (`/qna`)
-- Direct access in the header (`☸ QnA`).
-- Connects to 257+ categorized QnA entries covering:
+### 2. Jnāna Samvāda Codex (`/jnana-samvada`)
+- Direct access in the header (`☸ Jnāna Samvāda`).
+- Connects to 257+ categorized inquiries covering:
   - *Mantra & Japa*
   - *Pūjā, Āratī & Rituals*
   - *Maṇḍala & Anuṣṭhāna*
@@ -53,6 +53,7 @@ A unified sacred portal combining the recreation of [bhairavaanugraha.com](https
   - *Advanced Topics*
   - *Women & Sādhanā*
 - Instant fuzzy search modal (`⌘K`), recent question drawer, and tag browsing.
+- Automatic redirection from `/qna` for backwards compatibility.
 
 ### 3. Bhairav Loka Sahasralinga Codex (`/bhairav-loka`)
 - Direct access in the header (`✦ Bhairav Loka`).
@@ -121,11 +122,10 @@ The Super Application guarantees that existing source repositories remain comple
 
 4. Open your browser:
    - **Main Portal**: `http://localhost:5050/`
-   - **QnA Codex**: `http://localhost:5050/qna`
+   - **Jnāna Samvāda Codex**: `http://localhost:5050/jnana-samvada`
    - **Bhairav Loka**: `http://localhost:5050/bhairav-loka`
    - **Sādhana Paddhati**: `http://localhost:5050/sadhana-paddhati`
    - **Ashtami Gateways**: `http://localhost:5050/ashtami`
-   - **Jnāna Samvāda**: `http://localhost:5050/jnana-samvada`
 
 ---
 
@@ -136,7 +136,7 @@ Run the automated endpoint verification suite:
 python test_superapp.py
 ```
 Checks:
-- All 6 HTML page routes (`/`, `/qna`, `/bhairav-loka`, `/sadhana-paddhati`, `/ashtami`, `/jnana-samvada`)
+- All HTML page routes (`/`, `/jnana-samvada`, `/qna` redirect, `/bhairav-loka`, `/sadhana-paddhati`, `/ashtami`)
 - All API endpoints (`/api/qna`, `/api/posts`, `/api/stats`)
 - Sub-app proxied stylesheets, scripts, and media files
 - Returns `200 OK` across all 17 integration checkpoints.
@@ -169,11 +169,10 @@ superappbhairavaanugraha/
 └── templates/
     ├── base.html              # Unified layout with chrome header & footer
     ├── index.html             # Recreated bhairavaanugraha.com landing page
-    ├── qna.html               # QnA Codex integration
+    ├── qna.html               # Jnāna Samvāda Codex integration
     ├── bhairav_loka.html      # Sahasralinga Codex integration
     ├── sadhana_paddhati.html  # Sādhana Paddhati guidance
-    ├── ashtami.html           # Ashtami gateways & lunar timings
-    └── jnana_samvada.html     # Spiritual FAQ archive
+    └── ashtami.html           # Ashtami gateways & lunar timings
 ```
 
 ---
