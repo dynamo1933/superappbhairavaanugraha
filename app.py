@@ -14,23 +14,27 @@ from datetime import datetime
 from flask import Flask, render_template, jsonify, request, send_from_directory, abort, Response, redirect
 
 # ==============================================================================
-# PATH CONFIGURATION (Strictly Read-Only Access to Sub-Apps)
+# PATH CONFIGURATION (Local Filesystem + Cloud/Vercel Fallbacks)
 # ==============================================================================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-BHAIRVA_DIR = r'C:\Users\dynam\Desktop\Bhairva'
-INSTA_DIR = r'C:\Users\dynam\Desktop\instagram_scrap'
+LOCAL_BHAIRVA = r'C:\Users\dynam\Desktop\Bhairva'
+LOCAL_INSTA = r'C:\Users\dynam\Desktop\instagram_scrap'
 
-# Verify directories exist
-assert os.path.exists(BHAIRVA_DIR), f"Directory {BHAIRVA_DIR} does not exist!"
-assert os.path.exists(INSTA_DIR), f"Directory {INSTA_DIR} does not exist!"
+BHAIRVA_DIR = os.environ.get('BHAIRVA_DIR', LOCAL_BHAIRVA)
+if not os.path.exists(BHAIRVA_DIR):
+    BHAIRVA_DIR = os.path.join(BASE_DIR, 'data', 'bhairva')
+
+INSTA_DIR = os.environ.get('INSTA_DIR', LOCAL_INSTA)
+if not os.path.exists(INSTA_DIR):
+    INSTA_DIR = os.path.join(BASE_DIR, 'data', 'instagram_scrap')
 
 # Create Flask application
 app = Flask(__name__, template_folder=os.path.join(BASE_DIR, 'templates'), static_folder=os.path.join(BASE_DIR, 'static'))
 
-# Add sub-app directories to sys.path in read-only mode for importing helper modules
-if BHAIRVA_DIR not in sys.path:
+# Add directories to sys.path in read-only mode for importing helper modules if present
+if os.path.exists(BHAIRVA_DIR) and BHAIRVA_DIR not in sys.path:
     sys.path.append(BHAIRVA_DIR)
-if INSTA_DIR not in sys.path:
+if os.path.exists(INSTA_DIR) and INSTA_DIR not in sys.path:
     sys.path.append(INSTA_DIR)
 
 try:
@@ -227,8 +231,14 @@ def serve_bhairva_analytics():
 
 @app.route('/images/<path:filename>')
 def serve_bhairva_images(filename):
-    """Serves images from Bhairva images directory"""
-    return send_from_directory(os.path.join(BHAIRVA_DIR, 'images'), filename)
+    """Serves images from Bhairva images directory with fallback"""
+    img_dir = os.path.join(BHAIRVA_DIR, 'images')
+    if os.path.exists(img_dir) and os.path.exists(os.path.join(img_dir, filename)):
+        return send_from_directory(img_dir, filename)
+    fallback_dir = os.path.join(BASE_DIR, 'static', 'images')
+    if os.path.exists(os.path.join(fallback_dir, filename)):
+        return send_from_directory(fallback_dir, filename)
+    abort(404)
 
 @app.route('/static/css/style.css')
 def serve_loka_css():
@@ -242,8 +252,13 @@ def serve_loka_js():
 
 @app.route('/media/<path:filename>')
 def serve_media(filename):
-    """Serves images for Bhairav Loka darshans"""
-    return send_from_directory(IMAGES_DIR, filename)
+    """Serves images for Bhairav Loka darshans with fallback"""
+    if os.path.exists(IMAGES_DIR) and os.path.exists(os.path.join(IMAGES_DIR, filename)):
+        return send_from_directory(IMAGES_DIR, filename)
+    fallback_dir = os.path.join(BASE_DIR, 'static', 'images')
+    if os.path.exists(os.path.join(fallback_dir, filename)):
+        return send_from_directory(fallback_dir, filename)
+    abort(404)
 
 # ==============================================================================
 # MAIN ENTRYPOINT
