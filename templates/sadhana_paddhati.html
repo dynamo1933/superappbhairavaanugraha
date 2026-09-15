@@ -1,80 +1,2036 @@
 {% extends "base.html" %}
 
-{% block title %}Sādhana Paddhati · Bhairava Anugraha Super App{% endblock %}
+{% block title %}Sādhana Paddhati · Bhairava & Devi Flow · Bhairava Anugraha{% endblock %}
+
+{% block extra_head %}
+<!-- Font Awesome 6 Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+<style>
+  /* ==========================================================================
+     SĀDHANA PADDHATI · UNIFIED THEME (MATCHING BHAIRVA SACRED AESTHETIC)
+     ========================================================================== */
+
+  .paddhati-hero {
+    padding: 3rem 1.5rem 2rem;
+    text-align: center;
+    position: relative;
+    border-bottom: 1px solid var(--gold-border);
+    background: radial-gradient(circle at 50% 30%, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
+  }
+
+  .paddhati-hero .skt-badge {
+    display: inline-block;
+    font-family: var(--sanskrit);
+    font-size: 1.1rem;
+    color: var(--gold-bright);
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+  }
+
+  .paddhati-hero h1 {
+    font-family: var(--display);
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    color: var(--paper-bright);
+    margin: 0.2rem 0 0.8rem;
+    letter-spacing: 1px;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  }
+
+  .paddhati-hero .hero-sub {
+    font-size: 1.1rem;
+    color: var(--gold-3);
+    font-style: italic;
+    max-width: 800px;
+    margin: 0 auto 1.5rem;
+    line-height: 1.6;
+  }
+
+  /* Toolbar Controls */
+  .paddhati-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .btn-krama-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.25rem;
+    border-radius: 999px;
+    font-family: var(--display);
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--gold-border);
+    background: rgba(19, 18, 25, 0.8);
+    color: var(--paper-bright);
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .btn-krama-nav:hover, .btn-krama-nav.is-active {
+    border-color: var(--gold-bright);
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.25), rgba(128, 10, 10, 0.3));
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
+    transform: translateY(-2px);
+  }
+
+  .btn-ctrl {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    padding: 0.5rem 0.9rem;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(13, 12, 16, 0.6);
+    color: var(--paper-dim);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-ctrl:hover {
+    color: var(--gold);
+    border-color: var(--gold-border);
+  }
+
+  /* Master Container */
+  .paddhati-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 4rem;
+  }
+
+  /* ==========================================================================
+     COLLAPSIBLE ACCORDION SECTIONS
+     ========================================================================== */
+
+  .krama-accordion {
+    margin-bottom: 3rem;
+    border-radius: 18px;
+    border: 1px solid var(--gold-border);
+    background: linear-gradient(180deg, rgba(19, 18, 25, 0.92) 0%, rgba(13, 12, 16, 0.96) 100%);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(212, 175, 55, 0.15);
+    overflow: hidden;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .krama-accordion:hover {
+    border-color: rgba(212, 175, 55, 0.45);
+  }
+
+  .krama-accordion.devi-krama {
+    border-color: rgba(230, 70, 70, 0.25);
+  }
+
+  .krama-accordion.devi-krama:hover {
+    border-color: rgba(230, 70, 70, 0.45);
+  }
+
+  /* Accordion Header (Trigger) */
+  .accordion-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 2rem;
+    background: linear-gradient(135deg, rgba(26, 24, 36, 0.8) 0%, rgba(15, 14, 21, 0.9) 100%);
+    border: none;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+    color: var(--paper-bright);
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.3s ease, padding 0.3s ease;
+  }
+
+  .krama-accordion.devi-krama .accordion-trigger {
+    background: linear-gradient(135deg, rgba(40, 15, 20, 0.85) 0%, rgba(20, 10, 14, 0.95) 100%);
+    border-bottom-color: rgba(230, 70, 70, 0.15);
+  }
+
+  .accordion-trigger:hover {
+    background: linear-gradient(135deg, rgba(35, 30, 48, 0.9) 0%, rgba(22, 20, 30, 0.95) 100%);
+  }
+
+  .krama-accordion.devi-krama .accordion-trigger:hover {
+    background: linear-gradient(135deg, rgba(50, 18, 25, 0.95) 0%, rgba(28, 12, 18, 0.98) 100%);
+  }
+
+  .trigger-left {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex: 1;
+  }
+
+  .trigger-avatar {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--gold);
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+  }
+
+  .accordion-trigger:hover .trigger-avatar {
+    transform: scale(1.05);
+  }
+
+  .trigger-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--gold-bright);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: rgba(212, 175, 55, 0.12);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    padding: 3px 10px;
+    border-radius: 999px;
+    margin-bottom: 4px;
+  }
+
+  .krama-accordion.devi-krama .trigger-badge {
+    color: #ff9999;
+    background: rgba(200, 40, 60, 0.15);
+    border-color: rgba(200, 40, 60, 0.3);
+  }
+
+  .trigger-title {
+    font-family: var(--display);
+    font-size: 1.65rem;
+    color: var(--paper-bright);
+    margin: 0;
+    line-height: 1.2;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .trigger-sub {
+    font-family: var(--body);
+    font-size: 1rem;
+    color: var(--paper-dim);
+    margin: 4px 0 0;
+    font-style: italic;
+  }
+
+  .trigger-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+  }
+
+  .toggle-status-pill {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--gold-border);
+    color: var(--gold-3);
+    background: rgba(212, 175, 55, 0.08);
+  }
+
+  .toggle-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--gold-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold-bright);
+    font-size: 0.9rem;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
+  }
+
+  .krama-accordion.is-open .toggle-icon {
+    transform: rotate(180deg);
+    background: rgba(212, 175, 55, 0.18);
+  }
+
+  /* Accordion Content Panel */
+  .accordion-panel {
+    padding: 2.5rem 2rem;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .krama-accordion.is-collapsed .accordion-panel {
+    display: none;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ==========================================================================
+     FLOW VIEW STYLES (SHARED FROM PADATI & DEVI)
+     ========================================================================== */
+
+  .flow-journey {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .phase-section {
+    position: relative;
+  }
+
+  /* Phase Header Bar */
+  .phase-header-bar {
+    background: linear-gradient(135deg, rgba(30, 28, 42, 0.95) 0%, rgba(20, 18, 28, 0.95) 100%);
+    border: 1px solid var(--gold-border);
+    padding: 0.85rem 1.4rem;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  .phase-header-bar.diksha {
+    border-color: rgba(245, 158, 11, 0.4);
+    background: linear-gradient(135deg, rgba(45, 25, 15, 0.95) 0%, rgba(25, 15, 10, 0.95) 100%);
+  }
+
+  .phase-header-bar.devi-phase {
+    border-color: rgba(244, 63, 94, 0.4);
+    background: linear-gradient(135deg, rgba(45, 15, 25, 0.95) 0%, rgba(25, 10, 15, 0.95) 100%);
+  }
+
+  .phase-icon-badge {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--crimson) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 0.85rem;
+    box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+  }
+
+  .phase-header-bar.devi-phase .phase-icon-badge {
+    background: linear-gradient(135deg, #f43f5e 0%, #991b1b 100%);
+  }
+
+  .phase-header-title {
+    font-family: var(--display);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--paper-bright);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* Flow Row & Cards */
+  .flow-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 0 1.5rem;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--gold-border) transparent;
+  }
+
+  .flow-row::-webkit-scrollbar {
+    height: 6px;
+  }
+  .flow-row::-webkit-scrollbar-thumb {
+    background: var(--gold-border);
+    border-radius: 3px;
+  }
+
+  .flow-marker {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(19, 18, 25, 0.9);
+    border: 2px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold-bright);
+    font-size: 0.95rem;
+    flex-shrink: 0;
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.2);
+  }
+
+  .flow-cards {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+    min-width: max-content;
+  }
+
+  /* Stage Card */
+  .stage-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 210px;
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .stage-card:hover {
+    transform: translateY(-6px);
+  }
+
+  /* Status Icon Over Card */
+  .card-status-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--ink-2);
+    border: 2px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    color: var(--gold-bright);
+    margin-bottom: -19px;
+    z-index: 3;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+  }
+
+  .stage-card:hover .card-status-icon {
+    transform: scale(1.12);
+    box-shadow: 0 0 16px rgba(212, 175, 55, 0.5);
+  }
+
+  /* Card Body */
+  .card-body {
+    width: 100%;
+    padding: 1.85rem 1.25rem 1.25rem;
+    border-radius: 16px;
+    text-align: center;
+    background: linear-gradient(160deg, rgba(28, 26, 38, 0.95) 0%, rgba(15, 14, 21, 0.98) 100%);
+    border: 1px solid var(--gold-border);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(212, 175, 55, 0.15);
+    transition: all 0.3s ease;
+  }
+
+  .stage-card:hover .card-body {
+    border-color: var(--gold-bright);
+    box-shadow: 0 12px 35px rgba(212, 175, 55, 0.2), inset 0 1px 0 rgba(212, 175, 55, 0.3);
+  }
+
+  .card-body.diksha-body {
+    background: linear-gradient(160deg, rgba(40, 24, 18, 0.95) 0%, rgba(20, 12, 8, 0.98) 100%);
+    border-color: rgba(245, 158, 11, 0.35);
+  }
+
+  .card-body.rudraksha-body {
+    background: linear-gradient(160deg, rgba(35, 20, 15, 0.95) 0%, rgba(18, 10, 8, 0.98) 100%);
+    border-color: rgba(212, 175, 55, 0.35);
+  }
+
+  .card-body.charana-body {
+    background: linear-gradient(160deg, rgba(32, 20, 42, 0.95) 0%, rgba(16, 10, 22, 0.98) 100%);
+    border-color: rgba(168, 85, 247, 0.35);
+  }
+
+  .mandala-img, .rudraksha-img {
+    width: 82px;
+    height: 82px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 0.9rem;
+    border: 2px solid var(--gold-border);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    display: block;
+    transition: all 0.3s ease;
+  }
+
+  .stage-card:hover .mandala-img, .stage-card:hover .rudraksha-img {
+    transform: scale(1.06);
+    border-color: var(--gold-bright);
+    box-shadow: 0 0 16px rgba(212, 175, 55, 0.4);
+  }
+
+  .card-title {
+    font-family: var(--display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--paper-bright);
+    margin-bottom: 0.25rem;
+  }
+
+  .card-days {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--gold-3);
+    margin-bottom: 0.6rem;
+  }
+
+  .card-status-text {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--paper-dim);
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .stage-card:hover .card-status-text {
+    color: var(--gold-bright);
+    border-color: var(--gold-border);
+    background: rgba(212, 175, 55, 0.12);
+  }
+
+  /* Flow Arrow */
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold);
+    width: 38px;
+    flex-shrink: 0;
+    opacity: 0.75;
+    filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.4));
+    animation: arrowPulse 2s infinite ease-in-out;
+  }
+
+  .flow-arrow svg {
+    width: 32px;
+    height: 22px;
+  }
+
+  @keyframes arrowPulse {
+    0%, 100% { transform: translateX(0); opacity: 0.6; }
+    50% { transform: translateX(4px); opacity: 1; }
+  }
+
+  /* Section Connector (Downward Pulse) */
+  .section-connector {
+    display: flex;
+    justify-content: center;
+    padding: 0.75rem 0 1.25rem;
+  }
+
+  .connector-pulse {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: var(--gold);
+  }
+
+  .connector-line {
+    width: 2px;
+    height: 28px;
+    background: linear-gradient(180deg, var(--gold) 0%, transparent 100%);
+  }
+
+  /* Sacred Reminder Banner */
+  .sacred-reminder {
+    margin: 2.5rem 0 1.5rem;
+    padding: 1.5rem 2rem;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, rgba(128, 10, 10, 0.12) 100%);
+    border: 1px solid var(--gold-border);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .reminder-icon {
+    font-size: 2.2rem;
+    flex-shrink: 0;
+    color: var(--gold-bright);
+  }
+
+  .reminder-text {
+    font-family: var(--body);
+    font-size: 1.15rem;
+    font-style: italic;
+    color: var(--paper-bright);
+    margin: 0 0 0.4rem;
+    line-height: 1.5;
+  }
+
+  .reminder-attribution {
+    font-family: var(--display);
+    font-size: 0.95rem;
+    color: var(--gold);
+    letter-spacing: 1px;
+  }
+
+  /* Welcome / Orientation Section */
+  .orientation-card {
+    padding: 2rem;
+    border-radius: 16px;
+    background: rgba(19, 18, 25, 0.85);
+    border: 1px solid var(--gold-border);
+    margin-top: 1.5rem;
+  }
+
+  .orientation-head {
+    font-family: var(--display);
+    font-size: 1.5rem;
+    color: var(--paper-bright);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .orientation-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+  }
+
+  .action-box {
+    padding: 1.25rem;
+    border-radius: 12px;
+    background: rgba(13, 12, 16, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    transition: all 0.3s ease;
+  }
+
+  .action-box:hover {
+    border-color: var(--gold-border);
+    background: rgba(212, 175, 55, 0.06);
+  }
+
+  .action-box .act-icon {
+    font-size: 1.6rem;
+    flex-shrink: 0;
+  }
+
+  .action-box h4 {
+    font-family: var(--display);
+    font-size: 1.15rem;
+    color: var(--paper-bright);
+    margin: 0 0 0.25rem;
+  }
+
+  .action-box p {
+    font-size: 0.95rem;
+    color: var(--paper-dim);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  /* ==========================================================================
+     DEVI ANUGRAHA CONTENT SPECIFIC STYLES (FROM DEVI.HTML)
+     ========================================================================== */
+
+  .devi-hero-card {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+    padding: 2.5rem;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(60, 20, 28, 0.7) 0%, rgba(25, 12, 18, 0.9) 100%);
+    border: 1px solid rgba(244, 63, 94, 0.3);
+    margin-bottom: 2.5rem;
+  }
+
+  .devi-hero-img-wrap {
+    flex-shrink: 0;
+  }
+
+  .devi-hero-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--gold);
+    box-shadow: 0 8px 30px rgba(244, 63, 94, 0.35);
+  }
+
+  .devi-hero-content {
+    flex: 1;
+  }
+
+  .devi-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(244, 63, 94, 0.15);
+    border: 1px solid rgba(244, 63, 94, 0.35);
+    color: #fda4af;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+
+  .devi-hero-title {
+    font-family: var(--display);
+    font-size: 2.2rem;
+    color: var(--paper-bright);
+    margin: 0 0 0.5rem;
+    letter-spacing: 1px;
+  }
+
+  .devi-hero-sub {
+    font-family: var(--body);
+    font-size: 1.15rem;
+    font-style: italic;
+    color: var(--gold-3);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* Intro Box - Red/Gold glow */
+  .intro-box {
+    background: linear-gradient(135deg, rgba(128, 10, 25, 0.4) 0%, rgba(50, 10, 18, 0.6) 100%);
+    border: 1px solid rgba(244, 63, 94, 0.35);
+    border-radius: 14px;
+    padding: 2rem 2.5rem;
+    text-align: center;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  }
+
+  .intro-title {
+    font-family: var(--display);
+    font-size: 1.7rem;
+    color: var(--gold-bright);
+    margin: 0 0 0.8rem;
+    letter-spacing: 1px;
+  }
+
+  .intro-text {
+    font-family: var(--body);
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: var(--paper-bright);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  /* Philosophy Grid */
+  .philosophy-grid {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 2.5rem;
+    align-items: center;
+    background: rgba(19, 18, 25, 0.9);
+    border: 1px solid var(--gold-border);
+    padding: 2rem;
+    border-radius: 16px;
+    margin-bottom: 2.5rem;
+  }
+
+  .philosophy-img-wrap {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid var(--gold-border);
+    max-height: 380px;
+  }
+
+  .philosophy-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+
+  .philosophy-img:hover {
+    transform: scale(1.03);
+  }
+
+  .philosophy-content h2 {
+    font-family: var(--display);
+    font-size: 2rem;
+    color: var(--paper-bright);
+    margin: 0 0 0.5rem;
+  }
+
+  .philosophy-divider {
+    width: 60px;
+    height: 2px;
+    background: var(--gold);
+    margin-bottom: 1.25rem;
+  }
+
+  .philosophy-text p {
+    font-size: 1.05rem;
+    color: var(--paper-dim);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+
+  .highlight-shakti {
+    color: #fb7185;
+    font-weight: 600;
+  }
+
+  .philosophy-highlight-box {
+    background: rgba(244, 63, 94, 0.08);
+    border-left: 3px solid var(--gold);
+    padding: 1rem 1.25rem;
+    margin: 1.25rem 0;
+    font-family: var(--display);
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--gold-bright);
+  }
+
+  /* Guidelines Grid */
+  .guidelines-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .guide-card {
+    background: rgba(19, 18, 25, 0.85);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-left: 3px solid var(--gold);
+    transition: all 0.3s ease;
+  }
+
+  .guide-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--gold-border);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  }
+
+  .guide-title {
+    font-family: var(--display);
+    font-size: 1.3rem;
+    color: var(--gold-bright);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .guide-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--paper-dim);
+    margin: 0;
+  }
+
+  /* Timings Card */
+  .timings-card {
+    background: linear-gradient(135deg, rgba(35, 25, 20, 0.8) 0%, rgba(20, 15, 12, 0.9) 100%);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: 14px;
+    padding: 1.75rem 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .timings-title {
+    font-family: var(--display);
+    font-size: 1.6rem;
+    color: var(--gold-bright);
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .timing-item {
+    margin-bottom: 0.85rem;
+    padding-bottom: 0.85rem;
+    border-bottom: 1px dashed rgba(212, 175, 55, 0.2);
+    font-size: 1.05rem;
+    color: var(--paper-bright);
+    line-height: 1.5;
+  }
+
+  .timing-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .timing-name {
+    font-family: var(--display);
+    color: var(--gold-bright);
+    font-weight: 600;
+  }
+
+  /* Pathways Section */
+  .pathway-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .pathway-card {
+    background: rgba(19, 18, 25, 0.9);
+    border-radius: 14px;
+    padding: 2rem 1.5rem;
+    border: 1px solid var(--gold-border);
+    text-align: center;
+    transition: all 0.35s ease;
+  }
+
+  .pathway-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--gold-bright);
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.15);
+  }
+
+  .pathway-icon {
+    font-size: 2.5rem;
+    color: var(--gold-bright);
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+
+  .pathway-title {
+    font-family: var(--display);
+    font-size: 1.5rem;
+    color: var(--paper-bright);
+    margin-bottom: 0.5rem;
+  }
+
+  .pathway-text {
+    font-size: 0.95rem;
+    color: var(--paper-dim);
+    line-height: 1.5;
+    margin-bottom: 1.25rem;
+  }
+
+  .pathway-btn {
+    display: inline-block;
+    padding: 0.5rem 1.4rem;
+    background: linear-gradient(135deg, var(--gold) 0%, #b45309 100%);
+    color: #111;
+    font-family: var(--display);
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .pathway-btn:hover {
+    transform: scale(1.05);
+    background: linear-gradient(135deg, var(--gold-bright) 0%, var(--gold) 100%);
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+    color: #000;
+  }
+
+  /* Devi Quote */
+  .sacred-devi-quote {
+    background: linear-gradient(135deg, rgba(80, 15, 25, 0.5) 0%, rgba(35, 10, 18, 0.7) 100%);
+    border: 1px solid rgba(244, 63, 94, 0.3);
+    border-radius: 14px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    margin-top: 2rem;
+    position: relative;
+  }
+
+  .devi-quote-text {
+    font-family: var(--display);
+    font-size: 1.35rem;
+    font-style: italic;
+    color: var(--paper-bright);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ==========================================================================
+     INTERACTIVE STAGE DETAILS MODAL
+     ========================================================================== */
+
+  .stage-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    animation: modalFadeIn 0.3s ease;
+  }
+
+  .stage-modal-overlay.is-active {
+    display: flex;
+  }
+
+  @keyframes modalFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .stage-modal-card {
+    background: linear-gradient(170deg, #181622 0%, #0d0c11 100%);
+    border: 1px solid var(--gold);
+    border-radius: 20px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(212, 175, 55, 0.25);
+    position: relative;
+  }
+
+  .modal-close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--paper-bright);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.2s ease;
+  }
+
+  .modal-close-btn:hover {
+    background: rgba(200, 30, 30, 0.8);
+    border-color: #f87171;
+    color: #fff;
+  }
+
+  .modal-header-banner {
+    position: relative;
+    height: 180px;
+    overflow: hidden;
+    border-radius: 20px 20px 0 0;
+  }
+
+  .modal-banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.7);
+  }
+
+  .modal-banner-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, #181622 0%, transparent 80%);
+  }
+
+  .modal-body {
+    padding: 1.5rem 2rem 2rem;
+  }
+
+  .modal-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--gold-bright);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: rgba(212, 175, 55, 0.12);
+    border: 1px solid var(--gold-border);
+    padding: 3px 10px;
+    border-radius: 999px;
+    margin-bottom: 0.5rem;
+  }
+
+  .modal-title {
+    font-family: var(--display);
+    font-size: 1.85rem;
+    color: var(--paper-bright);
+    margin: 0 0 0.5rem;
+  }
+
+  .modal-desc {
+    font-size: 1rem;
+    color: var(--paper-dim);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-meta-box {
+    background: rgba(10, 9, 13, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0.85rem;
+    border-radius: 10px;
+  }
+
+  .meta-label {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: var(--gold-3);
+    margin-bottom: 0.25rem;
+  }
+
+  .meta-value {
+    font-family: var(--display);
+    font-size: 1.1rem;
+    color: var(--paper-bright);
+    font-weight: 600;
+  }
+
+  .modal-cta-wrap {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 1.5rem;
+  }
+
+  .modal-btn-telegram {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+    color: #fff;
+    font-family: var(--display);
+    font-size: 1.05rem;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(2, 132, 199, 0.35);
+    transition: all 0.3s ease;
+  }
+
+  .modal-btn-telegram:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(2, 132, 199, 0.5);
+    color: #fff;
+  }
+
+  @media (max-width: 768px) {
+    .accordion-trigger {
+      padding: 1.25rem 1rem;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    .trigger-right {
+      width: 100%;
+      justify-content: space-between;
+    }
+    .accordion-panel {
+      padding: 1.5rem 1rem;
+    }
+    .devi-hero-card {
+      flex-direction: column;
+      text-align: center;
+      padding: 1.5rem;
+    }
+    .philosophy-grid {
+      grid-template-columns: 1fr;
+    }
+    .modal-meta-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+{% endblock %}
 
 {% block content %}
-<section class="hero" style="padding-bottom: 40px;">
-  <div class="section-head" style="margin-bottom: 20px;">
-    <span class="subhead">THE PATHWAY OF SACRED DISCIPLINE</span>
-    <h1 style="font-family: var(--display); font-size: 52px; color: var(--paper-bright); margin-bottom: 16px;">
-      Sacred Sādhana Paddhati
-    </h1>
-    <p style="font-size: 20px; color: var(--gold-3); font-style: italic;">
-      “Every mantra is an offering. Every sādhanā, a surrender. Every step is His grace.”
-    </p>
+<!-- ==================== HERO SECTION ==================== -->
+<section class="paddhati-hero">
+  <div class="skt-badge">॥ श्री भैरव साधना एवं श्री कामाख्या कृपा पद्धतिः ॥</div>
+  <h1>Sacred Sādhana Paddhati</h1>
+  <p class="hero-sub">
+    “Every mantra is an offering. Every sādhanā, a surrender. The path of Bhairava awakens unshakable stillness; the grace of Devi awakens boundless cosmic illumination.”
+  </p>
+
+  <!-- Master Toolbar -->
+  <div class="paddhati-toolbar">
+    <button type="button" class="btn-krama-nav is-active" id="jump-bhairava-btn" onclick="scrollToSection('bhairava-krama-section')">
+      <span>🔱 Bhairava Sādhana Flow</span>
+      <span style="font-size: 0.75rem; opacity: 0.8;">(Open by Default)</span>
+    </button>
+    <button type="button" class="btn-krama-nav" id="jump-devi-btn" onclick="scrollToSection('devi-krama-section')">
+      <span>🌸 Devi Anughara Flow</span>
+      <span style="font-size: 0.75rem; opacity: 0.8;">(Collapsible)</span>
+    </button>
+    <button type="button" class="btn-ctrl" onclick="expandBothSections()">
+      <i class="fas fa-arrows-up-down-left-right"></i> Expand Both
+    </button>
+    <button type="button" class="btn-ctrl" onclick="collapseBothSections()">
+      <i class="fas fa-compress"></i> Collapse Both
+    </button>
   </div>
 </section>
 
-<!-- Three Sacred Steps -->
-<section class="portals-section" style="padding-top: 20px;">
-  <div class="section-head">
-    <span class="subhead">THE THREEFOLD ASCENT</span>
-    <h2>Path to Inner Peace &amp; Union</h2>
-    <p>The structured progression for seekers embarking upon the esoteric sadhana of Bhairava.</p>
-  </div>
+<!-- ==================== MAIN FLOW CONTAINER ==================== -->
+<div class="paddhati-container">
 
-  <div class="portals-grid">
-    <!-- Step 1 -->
-    <div class="portal-card">
-      <div class="portal-icon-wrap">🌅</div>
-      <div class="portal-tag">STAGE I · ARAMBHA</div>
-      <h3>First Step: Inner Dawn</h3>
-      <p>Beginning the practice with reverence. Establishing the sacred sanctum within, lighting the lamp of awareness, cultivating stillness, and quieting the sensory chatter before entering communion.</p>
-      <div style="font-family: var(--mono); font-size: 12px; color: var(--gold); border-top: 1px solid var(--gold-border); padding-top: 16px;">
-        DISCIPLINE: Daily Asana &amp; Pranayama Alignment
+  <!-- ========================================================================
+       SECTION 1: BHAIRAVA SĀDHANA PADDHATI (FROM PADATI.HTML)
+       * COLLAPSIBLE & OPEN BY DEFAULT *
+       ======================================================================== -->
+  <div class="krama-accordion is-open" id="bhairava-krama-section">
+    <!-- Trigger Header -->
+    <button type="button" class="accordion-trigger" onclick="toggleAccordion('bhairava-krama-section')" aria-expanded="true">
+      <div class="trigger-left">
+        <img src="{{ url_for('static', filename='images/bhairav_with_sadhak.jpg') }}" alt="Bhairava with Sadhak" class="trigger-avatar" onerror="this.src='/static/images/logo.jpeg'" />
+        <div>
+          <span class="trigger-badge">KRAMA I · SHIVA BHAIRAVA SĀDHANA</span>
+          <h2 class="trigger-title">
+            <span>Spiritual Progress</span>
+            <span class="gold" style="font-size: 1.1rem;">· Sādhana Paddhati</span>
+          </h2>
+          <p class="trigger-sub">Your sacred journey through the stages of awakening, Rudraksha Diksha &amp; Mandalas</p>
+        </div>
+      </div>
+      <div class="trigger-right">
+        <span class="toggle-status-pill" id="bhairava-status-pill">OPEN · TAP TO COLLAPSE</span>
+        <div class="toggle-icon">
+          <i class="fas fa-chevron-down"></i>
+        </div>
+      </div>
+    </button>
+
+    <!-- Collapsible Body Content -->
+    <div class="accordion-panel">
+      <div class="flow-journey">
+
+        <!-- ===== PHASE 1: FOUNDATION OF SADHANA ===== -->
+        <div class="phase-section">
+          <div class="phase-header-bar">
+            <div class="phase-icon-badge">
+              <i class="fas fa-seedling"></i>
+            </div>
+            <span class="phase-header-title">Phase I · Foundation of Sādhana</span>
+          </div>
+
+          <div class="flow-row">
+            <div class="flow-marker" title="Journey Inception">
+              <i class="fas fa-play"></i>
+            </div>
+
+            <div class="flow-cards">
+              <!-- Mandala 1 -->
+              <div class="stage-card" onclick="openStageModal(1)" role="button" tabindex="0">
+                <div class="card-status-icon">
+                  <i class="fas fa-unlock"></i>
+                </div>
+                <div class="card-body">
+                  <img src="{{ url_for('static', filename='images/stage_headers/mandala_1_header.jpg') }}" alt="Mandala 1" class="mandala-img" onerror="this.src='/static/images/logo.jpeg'" />
+                  <div class="card-title">Mandala 1</div>
+                  <div class="card-days">21 / 41 Days</div>
+                  <div class="card-status-text">Ready · Tap to View</div>
+                </div>
+              </div>
+
+              <!-- Flow Arrow -->
+              <div class="flow-arrow">
+                <svg viewBox="0 0 35 22" fill="none">
+                  <path d="M0 11 H26 M21 5 L28 11 L21 17" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+
+              <!-- Mandala 2 -->
+              <div class="stage-card" onclick="openStageModal(2)" role="button" tabindex="0">
+                <div class="card-status-icon">
+                  <i class="fas fa-unlock"></i>
+                </div>
+                <div class="card-body">
+                  <img src="{{ url_for('static', filename='images/stage_headers/mandala_2_header.jpg') }}" alt="Mandala 2" class="mandala-img" onerror="this.src='/static/images/logo.jpeg'" />
+                  <div class="card-title">Mandala 2</div>
+                  <div class="card-days">41 Days</div>
+                  <div class="card-status-text">Ready · Tap to View</div>
+                </div>
+              </div>
+
+              <!-- Flow Arrow -->
+              <div class="flow-arrow">
+                <svg viewBox="0 0 35 22" fill="none">
+                  <path d="M0 11 H26 M21 5 L28 11 L21 17" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+
+              <!-- Mandala 3 -->
+              <div class="stage-card" onclick="openStageModal(3)" role="button" tabindex="0">
+                <div class="card-status-icon">
+                  <i class="fas fa-unlock"></i>
+                </div>
+                <div class="card-body">
+                  <img src="{{ url_for('static', filename='images/stage_headers/mandala_3_header.jpg') }}" alt="Mandala 3" class="mandala-img" onerror="this.src='/static/images/logo.jpeg'" />
+                  <div class="card-title">Mandala 3</div>
+                  <div class="card-days">41 Days</div>
+                  <div class="card-status-text">Ready · Tap to View</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flow-marker" title="Phase I Milestone">
+              <i class="fas fa-check"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section Connector Pulse -->
+        <div class="section-connector">
+          <div class="connector-pulse">
+            <div class="connector-line"></div>
+            <i class="fas fa-chevron-down" style="font-size: 0.8rem;"></i>
+          </div>
+        </div>
+
+        <!-- ===== PHASE 2: RUDRAKSHA DIKSHA 8 & 11 MUKHI ===== -->
+        <div class="phase-section">
+          <div class="phase-header-bar diksha">
+            <div class="phase-icon-badge">
+              <i class="fas fa-gem"></i>
+            </div>
+            <span class="phase-header-title">Phase II · Pratham Charana — Rudraksha Diksha — 8 &amp; 11 Mukhi</span>
+          </div>
+
+          <div class="flow-row">
+            <div class="flow-marker" title="Diksha Stream">
+              <i class="fas fa-play"></i>
+            </div>
+
+            <div class="flow-cards">
+              <!-- Pratham Charana -->
+              <div class="stage-card" onclick="openStageModal(7)" role="button" tabindex="0">
+                <div class="card-status-icon">
+                  <i class="fas fa-om"></i>
+                </div>
+                <div class="card-body diksha-body">
+                  <img src="{{ url_for('static', filename='images/pratam_charana_header.jpg') }}" alt="Pratham Charana" class="rudraksha-img" onerror="this.src='/static/images/logo.jpeg'" />
+                  <div class="card-title">Pratham Charana</div>
+                  <div class="card-days">Diksha Initiation</div>
+                  <div class="card-status-text">Ready · Tap to View</div>
+                </div>
+              </div>
+
+              <!-- Flow Arrow -->
+              <div class="flow-arrow">
+                <svg viewBox="0 0 35 22" fill="none">
+                  <path d="M0 11 H26 M21 5 L28 11 L21 17" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+
+              <!-- 8 Mukhi -->
+              <div class="stage-card" onclick="openStageModal(4)" role="button" tabindex="0">
+                <div class="card-status-icon">
+                  <i class="fas fa-circle-dot"></i>
+                </div>
+                <div class="card-body rudraksha-body">
+                  <img src="{{ url_for('static', filename='images/8 Mukhi _ Achtgesicht Rudraksha Nepal 20-22 mm.jpeg') }}" alt="8 Mukhi Rudraksha" class="rudraksha-img" onerror="this.src='/static/images/logo.jpeg'" />
+                  <div class="card-title">8 Mukhi</div>
+                  <div class="card-days">Lord Ganesha &amp; Ashta Bhairava</div>
+                  <div class="card-status-text">Ready · Tap to View</div>
+                </div>
+              </div>
+
+              <!-- Flow Arrow -->
+              <div class="flow-arrow">
+                <svg viewBox="0 0 35 22" fill="none">
+                  <path d="M0 11 H26 M21 5 L28 11 L21 17" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+
+              <!-- 11 Mukhi -->
+              <div class="stage-card" onclick="openStageModal(5)" role="button" tabindex="0">
+                <div class="card-status-icon">
+                  <i class="fas fa-circle-dot"></i>
+                </div>
+                <div class="card-body rudraksha-body">
+                  <img src="{{ url_for('static', filename='images/rudraksha/rudrakha_11_mukhi.jpeg') }}" alt="11 Mukhi Rudraksha" class="rudraksha-img" onerror="this.src='/static/images/logo.jpeg'" />
+                  <div class="card-title">11 Mukhi</div>
+                  <div class="card-days">Ekadasha Rudra Spanda</div>
+                  <div class="card-status-text">Ready · Tap to View</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flow-marker" title="Phase II Milestone">
+              <i class="fas fa-check"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section Connector Pulse -->
+        <div class="section-connector">
+          <div class="connector-pulse">
+            <div class="connector-line"></div>
+            <i class="fas fa-chevron-down" style="font-size: 0.8rem;"></i>
+          </div>
+        </div>
+
+        <!-- ===== PHASE 3: DUTIYA CHARANA & BEYOND ===== -->
+        <div class="phase-section">
+          <div class="phase-header-bar">
+            <div class="phase-icon-badge">
+              <i class="fas fa-mountain"></i>
+            </div>
+            <span class="phase-header-title">Phase III · Dutiya Charana &amp; Beyond — 14 Mukhi &amp; Tritiya Charana</span>
+          </div>
+
+          <div class="flow-row">
+            <div class="flow-marker" title="Ascent Stream">
+              <i class="fas fa-play"></i>
+            </div>
+
+            <div class="flow-cards">
+              <!-- Dutiya Charana -->
+              <div class="stage-card" onclick="openStageModal(8)" role="button" tabindex="0">
+                <div class="card-status-icon">
+                  <i class="fas fa-om"></i>
+                </div>
+                <div class="card-body charana-body">
+                  <img src="{{ url_for('static', filename='images/bhairava_black.jpg') }}" alt="Dutiya Charana" class="mandala-img" onerror="this.src='/static/images/logo.jpeg'" />
+                  <div class="card-title">Dutiya Charana</div>
+                  <div class="card-days">Deep Antar-Sadhana</div>
+                  <div class="card-status-text">Ready · Tap to View</div>
+                </div>
+              </div>
+
+              <!-- Flow Arrow -->
+              <div class="flow-arrow">
+                <svg viewBox="0 0 35 22" fill="none">
+                  <path d="M0 11 H26 M21 5 L28 11 L21 17" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+
+              <!-- 14 Mukhi -->
+              <div class="stage-card" onclick="openStageModal(6)" role="button" tabindex="0">
+                <div class="card-status-icon">
+                  <i class="fas fa-circle-dot"></i>
+                </div>
+                <div class="card-body rudraksha-body">
+                  <img src="{{ url_for('static', filename='images/rudraksha/rudarakha_14_muki.jpeg') }}" alt="14 Mukhi Rudraksha" class="rudraksha-img" onerror="this.src='/static/images/logo.jpeg'" />
+                  <div class="card-title">14 Mukhi</div>
+                  <div class="card-days">Deva Mani · Ajna Awakening</div>
+                  <div class="card-status-text">Ready · Tap to View</div>
+                </div>
+              </div>
+
+              <!-- Flow Arrow -->
+              <div class="flow-arrow">
+                <svg viewBox="0 0 35 22" fill="none">
+                  <path d="M0 11 H26 M21 5 L28 11 L21 17" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+
+              <!-- Tritiya Charana -->
+              <div class="stage-card" onclick="openStageModal(9)" role="button" tabindex="0">
+                <div class="card-status-icon">
+                  <i class="fas fa-star"></i>
+                </div>
+                <div class="card-body charana-body">
+                  <img src="{{ url_for('static', filename='images/bhairava_eight_hands.jpeg') }}" alt="Tritiya Charana" class="mandala-img" onerror="this.src='/static/images/logo.jpeg'" />
+                  <div class="card-title">Tritiya Charana</div>
+                  <div class="card-days">Purna Samadhi &amp; Union</div>
+                  <div class="card-status-text">Ready · Tap to View</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flow-marker" title="Highest Fulfillment">
+              <i class="fas fa-flag-checkered"></i>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.flow-journey -->
+
+      <!-- Sacred Reminder -->
+      <div class="sacred-reminder">
+        <div class="reminder-icon">🙏</div>
+        <div class="reminder-content">
+          <p class="reminder-text">
+            “Each stage unfolds in divine timing. Trust the process, surrender to the journey, and maintain strict anusthana discipline.”
+          </p>
+          <div class="reminder-attribution">— Guru Bhairava Anugraha</div>
+        </div>
+      </div>
+
+      <!-- Welcome & Action Box -->
+      <div class="orientation-card">
+        <div class="orientation-head">
+          <span>🕉️ Orientation for Seekers</span>
+        </div>
+        <p style="color: var(--paper-dim); margin: 0; line-height: 1.6;">
+          Seekers embarking on the Bhairava Sādhana Paddhati are initiated step-by-step to harmonize the pranic currents and awaken inner witness consciousness without psychic shocks.
+        </p>
+        <div class="orientation-actions">
+          <div class="action-box">
+            <span class="act-icon">💬</span>
+            <div>
+              <h4>Direct Telegram Community</h4>
+              <p>Connect directly with fellow sadhaks and guides for initiation questions.</p>
+              <a href="https://t.me/+tM8pVCZWG8cxYjc1" target="_blank" rel="noopener" style="color: var(--gold-bright); font-size: 0.85rem; font-weight: 600; display: inline-block; margin-top: 6px;">Join Telegram Channel →</a>
+            </div>
+          </div>
+          <div class="action-box">
+            <span class="act-icon">📚</span>
+            <div>
+              <h4>Jnāna Samvāda Codex</h4>
+              <p>Explore hundreds of sacred queries answered regarding mantras, food rules, and sadhana.</p>
+              <a href="/jnana-samvada" style="color: var(--gold-bright); font-size: 0.85rem; font-weight: 600; display: inline-block; margin-top: 6px;">Open Jnāna Samvāda →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.accordion-panel -->
+  </div><!-- /#bhairava-krama-section -->
+
+
+  <!-- ========================================================================
+       SECTION 2: MAA KĀMĀKHYĀ DEVI SĀDHANA (FROM DEVI.HTML & DEVI_PADATHI)
+       * COLLAPSIBLE & COLLAPSED BY DEFAULT *
+       ======================================================================== -->
+  <div class="krama-accordion devi-krama is-collapsed" id="devi-krama-section">
+    <!-- Trigger Header -->
+    <button type="button" class="accordion-trigger" onclick="toggleAccordion('devi-krama-section')" aria-expanded="false">
+      <div class="trigger-left">
+        <img src="{{ url_for('static', filename='images/kamakhaya_maa_with_baba_header.jpg') }}" alt="Maa Kamakhya with Baba" class="trigger-avatar" onerror="this.src='/static/images/logo.jpeg'" />
+        <div>
+          <span class="trigger-badge">KRAMA II · SHAKTI ANUGRAHA · MAA KĀMĀKHYĀ</span>
+          <h2 class="trigger-title">
+            <span>Devi Anughara</span>
+            <span style="font-size: 1.1rem; color: #fda4af;">· Maa Kāmākhyā Sādhana Flow</span>
+          </h2>
+          <p class="trigger-sub">“She is the grace that nurtures, the energy that moves, and the mother who holds”</p>
+        </div>
+      </div>
+      <div class="trigger-right">
+        <span class="toggle-status-pill" id="devi-status-pill">COLLAPSED · TAP TO EXPAND</span>
+        <div class="toggle-icon">
+          <i class="fas fa-chevron-down"></i>
+        </div>
+      </div>
+    </button>
+
+    <!-- Collapsible Body Content -->
+    <div class="accordion-panel">
+
+      <!-- Devi Hero Banner -->
+      <div class="devi-hero-card">
+        <div class="devi-hero-img-wrap">
+          <img src="{{ url_for('static', filename='images/kamakhaya_maa_with_baba_header.jpg') }}" alt="Devi Maa" class="devi-hero-img" onerror="this.src='/static/images/logo.jpeg'" />
+        </div>
+        <div class="devi-hero-content">
+          <div class="devi-badge">
+            <span>🌸</span>
+            <span>The Divine Feminine</span>
+          </div>
+          <h2 class="devi-hero-title">Devi Anughara</h2>
+          <p class="devi-hero-sub">
+            “She is the grace that nurtures, the energy that moves, and the mother who holds.”
+          </p>
+        </div>
+      </div>
+
+      <!-- The Call of the Mother (Intro Box) -->
+      <div class="intro-box">
+        <h3 class="intro-title">The Call of the Mother</h3>
+        <p class="intro-text">
+          This space is an invitation to come a little closer, to listen a little deeper, and to remember Her call that now echoes within. The Devi aspect is not separate but the flowering of the seed planted by Bhairava.
+        </p>
+      </div>
+
+      <!-- Philosophy Grid: Ultimate Womb of Power -->
+      <div class="philosophy-grid">
+        <div class="philosophy-img-wrap">
+          <img src="{{ url_for('static', filename='images/kamakhaya_maa_yoni_pith.jpg') }}" alt="Kamakhya Maa Yoni Pith" class="philosophy-img" onerror="this.src='/static/images/logo.jpeg'" />
+        </div>
+        <div class="philosophy-content">
+          <h2>Ultimate Womb of Power</h2>
+          <div class="philosophy-divider"></div>
+          <div class="philosophy-text">
+            <p>
+              Maa Kāmākhyā is <span class="highlight-shakti">Purna Shakti</span>, the complete embodiment of all forms of the Divine Feminine. She is the source, center, and culmination of every Devi Aradhana.
+            </p>
+            <p>
+              The Yoni Peetha is the residence of Tantra and the ultimate reality behind all Devi worship. Every mantra or offering made to any form of Shakti (Kali, Tara, Chhinnamasta, Tripurasundari) ultimately reaches Her.
+            </p>
+            <div class="philosophy-highlight-box">
+              “Sadhana is not done to reach Maa—it's to remember She was never apart.”
+            </div>
+            <p>
+              Through Her grace, the seeker transcends the boundaries of the self, merging with the cosmic pulse that sustains the entire creation. Her presence is the subtle current that leads us home.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Guidelines Grid (4 Pillars) -->
+      <div style="margin-bottom: 2.5rem;">
+        <h3 style="font-family: var(--display); font-size: 1.7rem; color: var(--paper-bright); text-align: center; margin-bottom: 1.5rem;">
+          Sacred Devi Sādhana Guidelines
+        </h3>
+        <div class="guidelines-grid">
+          <div class="guide-card">
+            <div class="guide-title">🥗 Diet</div>
+            <p class="guide-text">Strict Satvik diet. No onion, garlic, eggs, or non-veg. Maintain purity of intake to stabilize psychic energy.</p>
+          </div>
+          <div class="guide-card">
+            <div class="guide-title">👕 Attire</div>
+            <p class="guide-text">Red or yellow sacred clothing is preferred during sadhana to align with the vibrant Shakti frequencies.</p>
+          </div>
+          <div class="guide-card">
+            <div class="guide-title">🌅 Timing</div>
+            <p class="guide-text">Preferred after sunset or before sunrise. The 'Sandhya' (twilight) periods are most potent for Her connection.</p>
+          </div>
+          <div class="guide-card">
+            <div class="guide-title">🧘 Conduct</div>
+            <p class="guide-text">Maintain Brahmacharya (celibacy) and mental/emotional purity. Treat all women with utmost respect as living Shaktis.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Potent Timing Card -->
+      <div class="timings-card" id="potent-timings">
+        <div class="timings-title">
+          <span>🌙</span>
+          <span>Potent Timing for Devi Sādhana</span>
+        </div>
+        <div class="timing-item">
+          <span class="timing-name">Shukla Paksha:</span> Ekadashi or Ashtami are ideal starting points for any new anusthana.
+        </div>
+        <div class="timing-item">
+          <span class="timing-name">Chaitra &amp; Ashwin Navratri:</span> The two primary cosmic Navratris for public and private worship.
+        </div>
+        <div class="timing-item">
+          <span class="timing-name">Gupta Navratris (Magha, Ashadha, Pausha):</span> Highly sacred windows for intense and esoteric practices.
+        </div>
+      </div>
+
+      <!-- ===== KAMAKHYA SADHANA MANDALA FLOW (FROM DEVI_PADATHI.HTML) ===== -->
+      <div class="phase-section" style="margin-top: 2rem;">
+        <div class="phase-header-bar devi-phase">
+          <div class="phase-icon-badge">
+            <i class="fas fa-om"></i>
+          </div>
+          <span class="phase-header-title">Kamakhya Sadhana Mandala — Path of Divine Feminine</span>
+        </div>
+
+        <div class="flow-row">
+          <div class="flow-marker" title="Devi Flow Inception">
+            <i class="fas fa-play"></i>
+          </div>
+
+          <div class="flow-cards">
+            <!-- Devi Mandala 1 -->
+            <div class="stage-card" onclick="openStageModal(101)" role="button" tabindex="0">
+              <div class="card-status-icon">
+                <i class="fas fa-unlock"></i>
+              </div>
+              <div class="card-body">
+                <img src="{{ url_for('static', filename='images/kamakhaya_maa_mandla_1_header.jpg') }}" alt="Devi Mandala 1" class="mandala-img" onerror="this.src='/static/images/stage_headers/mandala_1_header.jpg'" />
+                <div class="card-title">Devi Mandala 1</div>
+                <div class="card-days">33 Days</div>
+                <div class="card-status-text">Ready · Tap to View</div>
+              </div>
+            </div>
+
+            <!-- Flow Arrow -->
+            <div class="flow-arrow">
+              <svg viewBox="0 0 35 22" fill="none">
+                <path d="M0 11 H26 M21 5 L28 11 L21 17" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+
+            <!-- Devi Mandala 2 -->
+            <div class="stage-card" onclick="openStageModal(102)" role="button" tabindex="0">
+              <div class="card-status-icon">
+                <i class="fas fa-unlock"></i>
+              </div>
+              <div class="card-body">
+                <img src="{{ url_for('static', filename='images/kamakhaya_maa_mandla_2_header.jpg') }}" alt="Devi Mandala 2" class="mandala-img" onerror="this.src='/static/images/stage_headers/mandala_2_header.jpg'" />
+                <div class="card-title">Devi Mandala 2</div>
+                <div class="card-days">66 Days</div>
+                <div class="card-status-text">Ready · Tap to View</div>
+              </div>
+            </div>
+
+            <!-- Flow Arrow -->
+            <div class="flow-arrow">
+              <svg viewBox="0 0 35 22" fill="none">
+                <path d="M0 11 H26 M21 5 L28 11 L21 17" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+
+            <!-- Devi Mandala 3 -->
+            <div class="stage-card" onclick="openStageModal(103)" role="button" tabindex="0">
+              <div class="card-status-icon">
+                <i class="fas fa-unlock"></i>
+              </div>
+              <div class="card-body">
+                <img src="{{ url_for('static', filename='images/kamakhaya_maa_mandla_3_header.jpg') }}" alt="Devi Mandala 3" class="mandala-img" onerror="this.src='/static/images/stage_headers/mandala_3_header.jpg'" />
+                <div class="card-title">Devi Mandala 3</div>
+                <div class="card-days">99 Days</div>
+                <div class="card-status-text">Ready · Tap to View</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-marker" title="Purna Samarpanam">
+            <i class="fas fa-lotus"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pathways of Grace (3 Cards) -->
+      <div style="margin-top: 2.5rem;">
+        <h3 style="font-family: var(--display); font-size: 1.7rem; color: var(--paper-bright); text-align: center; margin-bottom: 1.5rem;">
+          Pathways of Grace
+        </h3>
+        <div class="pathway-grid">
+          <div class="pathway-card">
+            <i class="fas fa-lotus pathway-icon"></i>
+            <h4 class="pathway-title">Devi Padathi</h4>
+            <p class="pathway-text">A structured progression of 3 Mandalas designed to deepen your connection daily.</p>
+            <button type="button" class="pathway-btn" onclick="openStageModal(101)">Explore Padathi</button>
+          </div>
+
+          <div class="pathway-card">
+            <i class="fas fa-om pathway-icon"></i>
+            <h4 class="pathway-title">Vishesh Sadhana</h4>
+            <p class="pathway-text">Specific sadhanas for auspicious windows like Navratri, with simplified guidelines.</p>
+            <a href="#potent-timings" class="pathway-btn">Explore Timings</a>
+          </div>
+
+          <div class="pathway-card">
+            <i class="fas fa-scroll pathway-icon"></i>
+            <h4 class="pathway-title">Documents &amp; Texts</h4>
+            <p class="pathway-text">Access sacred scriptures, guides, and supporting materials for your Devi path.</p>
+            <a href="/documents" target="_blank" class="pathway-btn">View Sacred PDF</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sacred Devi Quote -->
+      <div class="sacred-devi-quote">
+        <p class="devi-quote-text">
+          “To know Her is to know the very pulse of existence. She is not far away; She is the breath you take and the love that seeks.”
+        </p>
+      </div>
+
+    </div><!-- /.accordion-panel -->
+  </div><!-- /#devi-krama-section -->
+
+</div><!-- /.paddhati-container -->
+
+
+<!-- ========================================================================
+     INTERACTIVE STAGE DETAIL MODAL
+     ======================================================================== -->
+<div class="stage-modal-overlay" id="stage-modal" onclick="closeStageModal(event)">
+  <div class="stage-modal-card" onclick="event.stopPropagation()">
+    <button type="button" class="modal-close-btn" onclick="closeStageModal()" aria-label="Close modal">×</button>
+    <div class="modal-header-banner">
+      <img id="modal-img" src="" alt="Stage Artwork" class="modal-banner-img" />
+      <div class="modal-banner-overlay"></div>
+    </div>
+    <div class="modal-body">
+      <span class="modal-badge" id="modal-badge">MANDALA STAGE</span>
+      <h3 class="modal-title" id="modal-title">Stage Title</h3>
+      <p class="modal-desc" id="modal-desc">Stage description text goes here.</p>
+
+      <div class="modal-meta-grid">
+        <div class="modal-meta-box">
+          <div class="meta-label">Duration &amp; Discipline</div>
+          <div class="meta-value" id="modal-duration">41 Days</div>
+        </div>
+        <div class="modal-meta-box">
+          <div class="meta-label">Spiritual Focus</div>
+          <div class="meta-value" id="modal-focus">Japa &amp; Asana</div>
+        </div>
+      </div>
+
+      <div class="modal-cta-wrap">
+        <a href="https://t.me/+tM8pVCZWG8cxYjc1" target="_blank" rel="noopener" class="modal-btn-telegram">
+          <i class="fab fa-telegram"></i>
+          <span>Ask in Telegram Community</span>
+        </a>
+        <button type="button" class="btn-ctrl" onclick="closeStageModal()" style="padding: 0.75rem 1.25rem;">Close</button>
       </div>
     </div>
-
-    <!-- Step 2 -->
-    <div class="portal-card">
-      <div class="portal-icon-wrap">🔥</div>
-      <div class="portal-tag">STAGE II · DHYANA</div>
-      <h3>Second Step: Divine Deepening</h3>
-      <p>Immersion into sacred Japa and Dhyana. Tuning the consciousness to the subtle vibrations of Bhairava mantras, purifying the psychic channels, and anchoring the mind in unswerving focus.</p>
-      <div style="font-family: var(--mono); font-size: 12px; color: var(--gold); border-top: 1px solid var(--gold-border); padding-top: 16px;">
-        DISCIPLINE: Japa Anusthana &amp; Mantra Chanting
-      </div>
-    </div>
-
-    <!-- Step 3 -->
-    <div class="portal-card">
-      <div class="portal-icon-wrap">🔱</div>
-      <div class="portal-tag">STAGE III · SAMADHI</div>
-      <h3>Third Step: Sacred Union</h3>
-      <p>Surrender of the individual ego into the all-pervading consciousness of Bhairava. Transcending dualities, where the seeker, the path, and the destination dissolve into Sarvam Bhairava Swaroopam.</p>
-      <div style="font-family: var(--mono); font-size: 12px; color: var(--gold); border-top: 1px solid var(--gold-border); padding-top: 16px;">
-        DISCIPLINE: Sahaja Samadhi &amp; Unbroken Witnessing
-      </div>
-    </div>
   </div>
-</section>
+</div>
+{% endblock %}
 
-<!-- Rudraksha Initiation Section -->
-<section class="essence-section" style="padding-top: 40px;">
-  <div class="essence-box">
-    <div class="skt gold" style="font-size: 26px; margin-bottom: 16px;">॥ रुद्राक्ष माहात्म्यम् ॥</div>
-    <h2 style="font-family:var(--display); font-size:36px; color:var(--paper-bright); margin-bottom:16px;">
-      Begin Your Sacred Rudraksha Journey
-    </h2>
-    <p class="essence-body">
-      Rudraksha is not an ornament; it is the crystallized tear of Mahadeva Shiva, an energetic conduit that stabilizes the nervous system, shields the aura, and amplifies mantra spanda during intense sadhana sessions.
-    </p>
-    <div style="margin-top: 30px;">
-      <a href="/jnana-samvada" class="btn-gold-primary">
-        <span>Explore Jnāna Samvāda on Rudraksha Rules</span>
-        <span>→</span>
-      </a>
-    </div>
-  </div>
-</section>
+{% block extra_scripts %}
+<script>
+  // ==========================================================================
+  // STAGE DATA REPOSITORY FOR MODALS
+  // ==========================================================================
+  const STAGE_DATA = {
+    1: {
+      title: "Mandala 1 · Inception & Dawn",
+      badge: "PHASE I · FOUNDATION",
+      image: "/static/images/stage_headers/mandala_1_header.jpg",
+      duration: "21 or 41 Days",
+      focus: "Asana, Stillness & Japa",
+      desc: "The primary awakening of the sadhak. In this initial mandala, the seeker establishes a firm physical seat (Asana Siddhi) and lights the internal lamp of pure awareness. Daily Japa begins to harmonize the pranic sheath."
+    },
+    2: {
+      title: "Mandala 2 · Divine Deepening",
+      badge: "PHASE I · FOUNDATION",
+      image: "/static/images/stage_headers/mandala_2_header.jpg",
+      duration: "41 Days",
+      focus: "Prana Alignment & Spanda",
+      desc: "Deepening of the vibration. The mind quiets as mantra resonance permeates the subtle channels (Nadis). The internal heat (Tapas) begins to dissolve ancient karmic latencies and emotional turbulence."
+    },
+    3: {
+      title: "Mandala 3 · Foundation Completion",
+      badge: "PHASE I · FOUNDATION",
+      image: "/static/images/stage_headers/mandala_3_header.jpg",
+      duration: "41 Days",
+      focus: "Unshakable Grounding",
+      desc: "Completion of the threefold foundational cycle. The seeker has anchored the mind in unwavering concentration. Inner stillness is established, rendering the vessel fit for sacred Rudraksha Diksha."
+    },
+    7: {
+      title: "Pratham Charana · Rudraksha Diksha",
+      badge: "PHASE II · DIKSHA INITIATION",
+      image: "/static/images/pratam_charana_header.jpg",
+      duration: "Sacred Transmission",
+      focus: "Guru Sankalpa & Transmission",
+      desc: "Formal initiation into the sacred stream of Rudraksha Diksha. The Guru or lineage blesses the seeker with the protective shield of Shiva-Bhairava consciousness."
+    },
+    4: {
+      title: "8 Mukhi Rudraksha · Ashta Murti",
+      badge: "PHASE II · SACRED ENERGIES",
+      image: "/static/images/8 Mukhi _ Achtgesicht Rudraksha Nepal 20-22 mm.jpeg",
+      duration: "Continuous Dharana",
+      focus: "Obstacle Removal & Willpower",
+      desc: "Blessed by Lord Ganesha and the Eight Murtis of Bhairava. Wearers experience profound clarity, the dissolution of obstacles, and the grounding of the root and naval chakras."
+    },
+    5: {
+      title: "11 Mukhi Rudraksha · Ekadasha Rudra",
+      badge: "PHASE II · SACRED ENERGIES",
+      image: "/static/images/rudraksha/rudrakha_11_mukhi.jpeg",
+      duration: "Continuous Dharana",
+      focus: "Fearlessness & Prana Control",
+      desc: "Sacred representation of the Eleven Rudras. Grants courage, shields against psychic hostility, controls sensory dissipation, and attunes the sadhak to fierce divine protection."
+    },
+    8: {
+      title: "Dutiya Charana · The Inward Eye",
+      badge: "PHASE III · ANTAR-SADHANA",
+      image: "/static/images/bhairava_black.jpg",
+      duration: "Advanced Antar-Sadhana",
+      focus: "Mouna (Silence) & Chidakasha",
+      desc: "The transition from outer ritual to the limitless cave of the heart. The sadhak practices deep internal contemplation, resting as the witness behind all perceptions."
+    },
+    6: {
+      title: "14 Mukhi Rudraksha · Deva Mani",
+      badge: "PHASE III · SACRED ENERGIES",
+      image: "/static/images/rudraksha/rudarakha_14_muki.jpeg",
+      duration: "Awakening Ajna Chakra",
+      focus: "Intuition & Third Eye Vision",
+      desc: "Known as the Deva Mani, born directly from the third eye of Mahadeva Shiva. Opens intuitive wisdom, clairvoyance, and unlocks direct perception beyond intellectual intellect."
+    },
+    9: {
+      title: "Tritiya Charana · Purna Samadhi",
+      badge: "PHASE III · SUPREME UNION",
+      image: "/static/images/bhairava_eight_hands.jpeg",
+      duration: "Spontaneous Sahaja",
+      focus: "Sarvam Bhairava Swaroopam",
+      desc: "The pinnacle of the Bhairava Kramas. Seeker, path, and destination merge. Every breath becomes a mantra, every posture a mudra, in perpetual realization of non-dual consciousness."
+    },
+    101: {
+      title: "Devi Mandala 1 · The Womb of Grace",
+      badge: "SHAKTI KRAMA · MAA KAMAKHYA",
+      image: "/static/images/kamakhaya_maa_mandla_1_header.jpg",
+      duration: "33 Days",
+      focus: "Nurturing Devotion & Purity",
+      desc: "Awakening the maternal pulse of Maa Kāmākhyā. The sadhak purifies the emotional heart and aligns with the cosmic womb of infinite grace and unconditional motherly refuge."
+    },
+    102: {
+      title: "Devi Mandala 2 · Spanda of Shakti",
+      badge: "SHAKTI KRAMA · MAA KAMAKHYA",
+      image: "/static/images/kamakhaya_maa_mandla_2_header.jpg",
+      duration: "66 Days",
+      focus: "Kundalini Flow & Compassion",
+      desc: "The dynamic movement of Shakti through the psychic channels. Inner knots (Granthis) soften under the gentle yet intense fire of Her divine presence."
+    },
+    103: {
+      title: "Devi Mandala 3 · Purna Samarpanam",
+      badge: "SHAKTI KRAMA · MAA KAMAKHYA",
+      image: "/static/images/kamakhaya_maa_mandla_3_header.jpg",
+      duration: "99 Days",
+      focus: "Total Dissolution into Her Heart",
+      desc: "The final surrender into the all-encompassing Yoni Peetha of Kamakhya. The sadhak experiences the entire cosmos as the living, pulsating body of the Divine Mother."
+    }
+  };
+
+  // ==========================================================================
+  // ACCORDION TOGGLING & STATE MANAGEMENT
+  // ==========================================================================
+  function toggleAccordion(sectionId) {
+    const el = document.getElementById(sectionId);
+    if (!el) return;
+
+    const isOpen = el.classList.contains('is-open');
+    if (isOpen) {
+      el.classList.remove('is-open');
+      el.classList.add('is-collapsed');
+      updateAccordionUI(sectionId, false);
+    } else {
+      el.classList.remove('is-collapsed');
+      el.classList.add('is-open');
+      updateAccordionUI(sectionId, true);
+    }
+  }
+
+  function updateAccordionUI(sectionId, isOpen) {
+    const trigger = document.querySelector(`#${sectionId} .accordion-trigger`);
+    if (trigger) {
+      trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    }
+
+    if (sectionId === 'bhairava-krama-section') {
+      const pill = document.getElementById('bhairava-status-pill');
+      if (pill) pill.textContent = isOpen ? 'OPEN · TAP TO COLLAPSE' : 'COLLAPSED · TAP TO EXPAND';
+      const btn = document.getElementById('jump-bhairava-btn');
+      if (btn) btn.classList.toggle('is-active', isOpen);
+    } else if (sectionId === 'devi-krama-section') {
+      const pill = document.getElementById('devi-status-pill');
+      if (pill) pill.textContent = isOpen ? 'OPEN · TAP TO COLLAPSE' : 'COLLAPSED · TAP TO EXPAND';
+      const btn = document.getElementById('jump-devi-btn');
+      if (btn) btn.classList.toggle('is-active', isOpen);
+    }
+  }
+
+  function expandBothSections() {
+    ['bhairava-krama-section', 'devi-krama-section'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.remove('is-collapsed');
+        el.classList.add('is-open');
+        updateAccordionUI(id, true);
+      }
+    });
+  }
+
+  function collapseBothSections() {
+    ['bhairava-krama-section', 'devi-krama-section'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.remove('is-open');
+        el.classList.add('is-collapsed');
+        updateAccordionUI(id, false);
+      }
+    });
+  }
+
+  function scrollToSection(sectionId) {
+    const el = document.getElementById(sectionId);
+    if (el) {
+      if (el.classList.contains('is-collapsed')) {
+        toggleAccordion(sectionId);
+      }
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  // ==========================================================================
+  // STAGE MODAL CONTROLS
+  // ==========================================================================
+  function openStageModal(stageId) {
+    const data = STAGE_DATA[stageId];
+    if (!data) return;
+
+    document.getElementById('modal-img').src = data.image;
+    document.getElementById('modal-badge').textContent = data.badge;
+    document.getElementById('modal-title').textContent = data.title;
+    document.getElementById('modal-desc').textContent = data.desc;
+    document.getElementById('modal-duration').textContent = data.duration;
+    document.getElementById('modal-focus').textContent = data.focus;
+
+    const modal = document.getElementById('stage-modal');
+    modal.classList.add('is-active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeStageModal(e) {
+    if (e && e.target !== e.currentTarget && !e.target.classList.contains('modal-close-btn')) {
+      return;
+    }
+    const modal = document.getElementById('stage-modal');
+    modal.classList.remove('is-active');
+    document.body.style.overflow = '';
+  }
+
+  // Handle ESC key for modal
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeStageModal();
+    }
+  });
+
+  // Check URL parameters on load
+  document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const view = urlParams.get('view');
+    const stage = urlParams.get('stage');
+
+    if (view === 'devi') {
+      const deviEl = document.getElementById('devi-krama-section');
+      if (deviEl && deviEl.classList.contains('is-collapsed')) {
+        toggleAccordion('devi-krama-section');
+      }
+      setTimeout(() => {
+        scrollToSection('devi-krama-section');
+      }, 200);
+    }
+
+    if (stage && STAGE_DATA[stage]) {
+      setTimeout(() => {
+        openStageModal(parseInt(stage, 10));
+      }, 300);
+    }
+  });
+</script>
 {% endblock %}

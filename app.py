@@ -154,8 +154,35 @@ def bhairav_loka_page():
 
 @app.route('/sadhana-paddhati')
 def sadhana_paddhati_page():
-    """Sādhana Paddhati 3-Stage Path"""
-    return render_template('sadhana_paddhati.html', active_page='sadhana')
+    """Sādhana Paddhati 3-Stage Path & Devi Anugraha Flow"""
+    active_view = request.args.get('view', 'bhairava')
+    stage_id = request.args.get('stage', None)
+    return render_template('sadhana_paddhati.html', active_page='sadhana', active_view=active_view, stage_id=stage_id)
+
+@app.route('/devi')
+@app.route('/devi-padathi')
+def devi_padathi_redirect():
+    """Convenience redirect to Devi section on sadhana-paddhati page"""
+    return redirect('/sadhana-paddhati?view=devi#devi-section')
+
+@app.route('/vishesh-sadhana')
+def vishesh_sadhana_redirect():
+    """Convenience redirect to Vishesh Sadhana section"""
+    return redirect('/sadhana-paddhati?view=devi#potent-timings')
+
+@app.route('/documents')
+def documents_page():
+    """Serves sacred PDF documentation or documents download"""
+    pdf_filename = 'Kāmākhyā–Bhairava.pdf'
+    pdf_path = os.path.join(BASE_DIR, 'static', pdf_filename)
+    if os.path.exists(pdf_path):
+        return send_from_directory(os.path.join(BASE_DIR, 'static'), pdf_filename)
+    return redirect('/static/Kāmākhyā–Bhairava.pdf')
+
+@app.route('/stage/<int:stage_id>')
+def stage_redirect(stage_id):
+    """Redirect to stage view on sadhana-paddhati"""
+    return redirect(f'/sadhana-paddhati?stage={stage_id}')
 
 @app.route('/ashtami')
 def ashtami_page():
