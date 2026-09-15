@@ -1297,6 +1297,17 @@ img {
   transform: translateX(4px);
 }
 
+/* Enforce desktop hiding */
+@media (min-width: 769px) {
+  .mobile-drawer,
+  .drawer-backdrop,
+  .mobile-toggle {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+}
+
 /* ==========================================================================
    RESPONSIVE QUERIES
    ========================================================================== */

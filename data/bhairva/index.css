@@ -1072,6 +1072,65 @@ body:not(.is-folio-view) .folio-page { display: none; }
   .overlay-card { padding: 48px 32px 56px; }
   .overlay h1 { font-size: 40px; }
 }
+
+/* ==========================================================================
+   QNA / JNANA SAMVADA MOBILE DRAWER (Base Definitions)
+   ========================================================================== */
+.qna-drawer-backdrop {
+  display: none;
+  position: fixed; inset: 0; background: rgba(7,6,10,0.8);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  z-index: 1490; opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.qna-mobile-drawer {
+  display: none;
+  position: fixed; top: 0; right: 0; width: 280px; max-width: 85vw;
+  height: 100vh; height: 100dvh; background: #130e09;
+  border-left: 1px solid var(--gold-border);
+  box-shadow: -10px 0 35px rgba(0,0,0,0.85); z-index: 1500;
+  transform: translateX(100%); visibility: hidden; pointer-events: none;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
+  padding: 24px 20px; flex-direction: column; overflow-y: auto;
+}
+
+.qna-drawer-close {
+  align-self: flex-end; font-size: 26px; color: var(--gold);
+  margin-bottom: 20px; padding: 4px 8px; border-radius: 4px;
+  background: rgba(212,166,74,0.1); border: 1px solid rgba(212,166,74,0.2);
+  cursor: pointer; line-height: 1;
+}
+
+.qna-drawer-links {
+  list-style: none; display: flex; flex-direction: column; gap: 10px;
+}
+
+.qna-drawer-links a {
+  font-size: 16px; color: var(--paper); display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 6px; border: 1px solid rgba(212,166,74,0.12);
+  background: rgba(26,20,16,0.5); text-decoration: none;
+}
+
+.qna-drawer-links a:hover {
+  border-color: var(--gold); color: var(--gold-3); background: rgba(212,166,74,0.15);
+}
+
+.mobile-toggle-qna {
+  display: none;
+}
+
+/* Enforce desktop hiding */
+@media (min-width: 769px) {
+  .qna-drawer-backdrop,
+  .qna-mobile-drawer,
+  .mobile-toggle-qna {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+}
+
 @media (max-width: 768px) {
   /* --- Chrome --- */
   .chrome-inner { padding: 12px 16px; gap: 12px; grid-template-columns: 1fr auto; }
@@ -1100,44 +1159,17 @@ body:not(.is-folio-view) .folio-page { display: none; }
   }
   .badge-super { display: none !important; }
 
-  /* Drawer for QnA */
   .qna-drawer-backdrop {
-    position: fixed; inset: 0; background: rgba(7,6,10,0.8);
-    backdrop-filter: blur(6px); z-index: 1490;
-    opacity: 0; visibility: hidden; pointer-events: none;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    display: block;
   }
   .qna-drawer-backdrop.is-open {
     opacity: 1; visibility: visible; pointer-events: auto;
   }
   .qna-mobile-drawer {
-    position: fixed; top: 0; right: 0; width: 280px; max-width: 85vw;
-    height: 100vh; height: 100dvh; background: #130e09;
-    border-left: 1px solid var(--gold-border);
-    box-shadow: -10px 0 35px rgba(0,0,0,0.85); z-index: 1500;
-    transform: translateX(100%); visibility: hidden; pointer-events: none;
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
-    padding: 24px 20px; display: flex; flex-direction: column; overflow-y: auto;
+    display: flex;
   }
   .qna-mobile-drawer.is-open {
     transform: translateX(0); visibility: visible; pointer-events: auto;
-  }
-  .qna-drawer-close {
-    align-self: flex-end; font-size: 26px; color: var(--gold);
-    margin-bottom: 20px; padding: 4px 8px; border-radius: 4px;
-    background: rgba(212,166,74,0.1); border: 1px solid rgba(212,166,74,0.2);
-    cursor: pointer; line-height: 1;
-  }
-  .qna-drawer-links {
-    list-style: none; display: flex; flex-direction: column; gap: 10px;
-  }
-  .qna-drawer-links a {
-    font-size: 16px; color: var(--paper); display: flex; align-items: center; gap: 10px;
-    padding: 10px 12px; border-radius: 6px; border: 1px solid rgba(212,166,74,0.12);
-    background: rgba(26,20,16,0.5); text-decoration: none;
-  }
-  .qna-drawer-links a:hover {
-    border-color: var(--gold); color: var(--gold-3); background: rgba(212,166,74,0.15);
   }
 
   /* --- Hero --- */
