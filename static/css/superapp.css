@@ -61,6 +61,8 @@
 html {
   scroll-behavior: smooth;
   background-color: var(--ink);
+  overflow-x: hidden;
+  width: 100%;
 }
 
 body {
@@ -74,6 +76,8 @@ body {
   overflow-x: hidden;
   position: relative;
   min-height: 100vh;
+  width: 100%;
+  max-width: 100vw;
 }
 
 a {
@@ -1203,49 +1207,94 @@ img {
 }
 
 /* ==========================================================================
-   MOBILE MENU DRAWER
+   MOBILE MENU DRAWER & BACKDROP
    ========================================================================== */
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 6, 10, 0.78);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 1490;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.drawer-backdrop.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
 .mobile-drawer {
   position: fixed;
   top: 0;
   right: 0;
-  width: 280px;
+  width: 290px;
+  max-width: 85vw;
   height: 100vh;
-  background: #120d08;
+  height: 100dvh;
+  background: #130e09;
   border-left: 1px solid var(--gold-border);
-  box-shadow: -10px 0 30px rgba(0,0,0,0.8);
+  box-shadow: -10px 0 35px rgba(0, 0, 0, 0.85);
   z-index: 1500;
   transform: translateX(100%);
-  transition: transform 0.3s ease;
-  padding: 24px;
+  visibility: hidden;
+  pointer-events: none;
+  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.32s;
+  padding: 24px 20px;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 }
 
 .mobile-drawer.is-open {
   transform: translateX(0);
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .drawer-close {
   align-self: flex-end;
   font-size: 28px;
   color: var(--gold);
-  margin-bottom: 24px;
+  margin-bottom: 20px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: rgba(212, 166, 74, 0.1);
+  border: 1px solid rgba(212, 166, 74, 0.2);
+  line-height: 1;
+  cursor: pointer;
 }
 
 .drawer-links {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 .drawer-links a {
   font-size: 18px;
   color: var(--paper);
-  display: block;
-  padding: 8px 0;
-  border-bottom: 1px solid rgba(212, 166, 74, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(212, 166, 74, 0.12);
+  background: rgba(26, 20, 16, 0.5);
+  transition: var(--transition);
+}
+
+.drawer-links a:hover,
+.drawer-links a:active {
+  background: rgba(212, 166, 74, 0.15);
+  border-color: var(--gold);
+  color: var(--gold-3);
+  transform: translateX(4px);
 }
 
 /* ==========================================================================
@@ -1254,7 +1303,7 @@ img {
 @media (max-width: 980px) {
   .hero-inner {
     grid-template-columns: 1fr;
-    gap: 40px;
+    gap: 36px;
     text-align: center;
   }
   .hero-left .mantra-banner {
@@ -1267,6 +1316,7 @@ img {
   .book-card {
     grid-template-columns: 1fr;
     text-align: center;
+    gap: 32px;
   }
   .book-order-box {
     text-align: left;
@@ -1276,26 +1326,297 @@ img {
   }
   .footer-inner {
     grid-template-columns: 1fr;
+    gap: 36px;
   }
 }
 
 @media (max-width: 768px) {
+  :root {
+    --chrome-h: 64px;
+  }
+
+  /* Header adjustments */
   .chrome-nav {
-    display: none;
+    display: none !important;
   }
   .mobile-toggle {
-    display: block;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    font-size: 22px;
+    color: var(--gold);
+    background: rgba(212, 166, 74, 0.1);
+    border: 1px solid var(--gold-border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+  .chrome-inner {
+    padding: 0 16px;
+    gap: 12px;
+  }
+  .chrome .b {
+    font-size: 19px;
+  }
+  .chrome .om {
+    font-size: 24px;
+  }
+  .search-btn {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+  .search-btn .kbd {
+    display: none;
+  }
+  .audio-toggle-btn {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  /* Ashtami banner */
+  .ashtami-banner {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+  .ashtami-inner {
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
+  }
+  .ashtami-link {
+    font-size: 10px;
+    padding: 3px 12px;
+  }
+
+  /* Hero Section */
+  .hero {
+    padding: 36px 16px 50px;
   }
   .hero-left h1 {
-    font-size: 38px;
+    font-size: clamp(28px, 7.5vw, 38px);
+    line-height: 1.18;
+  }
+  .hero-left .tagline {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+  .hero-left .mantra-banner {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    padding: 6px 12px;
+    max-width: 100%;
+    white-space: normal;
+  }
+  .hero-left .hero-desc {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 26px;
+  }
+  .hero-ctas {
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+  }
+  .btn-gold-primary,
+  .btn-gold-outline,
+  .btn-crimson-outline {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    padding: 13px 20px;
+    font-size: 16px;
+  }
+  .cartouche {
+    max-width: 100%;
+    padding: 18px 14px;
+  }
+  .cartouche-img {
+    max-height: 260px;
+    object-fit: cover;
+    margin-bottom: 14px;
+  }
+
+  /* Section Headings */
+  .section-head {
+    margin-bottom: 32px;
+    padding: 0 12px;
   }
   .section-head h2 {
-    font-size: 32px;
+    font-size: clamp(26px, 6.5vw, 32px);
+    line-height: 1.2;
+  }
+  .section-head p {
+    font-size: 16px;
+  }
+
+  /* Portals Grid */
+  .portals-section {
+    padding: 40px 16px;
+  }
+  .portals-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .portal-card {
+    padding: 26px 20px;
+  }
+  .portal-card h3 {
+    font-size: 22px;
+  }
+
+  /* Philosophy & Essence */
+  .essence-section {
+    padding: 40px 16px;
   }
   .essence-box {
-    padding: 36px 20px;
+    padding: 30px 16px;
+    border-radius: var(--radius-md);
   }
   .essence-quote {
+    font-size: 19px;
+    line-height: 1.45;
+    margin-bottom: 20px;
+  }
+  .essence-body {
+    font-size: 15px;
+    line-height: 1.65;
+    margin-bottom: 20px;
+  }
+  .essence-mantra {
+    font-size: 20px;
+  }
+  .pillars-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-top: 28px;
+  }
+  .pillar-card {
+    padding: 18px 14px;
+  }
+
+  /* Video Section */
+  .video-section {
+    padding: 40px 16px;
+  }
+  .video-footer-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+  }
+
+  /* Book Section */
+  .book-section {
+    padding: 40px 16px;
+  }
+  .book-card {
+    padding: 26px 16px;
+    border-radius: var(--radius-md);
+  }
+  .book-cover-img {
+    width: 190px;
+    transform: none;
+  }
+  .book-details h3 {
+    font-size: 24px;
+  }
+  .book-details .book-desc {
+    font-size: 15px;
+  }
+  .book-order-box {
+    padding: 12px 14px;
+    font-size: 14px;
+  }
+  .book-ctas {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  /* Community Section */
+  .community-section {
+    padding: 40px 16px;
+  }
+  .community-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .contact-card {
+    padding: 24px 18px;
+  }
+  .contact-card h3 {
     font-size: 22px;
+  }
+
+  /* Footer */
+  .site-footer {
+    padding: 40px 16px 24px;
+    margin-top: 40px;
+  }
+  .footer-inner {
+    gap: 28px;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+
+  /* Palette */
+  .palette-backdrop {
+    padding: 12px;
+    padding-top: 5vh;
+  }
+  .palette-modal {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 12px;
+  }
+  .palette-header {
+    padding: 12px 14px;
+  }
+  .palette-header .mono {
+    display: none;
+  }
+  .palette-input {
+    font-size: 16px;
+  }
+  .palette-results {
+    max-height: 60vh;
+  }
+}
+
+@media (max-width: 480px) {
+  .badge-super {
+    display: none !important;
+  }
+  .chrome .b {
+    font-size: 17px;
+  }
+  .chrome .om {
+    font-size: 22px;
+  }
+  .chrome-inner {
+    padding: 0 12px;
+  }
+  .chrome .right {
+    gap: 6px;
+  }
+  .search-btn span:first-child {
+    display: none;
+  }
+  .search-btn::before {
+    content: "🔍";
+    font-size: 13px;
+  }
+  .audio-toggle-btn span {
+    font-size: 11px;
+  }
+  .hero-left h1 {
+    font-size: 28px;
+  }
+  .section-head h2 {
+    font-size: 24px;
   }
 }

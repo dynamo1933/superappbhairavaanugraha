@@ -1945,10 +1945,15 @@ body.modal-open {
   }
 }
 
-/* 3. Mobile Portrait (<= 640px) */
-@media (max-width: 640px) {
+/* 3. Mobile Portrait (<= 768px) */
+@media (max-width: 768px) {
   .chrome-inner {
     padding: 8px 12px;
+    gap: 8px;
+  }
+
+  .chrome .nav {
+    display: none !important;
   }
 
   .chrome .sub-tag {
@@ -1963,8 +1968,54 @@ body.modal-open {
     font-size: 20px;
   }
 
-  .chrome .stat-badge span:not(.dot) {
-    font-size: 10px;
+  .chrome .stat-badge {
+    display: none;
+  }
+
+  .chrome .mobile-toggle {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Drawer for Bhairav Loka */
+  .loka-drawer-backdrop {
+    position: fixed; inset: 0; background: rgba(7,6,10,0.8);
+    backdrop-filter: blur(6px); z-index: 1490;
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  .loka-drawer-backdrop.is-open {
+    opacity: 1; visibility: visible; pointer-events: auto;
+  }
+  .loka-mobile-drawer {
+    position: fixed; top: 0; right: 0; width: 280px; max-width: 85vw;
+    height: 100vh; height: 100dvh; background: #130e09;
+    border-left: 1px solid var(--border-gold);
+    box-shadow: -10px 0 35px rgba(0,0,0,0.85); z-index: 1500;
+    transform: translateX(100%); visibility: hidden; pointer-events: none;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
+    padding: 24px 20px; display: flex; flex-direction: column; overflow-y: auto;
+  }
+  .loka-mobile-drawer.is-open {
+    transform: translateX(0); visibility: visible; pointer-events: auto;
+  }
+  .loka-drawer-close {
+    align-self: flex-end; font-size: 26px; color: var(--gold);
+    margin-bottom: 20px; padding: 4px 8px; border-radius: 4px;
+    background: rgba(212,166,74,0.1); border: 1px solid rgba(212,166,74,0.2);
+    cursor: pointer; line-height: 1;
+  }
+  .loka-drawer-links {
+    list-style: none; display: flex; flex-direction: column; gap: 10px;
+  }
+  .loka-drawer-links a {
+    font-size: 16px; color: var(--paper); display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: 6px; border: 1px solid rgba(212,166,74,0.12);
+    background: rgba(26,20,16,0.5); text-decoration: none;
+  }
+  .loka-drawer-links a:hover {
+    border-color: var(--gold); color: var(--gold-3); background: rgba(212,166,74,0.15);
   }
 
   .main-content {
@@ -1972,8 +2023,47 @@ body.modal-open {
   }
 
   .toolbar-section {
-    padding: 8px 10px;
+    padding: 10px;
     margin-bottom: 14px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .toolbar-left {
+    width: 100%;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .filter-search-box {
+    width: 100%;
+  }
+
+  .sort-dropdown {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .sort-dropdown select {
+    flex: 1;
+    margin-left: 8px;
+  }
+
+  .toolbar-right {
+    width: 100%;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 6px;
+  }
+
+  .toolbar-right .view-mode-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 8px 6px;
+    min-height: 38px;
   }
 
   .mandala-container {

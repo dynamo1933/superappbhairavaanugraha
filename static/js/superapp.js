@@ -242,16 +242,37 @@ function initCommandPalette() {
 /* --- 4. Mobile Drawer Navigation --- */
 function initMobileDrawer() {
   const drawer = document.getElementById('mobile-drawer');
+  const backdrop = document.getElementById('drawer-backdrop');
   const openBtn = document.getElementById('mobile-menu-btn');
   const closeBtn = document.getElementById('drawer-close-btn');
-  if (!drawer || !openBtn || !closeBtn) return;
+  if (!drawer || !openBtn) return;
 
-  openBtn.addEventListener('click', () => drawer.classList.add('is-open'));
-  closeBtn.addEventListener('click', () => drawer.classList.remove('is-open'));
+  function openDrawer() {
+    drawer.classList.add('is-open');
+    if (backdrop) backdrop.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeDrawer() {
+    drawer.classList.remove('is-open');
+    if (backdrop) backdrop.classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+
+  openBtn.addEventListener('click', openDrawer);
+  if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+  if (backdrop) backdrop.addEventListener('click', closeDrawer);
 
   // Close drawer on link click
   drawer.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => drawer.classList.remove('is-open'));
+    a.addEventListener('click', closeDrawer);
+  });
+
+  // Close on Escape key
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && drawer.classList.contains('is-open')) {
+      closeDrawer();
+    }
   });
 }
 

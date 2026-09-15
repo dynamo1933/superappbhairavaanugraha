@@ -587,13 +587,15 @@
     }
 
     const svgHtml = getLingamSvg(false);
-    const htmlParts = state.filteredPosts.map(post => {
-      const isActive = state.activePost && state.activePost.post_id === post.post_id;
-      const formattedIndex = String(post.index).padStart(3, '0');
+    const htmlParts = state.filteredPosts.map((post, idx) => {
+      const pid = post.post_id || post.id || `p-${idx}`;
+      const isActive = state.activePost && (state.activePost.post_id === pid || state.activePost.id === pid);
+      const postIndex = (post.index !== undefined && post.index !== null) ? post.index : (idx + 1);
+      const formattedIndex = String(postIndex).padStart(3, '0');
       const likesCount = post.likes ? post.likes.toLocaleString() : '0';
 
       return `
-        <div class="lingam-card ${isActive ? 'is-active' : ''}" data-id="${post.post_id}" data-index="${post.index}" id="lingam-card-${post.post_id}">
+        <div class="lingam-card ${isActive ? 'is-active' : ''}" data-id="${pid}" data-index="${postIndex}" id="lingam-card-${pid}">
           <div class="card-index-badge">№ ${formattedIndex}</div>
           <div class="lingam-visual-wrap">
             <div class="lingam-halo"></div>
@@ -601,7 +603,7 @@
           </div>
           <div class="card-title">${escapeHtml(post.title)}</div>
           <div class="card-meta-row">
-            <span>${post.formatted_date ? post.formatted_date.split(',')[0] : ''}</span>
+            <span>${(post.formatted_date || post.date || '').split(',')[0]}</span>
             <span class="likes-tag">♥ ${likesCount}</span>
           </div>
         </div>

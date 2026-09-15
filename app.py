@@ -20,13 +20,16 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 LOCAL_BHAIRVA = r'C:\Users\dynam\Desktop\Bhairva'
 LOCAL_INSTA = r'C:\Users\dynam\Desktop\instagram_scrap'
 
-BHAIRVA_DIR = os.environ.get('BHAIRVA_DIR', LOCAL_BHAIRVA)
-if not os.path.exists(BHAIRVA_DIR):
-    BHAIRVA_DIR = os.path.join(BASE_DIR, 'data', 'bhairva')
+# Prefer self-contained data folders in superappbhairavaanugraha
+BHAIRVA_DIR = os.environ.get('BHAIRVA_DIR')
+if not BHAIRVA_DIR:
+    local_data_bhairva = os.path.join(BASE_DIR, 'data', 'bhairva')
+    BHAIRVA_DIR = local_data_bhairva if os.path.exists(local_data_bhairva) else LOCAL_BHAIRVA
 
-INSTA_DIR = os.environ.get('INSTA_DIR', LOCAL_INSTA)
-if not os.path.exists(INSTA_DIR):
-    INSTA_DIR = os.path.join(BASE_DIR, 'data', 'instagram_scrap')
+INSTA_DIR = os.environ.get('INSTA_DIR')
+if not INSTA_DIR:
+    local_data_insta = os.path.join(BASE_DIR, 'data', 'instagram_scrap')
+    INSTA_DIR = local_data_insta if os.path.exists(local_data_insta) else LOCAL_INSTA
 
 # Create Flask application
 app = Flask(__name__, template_folder=os.path.join(BASE_DIR, 'templates'), static_folder=os.path.join(BASE_DIR, 'static'))
@@ -99,11 +102,14 @@ def load_filtered_posts():
                 "likes": item.get('likes', 0),
                 "comments": item.get('comments', 0),
                 "image_filename": item.get('image_filename', ''),
-                "url": item.get('url', ''),
                 "hashtags": tags
             })
     filtered.sort(key=lambda x: x['raw_timestamp'] or '', reverse=True)
-    return filtered[:150]
+    results = filtered[:150]
+    for idx, p in enumerate(results, start=1):
+        p['index'] = idx
+        p['post_id'] = p['id']
+    return results
 
 CACHED_POSTS = load_filtered_posts()
 print(f"[+] Loaded {len(CACHED_POSTS)} posts for Bhairav Loka Sahasralinga Codex")
