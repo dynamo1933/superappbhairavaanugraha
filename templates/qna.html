@@ -11,48 +11,67 @@
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Tiro+Devanagari+Sanskrit:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="index.css?v=2" />
+  <link rel="stylesheet" href="/static/css/unified-header.css?v=1" />
 </head>
 
 <body>
 
-  <!-- ==================== CHROME ==================== -->
+  <!-- ==================== UNIFIED CHROME HEADER ==================== -->
   <header class="chrome" id="site-chrome">
     <div class="chrome-inner">
       <a class="left" href="/" title="Bhairava Anugraha Super App">
         <span class="om">ॐ</span>
-        <span class="b">Bhairava <em>Anugraha</em></span> <span class="badge-super mono" style="font-size:9px; letter-spacing:0.18em; padding:2px 6px; background:rgba(212,166,74,0.15); color:var(--gold-3); border:1px solid rgba(212,166,74,0.35); border-radius:3px; margin-left:6px;">SUPER APP</span>
+        <span class="b">Bhairava <em>Anugraha</em></span>
+        <span class="badge-super">Super App</span>
       </a>
-      <nav class="nav">
-        <a href="/" title="Return to Landing Page">Home</a>
-        <a class="is-active" href="/jnana-samvada" title="Jnāna Samvāda · Bhairava Codex">☸ Jnāna Samvāda</a>
-        <a href="/bhairav-loka" title="Bhairav Loka Sahasralinga">✦ Bhairav Loka</a>
-        <a href="/sadhana-paddhati" title="Sādhana Paddhati">🔱 Sādhana</a>
-        <a href="#categories" data-scroll=".categories">Folios</a>
-        <a href="#recent" data-scroll=".recent">Recent</a>
-        <a href="#guruji" data-scroll="#guruji">Guruji</a>
+
+      <nav class="chrome-nav">
+        <a href="/" class="nav-item">Home</a>
+        <a href="/jnana-samvada" class="nav-item nav-pill-super is-active" title="Open Jnāna Samvāda Codex">☸ Jnāna Samvāda</a>
+        <a href="/bhairav-loka" class="nav-item nav-pill-super" title="Open Bhairav Loka Sahasralinga Codex">✦ Bhairav Loka</a>
+        <a href="/sadhana-paddhati" class="nav-item">Sādhana Paddhati</a>
+        <a href="/ashtami" class="nav-item">Ashtami</a>
       </nav>
+
       <div class="right">
-        <button class="search" type="button" id="chrome-search" aria-haspopup="dialog" aria-controls="palette">
-          <span>Search the Codex</span>
+        <button type="button" class="audio-toggle-btn" id="audio-toggle-btn" title="Toggle Meditative Bell Chime">
+          <span>🔕 Audio Off</span>
+        </button>
+
+        <button type="button" class="search-btn" id="chrome-search" title="Search the Codex (⌘K)">
+          <span>Search</span>
           <span class="kbd">⌘K</span>
         </button>
-        <button type="button" class="mobile-toggle-qna" id="qna-mobile-toggle" aria-label="Open Navigation">☰</button>
+
+        <button type="button" class="mobile-toggle" id="mobile-menu-btn" aria-label="Open Navigation Menu">
+          ☰
+        </button>
       </div>
     </div>
   </header>
 
-  <!-- Mobile Drawer for QnA -->
-  <div class="qna-drawer-backdrop" id="qna-drawer-backdrop"></div>
-  <div class="qna-mobile-drawer" id="qna-mobile-drawer">
-    <button type="button" class="qna-drawer-close" id="qna-drawer-close">&times;</button>
-    <div style="font-family:var(--skt); font-size:24px; color:var(--gold); margin-bottom:18px;">ॐ भैरवाय नमः</div>
-    <ul class="qna-drawer-links">
-      <li><a href="/"><span>🏛</span> Home Landing</a></li>
-      <li><a href="/jnana-samvada" style="color:var(--gold-3);"><span>☸</span> Jnāna Samvāda</a></li>
-      <li><a href="/bhairav-loka"><span>✦</span> Bhairav Loka Codex</a></li>
-      <li><a href="/sadhana-paddhati"><span>🔱</span> Sādhana Paddhati</a></li>
-      <li><a href="/ashtami"><span>🌙</span> Ashtami Gateways</a></li>
-      <li><a href="https://t.me/+tM8pVCZWG8cxYjc1" target="_blank" rel="noopener"><span>✈</span> Join Telegram</a></li>
+  <!-- ==================== ASHTAMI ALERT RIBBON ==================== -->
+  <div class="ashtami-banner">
+    <div class="ashtami-inner">
+      <span class="pulse-dot"></span>
+      <span class="ashtami-text">Next Krishna Paksha Ashtami: <strong>Oct 03, 8:00 AM – Oct 04, 5:52 AM IST</strong></span>
+      <a href="/ashtami" class="ashtami-link">Explore Sacred Gateways →</a>
+    </div>
+  </div>
+
+  <!-- ==================== MOBILE MENU DRAWER ==================== -->
+  <div class="drawer-backdrop" id="drawer-backdrop"></div>
+  <div class="mobile-drawer" id="mobile-drawer">
+    <button class="drawer-close" id="drawer-close-btn">&times;</button>
+    <div class="skt gold" style="font-size: 28px; margin-bottom: 20px;">ॐ भैरवाय नमः</div>
+    <ul class="drawer-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/jnana-samvada" style="color:var(--gold-3)">☸ Jnāna Samvāda</a></li>
+      <li><a href="/bhairav-loka" style="color:var(--gold-3)">✦ Bhairav Loka</a></li>
+      <li><a href="/sadhana-paddhati">Sādhana Paddhati</a></li>
+      <li><a href="/ashtami">Ashtami Portal</a></li>
+      <li><a href="https://t.me/+tM8pVCZWG8cxYjc1" target="_blank" rel="noopener">Join Telegram</a></li>
+      <li><a href="https://wa.me/916262212153" target="_blank" rel="noopener">WhatsApp: +91 62622 12153</a></li>
     </ul>
   </div>
 
@@ -392,28 +411,7 @@
 
   <script src="analytics.js"></script>
   <script src="index.js"></script>
-  <script>
-    (function() {
-      const openBtn = document.getElementById('qna-mobile-toggle');
-      const closeBtn = document.getElementById('qna-drawer-close');
-      const drawer = document.getElementById('qna-mobile-drawer');
-      const backdrop = document.getElementById('qna-drawer-backdrop');
-      if (!openBtn || !drawer) return;
-      function open() {
-        drawer.classList.add('is-open');
-        if (backdrop) backdrop.classList.add('is-open');
-      }
-      function close() {
-        drawer.classList.remove('is-open');
-        if (backdrop) backdrop.classList.remove('is-open');
-      }
-      openBtn.addEventListener('click', open);
-      if (closeBtn) closeBtn.addEventListener('click', close);
-      if (backdrop) backdrop.addEventListener('click', close);
-      drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
-      window.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
-    })();
-  </script>
+  <script src="/static/js/superapp.js?v=2"></script>
 </body>
 
 </html>

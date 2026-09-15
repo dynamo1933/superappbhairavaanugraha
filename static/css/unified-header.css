@@ -1,0 +1,658 @@
+/* ==========================================================================
+   BHAIRAVA ANUGRAHA · UNIFIED SACRED CHROME HEADER & ASHTAMI RIBBON
+   Canonical Header Styling matching the Landing Sanctuary across all pages
+   ========================================================================== */
+
+:root {
+  --chrome-void:         #07060a;
+  --chrome-ink:          #0e0a06;
+  --chrome-paper:        #e9dfc8;
+  --chrome-paper-2:      #d6c9a3;
+  --chrome-paper-bright: #fdfaf2;
+  --chrome-ink-mute:     rgba(233, 223, 200, 0.68);
+  --chrome-ink-dim:      rgba(233, 223, 200, 0.44);
+  --chrome-gold:         #d4a64a;
+  --chrome-gold-2:       #b8842a;
+  --chrome-gold-3:       #f0d48a;
+  --chrome-gold-glow:    rgba(212, 166, 74, 0.28);
+  --chrome-gold-subtle:  rgba(212, 166, 74, 0.12);
+  --chrome-gold-border:  rgba(212, 166, 74, 0.35);
+  --chrome-h:            72px;
+  --chrome-max-w:        1280px;
+  --chrome-radius-sm:    4px;
+  --chrome-display:      "Cormorant Garamond", Georgia, serif;
+  --chrome-serif:        "EB Garamond", Georgia, serif;
+  --chrome-skt:          "Tiro Devanagari Sanskrit", "Noto Serif Devanagari", serif;
+  --chrome-mono:         "JetBrains Mono", ui-monospace, monospace;
+  --chrome-transition:   all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   1. CHROME BAR CONTAINER (Sticky Glassmorphic Header)
+   ========================================================================== */
+header.chrome,
+.chrome {
+  position: sticky !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: var(--chrome-h, 72px) !important;
+  background: rgba(14, 10, 6, 0.94) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-bottom: 1px solid rgba(212, 166, 74, 0.35) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.75) !important;
+  z-index: 1000 !important;
+  display: flex !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+}
+
+.chrome-inner {
+  max-width: 1280px !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+  padding: 0 24px !important;
+  display: flex !important;
+  grid-template-columns: none !important; /* overrides legacy grid display */
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 20px !important;
+  box-sizing: border-box !important;
+}
+
+/* ==========================================================================
+   2. BRANDING (Left Section)
+   ========================================================================== */
+.chrome .left,
+.chrome-inner .left {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex-shrink: 0 !important;
+  text-decoration: none !important;
+  color: inherit !important;
+  cursor: pointer !important;
+}
+
+.chrome .om,
+.chrome .left .om {
+  font-family: var(--chrome-skt, "Tiro Devanagari Sanskrit", serif) !important;
+  font-size: 28px !important;
+  color: #f0d48a !important;
+  text-shadow: 0 0 16px rgba(212, 166, 74, 0.35) !important;
+  line-height: 1 !important;
+  transition: transform 0.4s ease !important;
+  display: inline-block !important;
+  font-weight: normal !important;
+}
+
+.chrome .left:hover .om {
+  transform: rotate(10deg) scale(1.1) !important;
+}
+
+.chrome .b,
+.chrome .left .b {
+  font-family: var(--chrome-display, "Cormorant Garamond", Georgia, serif) !important;
+  font-size: 21px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.04em !important;
+  color: #fdfaf2 !important;
+  font-style: normal !important;
+  white-space: nowrap !important;
+  line-height: 1.2 !important;
+}
+
+.chrome .b em,
+.chrome .left .b em {
+  font-style: italic !important;
+  font-weight: 400 !important;
+  color: #d4a64a !important;
+}
+
+.badge-super,
+.chrome .badge-super {
+  font-family: var(--chrome-mono, "JetBrains Mono", monospace) !important;
+  font-size: 9px !important;
+  letter-spacing: 0.18em !important;
+  padding: 3px 7px !important;
+  background: rgba(212, 166, 74, 0.12) !important;
+  color: #f0d48a !important;
+  border: 1px solid rgba(212, 166, 74, 0.35) !important;
+  border-radius: 3px !important;
+  text-transform: uppercase !important;
+  font-weight: 500 !important;
+  white-space: nowrap !important;
+  display: inline-block !important;
+  line-height: normal !important;
+  margin-left: 4px !important;
+}
+
+/* ==========================================================================
+   3. DESKTOP NAVIGATION (Center Section)
+   ========================================================================== */
+.chrome-nav {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.chrome-nav .nav-item {
+  font-family: var(--chrome-serif, "EB Garamond", Georgia, serif) !important;
+  font-size: 16px !important;
+  color: rgba(233, 223, 200, 0.68) !important;
+  padding: 8px 14px !important;
+  border-radius: 4px !important;
+  position: relative !important;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  white-space: nowrap !important;
+  text-decoration: none !important;
+  text-transform: none !important; /* CRITICAL: prevents all-caps mono */
+  letter-spacing: normal !important;
+  font-weight: 400 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  border-bottom: none !important;
+  cursor: pointer !important;
+}
+
+.chrome-nav .nav-item:hover {
+  color: #f0d48a !important;
+  background: rgba(212, 166, 74, 0.12) !important;
+}
+
+.chrome-nav .nav-item.is-active {
+  color: #f0d48a !important;
+  font-weight: 600 !important;
+}
+
+.chrome-nav .nav-item.is-active::after {
+  content: "" !important;
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 14px !important;
+  right: 14px !important;
+  height: 2px !important;
+  background: linear-gradient(90deg, transparent, #d4a64a, transparent) !important;
+  border-radius: 2px !important;
+}
+
+.chrome-nav .nav-pill-super {
+  border: 1px solid rgba(212, 166, 74, 0.35) !important;
+  background: rgba(212, 166, 74, 0.08) !important;
+  font-weight: 500 !important;
+}
+
+.chrome-nav .nav-pill-super:hover {
+  background: rgba(212, 166, 74, 0.16) !important;
+  border-color: #d4a64a !important;
+}
+
+/* ==========================================================================
+   4. RIGHT CONTROLS (Audio, Search, Mobile Toggle)
+   ========================================================================== */
+.chrome .right,
+.chrome-inner .right {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex-shrink: 0 !important;
+}
+
+.audio-toggle-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 7px 12px !important;
+  background: rgba(26, 20, 16, 0.7) !important;
+  border: 1px solid rgba(212, 166, 74, 0.25) !important;
+  border-radius: 4px !important;
+  color: rgba(233, 223, 200, 0.68) !important;
+  font-size: 13px !important;
+  font-family: var(--chrome-mono, "JetBrains Mono", monospace) !important;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+}
+
+.audio-toggle-btn:hover {
+  border-color: #d4a64a !important;
+  color: #f0d48a !important;
+  background: rgba(42, 31, 21, 0.85) !important;
+}
+
+.search-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 7px 14px !important;
+  background: rgba(26, 20, 16, 0.8) !important;
+  border: 1px solid rgba(212, 166, 74, 0.35) !important;
+  border-radius: 4px !important;
+  color: #d6c9a3 !important;
+  font-family: var(--chrome-serif, "EB Garamond", Georgia, serif) !important;
+  font-size: 14px !important;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  cursor: pointer !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  white-space: nowrap !important;
+}
+
+.search-btn:hover {
+  background: rgba(42, 31, 21, 0.9) !important;
+  border-color: #d4a64a !important;
+  color: #f0d48a !important;
+  box-shadow: 0 0 12px rgba(212, 166, 74, 0.28) !important;
+}
+
+.search-btn .kbd {
+  font-family: var(--chrome-mono, "JetBrains Mono", monospace) !important;
+  font-size: 10px !important;
+  background: rgba(233, 223, 200, 0.12) !important;
+  padding: 2px 6px !important;
+  border-radius: 3px !important;
+  border: 1px solid rgba(233, 223, 200, 0.2) !important;
+  color: inherit !important;
+}
+
+.mobile-toggle {
+  display: none !important;
+  font-size: 24px !important;
+  color: #d4a64a !important;
+  padding: 6px !important;
+  cursor: pointer !important;
+  background: none !important;
+  border: none !important;
+}
+
+/* ==========================================================================
+   5. ASHTAMI ALERT RIBBON
+   ========================================================================== */
+.ashtami-banner {
+  background: linear-gradient(90deg, #1c1109 0%, #2f190e 50%, #1c1109 100%) !important;
+  border-bottom: 1px solid rgba(212, 166, 74, 0.3) !important;
+  padding: 8px 16px !important;
+  text-align: center !important;
+  font-size: 14px !important;
+  position: relative !important;
+  z-index: 10 !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+}
+
+.ashtami-inner {
+  max-width: 1280px !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-wrap: wrap !important;
+  gap: 12px !important;
+}
+
+.pulse-dot {
+  width: 8px !important;
+  height: 8px !important;
+  background: #ff5252 !important;
+  border-radius: 50% !important;
+  display: inline-block !important;
+  box-shadow: 0 0 8px #ff5252 !important;
+  animation: pulse-glow 1.8s infinite ease-in-out !important;
+  flex-shrink: 0 !important;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.4; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+.ashtami-text {
+  color: #e9dfc8 !important;
+  font-family: var(--chrome-serif, "EB Garamond", Georgia, serif) !important;
+}
+
+.ashtami-text strong {
+  color: #f0d48a !important;
+  font-family: var(--chrome-display, "Cormorant Garamond", Georgia, serif) !important;
+  letter-spacing: 0.02em !important;
+}
+
+.ashtami-link {
+  font-family: var(--chrome-mono, "JetBrains Mono", monospace) !important;
+  font-size: 11px !important;
+  color: #d4a64a !important;
+  border: 1px solid rgba(212, 166, 74, 0.35) !important;
+  padding: 2px 10px !important;
+  border-radius: 20px !important;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+}
+
+.ashtami-link:hover {
+  background: #d4a64a !important;
+  color: #0e0a06 !important;
+}
+
+/* ==========================================================================
+   6. MOBILE DRAWER NAVIGATION & BACKDROP
+   ========================================================================== */
+.drawer-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(7, 6, 10, 0.78) !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  z-index: 1490 !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transition: opacity 0.3s ease, visibility 0.3s ease !important;
+}
+
+.drawer-backdrop.is-open {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+.mobile-drawer {
+  position: fixed !important;
+  top: 0 !important;
+  right: 0 !important;
+  width: 290px !important;
+  max-width: 85vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  background: #130e09 !important;
+  border-left: 1px solid rgba(212, 166, 74, 0.35) !important;
+  box-shadow: -10px 0 35px rgba(0, 0, 0, 0.85) !important;
+  z-index: 1500 !important;
+  transform: translateX(100%) !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.32s !important;
+  padding: 24px 20px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow-y: auto !important;
+  box-sizing: border-box !important;
+}
+
+.mobile-drawer.is-open {
+  transform: translateX(0) !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+.drawer-close {
+  align-self: flex-end !important;
+  font-size: 28px !important;
+  color: #d4a64a !important;
+  margin-bottom: 20px !important;
+  padding: 4px 8px !important;
+  border-radius: 4px !important;
+  background: rgba(212, 166, 74, 0.1) !important;
+  border: 1px solid rgba(212, 166, 74, 0.2) !important;
+  line-height: 1 !important;
+  cursor: pointer !important;
+}
+
+.drawer-links {
+  list-style: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.drawer-links a {
+  font-size: 18px !important;
+  color: #e9dfc8 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 10px 12px !important;
+  border-radius: 6px !important;
+  border: 1px solid rgba(212, 166, 74, 0.12) !important;
+  background: rgba(26, 20, 16, 0.5) !important;
+  text-decoration: none !important;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  font-family: var(--chrome-serif, "EB Garamond", Georgia, serif) !important;
+}
+
+.drawer-links a:hover,
+.drawer-links a:active {
+  background: rgba(212, 166, 74, 0.15) !important;
+  border-color: #d4a64a !important;
+  color: #f0d48a !important;
+  transform: translateX(4px) !important;
+}
+
+/* ==========================================================================
+   7. COMMAND PALETTE MODAL (⌘K)
+   ========================================================================== */
+.palette-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(7, 6, 10, 0.82) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  z-index: 2000 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+  padding-top: 12vh !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transition: opacity 0.25s ease, visibility 0.25s ease !important;
+}
+
+.palette-backdrop.is-open {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+.palette-modal {
+  width: 90% !important;
+  max-width: 600px !important;
+  background: #18120c !important;
+  border: 1px solid rgba(212, 166, 74, 0.4) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), 0 0 30px rgba(212, 166, 74, 0.2) !important;
+  overflow: hidden !important;
+}
+
+.palette-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 16px 20px !important;
+  border-bottom: 1px solid rgba(212, 166, 74, 0.2) !important;
+}
+
+.palette-input {
+  flex: 1 !important;
+  background: none !important;
+  border: none !important;
+  color: #fdfaf2 !important;
+  font-family: var(--chrome-serif, "EB Garamond", Georgia, serif) !important;
+  font-size: 18px !important;
+  outline: none !important;
+}
+
+.palette-results {
+  max-height: 380px !important;
+  overflow-y: auto !important;
+  padding: 8px !important;
+}
+
+.palette-item {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 10px 14px !important;
+  border-radius: 6px !important;
+  color: #e9dfc8 !important;
+  cursor: pointer !important;
+  transition: background 0.15s ease !important;
+  font-family: var(--chrome-serif, "EB Garamond", Georgia, serif) !important;
+  font-size: 16px !important;
+}
+
+.palette-item:hover,
+.palette-item.is-selected {
+  background: rgba(212, 166, 74, 0.15) !important;
+  color: #f0d48a !important;
+}
+
+.palette-item-tag {
+  font-family: var(--chrome-mono, "JetBrains Mono", monospace) !important;
+  font-size: 10px !important;
+  background: rgba(233, 223, 200, 0.1) !important;
+  padding: 2px 6px !important;
+  border-radius: 3px !important;
+}
+
+/* ==========================================================================
+   8. RESPONSIVE MEDIA QUERIES (DESKTOP / TABLET / MOBILE)
+   ========================================================================== */
+
+/* Enforce desktop hiding of drawer elements */
+@media (min-width: 769px) {
+  .mobile-drawer,
+  .drawer-backdrop,
+  .mobile-toggle,
+  .qna-mobile-drawer,
+  .qna-drawer-backdrop,
+  .mobile-toggle-qna,
+  .loka-mobile-drawer,
+  .loka-drawer-backdrop,
+  #loka-mobile-toggle {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+}
+
+/* Tablet & Mobile Screens */
+@media (max-width: 768px) {
+  header.chrome,
+  .chrome {
+    height: 64px !important;
+  }
+
+  .chrome-nav {
+    display: none !important;
+  }
+
+  .mobile-toggle {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 38px !important;
+    height: 38px !important;
+    font-size: 22px !important;
+    color: #d4a64a !important;
+    background: rgba(212, 166, 74, 0.1) !important;
+    border: 1px solid rgba(212, 166, 74, 0.35) !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+  }
+
+  .chrome-inner {
+    padding: 0 16px !important;
+    gap: 12px !important;
+  }
+
+  .chrome .b,
+  .chrome .left .b {
+    font-size: 19px !important;
+  }
+
+  .chrome .om,
+  .chrome .left .om {
+    font-size: 24px !important;
+  }
+
+  .search-btn {
+    padding: 6px 10px !important;
+    font-size: 13px !important;
+  }
+
+  .search-btn .kbd {
+    display: none !important;
+  }
+
+  .audio-toggle-btn {
+    padding: 6px 8px !important;
+    font-size: 12px !important;
+  }
+
+  .ashtami-banner {
+    padding: 8px 12px !important;
+    font-size: 13px !important;
+  }
+
+  .ashtami-inner {
+    flex-direction: column !important;
+    gap: 6px !important;
+    text-align: center !important;
+  }
+
+  .ashtami-link {
+    font-size: 10px !important;
+    padding: 3px 12px !important;
+  }
+}
+
+/* Small Smartphone Screens */
+@media (max-width: 480px) {
+  .badge-super,
+  .chrome .badge-super {
+    display: none !important;
+  }
+
+  .chrome .b,
+  .chrome .left .b {
+    font-size: 17px !important;
+  }
+
+  .chrome .om,
+  .chrome .left .om {
+    font-size: 22px !important;
+  }
+
+  .chrome-inner {
+    padding: 0 12px !important;
+  }
+
+  .chrome .right,
+  .chrome-inner .right {
+    gap: 6px !important;
+  }
+
+  .search-btn span:first-child {
+    display: none !important;
+  }
+
+  .search-btn::before {
+    content: "🔍" !important;
+    font-size: 13px !important;
+  }
+
+  .audio-toggle-btn span {
+    font-size: 11px !important;
+  }
+}

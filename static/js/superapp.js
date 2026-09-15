@@ -90,6 +90,8 @@ function initAmbientCanvas() {
 function initSacredAudio() {
   const btn = document.getElementById('audio-toggle-btn');
   if (!btn) return;
+  // If Bhairav Loka app container is present, allow app.js to control audio
+  if (document.querySelector('.app-container')) return;
 
   let audioCtx = null;
   let isPlaying = false;

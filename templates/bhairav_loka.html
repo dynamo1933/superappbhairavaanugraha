@@ -17,6 +17,7 @@
 
   <!-- Master Stylesheet -->
   <link rel="stylesheet" href="/static/css/style.css?v=20260908_150" />
+  <link rel="stylesheet" href="/static/css/unified-header.css?v=1" />
 </head>
 
 <body>
@@ -32,53 +33,62 @@
   <div class="leaf-field"></div>
   <div class="grain"></div>
 
-  <!-- ==================== STICKY CHROME HEADER ==================== -->
+  <!-- ==================== UNIFIED CHROME HEADER ==================== -->
   <header class="chrome" id="site-chrome">
     <div class="chrome-inner">
-      <div class="left" style="display:flex; align-items:center; gap:10px;">
-        <a href="/" style="display:flex; align-items:center; gap:8px; text-decoration:none; color:inherit;">
-          <span class="om">ॐ</span>
-          <span class="b">Bhairava <em>Loka</em></span>
-          <span class="sub-tag mono" style="font-size:9px; letter-spacing:0.18em; padding:2px 6px; background:rgba(212,166,74,0.15); color:var(--gold-3); border:1px solid rgba(212,166,74,0.35); border-radius:3px;">SUPER APP</span>
-        </a>
-      </div>
+      <a class="left" href="/" title="Bhairava Anugraha Super App">
+        <span class="om">ॐ</span>
+        <span class="b">Bhairava <em>Anugraha</em></span>
+        <span class="badge-super">Super App</span>
+      </a>
 
-      <nav class="nav" style="display:flex; align-items:center; gap:8px;">
-        <a href="/" style="padding:6px 12px; color:var(--ink-mute); font-size:15px; border-radius:4px; text-decoration:none;">Home</a>
-        <a href="/jnana-samvada" style="padding:6px 12px; color:var(--gold-3); font-size:15px; border-radius:4px; border:1px solid rgba(212,166,74,0.3); background:rgba(212,166,74,0.08); text-decoration:none;">☸ Jnāna Samvāda</a>
-        <a href="/bhairav-loka" style="padding:6px 12px; color:var(--gold-3); font-weight:600; font-size:15px; border-radius:4px; border-bottom:2px solid var(--gold); text-decoration:none;">✦ Bhairav Loka</a>
-        <a href="/sadhana-paddhati" style="padding:6px 12px; color:var(--ink-mute); font-size:15px; border-radius:4px; text-decoration:none;">🔱 Sādhana</a>
+      <nav class="chrome-nav">
+        <a href="/" class="nav-item">Home</a>
+        <a href="/jnana-samvada" class="nav-item nav-pill-super" title="Open Jnāna Samvāda Codex">☸ Jnāna Samvāda</a>
+        <a href="/bhairav-loka" class="nav-item nav-pill-super is-active" title="Open Bhairav Loka Sahasralinga Codex">✦ Bhairav Loka</a>
+        <a href="/sadhana-paddhati" class="nav-item">Sādhana Paddhati</a>
+        <a href="/ashtami" class="nav-item">Ashtami</a>
       </nav>
 
-      <div class="nav-actions">
-        <div class="stat-badge">
-          <span class="dot"></span>
-          <span id="header-total-count">{{ total_posts }} Bhairav Swarupa</span>
-        </div>
-        <button class="audio-toggle" id="audio-toggle-btn" type="button" title="Toggle Temple Bell Chime">
+      <div class="right">
+        <button type="button" class="audio-toggle-btn" id="audio-toggle-btn" title="Toggle Meditative Bell Chime">
           <span>🔕 Audio Off</span>
         </button>
-        <button class="search-btn" id="chrome-search-btn" type="button" aria-haspopup="dialog">
-          <span>Search Codex</span>
+
+        <button type="button" class="search-btn" id="chrome-search-btn" title="Search the Codex (⌘K)">
+          <span>Search</span>
           <span class="kbd">⌘K</span>
         </button>
-        <button class="mobile-toggle" id="loka-mobile-toggle" type="button" aria-label="Open Navigation Menu" style="display:none; color:var(--gold); font-size:22px; padding:4px 8px; border:1px solid rgba(212,166,74,0.3); border-radius:4px; background:rgba(212,166,74,0.1); cursor:pointer;">☰</button>
+
+        <button type="button" class="mobile-toggle" id="mobile-menu-btn" aria-label="Open Navigation Menu">
+          ☰
+        </button>
       </div>
     </div>
   </header>
 
-  <!-- Mobile Drawer for Bhairav Loka -->
-  <div class="loka-drawer-backdrop" id="loka-drawer-backdrop"></div>
-  <div class="loka-mobile-drawer" id="loka-mobile-drawer">
-    <button type="button" class="loka-drawer-close" id="loka-drawer-close">&times;</button>
-    <div style="font-family:var(--skt); font-size:24px; color:var(--gold); margin-bottom:18px;">ॐ भैरवाय नमः</div>
-    <ul class="loka-drawer-links">
-      <li><a href="/"><span>🏛</span> Home Landing</a></li>
-      <li><a href="/jnana-samvada"><span>☸</span> Jnāna Samvāda</a></li>
-      <li><a href="/bhairav-loka" style="color:var(--gold-3);"><span>✦</span> Bhairav Loka Codex</a></li>
-      <li><a href="/sadhana-paddhati"><span>🔱</span> Sādhana Paddhati</a></li>
-      <li><a href="/ashtami"><span>🌙</span> Ashtami Gateways</a></li>
-      <li><a href="https://t.me/+tM8pVCZWG8cxYjc1" target="_blank" rel="noopener"><span>✈</span> Join Telegram</a></li>
+  <!-- ==================== ASHTAMI ALERT RIBBON ==================== -->
+  <div class="ashtami-banner">
+    <div class="ashtami-inner">
+      <span class="pulse-dot"></span>
+      <span class="ashtami-text">Next Krishna Paksha Ashtami: <strong>Oct 03, 8:00 AM – Oct 04, 5:52 AM IST</strong></span>
+      <a href="/ashtami" class="ashtami-link">Explore Sacred Gateways →</a>
+    </div>
+  </div>
+
+  <!-- ==================== MOBILE MENU DRAWER ==================== -->
+  <div class="drawer-backdrop" id="drawer-backdrop"></div>
+  <div class="mobile-drawer" id="mobile-drawer">
+    <button class="drawer-close" id="drawer-close-btn">&times;</button>
+    <div class="skt gold" style="font-size: 28px; margin-bottom: 20px;">ॐ भैरवाय नमः</div>
+    <ul class="drawer-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/jnana-samvada" style="color:var(--gold-3)">☸ Jnāna Samvāda</a></li>
+      <li><a href="/bhairav-loka" style="color:var(--gold-3)">✦ Bhairav Loka</a></li>
+      <li><a href="/sadhana-paddhati">Sādhana Paddhati</a></li>
+      <li><a href="/ashtami">Ashtami Portal</a></li>
+      <li><a href="https://t.me/+tM8pVCZWG8cxYjc1" target="_blank" rel="noopener">Join Telegram</a></li>
+      <li><a href="https://wa.me/916262212153" target="_blank" rel="noopener">WhatsApp: +91 62622 12153</a></li>
     </ul>
   </div>
 
@@ -296,28 +306,7 @@
 
   <!-- Master JavaScript Application -->
   <script src="/static/js/app.js?v=20260908_150"></script>
-  <script>
-    (function() {
-      const openBtn = document.getElementById('loka-mobile-toggle');
-      const closeBtn = document.getElementById('loka-drawer-close');
-      const drawer = document.getElementById('loka-mobile-drawer');
-      const backdrop = document.getElementById('loka-drawer-backdrop');
-      if (!openBtn || !drawer) return;
-      function open() {
-        drawer.classList.add('is-open');
-        if (backdrop) backdrop.classList.add('is-open');
-      }
-      function close() {
-        drawer.classList.remove('is-open');
-        if (backdrop) backdrop.classList.remove('is-open');
-      }
-      openBtn.addEventListener('click', open);
-      if (closeBtn) closeBtn.addEventListener('click', close);
-      if (backdrop) backdrop.addEventListener('click', close);
-      drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
-      window.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
-    })();
-  </script>
+  <script src="/static/js/superapp.js?v=2"></script>
 </body>
 
 </html>
