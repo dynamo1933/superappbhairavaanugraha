@@ -30,6 +30,8 @@ if not os.path.exists(INSTA_DIR):
 
 # Create Flask application
 app = Flask(__name__, template_folder=os.path.join(BASE_DIR, 'templates'), static_folder=os.path.join(BASE_DIR, 'static'))
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+app.jinja_env.auto_reload = True
 
 # Add directories to sys.path in read-only mode for importing helper modules if present
 if os.path.exists(BHAIRVA_DIR) and BHAIRVA_DIR not in sys.path:

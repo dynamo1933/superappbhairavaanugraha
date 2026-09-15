@@ -101,11 +101,12 @@
     border-color: var(--gold-border);
   }
 
-  /* Master Container */
+  /* Master Container - Fills the Entire Frame Gracefully */
   .paddhati-container {
-    max-width: 1200px;
+    max-width: 1440px;
+    width: 95%;
     margin: 0 auto;
-    padding: 2.5rem 1.25rem 4rem;
+    padding: 2.5rem 1rem 4rem;
   }
 
   /* ==========================================================================
@@ -284,47 +285,57 @@
   .flow-journey {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 2rem;
+    width: 100%;
   }
 
   .phase-section {
     position: relative;
+    width: 100%;
   }
 
-  /* Phase Header Bar */
+  /* Phase Header Bar - Full Frame Width */
   .phase-header-bar {
-    background: linear-gradient(135deg, rgba(30, 28, 42, 0.95) 0%, rgba(20, 18, 28, 0.95) 100%);
+    background: linear-gradient(90deg, rgba(32, 28, 44, 0.96) 0%, rgba(20, 18, 28, 0.92) 50%, rgba(15, 14, 22, 0.88) 100%);
     border: 1px solid var(--gold-border);
-    padding: 0.85rem 1.4rem;
-    border-radius: 999px;
-    display: inline-flex;
+    padding: 0.95rem 1.6rem;
+    border-radius: 14px;
+    display: flex;
     align-items: center;
-    gap: 0.85rem;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 1.75rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
   }
 
   .phase-header-bar.diksha {
-    border-color: rgba(245, 158, 11, 0.4);
-    background: linear-gradient(135deg, rgba(45, 25, 15, 0.95) 0%, rgba(25, 15, 10, 0.95) 100%);
+    border-color: rgba(245, 158, 11, 0.45);
+    background: linear-gradient(90deg, rgba(48, 26, 16, 0.96) 0%, rgba(26, 16, 10, 0.92) 50%, rgba(18, 12, 8, 0.88) 100%);
   }
 
   .phase-header-bar.devi-phase {
-    border-color: rgba(244, 63, 94, 0.4);
-    background: linear-gradient(135deg, rgba(45, 15, 25, 0.95) 0%, rgba(25, 10, 15, 0.95) 100%);
+    border-color: rgba(244, 63, 94, 0.45);
+    background: linear-gradient(90deg, rgba(48, 16, 26, 0.96) 0%, rgba(26, 10, 16, 0.92) 50%, rgba(18, 8, 12, 0.88) 100%);
+  }
+
+  .phase-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
   }
 
   .phase-icon-badge {
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
     background: linear-gradient(135deg, var(--gold) 0%, var(--crimson) 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     color: #fff;
-    font-size: 0.85rem;
-    box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+    font-size: 0.9rem;
+    box-shadow: 0 2px 10px rgba(212, 175, 55, 0.35);
+    flex-shrink: 0;
   }
 
   .phase-header-bar.devi-phase .phase-icon-badge {
@@ -333,175 +344,217 @@
 
   .phase-header-title {
     font-family: var(--display);
-    font-size: 1.15rem;
+    font-size: 1.25rem;
     font-weight: 600;
     color: var(--paper-bright);
     letter-spacing: 1px;
     text-transform: uppercase;
   }
 
-  /* Flow Row & Cards */
+  .phase-meta-pill {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gold-bright);
+    background: rgba(212, 175, 55, 0.12);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    padding: 4px 14px;
+    border-radius: 999px;
+  }
+
+  .phase-header-bar.diksha .phase-meta-pill {
+    color: #fde047;
+    background: rgba(245, 158, 11, 0.15);
+    border-color: rgba(245, 158, 11, 0.4);
+  }
+
+  .phase-header-bar.devi-phase .phase-meta-pill {
+    color: #fecdd3;
+    background: rgba(244, 63, 94, 0.15);
+    border-color: rgba(244, 63, 94, 0.4);
+  }
+
+  /* Flow Row & Cards - FULL WIDTH EXPANSION */
   .flow-row {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 0.5rem 0 1.5rem;
-    overflow-x: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--gold-border) transparent;
-  }
-
-  .flow-row::-webkit-scrollbar {
-    height: 6px;
-  }
-  .flow-row::-webkit-scrollbar-thumb {
-    background: var(--gold-border);
-    border-radius: 3px;
+    justify-content: space-between;
+    gap: 1.25rem;
+    padding: 0.75rem 0 1.75rem;
+    width: 100%;
   }
 
   .flow-marker {
-    width: 44px;
-    height: 44px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
-    background: rgba(19, 18, 25, 0.9);
+    background: rgba(19, 18, 25, 0.95);
     border: 2px solid var(--gold);
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--gold-bright);
-    font-size: 0.95rem;
+    font-size: 1.1rem;
     flex-shrink: 0;
-    box-shadow: 0 0 12px rgba(212, 175, 55, 0.2);
+    box-shadow: 0 0 16px rgba(212, 175, 55, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  .flow-marker:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 22px rgba(212, 175, 55, 0.5);
   }
 
   .flow-cards {
     display: flex;
-    align-items: center;
-    gap: 1rem;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 1.25rem;
     flex: 1;
-    min-width: max-content;
+    width: 100%;
   }
 
-  /* Stage Card */
+  /* Stage Card - Stretches evenly across available width */
   .stage-card {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 210px;
+    flex: 1 1 0;
+    min-width: 0;
+    width: 100%;
     cursor: pointer;
     transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .stage-card:hover {
-    transform: translateY(-6px);
+    transform: translateY(-8px);
   }
 
   /* Status Icon Over Card */
   .card-status-icon {
-    width: 38px;
-    height: 38px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     background: var(--ink-2);
     border: 2px solid var(--gold);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: var(--gold-bright);
-    margin-bottom: -19px;
+    margin-bottom: -21px;
     z-index: 3;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
     transition: all 0.3s ease;
   }
 
   .stage-card:hover .card-status-icon {
-    transform: scale(1.12);
-    box-shadow: 0 0 16px rgba(212, 175, 55, 0.5);
+    transform: scale(1.15);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
   }
 
-  /* Card Body */
+  /* Card Body - Expansive & Balanced */
   .card-body {
     width: 100%;
-    padding: 1.85rem 1.25rem 1.25rem;
-    border-radius: 16px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2.2rem 1.4rem 1.6rem;
+    border-radius: 18px;
     text-align: center;
-    background: linear-gradient(160deg, rgba(28, 26, 38, 0.95) 0%, rgba(15, 14, 21, 0.98) 100%);
+    background: linear-gradient(160deg, rgba(28, 26, 38, 0.96) 0%, rgba(15, 14, 21, 0.98) 100%);
     border: 1px solid var(--gold-border);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(212, 175, 55, 0.15);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(212, 175, 55, 0.15);
     transition: all 0.3s ease;
   }
 
   .stage-card:hover .card-body {
     border-color: var(--gold-bright);
-    box-shadow: 0 12px 35px rgba(212, 175, 55, 0.2), inset 0 1px 0 rgba(212, 175, 55, 0.3);
+    box-shadow: 0 14px 40px rgba(212, 175, 55, 0.25), inset 0 1px 0 rgba(212, 175, 55, 0.35);
   }
 
   .card-body.diksha-body {
-    background: linear-gradient(160deg, rgba(40, 24, 18, 0.95) 0%, rgba(20, 12, 8, 0.98) 100%);
-    border-color: rgba(245, 158, 11, 0.35);
+    background: linear-gradient(160deg, rgba(42, 25, 18, 0.96) 0%, rgba(20, 12, 8, 0.98) 100%);
+    border-color: rgba(245, 158, 11, 0.4);
   }
 
   .card-body.rudraksha-body {
-    background: linear-gradient(160deg, rgba(35, 20, 15, 0.95) 0%, rgba(18, 10, 8, 0.98) 100%);
-    border-color: rgba(212, 175, 55, 0.35);
+    background: linear-gradient(160deg, rgba(38, 22, 16, 0.96) 0%, rgba(18, 10, 8, 0.98) 100%);
+    border-color: rgba(212, 175, 55, 0.4);
   }
 
   .card-body.charana-body {
-    background: linear-gradient(160deg, rgba(32, 20, 42, 0.95) 0%, rgba(16, 10, 22, 0.98) 100%);
-    border-color: rgba(168, 85, 247, 0.35);
+    background: linear-gradient(160deg, rgba(34, 20, 44, 0.96) 0%, rgba(16, 10, 22, 0.98) 100%);
+    border-color: rgba(168, 85, 247, 0.4);
   }
 
   .mandala-img, .rudraksha-img {
-    width: 82px;
-    height: 82px;
+    width: 96px;
+    height: 96px;
     border-radius: 50%;
     object-fit: cover;
-    margin: 0 auto 0.9rem;
+    margin: 0 auto 1rem;
     border: 2px solid var(--gold-border);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
     display: block;
-    transition: all 0.3s ease;
+    transition: all 0.35s ease;
   }
 
   .stage-card:hover .mandala-img, .stage-card:hover .rudraksha-img {
-    transform: scale(1.06);
+    transform: scale(1.08);
     border-color: var(--gold-bright);
-    box-shadow: 0 0 16px rgba(212, 175, 55, 0.4);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.45);
   }
 
   .card-title {
     font-family: var(--display);
-    font-size: 1.25rem;
+    font-size: 1.45rem;
     font-weight: 600;
     color: var(--paper-bright);
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.3rem;
+    line-height: 1.25;
   }
 
   .card-days {
     font-family: var(--mono);
-    font-size: 0.75rem;
-    color: var(--gold-3);
-    margin-bottom: 0.6rem;
+    font-size: 0.82rem;
+    color: var(--gold-bright);
+    margin-bottom: 0.45rem;
+    letter-spacing: 0.5px;
+  }
+
+  .card-essence {
+    font-family: var(--body);
+    font-size: 0.92rem;
+    color: var(--paper-dim);
+    font-style: italic;
+    line-height: 1.35;
+    margin-bottom: 0.85rem;
+    max-width: 90%;
   }
 
   .card-status-text {
     display: inline-block;
     font-family: var(--mono);
-    font-size: 0.7rem;
+    font-size: 0.72rem;
     text-transform: uppercase;
     letter-spacing: 1px;
     color: var(--paper-dim);
-    padding: 3px 10px;
+    padding: 4px 14px;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: auto;
   }
 
   .stage-card:hover .card-status-text {
     color: var(--gold-bright);
     border-color: var(--gold-border);
-    background: rgba(212, 175, 55, 0.12);
+    background: rgba(212, 175, 55, 0.15);
   }
 
   /* Flow Arrow */
@@ -510,14 +563,17 @@
     align-items: center;
     justify-content: center;
     color: var(--gold);
-    width: 38px;
+    width: 44px;
     flex-shrink: 0;
-    opacity: 0.75;
-    filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.4));
+    opacity: 0.85;
+    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.45));
     animation: arrowPulse 2s infinite ease-in-out;
   }
 
   .flow-arrow svg {
+    width: 36px;
+    height: 24px;
+  }
     width: 32px;
     height: 22px;
   }
@@ -1242,10 +1298,13 @@
         <!-- ===== PHASE 1: FOUNDATION OF SADHANA ===== -->
         <div class="phase-section">
           <div class="phase-header-bar">
-            <div class="phase-icon-badge">
-              <i class="fas fa-seedling"></i>
+            <div class="phase-header-left">
+              <div class="phase-icon-badge">
+                <i class="fas fa-seedling"></i>
+              </div>
+              <span class="phase-header-title">Phase I · Foundation of Sādhana</span>
             </div>
-            <span class="phase-header-title">Phase I · Foundation of Sādhana</span>
+            <span class="phase-meta-pill">3 Mandalas · 103 Days Total Purification</span>
           </div>
 
           <div class="flow-row">
@@ -1263,14 +1322,15 @@
                   <img src="{{ url_for('static', filename='images/stage_headers/mandala_1_header.jpg') }}" alt="Mandala 1" class="mandala-img" onerror="this.src='/static/images/logo.jpeg'" />
                   <div class="card-title">Mandala 1</div>
                   <div class="card-days">21 / 41 Days</div>
-                  <div class="card-status-text">Ready · Tap to View</div>
+                  <div class="card-essence">Asana Siddhi &amp; Prana Stillness</div>
+                  <div class="card-status-text">Ready · Tap to Explore</div>
                 </div>
               </div>
 
               <!-- Flow Arrow -->
               <div class="flow-arrow">
-                <svg viewBox="0 0 35 22" fill="none">
-                  <path d="M0 11 H26 M21 5 L28 11 L21 17" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <svg viewBox="0 0 36 24" fill="none">
+                  <path d="M0 12 H28 M22 5 L30 12 L22 19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </div>
 
@@ -1283,14 +1343,15 @@
                   <img src="{{ url_for('static', filename='images/stage_headers/mandala_2_header.jpg') }}" alt="Mandala 2" class="mandala-img" onerror="this.src='/static/images/logo.jpeg'" />
                   <div class="card-title">Mandala 2</div>
                   <div class="card-days">41 Days</div>
-                  <div class="card-status-text">Ready · Tap to View</div>
+                  <div class="card-essence">Internal Purification &amp; Spanda</div>
+                  <div class="card-status-text">Ready · Tap to Explore</div>
                 </div>
               </div>
 
               <!-- Flow Arrow -->
               <div class="flow-arrow">
-                <svg viewBox="0 0 35 22" fill="none">
-                  <path d="M0 11 H26 M21 5 L28 11 L21 17" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <svg viewBox="0 0 36 24" fill="none">
+                  <path d="M0 12 H28 M22 5 L30 12 L22 19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </div>
 
@@ -1303,7 +1364,8 @@
                   <img src="{{ url_for('static', filename='images/stage_headers/mandala_3_header.jpg') }}" alt="Mandala 3" class="mandala-img" onerror="this.src='/static/images/logo.jpeg'" />
                   <div class="card-title">Mandala 3</div>
                   <div class="card-days">41 Days</div>
-                  <div class="card-status-text">Ready · Tap to View</div>
+                  <div class="card-essence">Foundational Mastery &amp; Grounding</div>
+                  <div class="card-status-text">Ready · Tap to Explore</div>
                 </div>
               </div>
             </div>
@@ -1325,10 +1387,13 @@
         <!-- ===== PHASE 2: RUDRAKSHA DIKSHA 8 & 11 MUKHI ===== -->
         <div class="phase-section">
           <div class="phase-header-bar diksha">
-            <div class="phase-icon-badge">
-              <i class="fas fa-gem"></i>
+            <div class="phase-header-left">
+              <div class="phase-icon-badge">
+                <i class="fas fa-gem"></i>
+              </div>
+              <span class="phase-header-title">Phase II · Pratham Charana — Rudraksha Diksha — 8 &amp; 11 Mukhi</span>
             </div>
-            <span class="phase-header-title">Phase II · Pratham Charana — Rudraksha Diksha — 8 &amp; 11 Mukhi</span>
+            <span class="phase-meta-pill">3 Sacred Stages · Transmission</span>
           </div>
 
           <div class="flow-row">
@@ -1346,14 +1411,15 @@
                   <img src="{{ url_for('static', filename='images/pratam_charana_header.jpg') }}" alt="Pratham Charana" class="rudraksha-img" onerror="this.src='/static/images/logo.jpeg'" />
                   <div class="card-title">Pratham Charana</div>
                   <div class="card-days">Diksha Initiation</div>
-                  <div class="card-status-text">Ready · Tap to View</div>
+                  <div class="card-essence">Guru Sankalpa &amp; Lineage Transmission</div>
+                  <div class="card-status-text">Ready · Tap to Explore</div>
                 </div>
               </div>
 
               <!-- Flow Arrow -->
               <div class="flow-arrow">
-                <svg viewBox="0 0 35 22" fill="none">
-                  <path d="M0 11 H26 M21 5 L28 11 L21 17" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <svg viewBox="0 0 36 24" fill="none">
+                  <path d="M0 12 H28 M22 5 L30 12 L22 19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </div>
 
@@ -1364,16 +1430,17 @@
                 </div>
                 <div class="card-body rudraksha-body">
                   <img src="{{ url_for('static', filename='images/8 Mukhi _ Achtgesicht Rudraksha Nepal 20-22 mm.jpeg') }}" alt="8 Mukhi Rudraksha" class="rudraksha-img" onerror="this.src='/static/images/logo.jpeg'" />
-                  <div class="card-title">8 Mukhi</div>
+                  <div class="card-title">8 Mukhi Rudraksha</div>
                   <div class="card-days">Lord Ganesha &amp; Ashta Bhairava</div>
-                  <div class="card-status-text">Ready · Tap to View</div>
+                  <div class="card-essence">Obstacle Dissolution &amp; Grounding</div>
+                  <div class="card-status-text">Ready · Tap to Explore</div>
                 </div>
               </div>
 
               <!-- Flow Arrow -->
               <div class="flow-arrow">
-                <svg viewBox="0 0 35 22" fill="none">
-                  <path d="M0 11 H26 M21 5 L28 11 L21 17" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <svg viewBox="0 0 36 24" fill="none">
+                  <path d="M0 12 H28 M22 5 L30 12 L22 19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </div>
 
@@ -1384,9 +1451,10 @@
                 </div>
                 <div class="card-body rudraksha-body">
                   <img src="{{ url_for('static', filename='images/rudraksha/rudrakha_11_mukhi.jpeg') }}" alt="11 Mukhi Rudraksha" class="rudraksha-img" onerror="this.src='/static/images/logo.jpeg'" />
-                  <div class="card-title">11 Mukhi</div>
+                  <div class="card-title">11 Mukhi Rudraksha</div>
                   <div class="card-days">Ekadasha Rudra Spanda</div>
-                  <div class="card-status-text">Ready · Tap to View</div>
+                  <div class="card-essence">Fearlessness &amp; Psychic Protection</div>
+                  <div class="card-status-text">Ready · Tap to Explore</div>
                 </div>
               </div>
             </div>
@@ -1408,10 +1476,13 @@
         <!-- ===== PHASE 3: DUTIYA CHARANA & BEYOND ===== -->
         <div class="phase-section">
           <div class="phase-header-bar">
-            <div class="phase-icon-badge">
-              <i class="fas fa-mountain"></i>
+            <div class="phase-header-left">
+              <div class="phase-icon-badge">
+                <i class="fas fa-mountain"></i>
+              </div>
+              <span class="phase-header-title">Phase III · Dutiya Charana &amp; Beyond — 14 Mukhi &amp; Tritiya Charana</span>
             </div>
-            <span class="phase-header-title">Phase III · Dutiya Charana &amp; Beyond — 14 Mukhi &amp; Tritiya Charana</span>
+            <span class="phase-meta-pill">3 Supreme Stages · Mahasiddha Union</span>
           </div>
 
           <div class="flow-row">
@@ -1429,14 +1500,15 @@
                   <img src="{{ url_for('static', filename='images/bhairava_black.jpg') }}" alt="Dutiya Charana" class="mandala-img" onerror="this.src='/static/images/logo.jpeg'" />
                   <div class="card-title">Dutiya Charana</div>
                   <div class="card-days">Deep Antar-Sadhana</div>
-                  <div class="card-status-text">Ready · Tap to View</div>
+                  <div class="card-essence">Inner Mouna &amp; Chidakasha Contemplation</div>
+                  <div class="card-status-text">Ready · Tap to Explore</div>
                 </div>
               </div>
 
               <!-- Flow Arrow -->
               <div class="flow-arrow">
-                <svg viewBox="0 0 35 22" fill="none">
-                  <path d="M0 11 H26 M21 5 L28 11 L21 17" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <svg viewBox="0 0 36 24" fill="none">
+                  <path d="M0 12 H28 M22 5 L30 12 L22 19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </div>
 
@@ -1447,16 +1519,17 @@
                 </div>
                 <div class="card-body rudraksha-body">
                   <img src="{{ url_for('static', filename='images/rudraksha/rudarakha_14_muki.jpeg') }}" alt="14 Mukhi Rudraksha" class="rudraksha-img" onerror="this.src='/static/images/logo.jpeg'" />
-                  <div class="card-title">14 Mukhi</div>
+                  <div class="card-title">14 Mukhi Rudraksha</div>
                   <div class="card-days">Deva Mani · Ajna Awakening</div>
-                  <div class="card-status-text">Ready · Tap to View</div>
+                  <div class="card-essence">Third Eye Opening &amp; Direct Intuition</div>
+                  <div class="card-status-text">Ready · Tap to Explore</div>
                 </div>
               </div>
 
               <!-- Flow Arrow -->
               <div class="flow-arrow">
-                <svg viewBox="0 0 35 22" fill="none">
-                  <path d="M0 11 H26 M21 5 L28 11 L21 17" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <svg viewBox="0 0 36 24" fill="none">
+                  <path d="M0 12 H28 M22 5 L30 12 L22 19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </div>
 
@@ -1469,7 +1542,8 @@
                   <img src="{{ url_for('static', filename='images/bhairava_eight_hands.jpeg') }}" alt="Tritiya Charana" class="mandala-img" onerror="this.src='/static/images/logo.jpeg'" />
                   <div class="card-title">Tritiya Charana</div>
                   <div class="card-days">Purna Samadhi &amp; Union</div>
-                  <div class="card-status-text">Ready · Tap to View</div>
+                  <div class="card-essence">Sarvam Bhairava Swaroopam Realization</div>
+                  <div class="card-status-text">Ready · Tap to Explore</div>
                 </div>
               </div>
             </div>
@@ -1649,10 +1723,13 @@
       <!-- ===== KAMAKHYA SADHANA MANDALA FLOW (FROM DEVI_PADATHI.HTML) ===== -->
       <div class="phase-section" style="margin-top: 2rem;">
         <div class="phase-header-bar devi-phase">
-          <div class="phase-icon-badge">
-            <i class="fas fa-om"></i>
+          <div class="phase-header-left">
+            <div class="phase-icon-badge">
+              <i class="fas fa-om"></i>
+            </div>
+            <span class="phase-header-title">Kamakhya Sadhana Mandala — Path of Divine Feminine</span>
           </div>
-          <span class="phase-header-title">Kamakhya Sadhana Mandala — Path of Divine Feminine</span>
+          <span class="phase-meta-pill">3 Devi Mandalas · 198 Days Total Embodiment</span>
         </div>
 
         <div class="flow-row">
@@ -1670,14 +1747,15 @@
                 <img src="{{ url_for('static', filename='images/kamakhaya_maa_mandla_1_header.jpg') }}" alt="Devi Mandala 1" class="mandala-img" onerror="this.src='/static/images/stage_headers/mandala_1_header.jpg'" />
                 <div class="card-title">Devi Mandala 1</div>
                 <div class="card-days">33 Days</div>
-                <div class="card-status-text">Ready · Tap to View</div>
+                <div class="card-essence">Womb of Grace &amp; Maternal Refuge</div>
+                <div class="card-status-text">Ready · Tap to Explore</div>
               </div>
             </div>
 
             <!-- Flow Arrow -->
             <div class="flow-arrow">
-              <svg viewBox="0 0 35 22" fill="none">
-                <path d="M0 11 H26 M21 5 L28 11 L21 17" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <svg viewBox="0 0 36 24" fill="none">
+                <path d="M0 12 H28 M22 5 L30 12 L22 19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
 
@@ -1690,14 +1768,15 @@
                 <img src="{{ url_for('static', filename='images/kamakhaya_maa_mandla_2_header.jpg') }}" alt="Devi Mandala 2" class="mandala-img" onerror="this.src='/static/images/stage_headers/mandala_2_header.jpg'" />
                 <div class="card-title">Devi Mandala 2</div>
                 <div class="card-days">66 Days</div>
-                <div class="card-status-text">Ready · Tap to View</div>
+                <div class="card-essence">Dynamic Spanda of Cosmic Shakti</div>
+                <div class="card-status-text">Ready · Tap to Explore</div>
               </div>
             </div>
 
             <!-- Flow Arrow -->
             <div class="flow-arrow">
-              <svg viewBox="0 0 35 22" fill="none">
-                <path d="M0 11 H26 M21 5 L28 11 L21 17" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <svg viewBox="0 0 36 24" fill="none">
+                <path d="M0 12 H28 M22 5 L30 12 L22 19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
 
@@ -1710,7 +1789,8 @@
                 <img src="{{ url_for('static', filename='images/kamakhaya_maa_mandla_3_header.jpg') }}" alt="Devi Mandala 3" class="mandala-img" onerror="this.src='/static/images/stage_headers/mandala_3_header.jpg'" />
                 <div class="card-title">Devi Mandala 3</div>
                 <div class="card-days">99 Days</div>
-                <div class="card-status-text">Ready · Tap to View</div>
+                <div class="card-essence">Purna Devi Samarpanam &amp; Union</div>
+                <div class="card-status-text">Ready · Tap to Explore</div>
               </div>
             </div>
           </div>
