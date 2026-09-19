@@ -1,0 +1,1309 @@
+{% extends "base.html" %}
+
+{% block extra_styles %}
+<style>
+/* ===== VISHESH SADHANA PAGE - MATCHING APPLICATION THEME ===== */
+
+/* Hero Section */
+.vishesh-hero {
+    background: linear-gradient(135deg, var(--primary-red) 0%, #991b2e 50%, #7c1526 100%);
+    padding: 3rem 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.vishesh-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="sacredPattern" width="50" height="50" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23sacredPattern)"/></svg>');
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.hero-container {
+    position: relative;
+    z-index: 1;
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+}
+
+.hero-image-wrapper {
+    flex-shrink: 0;
+}
+
+.hero-image {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.hero-text-content {
+    text-align: center;
+    flex: 1;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    margin-bottom: 1rem;
+}
+
+.badge-icon {
+    font-size: 1.2rem;
+}
+
+.badge-text {
+    color: #fff;
+    font-family: var(--font-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.hero-title {
+    font-family: var(--font-mystical);
+    font-size: 2.5rem;
+    color: #fff;
+    margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    letter-spacing: 3px;
+}
+
+.hero-subtitle {
+    font-family: var(--font-sacred);
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 0.75rem;
+    font-style: italic;
+}
+
+.hero-sanskrit {
+    font-family: var(--font-mystical);
+    font-size: 1.3rem;
+    color: var(--accent-gold);
+    letter-spacing: 2px;
+}
+
+@media (max-width: 768px) {
+    .hero-container {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .hero-image {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .hero-title {
+        font-size: 1.8rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+}
+
+/* Main Content */
+.vishesh-main {
+    padding: 2rem 1.25rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+    .vishesh-main {
+        padding: 2.5rem 2rem;
+    }
+}
+
+/* Section Header - Matching App Style */
+.section-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.header-decoration {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.decoration-line {
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--primary-red), transparent);
+}
+
+.decoration-symbol {
+    font-size: 1.5rem;
+}
+
+.section-title {
+    font-family: var(--font-primary);
+    font-size: 1.8rem;
+    color: var(--primary-red);
+    margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+    font-family: var(--font-secondary);
+    color: var(--text-muted);
+    font-size: 1rem;
+}
+
+/* Content Cards */
+.content-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius-lg);
+    padding: 2rem 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 20px var(--shadow-color);
+    border: 1px solid var(--border-color);
+}
+
+@media (min-width: 768px) {
+    .content-card {
+        padding: 2.5rem 3rem;
+    }
+}
+
+/* Introduction Card - Warm Theme */
+.intro-card {
+    background: linear-gradient(135deg, var(--primary-red) 0%, #991b2e 100%);
+    border: none;
+    color: #fff;
+}
+
+.intro-title {
+    font-family: var(--font-mystical);
+    font-size: 1.5rem;
+    color: var(--accent-gold);
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.intro-text {
+    font-family: var(--font-secondary);
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 1.05rem;
+    line-height: 1.9;
+    text-align: justify;
+}
+
+.intro-text em {
+    color: var(--accent-gold);
+    font-style: italic;
+}
+
+/* Sanskrit Verse - Warm Theme */
+.sanskrit-verse {
+    background: linear-gradient(135deg, #fef7ed 0%, #fff7ed 100%);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    text-align: center;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.sanskrit-text {
+    font-family: var(--font-sacred);
+    font-size: 1.2rem;
+    color: var(--primary-red);
+    line-height: 1.8;
+    margin-bottom: 0.5rem;
+}
+
+.sanskrit-transliteration {
+    font-family: var(--font-sacred);
+    font-size: 1rem;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.sanskrit-meaning {
+    font-family: var(--font-secondary);
+    font-size: 0.95rem;
+    color: var(--text-dark);
+    margin-top: 0.75rem;
+    font-style: italic;
+}
+
+/* Sacred Nights Grid */
+.nights-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+@media (max-width: 600px) {
+    .nights-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.night-card {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+    text-align: center;
+    border: 1px solid rgba(196, 30, 58, 0.15);
+    transition: all 0.3s ease;
+}
+
+.night-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px var(--shadow-color);
+    border-color: var(--primary-red);
+}
+
+.night-name {
+    font-family: var(--font-primary);
+    font-size: 1.1rem;
+    color: var(--primary-red);
+    margin-bottom: 0.5rem;
+}
+
+.night-desc {
+    font-family: var(--font-secondary);
+    color: var(--text-dark);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+/* Preparation Card */
+.preparation-card {
+    background: linear-gradient(135deg, #fef7ed 0%, #fff7ed 100%);
+    border-left: 4px solid var(--accent-orange);
+}
+
+.prep-subsection {
+    margin-bottom: 1.5rem;
+}
+
+.prep-subsection-title {
+    font-family: var(--font-primary);
+    font-size: 1.2rem;
+    color: var(--primary-red);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.prep-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.prep-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.prep-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.prep-text {
+    font-family: var(--font-secondary);
+    color: var(--text-dark);
+    font-size: 0.9rem;
+}
+
+/* Step Cards */
+.step-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 10px var(--shadow-color);
+    transition: all 0.3s ease;
+}
+
+.step-card:hover {
+    box-shadow: 0 4px 15px var(--shadow-color);
+    border-left: 4px solid var(--primary-red);
+    transform: translateY(-2px);
+}
+
+@media (min-width: 768px) {
+    .step-card {
+        padding: 2rem;
+    }
+}
+
+/* Steps Grid Layout */
+.steps-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .steps-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+    
+    .step-card.full-width {
+        grid-column: 1 / -1;
+    }
+}
+
+.step-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.step-number {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--primary-red), var(--accent-orange));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mystical);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.step-title {
+    font-family: var(--font-primary);
+    font-size: 1.2rem;
+    color: var(--primary-red);
+    margin: 0;
+}
+
+.step-sanskrit {
+    font-family: var(--font-sacred);
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.step-content {
+    font-family: var(--font-secondary);
+    color: var(--text-dark);
+    font-size: 1rem;
+    line-height: 1.8;
+}
+
+.step-content p {
+    margin-bottom: 0.75rem;
+}
+
+/* Mantra Box */
+.mantra-box {
+    background: linear-gradient(135deg, #fef7ed 0%, #fff7ed 100%);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    margin: 1rem 0;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.mantra-title {
+    font-family: var(--font-primary);
+    font-size: 0.95rem;
+    color: var(--accent-orange);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.mantra-sanskrit {
+    font-family: var(--font-sacred);
+    font-size: 1.1rem;
+    color: var(--primary-red);
+    line-height: 1.7;
+    margin-bottom: 0.5rem;
+}
+
+.mantra-transliteration {
+    font-family: var(--font-sacred);
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+/* Dark Mantra Box - Updated to match theme */
+.mantra-box.dark {
+    background: linear-gradient(135deg, var(--primary-red) 0%, #991b2e 100%);
+    border: none;
+}
+
+.mantra-box.dark .mantra-title {
+    color: var(--accent-gold);
+}
+
+.mantra-box.dark .mantra-sanskrit {
+    color: #fff;
+}
+
+.mantra-box.dark .mantra-transliteration {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+/* Visualization Box */
+.visualization-box {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    margin: 1rem 0;
+    border-left: 3px solid var(--primary-red);
+}
+
+.visualization-title {
+    font-family: var(--font-primary);
+    font-size: 0.95rem;
+    color: var(--primary-red);
+    margin-bottom: 0.5rem;
+}
+
+.visualization-text {
+    font-family: var(--font-secondary);
+    color: var(--text-dark);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    font-style: italic;
+}
+
+/* Elements Grid */
+.elements-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+@media (max-width: 600px) {
+    .elements-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.element-item {
+    text-align: center;
+    padding: 0.75rem 0.5rem;
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(196, 30, 58, 0.15);
+}
+
+.element-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.3rem;
+}
+
+.element-name {
+    font-family: var(--font-primary);
+    font-size: 0.8rem;
+    color: var(--primary-red);
+}
+
+.element-sanskrit {
+    font-family: var(--font-sacred);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+/* Sankalpa Box */
+.sankalpa-box {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+    border: 1px solid rgba(196, 30, 58, 0.2);
+}
+
+.sankalpa-title {
+    font-family: var(--font-primary);
+    font-size: 1.1rem;
+    color: var(--primary-red);
+    margin-bottom: 0.75rem;
+    text-align: center;
+}
+
+.sankalpa-text {
+    font-family: var(--font-sacred);
+    font-size: 1.05rem;
+    color: var(--text-dark);
+    text-align: center;
+    font-style: italic;
+    line-height: 1.8;
+}
+
+/* Sacred Quote - Warm Theme */
+.sacred-quote {
+    background: linear-gradient(135deg, var(--primary-red) 0%, #991b2e 100%);
+    border-radius: var(--border-radius-lg);
+    padding: 2rem 1.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    position: relative;
+    box-shadow: 0 4px 20px var(--shadow-color);
+}
+
+@media (min-width: 768px) {
+    .sacred-quote {
+        padding: 2.5rem 3rem;
+    }
+}
+
+.sacred-quote::before {
+    content: '"';
+    font-family: var(--font-mystical);
+    font-size: 4rem;
+    color: rgba(255, 255, 255, 0.15);
+    position: absolute;
+    top: 0;
+    left: 1rem;
+    line-height: 1;
+}
+
+.quote-text {
+    font-family: var(--font-sacred);
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.95);
+    line-height: 1.8;
+    font-style: italic;
+    margin-bottom: 0.75rem;
+}
+
+.quote-attribution {
+    font-family: var(--font-secondary);
+    color: var(--accent-gold);
+    font-size: 0.95rem;
+}
+
+/* Guru Parampara */
+.parampara-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem;
+    margin: 1rem 0;
+}
+
+.parampara-item {
+    text-align: center;
+    padding: 0.75rem;
+    background: linear-gradient(135deg, #fef7ed 0%, #fff7ed 100%);
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.parampara-name {
+    font-family: var(--font-sacred);
+    font-size: 0.9rem;
+    color: var(--primary-red);
+}
+
+/* Warning Box */
+.warning-box {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    border: 2px solid rgba(196, 30, 58, 0.3);
+    text-align: center;
+}
+
+.warning-title {
+    font-family: var(--font-primary);
+    font-size: 1.1rem;
+    color: var(--primary-red);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.warning-text {
+    font-family: var(--font-secondary);
+    color: var(--text-dark);
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+/* Final Blessing Card */
+.final-blessing-card {
+    background: linear-gradient(135deg, var(--primary-red) 0%, #991b2e 100%);
+    border: none;
+    text-align: center;
+}
+
+.final-blessing-card .intro-title {
+    color: var(--accent-gold);
+}
+
+.final-blessing-card .intro-text {
+    color: rgba(255, 255, 255, 0.95);
+    text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 1.5rem;
+    }
+    
+    .intro-title {
+        font-size: 1.3rem;
+    }
+    
+    .intro-text {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .vishesh-main {
+        padding: 1.5rem 1rem;
+    }
+    
+    .content-card {
+        padding: 1.5rem 1.25rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .step-card {
+        padding: 1.25rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="vishesh-hero">
+    <div class="hero-container">
+        <div class="hero-image-wrapper">
+            <img src="{{ url_for('static', filename='images/kamakhaya_maa_with_baba_header.jpg') }}" 
+                 alt="Kāmākhyā-Bhairava" 
+                 class="hero-image">
+        </div>
+        <div class="hero-text-content">
+            <div class="hero-badge">
+                <span class="badge-icon">🔱</span>
+                <span class="badge-text">Sacred Sadhana</span>
+            </div>
+            <h1 class="hero-title">Kāmākhyā–Bhairava</h1>
+            <p class="hero-subtitle">Vishesh Sãdhana Guidelines — His Grace on us!</p>
+            <div class="hero-sanskrit">॥ भैरव अनुग्रह ॥</div>
+        </div>
+    </div>
+</section>
+
+<!-- Main Content -->
+<div class="vishesh-main">
+    
+    <!-- Introduction -->
+    <div class="content-card intro-card">
+        <h2 class="intro-title">🔱 Bhairava Anugraha 🔱</h2>
+        <p class="intro-text">
+            This sacred sadhana can be performed on four of the most potent and spiritually charged nights of the year, 
+            each offering unique blessings and transformative power for Tantra sadhakas.
+        </p>
+        
+        <div class="sanskrit-verse" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2);">
+            <div class="sanskrit-text" style="color: var(--accent-gold);">
+                रक्तवर्णां त्रिनेत्रां च चन्द्रसूर्याग्निलोचनाम्।<br>
+                स्मेरमुखीं वराभीति हस्तां कामाख्यां नमाम्यहम्॥
+            </div>
+            <div class="sanskrit-transliteration" style="color: rgba(255,255,255,0.85);">
+                Raktavarnām trinetrām ca candrasūryāgnilocanām,<br>
+                Smeramukhīm varābhīti hastām Kāmākhyām namāmyaham.
+            </div>
+            <div class="sanskrit-meaning" style="color: rgba(255,255,255,0.75);">
+                — I bow to Kāmākhyā, red in complexion, three-eyed, with moon, sun and fire as eyes, 
+                with a smiling face and hands bestowing boons and fearlessness.
+            </div>
+        </div>
+        
+        <p class="intro-text">
+            Practicing this sadhana on any of these nights allows the sadhaka to connect deeply with the divine energies, 
+            awaken hidden spiritual potential, and receive the protective and transformative grace of 
+            <em>Maa Kāmākhyā</em> and <em>Bhairava</em>.
+        </p>
+    </div>
+
+    <!-- Four Sacred Nights -->
+    <div class="content-card">
+        <div class="section-header">
+            <div class="header-decoration">
+                <span class="decoration-line"></span>
+                <span class="decoration-symbol">🌙</span>
+                <span class="decoration-line"></span>
+            </div>
+            <h2 class="section-title">Four Sacred Nights for Sadhana</h2>
+            <p class="section-subtitle">Choose any of these spiritually charged nights to perform this powerful sadhana</p>
+        </div>
+        
+        <div class="nights-grid">
+            <div class="night-card">
+                <div class="night-name">Maha Shivaratri</div>
+                <div class="night-desc">
+                    The night when Lord Shiva's consciousness is most accessible. Awakens inner wisdom, 
+                    purification, and divine grace, dissolving past karmas.
+                </div>
+            </div>
+            <div class="night-card">
+                <div class="night-name">Holika Dahan (Chhoti Holi)</div>
+                <div class="night-desc">
+                    The night of burning negativity and ego. Release inner impurities, attachments, 
+                    and obstacles, invoking divine protection.
+                </div>
+            </div>
+            <div class="night-card">
+                <div class="night-name">Naraka Chaturdaśī</div>
+                <div class="night-desc">
+                    The night of victory over inner darkness. Highly auspicious for Bhairava sadhana, 
+                    helping conquer fears and negativity.
+                </div>
+            </div>
+            <div class="night-card">
+                <div class="night-name">Kārtika Amāvasyā</div>
+                <div class="night-desc">
+                    The spiritually charged night of cosmic renewal. Magnifies spiritual purification, 
+                    mantra potency, and the blessings of Shakti and Bhairava.
+                </div>
+            </div>
+        </div>
+        
+        <div class="sacred-quote" style="margin-top: 2rem;">
+            <p class="quote-text">
+                "These two nights — Naraka Chaturdaśī and Kārtika Amāvasyā — are the nights when the veil between life and death, 
+                light and shadow, is thinnest. The fire of Bhairava burns away ignorance, and the womb of Kāmākhyā receives 
+                all the fallen seeds of karma to transform them."
+            </p>
+        </div>
+    </div>
+
+    <!-- Time and Place -->
+    <div class="content-card preparation-card">
+        <div class="section-header">
+            <div class="header-decoration">
+                <span class="decoration-line"></span>
+                <span class="decoration-symbol">🕐</span>
+                <span class="decoration-line"></span>
+            </div>
+            <h2 class="section-title">Time and Place</h2>
+            <p class="section-subtitle">Sacred timing and space preparation</p>
+        </div>
+        
+        <div class="prep-subsection">
+            <h3 class="prep-subsection-title"><i class="fas fa-clock"></i> Sacred Timing</h3>
+            <div class="prep-grid">
+                <div class="prep-item">
+                    <div class="prep-icon">🌙</div>
+                    <div class="prep-text"><strong>Begin:</strong> After 10:30 PM</div>
+                </div>
+                <div class="prep-item">
+                    <div class="prep-icon">⏰</div>
+                    <div class="prep-text"><strong>Continue past:</strong> Midnight till 1:30 AM ideally</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="prep-subsection">
+            <h3 class="prep-subsection-title"><i class="fas fa-compass"></i> Direction & Space</h3>
+            <div class="prep-grid">
+                <div class="prep-item">
+                    <div class="prep-icon">🧭</div>
+                    <div class="prep-text"><strong>Direction:</strong> Face North-East (Īśāna) or South (Dakshina) for those with Bhairava Diksha</div>
+                </div>
+                <div class="prep-item">
+                    <div class="prep-icon">🕯️</div>
+                    <div class="prep-text"><strong>Place:</strong> Quiet, dimly lit area with ghee lamp and incense</div>
+                </div>
+                <div class="prep-item">
+                    <div class="prep-icon">🧘</div>
+                    <div class="prep-text"><strong>Seat (Āsana):</strong> Black or red woolen cloth or kusha seat</div>
+                </div>
+                <div class="prep-item">
+                    <div class="prep-icon">🔱</div>
+                    <div class="prep-text"><strong>Symbols:</strong> Śrī Kāmākhyā or Śrī Guru Bhairava Yantra</div>
+                </div>
+                <div class="prep-item">
+                    <div class="prep-icon">🍈</div>
+                    <div class="prep-text"><strong>Offerings:</strong> White ash gourd (safed petha) or lemon for bali</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step-by-Step Guide -->
+    <div class="content-card">
+        <div class="section-header">
+            <div class="header-decoration">
+                <span class="decoration-line"></span>
+                <span class="decoration-symbol">📿</span>
+                <span class="decoration-line"></span>
+            </div>
+            <h2 class="section-title">Pūrvasevā (Preparation) — Step by Step</h2>
+            <p class="section-subtitle">Follow these sacred steps with devotion</p>
+        </div>
+        
+        <div class="steps-grid">
+            <!-- Step 1 - Full Width -->
+            <div class="step-card full-width">
+                <div class="step-header">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h3 class="step-title">Ācamana & Prānāyāma</h3>
+                        <span class="step-sanskrit">आचमन एवं प्राणायाम</span>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Purify the body and mind with the sacred mantras:</p>
+                    
+                    <div class="mantra-box">
+                        <div class="mantra-sanskrit">
+                            ॐ केशवाय स्वाहा | ॐ नारायणाय स्वाहा | ॐ माधवाय स्वाहा |
+                        </div>
+                        <div class="mantra-transliteration">
+                            Om Keśavāya Svāhā | Om Nārāyanāya Svāhā | Om Mādhavāya Svāhā |
+                        </div>
+                    </div>
+                    
+                    <p>Finally, pour water into the right hand and release it through the gap between the middle and ring fingers:</p>
+                    
+                    <div class="mantra-box">
+                        <div class="mantra-sanskrit">ॐ गोविन्दाय नमः</div>
+                        <div class="mantra-transliteration">Om Govindaya Namah</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2 - Full Width -->
+            <div class="step-card full-width">
+                <div class="step-header">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h3 class="step-title">Bhūtaśuddhi (Inner Purification)</h3>
+                        <span class="step-sanskrit">भूतशुद्धि</span>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Visualize five flames within your body:</p>
+                    
+                    <div class="elements-grid">
+                        <div class="element-item">
+                            <div class="element-icon">🔵</div>
+                            <div class="element-name">Head</div>
+                            <div class="element-sanskrit">Ākāśa - Blue</div>
+                        </div>
+                        <div class="element-item">
+                            <div class="element-icon">🟢</div>
+                            <div class="element-name">Chest</div>
+                            <div class="element-sanskrit">Vāyu - Green</div>
+                        </div>
+                        <div class="element-item">
+                            <div class="element-icon">🔴</div>
+                            <div class="element-name">Navel</div>
+                            <div class="element-sanskrit">Agni - Red</div>
+                        </div>
+                        <div class="element-item">
+                            <div class="element-icon">⚪</div>
+                            <div class="element-name">Thighs</div>
+                            <div class="element-sanskrit">Jala - White</div>
+                        </div>
+                        <div class="element-item">
+                            <div class="element-icon">🟡</div>
+                            <div class="element-name">Feet</div>
+                            <div class="element-sanskrit">Prthvī - Yellow</div>
+                        </div>
+                    </div>
+                    
+                    <p style="text-align: center; font-style: italic; color: var(--primary-red);">
+                        Merge all flames into the heart.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Step 3 - Full Width -->
+            <div class="step-card full-width">
+                <div class="step-header">
+                    <div class="step-number">3</div>
+                    <div>
+                        <h3 class="step-title">Āvāhana (Invocation)</h3>
+                        <span class="step-sanskrit">आवाहन</span>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Recite with deep connection and feeling:</p>
+                    
+                    <div class="mantra-box dark">
+                        <div class="mantra-sanskrit">
+                            ॐ ऐं ह्रीं क्लीं कामाख्यायै नमः | ॐ ह्रीं भैरवाय नमः ||
+                        </div>
+                        <div class="mantra-transliteration">
+                            "Om Aim Hrīm Klīm Kāmākhyāyai Namah | Om Hrīm Bhairavāya Namah ||"
+                        </div>
+                    </div>
+                    
+                    <p>Sprinkle water on yantra, lamp, and your heart.</p>
+                </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="step-card">
+                <div class="step-header">
+                    <div class="step-number">4</div>
+                    <div>
+                        <h3 class="step-title">Anganyāsa</h3>
+                        <span class="step-sanskrit">अंगन्यास</span>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <p>Using Bhairava Tantra mantra form:</p>
+                    
+                    <div class="mantra-box">
+                        <div class="mantra-sanskrit" style="font-size: 1rem; line-height: 2;">
+                            ॐ भैरवाय हृदयाय नमः |<br>
+                            ॐ रुद्राय शिरसे स्वाहा |<br>
+                            ॐ कालभैरवाय शिखायै वषट् |<br>
+                            ॐ कामाख्यायै कवचाय हुं |<br>
+                            ॐ कालीयै नेत्र-त्रयाय वषट् |<br>
+                            ॐ त्रिपुरायै अस्त्राय फट् ||
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 5 -->
+            <div class="step-card">
+                <div class="step-header">
+                    <div class="step-number">5</div>
+                    <div>
+                        <h3 class="step-title">Karananyāsa</h3>
+                        <span class="step-sanskrit">करन्यास</span>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <div class="mantra-box">
+                        <div class="mantra-sanskrit" style="font-size: 1rem; line-height: 2;">
+                            ॐ ह्रीं अंगुष्ठाभ्यां नमः |<br>
+                            ॐ क्लीं तर्जनीभ्यां नमः |<br>
+                            ॐ ऐं मध्यमाभ्यां नमः |<br>
+                            ॐ ह्रीं अनामिकाभ्यां नमः |<br>
+                            ॐ क्लीं कनिष्ठिकाभ्यां नमः |<br>
+                            ॐ ऐं करतलकरपृष्ठाभ्यां नमः ||
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dhyana -->
+    <div class="content-card">
+        <div class="section-header">
+            <div class="header-decoration">
+                <span class="decoration-line"></span>
+                <span class="decoration-symbol">🧘</span>
+                <span class="decoration-line"></span>
+            </div>
+            <h2 class="section-title">Dhyāna (Meditation Verse)</h2>
+            <p class="section-subtitle">Sacred visualization and contemplation</p>
+        </div>
+        
+        <div class="visualization-box">
+            <div class="visualization-title">🔱 Sacred Visualization</div>
+            <div class="visualization-text">
+                Visualize Bhairava seated in cremation ground, surrounded by fire, and Mā Kāmākhyā 
+                as radiant red energy rising from the earth — merging into him.
+            </div>
+        </div>
+        
+        <div class="sanskrit-verse">
+            <div class="sanskrit-text">
+                "दिगम्बरा, भैरव-स्वरूपा, त्रिनेत्र, उग्रा, करुणामयी,<br>
+                श्मशान-वासिनी, मा कामाख्या, देहि मे ज्ञानम्, मोक्षम्, अनुग्रहम्।"
+            </div>
+            <div class="sanskrit-transliteration">
+                "Digambarā, Bhairava-svarūpā, Trinetra, Ugrā, Karunāmayī,<br>
+                Śmaśāna-vāsinī, Mā Kāmākhyā, Dehi me Jñānam, Moksam, Anugraham."
+            </div>
+        </div>
+    </div>
+
+    <!-- Bali & Tattva Offerings -->
+    <div class="content-card">
+        <div class="section-header">
+            <div class="header-decoration">
+                <span class="decoration-line"></span>
+                <span class="decoration-symbol">🍈</span>
+                <span class="decoration-line"></span>
+            </div>
+            <h2 class="section-title">Bali & Tattva Offerings</h2>
+            <p class="section-subtitle">Symbolic offering — representing transformation and light</p>
+        </div>
+        
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">🍈</div>
+                <div>
+                    <h3 class="step-title">White Ash Gourd (Safed Petha) or Lemon Bali</h3>
+                </div>
+            </div>
+            <div class="step-content">
+                <ol style="padding-left: 1.5rem; line-height: 2;">
+                    <li>Energize it with the mantra:
+                        <div class="mantra-box" style="margin: 0.5rem 0;">
+                            <div class="mantra-sanskrit">ॐ क्षं भैरवाय बलिं समर्पयामि</div>
+                            <div class="mantra-transliteration">"Om Ksam Bhairavāya Balim Samarpayāmi"</div>
+                        </div>
+                    </li>
+                    <li>Touch it to your forehead, heart, and navel.</li>
+                    <li>Pierce with a trishula or cut with knife (Apply turmeric and Kumkum on each side) — visualizing all inner negativities released.</li>
+                    <li>Offer the juice/portion to the earth (outside or near a Peepal tree).</li>
+                    <li><em>Optional:</em> Light a camphor on top of cut lemon during Arathi.</li>
+                </ol>
+                
+                <div class="visualization-box" style="margin-top: 1rem;">
+                    <div class="visualization-title">📝 Understanding the Symbolism</div>
+                    <div class="visualization-text">
+                        Lemon represents the solar tejas and neutralizes graha dosa, while Ash Gourd absorbs 
+                        and dissolves tāmasika energies — hence used for protection and purification.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Japa & Main Mantras -->
+    <div class="content-card">
+        <div class="section-header">
+            <div class="header-decoration">
+                <span class="decoration-line"></span>
+                <span class="decoration-symbol">🔱</span>
+                <span class="decoration-line"></span>
+            </div>
+            <h2 class="section-title">Japa & Main Mantras</h2>
+            <p class="section-subtitle">Sacred mantras for invocation and blessing</p>
+        </div>
+        
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-header">
+                    <div class="step-number">🌸</div>
+                    <div>
+                        <h3 class="step-title">Dhyāna Mantra for Kāmākhyā</h3>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <div class="mantra-box dark">
+                        <div class="mantra-sanskrit">ॐ ऐं ह्रीं क्लीं कामाख्यायै नमः</div>
+                        <div class="mantra-transliteration">"Om Aim Hrīm Klīm Kāmākhyāyai Namah"</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-header">
+                    <div class="step-number">🔱</div>
+                    <div>
+                        <h3 class="step-title">Tantra Mantra for Bhairava</h3>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <div class="mantra-box dark">
+                        <div class="mantra-sanskrit">ॐ ह्रीं बटुक भैरवाय स्वाहा</div>
+                        <div class="mantra-transliteration">"Om Hrīm Batuka Bhairavāya Svāhā"</div>
+                    </div>
+                    <p style="text-align: center; margin: 0.5rem 0;">or</p>
+                    <div class="mantra-box dark">
+                        <div class="mantra-sanskrit">ॐ ह्रीं क्षं भैरवाय नमः</div>
+                        <div class="mantra-transliteration">"Om Hrīm Ksam Bhairavāya Namah"</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-card full-width">
+                <div class="step-header">
+                    <div class="step-number">⚡</div>
+                    <div>
+                        <h3 class="step-title">Combined Kaula Mantra (For Advanced Sādhaka)</h3>
+                    </div>
+                </div>
+                <div class="step-content">
+                    <div class="mantra-box dark">
+                        <div class="mantra-sanskrit" style="font-size: 1.2rem;">
+                            ॐ ऐं ह्रीं क्लीं भैरव-कामाख्यायै नमः स्वाहा
+                        </div>
+                        <div class="mantra-transliteration">
+                            "Om Aim Hrīm Klīm Bhairava-Kāmākhyāyai Namah Svāhā"
+                        </div>
+                    </div>
+                    <p style="text-align: center; margin-top: 1rem; font-weight: 600; color: var(--primary-red);">
+                        Japa Count: Minimum 108 or multiples of 3 (like 324)
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Arādhana & Pūrnāhuti -->
+    <div class="content-card">
+        <div class="section-header">
+            <div class="header-decoration">
+                <span class="decoration-line"></span>
+                <span class="decoration-symbol">🔔</span>
+                <span class="decoration-line"></span>
+            </div>
+            <h2 class="section-title">Arādhana & Pūrnāhuti</h2>
+            <p class="section-subtitle">Light camphor, ring bell or damaru and chant</p>
+        </div>
+        
+        <div class="mantra-box dark" style="max-width: 600px; margin: 0 auto;">
+            <div class="mantra-sanskrit">
+                ॐ भैरवाय नमः | ॐ कामाख्यायै नमः | अनुग्रहं देहि मे देवि |
+            </div>
+            <div class="mantra-transliteration">
+                "Om Bhairavāya Namah | Om Kāmākhyāyai Namah | Anugraham Dehi Me Devi |"
+            </div>
+        </div>
+        
+        <p style="text-align: center; color: var(--text-muted); margin: 1.5rem 0;">
+            Offer red flowers, incense, and surrender with palms joined.<br>
+            Sit in silent meditation for 10 minutes, letting the prāna settle in the heart.
+        </p>
+    </div>
+
+    <!-- Guru Parampara -->
+    <div class="content-card">
+        <div class="section-header">
+            <div class="header-decoration">
+                <span class="decoration-line"></span>
+                <span class="decoration-symbol">🙏</span>
+                <span class="decoration-line"></span>
+            </div>
+            <h2 class="section-title">Closing — Guru Parampara</h2>
+            <p class="section-subtitle">Close your eyes and offer salutation to the lineage</p>
+        </div>
+        
+        <div class="parampara-grid">
+            <div class="parampara-item"><span class="parampara-name">Om Gurubhyo Namah</span></div>
+            <div class="parampara-item"><span class="parampara-name">Om Matsyendranāthāya Namah</span></div>
+            <div class="parampara-item"><span class="parampara-name">Om Gorakshanāthāya Namah</span></div>
+            <div class="parampara-item"><span class="parampara-name">Om Jalandhar Nāthāya Namah</span></div>
+            <div class="parampara-item"><span class="parampara-name">Om Kanifnathāya Namah</span></div>
+            <div class="parampara-item"><span class="parampara-name">Om Charpatināthāya Namah</span></div>
+            <div class="parampara-item"><span class="parampara-name">Om Nityānandānāthāya Namah</span></div>
+            <div class="parampara-item"><span class="parampara-name">Om Param Guru Bhairavāya Namah</span></div>
+        </div>
+        
+        <div class="visualization-box" style="margin-top: 1.5rem;">
+            <div class="visualization-title">🔮 Final Visualization</div>
+            <div class="visualization-text">
+                Lineage of Nath Gurus forms a protective circle around the sadhaka. 
+                Shakti flows from the first Guru (Matsyendranāthāya) to your heart and third eye. 
+                Feel inner guidance, protection, and alignment.
+            </div>
+        </div>
+        
+        <div class="sankalpa-box" style="margin-top: 1.5rem;">
+            <h3 class="sankalpa-title">🕉️ Closing Mantra</h3>
+            <p class="sankalpa-text">
+                "Om Tat Sat Om Bhairava Kāmākhyā Guru Paramparāyai Namah"
+            </p>
+        </div>
+    </div>
+
+    <!-- Sacred Quote -->
+    <div class="sacred-quote">
+        <p class="quote-text">
+            "Remember, this Naraka Chaturdaśī is not about outer darkness, it is the destruction of inner Naraka — 
+            ignorance, lust, pride. Kārtika Amāvasyā is not emptiness, but the womb of Kāmākhyā — 
+            where all dissolved seeds of karma are reborn as light.<br><br>
+            When you invoke Bhairava and Kāmākhyā together, you are invoking both the Fire and the Womb — 
+            Consciousness and Power merging as Liberation."
+        </p>
+        <p class="quote-attribution">— Bhairava Anugraha</p>
+    </div>
+
+    <!-- Warning -->
+    <div class="warning-box">
+        <div class="warning-title">
+            <i class="fas fa-exclamation-triangle"></i> Sacred Knowledge
+        </div>
+        <div class="warning-text">
+            Remember, these steps are a guarded secret meant solely for those initiated in the true path of Bhairava Sadhana. 
+            Keep this knowledge within the circle of Sadaka and approach it with utmost reverence and discretion.
+        </div>
+    </div>
+
+    <!-- Final Blessing -->
+    <div class="content-card final-blessing-card">
+        <h2 class="intro-title">॥ ॐ भैरवाय नमः ॐ कामाख्यै नमः ॥</h2>
+        <p class="intro-text" style="font-size: 1.2rem;">
+            May Bhairava guide and bless your Sadhana!
+        </p>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Smooth scroll animations for cards
+document.addEventListener('DOMContentLoaded', function() {
+    const cards = document.querySelectorAll('.content-card, .step-card, .night-card, .sacred-quote');
+    
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    cards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(card);
+    });
+});
+</script>
+{% endblock %}

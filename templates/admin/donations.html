@@ -1,0 +1,873 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <style>
+        /* ==========================================================================
+           SACRED DARK-GOLD DONATIONS LEDGER STYLING
+           ========================================================================== */
+        .container {
+            max-width: 1440px;
+        }
+
+        .admin-header {
+            background: rgba(20, 15, 12, 0.9);
+            border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .admin-header h1 {
+            font-family: var(--display, serif);
+            font-size: 2rem;
+            color: var(--paper-bright, #fdfaf2);
+            margin: 0 0 0.25rem;
+            font-weight: 700;
+        }
+
+        .admin-header p {
+            color: var(--paper-2, #d6c9a3);
+            font-size: 0.95rem;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .btn-admin {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0.55rem 1.25rem;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #f0d48a 0%, #d4a64a 50%, #b8842a 100%);
+            color: #0e0a06 !important;
+            font-weight: 700;
+            font-family: var(--serif, serif);
+            font-size: 0.9rem;
+            border: 1px solid #f0d48a;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 15px rgba(212, 166, 74, 0.3);
+        }
+
+        .btn-admin:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 166, 74, 0.5);
+        }
+
+        .btn-admin-success {
+            background: linear-gradient(135deg, #34d399, #10b981) !important;
+            border-color: #34d399 !important;
+            color: #064e3b !important;
+        }
+
+        /* Stat Cards */
+        .admin-stats-card, .stat-card {
+            background: rgba(20, 15, 12, 0.88);
+            border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+            border-radius: 14px;
+            padding: 1.25rem 1.5rem;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+            margin-bottom: 1.5rem;
+        }
+
+        .admin-stats-card h3, .stat-card h3 {
+            font-family: var(--display, serif);
+            font-size: 1.8rem;
+            color: var(--gold-3, #f0d48a);
+            margin: 0;
+        }
+
+        .admin-stats-card p, .stat-card p {
+            color: var(--ink-mute, rgba(233, 223, 200, 0.68));
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin: 4px 0 0;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background: rgba(20, 15, 12, 0.88);
+            border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+            border-radius: 14px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .filter-input, .filter-select, .form-control, .form-select {
+            background: rgba(14, 10, 6, 0.85) !important;
+            border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35)) !important;
+            border-radius: 8px !important;
+            color: var(--paper-bright, #fdfaf2) !important;
+            font-size: 0.92rem !important;
+            padding: 0.6rem 0.9rem !important;
+        }
+
+        .filter-input:focus, .filter-select:focus, .form-control:focus {
+            border-color: var(--gold-3, #f0d48a) !important;
+            box-shadow: 0 0 12px rgba(212, 166, 74, 0.3) !important;
+        }
+
+        /* Table Responsiveness & Styles */
+        .table-responsive {
+            background: rgba(20, 15, 12, 0.92);
+            border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35)) !important;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            margin: 1.5rem 0;
+        }
+
+        .enterprise-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: transparent;
+            margin: 0;
+        }
+
+        .enterprise-table thead {
+            background: linear-gradient(135deg, rgba(212, 166, 74, 0.25) 0%, rgba(106, 16, 16, 0.35) 100%);
+            border-bottom: 2px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+        }
+
+        .enterprise-table thead th {
+            color: var(--gold-3, #f0d48a) !important;
+            padding: 1rem 1.25rem !important;
+            font-family: var(--display, serif);
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            border: none !important;
+            border-bottom: 1px solid rgba(212, 166, 74, 0.2) !important;
+            text-shadow: none !important;
+        }
+
+        .enterprise-table tbody tr {
+            background: rgba(14, 10, 6, 0.6) !important;
+            border-bottom: 1px solid rgba(212, 166, 74, 0.1) !important;
+            transition: all 0.2s ease;
+        }
+
+        .enterprise-table tbody tr:hover {
+            background: rgba(212, 166, 74, 0.1) !important;
+        }
+
+        .enterprise-table tbody td {
+            padding: 0.9rem 1.25rem !important;
+            color: var(--paper-bright, #fdfaf2) !important;
+            font-size: 0.92rem;
+            border: none !important;
+            border-bottom: 1px solid rgba(212, 166, 74, 0.1) !important;
+            vertical-align: middle;
+        }
+
+        .enterprise-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .enterprise-badge-success {
+            background: rgba(16, 185, 129, 0.2) !important;
+            color: #6ee7b7 !important;
+            border: 1px solid rgba(16, 185, 129, 0.4) !important;
+        }
+
+        .enterprise-badge-warning {
+            background: rgba(245, 158, 11, 0.2) !important;
+            color: #fcd34d !important;
+            border: 1px solid rgba(245, 158, 11, 0.4) !important;
+        }
+
+        .enterprise-badge-danger {
+            background: rgba(239, 68, 68, 0.2) !important;
+            color: #fca5a5 !important;
+            border: 1px solid rgba(239, 68, 68, 0.4) !important;
+        }
+
+        .btn-action-sm {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            border: 1px solid var(--gold-border);
+            background: rgba(14, 10, 6, 0.8);
+            color: var(--gold-3);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .btn-action-sm:hover {
+            background: rgba(212, 166, 74, 0.2);
+            color: #fff;
+        }
+
+        /* Enterprise Tabs & Containers (Dark-Gold Sacred Aesthetic) */
+        .enterprise-tabs {
+            background: rgba(20, 15, 12, 0.92);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        .enterprise-tabs-header {
+            padding: 1.5rem 2rem 1rem;
+            border-bottom: 1px solid rgba(212, 166, 74, 0.2);
+            background: linear-gradient(135deg, rgba(212, 166, 74, 0.15) 0%, rgba(14, 10, 6, 0.95) 100%);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .enterprise-tabs-header h3 {
+            color: var(--paper-bright, #fdfaf2);
+            font-weight: 700;
+            font-size: 1.35rem;
+            font-family: var(--display, serif);
+            margin: 0;
+        }
+        
+        .enterprise-tabs-nav {
+            display: flex;
+            background: rgba(14, 10, 6, 0.95);
+            border-bottom: 1px solid rgba(212, 166, 74, 0.2);
+            overflow-x: auto;
+            padding: 0 1rem;
+            gap: 6px;
+        }
+        
+        .enterprise-tab-item {
+            background: none;
+            border: none;
+            padding: 0.9rem 1.4rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            border-bottom: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+            color: var(--paper-2, #d6c9a3);
+            font-weight: 600;
+            font-family: var(--serif, serif);
+            font-size: 0.9rem;
+        }
+        
+        .enterprise-tab-item:hover {
+            background: rgba(212, 166, 74, 0.1);
+            color: var(--gold-3, #f0d48a);
+        }
+        
+        .enterprise-tab-item.active {
+            background: rgba(212, 166, 74, 0.15);
+            color: var(--gold-3, #f0d48a);
+            border-bottom-color: var(--gold, #d4a64a);
+            font-weight: 700;
+        }
+        
+        .enterprise-tab-item .badge {
+            background: rgba(212, 166, 74, 0.3);
+            color: var(--paper-bright, #fdfaf2);
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 999px;
+            font-weight: 600;
+        }
+        
+        .enterprise-tab-content {
+            background: transparent;
+        }
+        
+        .enterprise-tab-pane {
+            display: none !important;
+            padding: 1.75rem;
+        }
+
+        .enterprise-tab-pane.active {
+            display: block !important;
+        }
+        
+        .enterprise-card {
+            background: rgba(20, 15, 12, 0.92);
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        .enterprise-card-header {
+            padding: 1.25rem 1.75rem;
+            border-bottom: 1px solid rgba(212, 166, 74, 0.2);
+            background: linear-gradient(135deg, rgba(212, 166, 74, 0.1) 0%, rgba(14, 10, 6, 0.9) 100%);
+        }
+        
+        .enterprise-card-header h5 {
+            color: var(--paper-bright, #fdfaf2);
+            font-weight: 700;
+            font-family: var(--display, serif);
+            margin: 0;
+            font-size: 1.15rem;
+        }
+        
+        .enterprise-card-body {
+            padding: 1.75rem;
+        }
+        
+        .enterprise-empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--paper-2, #d6c9a3);
+        }
+        
+        .enterprise-empty-state-icon {
+            font-size: 3.5rem;
+            color: var(--gold-border, rgba(212, 166, 74, 0.35));
+            margin-bottom: 1rem;
+        }
+        
+        .enterprise-empty-state h3 {
+            color: var(--paper-bright, #fdfaf2);
+            margin-bottom: 0.5rem;
+            font-family: var(--display, serif);
+        }
+
+        .alert-info {
+            background: rgba(20, 15, 12, 0.85) !important;
+            border: 1px solid rgba(212, 166, 74, 0.3) !important;
+            color: var(--paper-bright, #fdfaf2) !important;
+            border-radius: 12px !important;
+        }
+        .alert-info h6 {
+            color: var(--gold-3, #f0d48a);
+        }
+
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .admin-stat-card {
+            background: rgba(20, 15, 12, 0.88);
+            border-radius: 14px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
+
+        .admin-stat-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--gold, #d4a64a);
+        }
+
+        .admin-stat-number {
+            font-family: var(--display, serif);
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--gold-3, #f0d48a);
+            margin-bottom: 0.25rem;
+            text-shadow: 0 2px 10px rgba(212, 166, 74, 0.3);
+        }
+
+        .admin-stat-label {
+            color: var(--paper-2, #d6c9a3);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-size: 0.8rem;
+            font-family: var(--serif, serif);
+        }
+    </style>
+
+    <!-- Admin Header -->
+    <div class="admin-header">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1>
+                    <i class="fas fa-database me-2"></i>Donation Management
+                </h1>
+                <p class="mb-0">Manage and monitor all donation records</p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <div class="admin-actions">
+                    <a href="{{ url_for('add_donation') }}" class="btn-admin btn-admin-success">
+                        <i class="fas fa-plus me-2"></i>Add Donation
+                    </a>
+                    <button id="sync-button" class="btn-admin">
+                        <i class="fas fa-sync-alt me-2"></i>Sync
+                    </button>
+                    <button id="refresh-button" class="btn-admin" style="background: linear-gradient(135deg, #10b981, #059669); border-color: #10b981;">
+                        <i class="fas fa-refresh me-2"></i>Refresh
+                    </button>
+                    <button id="test-sheets-button" class="btn-admin" style="background: linear-gradient(135deg, #7c3aed, #3b82f6); border-color: #7c3aed;">
+                        <i class="fas fa-table me-2"></i>Test Sheets
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Overall Statistics Cards -->
+    <div class="admin-stats">
+        <div class="admin-stat-card">
+            <div class="admin-stat-number">{{ total_donations or 0 }}</div>
+            <div class="admin-stat-label">Total Donations</div>
+        </div>
+        <div class="admin-stat-card">
+            <div class="admin-stat-number">₹{{ "%.2f"|format(total_amount or 0) }}</div>
+            <div class="admin-stat-label">Total Amount</div>
+        </div>
+        <div class="admin-stat-card">
+            <div class="admin-stat-number">{{ (all_worksheet_data|length) or 0 }}</div>
+            <div class="admin-stat-label">Categories</div>
+        </div>
+        <div class="admin-stat-card">
+            <div class="admin-stat-number">{{ (recent_donations|length) or 0 }}</div>
+            <div class="admin-stat-label">Recent (30 days)</div>
+        </div>
+    </div>
+
+    <!-- Debug Information -->
+    <div class="alert alert-info mb-3">
+        <h6><i class="fas fa-info-circle me-2"></i>Debug Information</h6>
+        <small>
+            <strong>Data Source:</strong> {{ data_source }}<br>
+            <strong>Total Donations in DB:</strong> {{ total_donations or 0 }}<br>
+            <strong>Recent Donations (30 days):</strong> {{ (recent_donations|length) or 0 }}<br>
+            <strong>Total Amount in DB:</strong> ₹{{ "%.2f"|format(total_amount or 0) }}<br>
+            <strong>Active Purposes:</strong> {{ (all_purposes|length) or 0 }}<br>
+            <strong>Worksheet Data Categories:</strong> {{ (all_worksheet_data|length) or 0 }}
+        </small>
+    </div>
+
+ 
+    <!-- All Donations with Tabs -->
+    {% if all_worksheet_data %}
+    <div class="enterprise-tabs">
+        <div class="enterprise-tabs-header">
+            <h3 class="mb-0">
+                <i class="fas fa-database me-2"></i>All Donation Records
+            </h3>
+            <div class="d-flex align-items-center gap-2">
+                <span class="text-muted small">Data Source: {{ data_source }}</span>
+                <i class="fas fa-sync-alt text-muted"></i>
+            </div>
+        </div>
+        
+        <div class="enterprise-tabs-nav">
+            {% for worksheet_name, worksheet_data in all_worksheet_data.items() %}
+            <button class="enterprise-tab-item {% if loop.first %}active{% endif %}" 
+                    data-tab="{{ worksheet_name|replace(' ', '')|lower }}">
+                <i class="fas fa-folder"></i>
+                <span>{{ worksheet_name }}</span>
+                <span class="badge">{{ worksheet_data.summary.total_donations }}</span>
+            </button>
+            {% endfor %}
+        </div>
+        
+        <div class="enterprise-tab-content">
+            {% for worksheet_name, worksheet_data in all_worksheet_data.items() %}
+            <div class="enterprise-tab-pane {% if loop.first %}active{% endif %}" 
+                 id="{{ worksheet_name|replace(' ', '')|lower }}">
+                
+                <div class="enterprise-card">
+                    <div class="enterprise-card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-table me-2"></i>{{ worksheet_name }} Donations
+                            <small class="text-muted ms-2">({{ worksheet_data.donations|length }} records)</small>
+                        </h5>
+                    </div>
+                    <div class="enterprise-card-body">
+                        <!-- Worksheet-specific KPI Cards -->
+                        <div class="admin-stats mb-4">
+                            <div class="admin-stat-card">
+                                <div class="admin-stat-number">{{ worksheet_data.summary.total_donations }}</div>
+                                <div class="admin-stat-label">Total Donations</div>
+                            </div>
+                            <div class="admin-stat-card">
+                                <div class="admin-stat-number">₹{{ "%.2f"|format(worksheet_data.summary.total_amount) }}</div>
+                                <div class="admin-stat-label">Total Amount</div>
+                            </div>
+                            <div class="admin-stat-card">
+                                <div class="admin-stat-number">{{ worksheet_data.summary.verified_donations }}</div>
+                                <div class="admin-stat-label">Verified</div>
+                            </div>
+                            <div class="admin-stat-card">
+                                <div class="admin-stat-number">₹{{ "%.2f"|format(worksheet_data.summary.average_donation) }}</div>
+                                <div class="admin-stat-label">Avg Donation</div>
+                            </div>
+                        </div>
+                        {% if worksheet_data.donations %}
+                        <div class="table-responsive" style="max-height: 600px; overflow-y: auto;">
+                            <table class="enterprise-table">
+                                <thead>
+                                    <tr>
+                                        <th><i class="fas fa-calendar me-2"></i>Date</th>
+                                        <th><i class="fas fa-user me-2"></i>Donor Information</th>
+                                        <th><i class="fas fa-rupee-sign me-2"></i>Amount</th>
+                                        <th><i class="fas fa-credit-card me-2"></i>Payment Method</th>
+                                        <th><i class="fas fa-check-circle me-2"></i>Status</th>
+                                        <th><i class="fas fa-cogs me-2"></i>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for donation in worksheet_data.donations %}
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex flex-column">
+                                                {% if donation.donation_date %}
+                                                    {% if donation.donation_date is string %}
+                                                        <span class="fw-semibold">{{ donation.donation_date }}</span>
+                                                    {% else %}
+                                                        <span class="fw-semibold">{{ donation.donation_date.strftime('%B %d, %Y') }}</span>
+                                                    {% endif %}
+                                                {% else %}
+                                                    <span class="text-muted">N/A</span>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex flex-column">
+                                                <span class="fw-semibold text-dark">{{ donation.donor_name }}</span>
+                                                {% if donation.donor_email %}
+                                                <small class="text-muted">{{ donation.donor_email }}</small>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex flex-column">
+                                                <span class="fw-bold text-success fs-5">{{ donation.currency }} {{ "%.2f"|format(donation.amount) }}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="enterprise-badge enterprise-badge-info">
+                                                <i class="fas fa-credit-card me-1"></i>{{ donation.payment_method }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {% if donation.is_verified %}
+                                            <span class="enterprise-badge enterprise-badge-success">
+                                                <i class="fas fa-check-circle me-1"></i>Verified
+                                            </span>
+                                            {% else %}
+                                            <span class="enterprise-badge enterprise-badge-warning">
+                                                <i class="fas fa-clock me-1"></i>Pending
+                                            </span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if not donation.is_verified %}
+                                                <button class="btn-admin btn-admin-success" 
+                                                        onclick="verifyDonation('{{ donation.id }}', '{{ donation.donor_name }}')"
+                                                        title="Verify Donation">
+                                                    <i class="fas fa-check me-1"></i>Verify
+                                                </button>
+                                            {% else %}
+                                                <span class="text-muted">
+                                                    <i class="fas fa-check-circle" style="color: #10b981;"></i>
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% else %}
+                        <div class="enterprise-empty-state">
+                            <div class="enterprise-empty-state-icon">
+                                <i class="fas fa-donate"></i>
+                            </div>
+                            <h3>No Donations Found</h3>
+                            <p>No donations have been recorded for this category yet.</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <div class="enterprise-card">
+        <div class="enterprise-card-header">
+            <h5 class="mb-0">
+                <i class="fas fa-list me-2"></i>No Donations Available
+            </h5>
+        </div>
+        <div class="enterprise-card-body">
+            <div class="enterprise-empty-state">
+                <div class="enterprise-empty-state-icon">
+                    <i class="fas fa-donate"></i>
+                </div>
+                <h3>No Donations Found</h3>
+                <p>No donations have been recorded yet.</p>
+                <a href="{{ url_for('add_donation') }}" class="btn-admin btn-admin-success">
+                    <i class="fas fa-plus me-2"></i>Add First Donation
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Set up sync button event listener
+    const syncButton = document.getElementById('sync-button');
+    if (syncButton) {
+        syncButton.addEventListener('click', performSync);
+    }
+    
+    // Set up test sheets button event listener
+    const testSheetsButton = document.getElementById('test-sheets-button');
+    if (testSheetsButton) {
+        testSheetsButton.addEventListener('click', testGoogleSheets);
+    }
+    
+    // Set up refresh button event listener
+    const refreshButton = document.getElementById('refresh-button');
+    if (refreshButton) {
+        refreshButton.addEventListener('click', function() {
+            console.log('🔄 Manual refresh requested');
+            window.location.reload();
+        });
+    }
+    
+    // Check Google Sheets connection status and enable/disable sync button
+    checkSyncStatus();
+    
+    function checkSyncStatus() {
+        // Check if Google Sheets is connected
+        fetch('/admin/sync-status')
+            .then(response => response.json())
+            .then(data => {
+                const syncButton = document.getElementById('sync-button');
+                if (syncButton) {
+                    if (data.connected) {
+                        syncButton.disabled = false;
+                        syncButton.title = 'Sync donations from Google Sheets';
+                    } else {
+                        syncButton.disabled = true;
+                        syncButton.title = 'Google Sheets not connected. Please set up credentials first.';
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error checking sync status:', error);
+                const syncButton = document.getElementById('sync-button');
+                if (syncButton) {
+                    syncButton.disabled = true;
+                    syncButton.title = 'Error checking connection status';
+                }
+            });
+    }
+    
+    function testGoogleSheets() {
+        const testButton = document.getElementById('test-sheets-button');
+        const testResults = document.getElementById('sheets-test-results');
+        const testContent = document.getElementById('sheets-test-content');
+        const originalText = testButton.innerHTML;
+        
+        // Show loading state
+        testButton.disabled = true;
+        testButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Testing...';
+        testResults.style.display = 'block';
+        
+        // Test Google Sheets connection
+        fetch('/admin/api/donations-from-sheets')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    testContent.innerHTML = `
+                        <div class="alert alert-success">
+                            <h6><i class="fas fa-check-circle me-2"></i>Google Sheets Connection Successful!</h6>
+                            <p><strong>Total donations found:</strong> ${data.count}</p>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Donor Name</th>
+                                        <th>Amount</th>
+                                        <th>Purpose</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${data.donations.slice(0, 10).map(donation => `
+                                        <tr>
+                                            <td>${donation.donor_name || 'N/A'}</td>
+                                            <td>${donation.currency || 'INR'} ${donation.amount || 0}</td>
+                                            <td>${donation.purpose || 'N/A'}</td>
+                                            <td>${donation.status || 'N/A'}</td>
+                                            <td>${donation.donation_date || 'N/A'}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                        ${data.donations.length > 10 ? `<p class="text-muted">Showing first 10 of ${data.donations.length} donations</p>` : ''}
+                    `;
+                } else {
+                    testContent.innerHTML = `
+                        <div class="alert alert-danger">
+                            <h6><i class="fas fa-exclamation-triangle me-2"></i>Google Sheets Connection Failed</h6>
+                            <p><strong>Error:</strong> ${data.error}</p>
+                        </div>
+                    `;
+                }
+            })
+            .catch(error => {
+                console.error('Test error:', error);
+                testContent.innerHTML = `
+                    <div class="alert alert-danger">
+                        <h6><i class="fas fa-exclamation-triangle me-2"></i>Test Failed</h6>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                    </div>
+                `;
+            })
+            .finally(() => {
+                // Reset button
+                testButton.disabled = false;
+                testButton.innerHTML = originalText;
+            });
+    }
+    
+    function performSync() {
+        const syncButton = document.getElementById('sync-button');
+        const originalText = syncButton.innerHTML;
+        
+        console.log('🔄 Starting sync process...');
+        
+        // Show loading state
+        syncButton.disabled = true;
+        syncButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Syncing...';
+        
+        // Perform sync using API endpoint
+        fetch('/admin/sync-now', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            console.log('📡 Sync response status:', response.status);
+            return response.json();
+        })
+        .then(data => {
+            console.log('📊 Sync response data:', data);
+            if (data.success) {
+                // Show success message
+                showAlert('success', data.message || 'Donations synced successfully!');
+                console.log('✅ Sync successful, refreshing page in 2 seconds...');
+                // Refresh the page to show updated data
+                setTimeout(() => {
+                    console.log('🔄 Reloading page...');
+                    window.location.reload();
+                }, 2000);
+            } else {
+                throw new Error(data.error || 'Sync failed');
+            }
+        })
+        .catch(error => {
+            console.error('❌ Sync error:', error);
+            showAlert('danger', error.message || 'Failed to sync donations. Please try again.');
+            // Reset button
+            syncButton.disabled = false;
+            syncButton.innerHTML = originalText;
+        });
+    }
+    
+    function showAlert(type, message) {
+        // Create alert element
+        const alertDiv = document.createElement('div');
+        alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 350px; background: #141018; border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.4)); color: #fdfaf2; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8); border-radius: 12px;';
+        alertDiv.innerHTML = `
+            <div class="d-flex align-items-center">
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'} me-2" style="color: ${type === 'success' ? '#34d399' : '#f87171'};"></i>
+                <span style="color: var(--paper-bright, #fdfaf2); font-size: 0.92rem;">${message}</span>
+                <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="alert"></button>
+            </div>
+        `;
+        
+        // Insert at the top of the body
+        document.body.appendChild(alertDiv);
+        
+        // Auto-dismiss after 5 seconds
+        setTimeout(() => {
+            if (alertDiv.parentNode) {
+                alertDiv.remove();
+            }
+        }, 5000);
+    }
+    
+    // Tab functionality
+    function showTab(tabElement) {
+        // Get the tab ID from data attribute
+        const tabId = tabElement.getAttribute('data-tab');
+        
+        // Remove active class from all tabs and panes
+        document.querySelectorAll('.enterprise-tab-item').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        document.querySelectorAll('.enterprise-tab-pane').forEach(pane => {
+            pane.classList.remove('active');
+        });
+
+        // Add active class to clicked tab
+        tabElement.classList.add('active');
+        
+        // Show corresponding pane
+        const pane = document.getElementById(tabId);
+        if (pane) {
+            pane.classList.add('active');
+        }
+    }
+    
+    // Add click event listeners to all tab buttons
+    document.querySelectorAll('.enterprise-tab-item').forEach(tab => {
+        tab.addEventListener('click', function(e) {
+            e.preventDefault();
+            showTab(this);
+        });
+    });
+    
+    // Verify donation function
+    function verifyDonation(donationId, donorName) {
+        if (confirm(`Verify donation from ${donorName}?`)) {
+            // For now, just show a message since we're working with Google Sheets data
+            showAlert('info', 'Verification feature will be available after syncing to database');
+        }
+    }
+});
+</script>
+{% endblock %}
+

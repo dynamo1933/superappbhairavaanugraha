@@ -1,0 +1,35 @@
+<!-- Chat Widget Component -->
+<div id="da-chat-widget" class="da-chat-widget">
+    <!-- Chat Button (FAB) -->
+    <button id="chat-fab" class="chat-fab" aria-label="Open Chat">
+        <i class="fas fa-comment-alt"></i>
+        <span class="chat-notification-badge" id="chat-badge" style="display: none;">0</span>
+    </button>
+
+    <!-- Chat Window -->
+    <div id="chat-window" class="chat-window" style="display: none;">
+        <div class="chat-header">
+            <div class="chat-header-info">
+                <i class="fas fa-om"></i>
+                <span>Ask Guru Bhairava</span>
+            </div>
+            <button id="chat-close" class="chat-close" aria-label="Close Chat">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div id="chat-messages" class="chat-messages">
+            <!-- Messages will be loaded here -->
+            <div class="chat-placeholder">
+                <p>Namaste! How can we guide you on your journey today?</p>
+            </div>
+        </div>
+        
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Type your message..." autocomplete="off">
+            <button id="chat-send" class="chat-send" aria-label="Send Message">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+</div>

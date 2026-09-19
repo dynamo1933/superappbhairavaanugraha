@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>{% block title %}Bhairava Anugraha · Super App{% endblock %}</title>
   <meta name="description" content="Explore Bhairava Consciousness with Bhairava Anugraha Super App. Reconnecting seekers through the sacred portals of QnA Codex, Sahasralinga Codex, and Divine Sādhana Paddhati." />
-  
+  <meta name="csrf-token" content="{{ csrf_token() if csrf_token is defined else '' }}">
+
   <!-- Favicon -->
   <link rel="icon" href="/static/images/logo.jpeg" type="image/jpeg" />
 
@@ -14,10 +15,16 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Tiro+Devanagari+Sanskrit:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  <!-- Master Stylesheet -->
-  <link rel="stylesheet" href="/static/css/superapp.css?v=2" />
-  <link rel="stylesheet" href="/static/css/unified-header.css?v=1" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Master Stylesheets -->
+  <link rel="stylesheet" href="/static/css/superapp.css?v=3" />
+  <link rel="stylesheet" href="/static/css/unified-header.css?v=2" />
+  <link rel="stylesheet" href="/static/css/admin-dark-gold.css?v=1" />
+
   {% block extra_head %}{% endblock %}
+  {% block extra_styles %}{% endblock %}
 </head>
 
 <body>
@@ -40,18 +47,78 @@
         <a href="/jnana-samvada" class="nav-item nav-pill-super {% if active_page == 'jnana_samvada' %}is-active{% endif %}" title="Open Jnāna Samvāda Codex">☸ Jnāna Samvāda</a>
         <a href="/bhairav-loka" class="nav-item nav-pill-super {% if active_page == 'bhairav_loka' %}is-active{% endif %}" title="Open Bhairav Loka Sahasralinga Codex">✦ Bhairav Loka</a>
         <a href="/sadhana-paddhati" class="nav-item {% if active_page == 'sadhana' %}is-active{% endif %}">Sādhana Paddhati</a>
+        <a href="/mandala-sadhana" class="nav-item {% if active_page == 'mandala_vow' %}is-active{% endif %}">Mandala Vows</a>
         <a href="/ashtami" class="nav-item {% if active_page == 'ashtami' %}is-active{% endif %}">Ashtami</a>
+        <a href="/bhiksha" class="nav-item {% if active_page == 'bhiksha' %}is-active{% endif %}">Bhiksha</a>
+
+        {% if current_user.is_authenticated and current_user.is_admin() %}
+        <div class="user-menu-wrap">
+          <a href="/auth/admin/users" class="nav-item nav-pill-super is-admin-pill" style="color: var(--gold-bright); border-color: var(--gold);">
+            <i class="fas fa-shield-halved"></i> Admin Portal
+          </a>
+        </div>
+        {% endif %}
       </nav>
 
       <div class="right">
         <button type="button" class="audio-toggle-btn" id="audio-toggle-btn" title="Toggle Meditative Bell Chime">
-          <span>🔕 Audio Off</span>
+          <span>🔕 <span class="btn-label-text">Audio</span></span>
         </button>
 
         <button type="button" class="search-btn" id="chrome-search" title="Search the Super App (⌘K)">
-          <span>Search</span>
+          <i class="fas fa-search" style="font-size: 0.85rem;"></i>
           <span class="kbd">⌘K</span>
         </button>
+
+        <!-- User Authentication & Profile Controls -->
+        {% if current_user.is_authenticated %}
+        <div class="user-menu-wrap">
+          <a href="/auth/profile" class="user-btn-trigger" aria-label="User Account Menu" title="Spiritual Profile & Settings">
+            {% if current_user.profile_picture %}
+              <img src="/auth/profile-picture/{{ current_user.id }}" alt="{{ current_user.full_name }}" class="user-avatar-mini" />
+            {% else %}
+              <i class="fas fa-user-circle" style="color: var(--gold-3); font-size: 1.1rem;"></i>
+            {% endif %}
+            <span>{{ current_user.full_name.split()[0] if current_user.full_name else current_user.username }}</span>
+            {% if current_user.is_admin() %}
+              <span class="admin-badge-mini">ADMIN</span>
+            {% endif %}
+            <i class="fas fa-chevron-down" style="font-size: 0.65rem; opacity: 0.7;"></i>
+          </a>
+          <div class="user-dropdown-menu">
+            <div class="user-dropdown-header">
+              <strong>{{ current_user.full_name or current_user.username }}</strong>
+              <div style="font-size: 0.75rem; color: var(--paper-dim);">{{ current_user.email }}</div>
+            </div>
+            <a href="/auth/profile"><i class="fas fa-id-badge"></i> Spiritual Profile</a>
+            <a href="/sadhana-paddhati"><i class="fas fa-route"></i> My Sādhana Path</a>
+            <a href="/mandala-sadhana"><i class="fas fa-scroll"></i> Mandala Sādhana Vow</a>
+            
+            {% if current_user.is_admin() %}
+            <div class="divider"></div>
+            <div style="padding: 0.4rem 1.25rem 0.2rem; font-size: 0.7rem; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">Admin Desk</div>
+            <a href="/auth/admin/users"><i class="fas fa-users-gear"></i> User Management</a>
+            <a href="/admin/mandala-sadhana"><i class="fas fa-feather"></i> Sādhana Registrations</a>
+            <a href="/admin/donations"><i class="fas fa-hand-holding-heart"></i> Donations Ledger</a>
+            <a href="/admin/chat"><i class="fas fa-comments"></i> Sadhak Mentorship Chat</a>
+            {% endif %}
+            
+            <div class="divider"></div>
+            <a href="/auth/logout" style="color: #f87171;"><i class="fas fa-arrow-right-from-bracket"></i> Sign Out</a>
+          </div>
+        </div>
+
+        <!-- Direct Visible Logout Button for Quick One-Click Access -->
+        <a href="/auth/logout" class="signout-direct-btn" id="header-logout-btn" title="Sign Out of Sanctuary">
+          <i class="fas fa-arrow-right-from-bracket"></i>
+          <span>Sign Out</span>
+        </a>
+        {% else %}
+        <a href="/auth/login" class="user-btn-trigger login-direct-btn" style="text-decoration: none;">
+          <i class="fas fa-arrow-right-to-bracket" style="color: var(--gold);"></i>
+          <span>Sign In</span>
+        </a>
+        {% endif %}
 
         <button type="button" class="mobile-toggle" id="mobile-menu-btn" aria-label="Open Navigation Menu">
           ☰
@@ -68,6 +135,20 @@
       <a href="/ashtami" class="ashtami-link">Explore Sacred Gateways →</a>
     </div>
   </div>
+
+  <!-- ==================== FLASH ALERTS ==================== -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-messages-container">
+        {% for category, message in messages %}
+          <div class="flash-alert flash-{{ category }}">
+            <span>{{ message }}</span>
+            <button type="button" class="flash-close" onclick="this.parentElement.remove()">&times;</button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
 
   <!-- ==================== MAIN CONTENT BLOCK ==================== -->
   <main>
@@ -90,7 +171,9 @@
           <li><a href="/jnana-samvada">Jnāna Samvāda (Bhairava Codex)</a></li>
           <li><a href="/bhairav-loka">Bhairav Loka Sahasralinga</a></li>
           <li><a href="/sadhana-paddhati">Sādhana Paddhati (Three Steps)</a></li>
+          <li><a href="/mandala-sadhana">Mandala Sādhana Vow</a></li>
           <li><a href="/ashtami">Ashtami Sacred Gateways</a></li>
+          <li><a href="/bhiksha">Sacred Bhiksha (Offerings)</a></li>
         </ul>
       </div>
 
@@ -102,6 +185,9 @@
           <li><a href="https://www.youtube.com/@BhairavaAnugraha" target="_blank" rel="noopener">YouTube (@BhairavaAnugraha)</a></li>
           <li><a href="https://www.instagram.com/bhairavayuga?igsh=YTJoY25lcmU2Z2xx&utm_source=qr" target="_blank" rel="noopener">Instagram (@bhairavayuga)</a></li>
           <li><a href="https://www.amazon.in/Life-Within-Without-Awakening-Consciousness-ebook/dp/B0HCLV9V27" target="_blank" rel="noopener">Book: Life Within and Without</a></li>
+          {% if current_user.is_authenticated and current_user.is_admin() %}
+          <li><a href="/auth/admin/users" style="color: var(--gold-bright);">⚡ Admin Portal</a></li>
+          {% endif %}
         </ul>
       </div>
     </div>
@@ -134,14 +220,35 @@
       <li><a href="/jnana-samvada" style="color:var(--gold-3)">☸ Jnāna Samvāda</a></li>
       <li><a href="/bhairav-loka" style="color:var(--gold-3)">✦ Bhairav Loka</a></li>
       <li><a href="/sadhana-paddhati">Sādhana Paddhati</a></li>
+      <li><a href="/mandala-sadhana">Mandala Vows</a></li>
       <li><a href="/ashtami">Ashtami Portal</a></li>
+      <li><a href="/bhiksha">Sacred Bhiksha</a></li>
+
+      {% if current_user.is_authenticated %}
+      <li><a href="/auth/profile" style="color: var(--gold-bright);">ॐ My Profile ({{ current_user.username }})</a></li>
+        {% if current_user.is_admin() %}
+        <li><a href="/auth/admin/users" style="color: var(--gold);">⚡ Admin Management</a></li>
+        <li><a href="/admin/mandala-sadhana">📜 Sādhana Vows</a></li>
+        <li><a href="/admin/donations">💰 Donations Ledger</a></li>
+        <li><a href="/admin/chat">💬 Mentorship Chat</a></li>
+        {% endif %}
+      <li><a href="/auth/logout" style="color: #f87171;">Sign Out</a></li>
+      {% else %}
+      <li><a href="/auth/login" style="color: var(--gold-bright);">Sign In / Register</a></li>
+      {% endif %}
+
       <li><a href="https://t.me/+tM8pVCZWG8cxYjc1" target="_blank">Join Telegram</a></li>
       <li><a href="tel:+916262212153">Call: +91 62622 12153</a></li>
     </ul>
   </div>
 
+  <!-- Spiritual Chat Drawer Widget for Logged In Sadhaks -->
+  {% if current_user.is_authenticated %}
+    {% include "components/chat_widget.html" ignore missing %}
+  {% endif %}
+
   <!-- Master Script -->
-  <script src="/static/js/superapp.js?v=2"></script>
+  <script src="/static/js/superapp.js?v=3"></script>
   {% block extra_scripts %}{% endblock %}
 </body>
 </html>

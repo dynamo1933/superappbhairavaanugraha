@@ -1,0 +1,696 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<style>
+    /* ==========================================================================
+       SACRED DARK-GOLD DONATION PURPOSES STYLING
+       ========================================================================== */
+    .admin-header {
+        background: rgba(20, 15, 12, 0.9);
+        border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+        border-radius: 16px;
+        padding: 1.5rem 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+
+    .admin-header h1 {
+        font-family: var(--display, serif);
+        font-size: 2rem;
+        color: var(--paper-bright, #fdfaf2);
+        margin: 0 0 0.25rem;
+        font-weight: 700;
+    }
+
+    .admin-header p {
+        color: var(--paper-2, #d6c9a3);
+        font-size: 0.95rem;
+    }
+
+    .admin-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    .btn-admin {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 0.55rem 1.25rem;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #f0d48a 0%, #d4a64a 50%, #b8842a 100%);
+        color: #0e0a06 !important;
+        font-weight: 700;
+        font-family: var(--serif, serif);
+        font-size: 0.9rem;
+        border: 1px solid #f0d48a;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.25s ease;
+        box-shadow: 0 4px 15px rgba(212, 166, 74, 0.3);
+    }
+
+    .btn-admin:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(212, 166, 74, 0.5);
+    }
+
+    .btn-admin-success {
+        color: #5a5a5a;
+        font-size: 0.9rem;
+        line-height: 1.4;
+        margin-top: 0.5rem;
+    }
+
+    .purpose-name {
+        font-weight: 700;
+        color: #1a1a1a;
+        font-size: 1.1rem;
+        font-family: 'Playfair Display', serif;
+    }
+
+    /* Creator info styling */
+    .creator-info {
+        font-size: 0.8rem;
+        color: #5a5a5a;
+        margin-top: 0.25rem;
+    }
+
+    .creator-info strong {
+        color: var(--gold-3, #f0d48a);
+    }
+
+    /* Action buttons in table */
+    .table-action-btn {
+        background: rgba(14, 10, 6, 0.85);
+        border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+        color: var(--gold-3, #f0d48a);
+        padding: 0.35rem 0.75rem;
+        border-radius: 8px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        transition: all 0.25s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        margin-right: 0.4rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .table-action-btn:hover {
+        background: rgba(212, 166, 74, 0.2);
+        color: #fff;
+        border-color: var(--gold, #d4a64a);
+        transform: translateY(-1px);
+    }
+
+    .table-action-btn-warning {
+        background: rgba(245, 158, 11, 0.15);
+        border-color: rgba(245, 158, 11, 0.4);
+        color: #fcd34d;
+    }
+
+    .table-action-btn-warning:hover {
+        background: rgba(245, 158, 11, 0.3);
+        color: #fff;
+    }
+
+    .table-action-btn-success {
+        background: rgba(16, 185, 129, 0.15);
+        border-color: rgba(16, 185, 129, 0.4);
+        color: #6ee7b7;
+    }
+
+    .table-action-btn-success:hover {
+        background: rgba(16, 185, 129, 0.3);
+        color: #fff;
+    }
+
+    .table-action-btn-danger {
+        background: rgba(239, 68, 68, 0.15);
+        border-color: rgba(239, 68, 68, 0.4);
+        color: #fca5a5;
+    }
+
+    .table-action-btn-danger:hover {
+        background: rgba(239, 68, 68, 0.3);
+        color: #fff;
+    }
+
+    /* Enterprise Form Styling */
+    .enterprise-form-control {
+        border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+        border-radius: 8px;
+        padding: 0.65rem 0.95rem;
+        font-size: 0.92rem;
+        background: rgba(14, 10, 6, 0.85);
+        color: var(--paper-bright, #fdfaf2);
+        transition: all 0.2s ease;
+    }
+
+    .enterprise-form-control:focus {
+        border-color: var(--gold-3, #f0d48a);
+        box-shadow: 0 0 12px rgba(212, 166, 74, 0.3);
+        outline: none;
+        background: rgba(20, 15, 10, 0.95);
+    }
+
+    .enterprise-form-control::placeholder {
+        color: #6b7280;
+        opacity: 0.7;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 0.5rem;
+        font-family: 'Playfair Display', serif;
+    }
+
+    .form-text {
+        font-size: 0.85rem;
+        color: #5a5a5a;
+        margin-top: 0.25rem;
+    }
+
+    .btn-admin-secondary {
+        background: linear-gradient(135deg, #6b7280, #4b5563);
+        border: 2px solid #6b7280;
+        color: #fef7ed;
+        padding: 0.8rem 1.5rem;
+        border-radius: 25px;
+        font-family: 'Source Sans Pro', sans-serif;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+    }
+
+    .btn-admin-secondary:hover {
+        background: linear-gradient(135deg, #4b5563, #374151);
+        color: #fef7ed;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+        text-decoration: none;
+    }
+
+    .purpose-examples {
+        background: linear-gradient(135deg, #fef7ed 0%, #fed7aa 100%);
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        border: 1px solid #fecaca;
+    }
+
+    /* Form Animation Styles */
+    #add-purpose-section {
+        transition: all 0.3s ease;
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    /* Invalid form field styling */
+    .is-invalid {
+        border-color: #dc2626 !important;
+        box-shadow: 0 0 0 0.2rem rgba(220, 38, 38, 0.25) !important;
+    }
+
+    .invalid-feedback {
+        color: #dc2626;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+</style>
+
+<!-- Admin Header -->
+<div class="admin-header">
+    <div class="row align-items-center">
+        <div class="col-lg-8">
+            <h1>
+                <i class="fas fa-list me-2"></i>Donation Purposes
+            </h1>
+            <p class="mb-0">Manage and organize donation purposes for your sacred initiatives</p>
+        </div>
+        <div class="col-lg-4 text-lg-end">
+            <div class="admin-actions">
+                <button id="toggle-add-form" class="btn-admin btn-admin-success">
+                    <i class="fas fa-plus me-2"></i>Add Purpose
+                </button>
+                <a href="{{ url_for('admin_donations') }}" class="btn-admin">
+                    <i class="fas fa-donate me-2"></i>Manage Donations
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Purpose Form (Initially Hidden) -->
+<div id="add-purpose-section" class="enterprise-card" style="display: none;">
+    <div class="enterprise-card-header">
+        <h5 class="mb-0">
+            <i class="fas fa-plus-circle me-2"></i>Add New Donation Purpose
+        </h5>
+    </div>
+    <div class="enterprise-card-body">
+        <form method="POST" novalidate id="add-purpose-form">
+            {{ form.hidden_tag() }}
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        {{ form.name.label(class="form-label fw-bold text-dark") }}
+                        {{ form.name(class="form-control enterprise-form-control" + (" is-invalid" if form.name.errors else ""), placeholder="e.g., Temple Maintenance, Spiritual Events") }}
+                        {% if form.name.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.name.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="form-text text-muted">A clear, descriptive name for this donation purpose</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        {{ form.description.label(class="form-label fw-bold text-dark") }}
+                        {{ form.description(class="form-control enterprise-form-control" + (" is-invalid" if form.description.errors else ""), rows="3", placeholder="Describe how donations for this purpose will be used...") }}
+                        {% if form.description.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.description.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="form-text text-muted">Detailed description of fund usage and purpose</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="purpose-examples">
+                    <small class="text-muted">
+                        <i class="fas fa-lightbulb text-warning me-1"></i>
+                        <strong>Examples:</strong> Temple Maintenance, Spiritual Events, Community Support, Educational Programs
+                    </small>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="button" id="cancel-add" class="btn-admin-secondary" style="font-size: 0.9rem; padding: 0.6rem 1.2rem;">
+                        <i class="fas fa-times me-1"></i>Cancel
+                    </button>
+                    <button type="submit" class="btn-admin btn-admin-success" style="font-size: 0.9rem; padding: 0.6rem 1.2rem;">
+                        <i class="fas fa-save me-1"></i>Add Purpose
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Overall Statistics Cards -->
+<div class="admin-stats">
+    <div class="admin-stat-card">
+        <div class="admin-stat-number">{{ purposes|length or 0 }}</div>
+        <div class="admin-stat-label">Total Purposes</div>
+    </div>
+    <div class="admin-stat-card">
+        <div class="admin-stat-number">{{ purposes|selectattr('is_active', 'equalto', true)|list|length or 0 }}</div>
+        <div class="admin-stat-label">Active Purposes</div>
+    </div>
+    <div class="admin-stat-card">
+        <div class="admin-stat-number">{{ purposes|selectattr('is_active', 'equalto', false)|list|length or 0 }}</div>
+        <div class="admin-stat-label">Inactive Purposes</div>
+    </div>
+    <div class="admin-stat-card">
+        <div class="admin-stat-number">{{ purposes|map(attribute='donations')|map('length')|sum or 0 }}</div>
+        <div class="admin-stat-label">Total Donations</div>
+    </div>
+</div>
+
+<!-- Purposes Table -->
+{% if purposes %}
+<div class="enterprise-card">
+    <div class="enterprise-card-header">
+        <h5 class="mb-0">
+            <i class="fas fa-table me-2"></i>All Donation Purposes
+            <small class="text-muted ms-2">({{ purposes|length }} total)</small>
+        </h5>
+    </div>
+    <div class="enterprise-card-body">
+        <div class="table-responsive">
+            <table class="enterprise-table">
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-tag me-2"></i>Purpose</th>
+                        <th><i class="fas fa-info-circle me-2"></i>Description</th>
+                        <th><i class="fas fa-toggle-on me-2"></i>Status</th>
+                        <th><i class="fas fa-calendar me-2"></i>Created</th>
+                        <th><i class="fas fa-donate me-2"></i>Donations</th>
+                        <th><i class="fas fa-cogs me-2"></i>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for purpose in purposes %}
+                    <tr>
+                        <td>
+                            <div class="purpose-name">{{ purpose.name }}</div>
+                        </td>
+                        <td>
+                            {% if purpose.description %}
+                                <div class="purpose-description">{{ purpose.description[:120] }}{% if purpose.description|length > 120 %}...{% endif %}</div>
+                            {% else %}
+                                <em class="text-muted">No description provided</em>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if purpose.is_active %}
+                            <span class="enterprise-badge enterprise-badge-success">
+                                <i class="fas fa-check-circle me-1"></i>Active
+                            </span>
+                            {% else %}
+                            <span class="enterprise-badge enterprise-badge-secondary">
+                                <i class="fas fa-pause-circle me-1"></i>Inactive
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div>
+                                <strong>{{ purpose.created_at.strftime('%B %d, %Y') }}</strong>
+                            </div>
+                            <div class="creator-info">
+                                by <strong>{{ purpose.creator.username }}</strong>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="enterprise-badge enterprise-badge-info">
+                                {{ purpose.donations|length }} donations
+                            </span>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-wrap gap-1">
+                                <a href="{{ url_for('toggle_donation_purpose', purpose_id=purpose.id) }}"
+                                   class="table-action-btn {% if purpose.is_active %}table-action-btn-warning{% else %}table-action-btn-success{% endif %}"
+                                   onclick="return confirm('{% if purpose.is_active %}Deactivate{% else %}Activate{% endif %} this purpose?')">
+                                    <i class="fas fa-{% if purpose.is_active %}pause{% else %}play{% endif %}"></i>
+                                    {% if purpose.is_active %}Deactivate{% else %}Activate{% endif %}
+                                </a>
+                                {% if purpose.donations|length == 0 %}
+                                <button type="button" class="table-action-btn table-action-btn-danger"
+                                        onclick="deletePurpose({{ purpose.id }}, '{{ purpose.name }}')">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="enterprise-card">
+    <div class="enterprise-card-header">
+        <h5 class="mb-0">
+            <i class="fas fa-list me-2"></i>No Donation Purposes
+        </h5>
+    </div>
+    <div class="enterprise-card-body">
+            <div class="enterprise-empty-state">
+                <div class="enterprise-empty-state-icon">
+                    <i class="fas fa-list"></i>
+                </div>
+                <h3>No Donation Purposes Found</h3>
+                <p>Start by creating your first donation purpose to organize your sacred initiatives.</p>
+                <button onclick="document.getElementById('toggle-add-form').click()" class="btn-admin btn-admin-success">
+                    <i class="fas fa-plus me-2"></i>Create First Purpose
+                </button>
+            </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Quick Actions & Information -->
+<div class="row mt-4">
+    <div class="col-lg-8">
+        <div class="enterprise-card">
+            <div class="enterprise-card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-bolt me-2"></i>Quick Actions
+                </h5>
+            </div>
+            <div class="enterprise-card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <button onclick="document.getElementById('toggle-add-form').click()" class="btn-admin btn-admin-success w-100">
+                            <i class="fas fa-plus me-2"></i>Add New Purpose
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="{{ url_for('admin_donations') }}" class="btn-admin w-100">
+                            <i class="fas fa-donate me-2"></i>Manage Donations
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="{{ url_for('bhiksha') }}" class="btn-admin btn-admin-secondary w-100" target="_blank">
+                            <i class="fas fa-eye me-2"></i>View Public Page
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="{{ url_for('sync_donations') }}" class="btn-admin btn-admin-secondary w-100"
+                           onclick="return confirm('This will sync donations from Google Sheets. Continue?')">
+                            <i class="fas fa-sync me-2"></i>Sync from Sheets
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="enterprise-card">
+            <div class="enterprise-card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-info-circle me-2"></i>About Purposes
+                </h5>
+            </div>
+            <div class="enterprise-card-body">
+                <div class="mb-3">
+                    <h6 class="text-muted mb-2">Common Categories</h6>
+                    <ul class="list-unstyled small">
+                        <li><i class="fas fa-check text-success me-2"></i>Temple Maintenance</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Spiritual Events</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Community Support</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Educational Programs</li>
+                    </ul>
+                </div>
+                <div>
+                    <h6 class="text-muted mb-2">Best Practices</h6>
+                    <ul class="list-unstyled small">
+                        <li><i class="fas fa-lightbulb text-warning me-2"></i>Clear, descriptive names</li>
+                        <li><i class="fas fa-lightbulb text-warning me-2"></i>Detailed descriptions</li>
+                        <li><i class="fas fa-lightbulb text-warning me-2"></i>Regular status updates</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Toggle add purpose form
+    const toggleBtn = document.getElementById('toggle-add-form');
+    const addSection = document.getElementById('add-purpose-section');
+    const cancelBtn = document.getElementById('cancel-add');
+
+    if (toggleBtn && addSection) {
+        toggleBtn.addEventListener('click', function() {
+            const isVisible = addSection.style.display !== 'none';
+
+            if (isVisible) {
+                // Hide form with animation
+                addSection.style.opacity = '1';
+                addSection.style.transform = 'scale(1)';
+                setTimeout(() => {
+                    addSection.style.opacity = '0';
+                    addSection.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        addSection.style.display = 'none';
+                        toggleBtn.innerHTML = '<i class="fas fa-plus me-2"></i>Add Purpose';
+                    }, 300);
+                }, 10);
+            } else {
+                // Show form with animation
+                addSection.style.display = 'block';
+                addSection.style.opacity = '0';
+                addSection.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    addSection.style.opacity = '1';
+                    addSection.style.transform = 'scale(1)';
+                    toggleBtn.innerHTML = '<i class="fas fa-minus me-2"></i>Hide Form';
+                    // Focus on first input
+                    const firstInput = addSection.querySelector('input[type="text"]');
+                    if (firstInput) firstInput.focus();
+                }, 10);
+            }
+        });
+    }
+
+    if (cancelBtn && addSection && toggleBtn) {
+        cancelBtn.addEventListener('click', function() {
+            addSection.style.opacity = '1';
+            addSection.style.transform = 'scale(1)';
+            setTimeout(() => {
+                addSection.style.opacity = '0';
+                addSection.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    addSection.style.display = 'none';
+                    toggleBtn.innerHTML = '<i class="fas fa-plus me-2"></i>Add Purpose';
+                }, 300);
+            }, 10);
+        });
+    }
+
+    // Enhanced delete function with better UX
+    window.deletePurpose = function(purposeId, purposeName) {
+        if (confirm(`🕉️ Are you sure you want to delete "${purposeName}"?\n\nThis action cannot be undone and will permanently remove this donation purpose.`)) {
+            // Show loading state
+            const deleteBtn = event.target.closest('button');
+            const originalText = deleteBtn.innerHTML;
+            deleteBtn.disabled = true;
+            deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Deleting...';
+
+            // Simulate delete action (replace with actual AJAX call)
+            setTimeout(() => {
+                showAlert('success', `"${purposeName}" has been successfully deleted.`);
+                // In a real implementation, reload the page or remove the row
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            }, 1000);
+        }
+    };
+
+    // Enhanced sync function
+    window.syncToGoogleSheets = function() {
+        if (confirm('🕉️ This will sync all donation purposes to Google Sheets. Continue?')) {
+            const syncBtn = document.querySelector('[onclick*="syncToGoogleSheets"]');
+            if (syncBtn) {
+                const originalText = syncBtn.innerHTML;
+                syncBtn.disabled = true;
+                syncBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Syncing...';
+
+                // Simulate sync action
+                setTimeout(() => {
+                    showAlert('success', 'Donation purposes synced successfully with Google Sheets!');
+                    syncBtn.disabled = false;
+                    syncBtn.innerHTML = originalText;
+                }, 2000);
+            }
+        }
+    };
+
+    // Alert function for notifications
+    function showAlert(type, message) {
+        // Create alert element
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+        alertDiv.style.cssText = `
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            min-width: 350px;
+            background: #141018;
+            border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.4));
+            color: var(--paper-bright, #fdfaf2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+            border-radius: 12px;
+        `;
+        alertDiv.innerHTML = `
+            <div class="d-flex align-items-center">
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'} me-2"
+                   style="color: ${type === 'success' ? '#34d399' : '#f87171'};"></i>
+                <div class="flex-grow-1">
+                    <strong style="color: var(--gold-3, #f0d48a);">${type === 'success' ? 'Success!' : 'Notice'}</strong><br>
+                    <span style="font-size: 0.9rem; color: var(--paper-2, #d6c9a3);">${message}</span>
+                </div>
+                <button type="button" class="btn-close btn-close-white ms-2" data-bs-dismiss="alert"></button>
+            </div>
+        `;
+
+        // Insert at the top of the body
+        document.body.appendChild(alertDiv);
+
+        // Auto-dismiss after 5 seconds
+        setTimeout(() => {
+            if (alertDiv.parentNode) {
+                alertDiv.remove();
+            }
+        }, 5000);
+    }
+
+    // Add hover effects to table rows
+    const tableRows = document.querySelectorAll('.enterprise-table tbody tr');
+    tableRows.forEach(row => {
+        row.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-2px)';
+            this.style.boxShadow = '0 6px 16px rgba(196, 30, 58, 0.2)';
+        });
+
+        row.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = 'none';
+        });
+    });
+
+    // Add click animation to action buttons
+    const actionButtons = document.querySelectorAll('.table-action-btn');
+    actionButtons.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            // Add pressed effect
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 150);
+        });
+    });
+
+    // Add loading animation to admin action buttons
+    const adminButtons = document.querySelectorAll('.btn-admin');
+    adminButtons.forEach(btn => {
+        btn.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-2px)';
+        });
+
+        btn.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

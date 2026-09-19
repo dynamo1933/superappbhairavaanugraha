@@ -1,0 +1,988 @@
+{% extends "base.html" %}
+
+{% block extra_styles %}
+<style>
+/* ===== DEVI PADATHI PAGE - ENHANCED UI/UX ===== */
+
+/* Page Header */
+.devi-padati-header {
+    background: linear-gradient(135deg, #9f1239 0%, #be185d 50%, #db2777 100%);
+    padding: 2rem 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.devi-padati-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/><circle cx="50" cy="50" r="30" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/></svg>');
+    background-size: 150px 150px;
+    opacity: 0.5;
+}
+
+.header-layout {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.header-image {
+    flex-shrink: 0;
+}
+
+.header-image img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid rgba(255,255,255,0.3);
+    box-shadow: 
+        0 8px 30px rgba(0,0,0,0.3),
+        0 0 0 2px rgba(255,255,255,0.1);
+    transition: all 0.3s ease;
+}
+
+.header-image img:hover {
+    transform: scale(1.05);
+    border-color: rgba(255,255,255,0.5);
+    box-shadow: 
+        0 12px 40px rgba(0,0,0,0.4),
+        0 0 0 3px rgba(255,255,255,0.2);
+}
+
+.header-content {
+    text-align: left;
+}
+
+.header-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+    display: inline-block;
+}
+
+.header-title {
+    font-family: var(--font-mystical);
+    font-size: 2.2rem;
+    color: #fff;
+    margin-bottom: 0.3rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.header-subtitle {
+    font-family: var(--font-sacred);
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.05rem;
+    font-style: italic;
+}
+
+.header-quote {
+    font-family: var(--font-sacred);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.85rem;
+    font-style: italic;
+    margin-top: 0.5rem;
+    line-height: 1.4;
+}
+
+/* Main Content */
+.devi-padati-main {
+    background: linear-gradient(180deg, #fdf2f8 0%, #fce7f3 50%, #fdf2f8 100%);
+    min-height: 100vh;
+    padding: 2.5rem 1rem 3rem;
+    position: relative;
+}
+
+/* Subtle background pattern */
+.devi-padati-main::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(219, 39, 119, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(236, 72, 153, 0.05) 0%, transparent 40%);
+    pointer-events: none;
+}
+
+.padati-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+/* ===== FLOW JOURNEY ===== */
+.flow-journey {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* ===== PHASE SECTION ===== */
+.phase-section {
+    margin-bottom: 0.5rem;
+    padding: 0.5rem 0;
+}
+
+/* Phase Header Bar */
+.phase-header-bar {
+    background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+    backdrop-filter: blur(10px);
+    padding: 0.9rem 1.5rem;
+    border-radius: 50px;
+    box-shadow: 
+        0 4px 20px rgba(219, 39, 119, 0.08),
+        0 1px 3px rgba(0,0,0,0.05),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(219, 39, 119, 0.1);
+}
+
+.phase-icon-badge {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #db2777 0%, #be185d 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.85rem;
+    box-shadow: 0 3px 8px rgba(219, 39, 119, 0.3);
+}
+
+.phase-header-title {
+    font-family: var(--font-mystical);
+    font-size: 0.95rem;
+    color: #be185d;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+/* ===== FLOW ROW ===== */
+.flow-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 0;
+    justify-content: center;
+}
+
+/* Start/End Markers */
+.flow-marker {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #fff 0%, #fdf2f8 100%);
+    border: 3px solid #db2777;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #db2777;
+    font-size: 1rem;
+    flex-shrink: 0;
+    box-shadow: 
+        0 4px 15px rgba(219, 39, 119, 0.2),
+        inset 0 2px 4px rgba(255,255,255,0.8);
+    transition: all 0.3s ease;
+}
+
+.flow-marker:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(219, 39, 119, 0.3);
+}
+
+/* Flow Cards Container */
+.flow-cards {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+    padding: 0.5rem 0;
+    justify-content: center;
+}
+
+/* ===== STAGE CARD ===== */
+.stage-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 180px;
+    max-width: 220px;
+    flex: 1;
+    cursor: default;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    margin: 0 0.5rem;
+}
+
+.stage-card.clickable {
+    cursor: pointer;
+}
+
+.stage-card.clickable:hover {
+    transform: translateY(-8px);
+}
+
+.stage-card.clickable:hover .card-body {
+    box-shadow: 
+        0 20px 40px rgba(0,0,0,0.15),
+        0 8px 16px rgba(0,0,0,0.1);
+}
+
+/* Card Status Icon */
+.card-status-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #fff 0%, #f9fafb 100%);
+    border: 3px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    margin-bottom: -16px;
+    z-index: 3;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.stage-card.clickable:hover .card-status-icon {
+    transform: scale(1.15);
+}
+
+/* Status variants */
+.card-status-icon.completed { 
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border-color: #10b981;
+    color: white;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+}
+
+.card-status-icon.current { 
+    background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+    border-color: #ec4899;
+    color: white;
+    box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+    animation: currentPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes currentPulse {
+    0%, 100% { 
+        box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 4px 25px rgba(236, 72, 153, 0.6);
+        transform: scale(1.08);
+    }
+}
+
+.card-status-icon.accessible { 
+    background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
+    border-color: #a855f7;
+    color: white;
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+}
+
+.card-status-icon.locked { 
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    border-color: #d1d5db;
+    color: #9ca3af;
+}
+
+/* Card Body */
+.card-body {
+    width: 100%;
+    padding: 1.75rem 1.25rem 1.25rem;
+    border-radius: 18px;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Active/Accessible card style - Devi Pink Theme */
+.card-body.active {
+    background: linear-gradient(145deg, #f472b6 0%, #ec4899 50%, #db2777 100%);
+    box-shadow: 
+        0 10px 30px rgba(236, 72, 153, 0.3),
+        0 4px 12px rgba(0,0,0,0.1),
+        inset 0 1px 0 rgba(255,255,255,0.3);
+}
+
+.card-body.active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+/* Locked card style */
+.card-body.locked {
+    background: linear-gradient(145deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
+    box-shadow: 
+        0 8px 25px rgba(0,0,0,0.06),
+        0 3px 10px rgba(0,0,0,0.04),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+    border: 1px solid rgba(203, 213, 225, 0.5);
+}
+
+/* Mandala card images */
+.mandala-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(255, 255, 255, 0.5);
+    margin-bottom: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
+
+.card-body.active .mandala-img {
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+}
+
+.card-body.locked .mandala-img {
+    filter: grayscale(50%) opacity(0.7);
+    border-color: rgba(203, 213, 225, 0.6);
+}
+
+.stage-card.clickable:hover .mandala-img {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
+}
+
+/* Card text */
+.card-title {
+    font-family: var(--font-primary);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    line-height: 1.3;
+}
+
+.card-body.active .card-title {
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.card-body.locked .card-title {
+    color: #64748b;
+}
+
+.card-days {
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+}
+
+.card-body.active .card-days {
+    color: rgba(255, 255, 255, 0.95);
+}
+
+.card-body.locked .card-days {
+    color: #94a3b8;
+}
+
+.card-status-text {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+.card-body.active .card-status-text {
+    color: rgba(255,255,255,0.9);
+}
+
+.card-body.locked .card-status-text {
+    color: #94a3b8;
+}
+
+/* Request button */
+.btn-request {
+    margin-top: 0.6rem;
+    padding: 0.4rem 0.9rem;
+    background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+    color: #db2777;
+    border: none;
+    border-radius: 15px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    letter-spacing: 0.3px;
+}
+
+.btn-request:hover {
+    background: #fff;
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.btn-request:disabled,
+.btn-request.sent {
+    background: rgba(255,255,255,0.6);
+    color: #94a3b8;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ===== FLOW ARROWS ===== */
+.flow-arrow {
+    display: flex;
+    align-items: center;
+    padding: 0 0.75rem;
+    flex-shrink: 0;
+}
+
+.flow-arrow svg {
+    width: 40px;
+    height: 24px;
+    color: #f9a8d4;
+    transition: all 0.3s ease;
+}
+
+.flow-arrow.active svg {
+    color: #ec4899;
+}
+
+/* ===== SACRED REMINDER ===== */
+.sacred-reminder {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+    backdrop-filter: blur(10px);
+    padding: 1.25rem 1.5rem;
+    border-radius: 20px;
+    margin-top: 2.5rem;
+    border: 1px solid rgba(236, 72, 153, 0.15);
+    box-shadow: 
+        0 8px 30px rgba(236, 72, 153, 0.08),
+        0 2px 8px rgba(0,0,0,0.04),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+}
+
+.reminder-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+.reminder-content {
+    flex: 1;
+}
+
+.reminder-text {
+    font-family: var(--font-sacred);
+    font-size: 1.05rem;
+    color: var(--text-dark);
+    margin-bottom: 0.3rem;
+    font-style: italic;
+    line-height: 1.6;
+}
+
+.reminder-attribution {
+    font-size: 0.85rem;
+    color: #db2777;
+    font-weight: 600;
+}
+
+/* ===== WELCOME SECTION ===== */
+.welcome-section {
+    margin-top: 2rem;
+}
+
+.welcome-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 1.75rem;
+    box-shadow: 
+        0 8px 30px rgba(219, 39, 119, 0.06),
+        0 2px 8px rgba(0,0,0,0.04),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+    text-align: center;
+    border: 1px solid rgba(219, 39, 119, 0.08);
+}
+
+.welcome-title {
+    font-family: var(--font-mystical);
+    font-size: 1.25rem;
+    color: #db2777;
+    margin-bottom: 0.75rem;
+}
+
+.welcome-card > p {
+    color: var(--text-muted);
+    margin-bottom: 1.25rem;
+    font-size: 0.95rem;
+}
+
+.welcome-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.action-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1.1rem;
+    background: var(--highlight-color);
+    border-radius: 14px;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.action-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+}
+
+.action-icon {
+    font-size: 1.25rem;
+}
+
+.action-content h4 {
+    font-size: 0.9rem;
+    color: var(--text-dark);
+    margin-bottom: 0.1rem;
+}
+
+.action-content p {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* ===== NOTIFICATIONS ===== */
+.notification {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    z-index: 9999;
+    padding: 1rem 1.5rem;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 100%);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    animation: notifSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    max-width: 320px;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.notification-success { border-left: 4px solid #10b981; }
+.notification-error { border-left: 4px solid #ef4444; }
+.notification-info { border-left: 4px solid #3b82f6; }
+
+.notification-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.notification-message {
+    color: var(--text-dark);
+    font-size: 0.9rem;
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: #9ca3af;
+    transition: all 0.3s ease;
+}
+
+.notification-close:hover {
+    color: #db2777;
+    transform: scale(1.1);
+}
+
+@keyframes notifSlide {
+    from { transform: translateX(100%) scale(0.9); opacity: 0; }
+    to { transform: translateX(0) scale(1); opacity: 1; }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+    .flow-row {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+    
+    .flow-cards {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1.25rem;
+    }
+    
+    .flow-marker {
+        display: none;
+    }
+    
+    .flow-arrow {
+        display: none;
+    }
+    
+    .stage-card {
+        min-width: 140px;
+        max-width: 160px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-layout {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .header-content {
+        text-align: center;
+    }
+    
+    .header-image img {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .header-title {
+        font-size: 1.8rem;
+        letter-spacing: 2px;
+    }
+}
+
+@media (max-width: 600px) {
+    .devi-padati-header {
+        padding: 1.5rem 1rem;
+    }
+    
+    .header-image img {
+        width: 85px;
+        height: 85px;
+    }
+    
+    .header-title {
+        font-size: 1.5rem;
+        letter-spacing: 1px;
+    }
+    
+    .header-icon {
+        font-size: 2rem;
+    }
+    
+    .devi-padati-main {
+        padding: 1.5rem 0.75rem 2.5rem;
+    }
+    
+    .phase-header-bar {
+        padding: 0.75rem 1rem;
+        border-radius: 30px;
+    }
+    
+    .phase-header-title {
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+    }
+    
+    .stage-card {
+        min-width: 120px;
+        max-width: 145px;
+    }
+    
+    .card-status-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 0.8rem;
+        margin-bottom: -14px;
+    }
+    
+    .card-body {
+        padding: 1.25rem 0.75rem 0.9rem;
+        border-radius: 14px;
+    }
+    
+    .card-title {
+        font-size: 0.85rem;
+    }
+    
+    .card-status-text {
+        font-size: 0.7rem;
+    }
+    
+    .sacred-reminder {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.25rem;
+    }
+    
+    .welcome-actions {
+        flex-direction: column;
+    }
+    
+    .action-item {
+        width: 100%;
+        justify-content: center;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+<!-- Page Header -->
+<section class="devi-padati-header">
+    <div class="header-layout">
+        <div class="header-image">
+            <img src="{{ url_for('static', filename='images/kamakhaya_maa_yoni_pith.jpg') }}" alt="Maa Kamakhya Yoni Pith" onerror="this.src='{{ url_for('static', filename='images/bhairav_with_sadhak.jpg') }}'">
+        </div>
+        <div class="header-content">
+            <h1 class="header-title">Devi Padathi</h1>
+            <p class="header-subtitle">Your sacred journey through the Kamakhya Sadhana Mandalas</p>
+            <p class="header-quote">Kamarupa resides the Yoni of the Devi, the root of creation, worshiped by all Siddhas.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Main Content -->
+<div class="devi-padati-main">
+    <div class="padati-container">
+        
+        <div class="flow-journey">
+            
+            <!-- ===== DEVI MANDALA SADHANA ===== -->
+            <div class="phase-section">
+                <div class="phase-header-bar">
+                    <div class="phase-icon-badge">
+                        <i class="fas fa-om"></i>
+                    </div>
+                    <span class="phase-header-title">Kamakhya Sadhana Mandala — Path of Divine Feminine</span>
+                </div>
+                
+                <div class="flow-row">
+                    <div class="flow-marker">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    
+                    <div class="flow-cards">
+                        {% for mandala_num in [1, 2, 3] %}
+                            {% set mandala_days = {1: 33, 2: 66, 3: 99} %}
+                            
+                            {# For Devi Mandalas - Check dedicated devi_mandala_X_access fields #}
+                            {% if mandala_num == 1 %}
+                                {% set is_accessible = current_user.is_approved and current_user.devi_mandala_1_access %}
+                            {% elif mandala_num == 2 %}
+                                {% set is_accessible = current_user.devi_mandala_2_access %}
+                            {% elif mandala_num == 3 %}
+                                {% set is_accessible = current_user.devi_mandala_3_access %}
+                            {% else %}
+                                {% set is_accessible = false %}
+                            {% endif %}
+                            {% set is_completed = false %}
+                            {% set is_current = is_accessible and not is_completed %}
+                            {% set prev_completed = (mandala_num == 1) or (mandala_num == 2 and current_user.devi_mandala_1_access) or (mandala_num == 3 and current_user.devi_mandala_2_access) %}
+                            {% set is_next_stage = not is_accessible and prev_completed %}
+                            
+                            {% if mandala_num > 1 %}
+                            <div class="flow-arrow {% if is_accessible or is_completed %}active{% endif %}">
+                                <svg viewBox="0 0 35 22" fill="none">
+                                    <path d="M0 11 H26 M21 5 L28 11 L21 17" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="stage-card {% if is_accessible or is_completed %}clickable{% endif %}" 
+                                 {% if is_accessible or is_completed %}onclick="window.location.href='/devi-stage/{{ mandala_num }}'"{% endif %}>
+                                <div class="card-status-icon {% if is_completed %}completed{% elif is_current %}current{% elif is_accessible %}accessible{% else %}locked{% endif %}">
+                                    {% if is_completed %}<i class="fas fa-check"></i>
+                                    {% elif is_current %}<i class="fas fa-star"></i>
+                                    {% elif is_accessible %}<i class="fas fa-unlock"></i>
+                                    {% else %}<i class="fas fa-lock"></i>{% endif %}
+                                </div>
+                                <div class="card-body {% if is_accessible or is_completed %}active{% else %}locked{% endif %}">
+                                    <img src="{{ url_for('static', filename='images/kamakhaya_maa_mandla_' ~ mandala_num ~ '_header.jpg') }}" 
+                                         alt="Kamakhya Maa Mandala {{ mandala_num }}" 
+                                         class="mandala-img"
+                                         onerror="this.src='{{ url_for('static', filename='images/stage_headers/mandala_' ~ mandala_num ~ '_header.jpg') }}'">
+                                    <div class="card-title">Mandala {{ mandala_num }}</div>
+                                    <div class="card-days">({{ mandala_days[mandala_num] }} days)</div>
+                                    <div class="card-status-text">
+                                        {% if is_completed %}Completed
+                                        {% elif is_current %}In Progress
+                                        {% elif is_accessible %}Ready
+                                        {% else %}Locked{% endif %}
+                                    </div>
+                                    {% if not is_accessible and not is_completed and mandala_num > 1 %}
+                                    <button class="btn-request" data-mandala="{{ mandala_num }}" onclick="event.stopPropagation(); requestDeviMandalaAccess({{ mandala_num }})">
+                                        Request Access
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="flow-marker">
+                        <i class="fas fa-flag-checkered"></i>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <!-- Sacred Reminder -->
+        <div class="sacred-reminder">
+            <div class="reminder-icon">🌸</div>
+            <div class="reminder-content">
+                <p class="reminder-text">
+                    "Each Mandala unfolds in divine timing. Complete each stage with devotion before requesting the next. Approval from the guide is required to progress."
+                </p>
+                <div class="reminder-attribution">— Maa Kamakhya's Grace</div>
+            </div>
+        </div>
+        
+        <!-- Welcome Section for users without access -->
+        {% if not current_user.is_approved %}
+        <section class="welcome-section">
+            <div class="welcome-card">
+                <h3 class="welcome-title">🌸 Welcome to Devi Padathi</h3>
+                <p>Your account needs to be approved before you can begin the Kamakhya Sadhana journey. Please contact an administrator.</p>
+                <div class="welcome-actions">
+                    <div class="action-item">
+                        <div class="action-icon">📧</div>
+                        <div class="action-content">
+                            <h4>Contact Admin</h4>
+                            <p>Request approval to start</p>
+                        </div>
+                    </div>
+                    <div class="action-item">
+                        <div class="action-icon">📚</div>
+                        <div class="action-content">
+                            <h4>Read About Devi</h4>
+                            <p><a href="/devi">Learn more</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        {% endif %}
+        
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+function requestDeviMandalaAccess(mandalaNum) {
+    const btn = document.querySelector(`.btn-request[data-mandala="${mandalaNum}"]`);
+    if (!btn || btn.disabled) return;
+    
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+    
+    const csrfToken = document.querySelector('input[name="csrf_token"]')?.value || '';
+    
+    fetch('{{ url_for("auth.request_devi_stage_access") }}', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ 'mandala_number': mandalaNum, 'csrf_token': csrfToken })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification(data.message || `Request sent for Mandala ${mandalaNum}`, 'success');
+            btn.textContent = 'Sent';
+            btn.classList.add('sent');
+        } else {
+            showNotification(data.message || 'Request failed', 'error');
+            btn.disabled = false;
+            btn.textContent = 'Request Access';
+        }
+    })
+    .catch(error => {
+        showNotification('An error occurred', 'error');
+        btn.disabled = false;
+        btn.textContent = 'Request Access';
+    });
+}
+
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <div class="notification-content">
+            <span class="notification-message">${message}</span>
+            <button class="notification-close" onclick="this.parentElement.parentElement.remove()">×</button>
+        </div>
+    `;
+    document.body.appendChild(notification);
+    setTimeout(() => notification.remove(), 3500);
+}
+
+// Smooth entrance animation
+document.addEventListener('DOMContentLoaded', function() {
+    const cards = document.querySelectorAll('.stage-card');
+    const arrows = document.querySelectorAll('.flow-arrow');
+    const markers = document.querySelectorAll('.flow-marker');
+    
+    cards.forEach((card, i) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(25px) scale(0.95)';
+        setTimeout(() => {
+            card.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0) scale(1)';
+        }, i * 100 + 100);
+    });
+    
+    arrows.forEach((arrow, i) => {
+        arrow.style.opacity = '0';
+        setTimeout(() => {
+            arrow.style.transition = 'opacity 0.4s ease';
+            arrow.style.opacity = '1';
+        }, i * 100 + 200);
+    });
+    
+    markers.forEach((marker, i) => {
+        marker.style.opacity = '0';
+        marker.style.transform = 'scale(0.5)';
+        setTimeout(() => {
+            marker.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+            marker.style.opacity = '1';
+            marker.style.transform = 'scale(1)';
+        }, 50);
+    });
+});
+</script>
+{% endblock %}
+

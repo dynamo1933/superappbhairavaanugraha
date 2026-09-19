@@ -12,6 +12,15 @@ ENV/
 raw_bhairavaanugraha.html
 full_site_scrape.json
 scraped_images.json
+# Database & Runtime Instance
+instance/
+*.db
+*.sqlite3
+
+# Scratch & Temporary Scripts
+scratch/
+
+# Logs
 *.log
 
 # IDE & OS

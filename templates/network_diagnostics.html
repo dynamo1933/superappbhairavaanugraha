@@ -1,0 +1,353 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-warning text-dark text-center">
+                    <h2 class="mb-0">
+                        <i class="fas fa-tools me-2"></i>
+                        Network Diagnostics & Troubleshooting
+                    </h2>
+                    <p class="mb-0 mt-2">Diagnostic tools to help resolve network connectivity issues</p>
+                </div>
+                <div class="card-body p-4">
+                    
+                    <!-- System Information -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="info-card p-3 border rounded">
+                                <h5 class="text-primary mb-3">
+                                    <i class="fas fa-desktop me-2"></i>
+                                    System Information
+                                </h5>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <strong>Platform:</strong><br>
+                                        <span class="badge bg-info">{{ system_info.platform }}</span>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <strong>Hostname:</strong><br>
+                                        <code>{{ system_info.hostname }}</code>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <strong>Python Version:</strong><br>
+                                        <code>{{ system_info.python_version }}</code>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <strong>Port Status:</strong><br>
+                                        {% if system_info.port_open %}
+                                            <span class="badge bg-success">Open</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Closed</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Network Interfaces -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="info-card p-3 border rounded">
+                                <h5 class="text-primary mb-3">
+                                    <i class="fas fa-network-wired me-2"></i>
+                                    Network Interfaces
+                                </h5>
+                                {% if all_interfaces %}
+                                    <div class="table-responsive">
+                                        <table class="table table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>Interface</th>
+                                                    <th>IP Address</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for interface, ip in all_interfaces.items() %}
+                                                <tr>
+                                                    <td><code>{{ interface }}</code></td>
+                                                    <td><span class="badge bg-success">{{ ip }}</span></td>
+                                                    <td>
+                                                        {% if ip == network_info.local_ip %}
+                                                            <span class="badge bg-primary">Primary</span>
+                                                        {% else %}
+                                                            <span class="badge bg-secondary">Available</span>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {% else %}
+                                    <div class="alert alert-warning">
+                                        <i class="fas fa-exclamation-triangle me-2"></i>
+                                        Could not detect network interfaces. This might indicate a network configuration issue.
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Connectivity Tests -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="info-card p-3 border rounded">
+                                <h5 class="text-primary mb-3">
+                                    <i class="fas fa-wifi me-2"></i>
+                                    Connectivity Tests
+                                </h5>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="test-item">
+                                            <strong>External Network:</strong>
+                                            {% if connectivity_test.external %}
+                                                <span class="badge bg-success">✓ Connected</span>
+                                            {% else %}
+                                                <span class="badge bg-danger">✗ No Connection</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="test-item">
+                                            <strong>Local Server:</strong>
+                                            {% if system_info.port_open %}
+                                                <span class="badge bg-success">✓ Running</span>
+                                            {% else %}
+                                                <span class="badge bg-danger">✗ Not Running</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Access URLs -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="info-card p-3 border rounded">
+                                <h5 class="text-primary mb-3">
+                                    <i class="fas fa-link me-2"></i>
+                                    Access URLs to Try
+                                </h5>
+                                <div class="url-list">
+                                    {% for interface, ip in all_interfaces.items() %}
+                                    <div class="url-item mb-2">
+                                        <strong>{{ interface }}:</strong>
+                                        <div class="input-group mt-1">
+                                            <input type="text" class="form-control" value="http://{{ ip }}:{{ network_info.port }}" readonly>
+                                            <button class="btn btn-outline-secondary btn-sm" onclick="copyToClipboard(this.previousElementSibling)">
+                                                <i class="fas fa-copy"></i>
+                                            </button>
+                                            <button class="btn btn-outline-primary btn-sm" onclick="testUrl('http://{{ ip }}:{{ network_info.port }}')">
+                                                <i class="fas fa-external-link-alt"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                    
+                                    <!-- mDNS URL -->
+                                    <div class="url-item mb-2">
+                                        <strong>mDNS (hostname.local):</strong>
+                                        <div class="input-group mt-1">
+                                            <input type="text" class="form-control" value="http://{{ network_info.hostname }}.local:{{ network_info.port }}" readonly>
+                                            <button class="btn btn-outline-secondary btn-sm" onclick="copyToClipboard(this.previousElementSibling)">
+                                                <i class="fas fa-copy"></i>
+                                            </button>
+                                            <button class="btn btn-outline-primary btn-sm" onclick="testUrl('http://{{ network_info.hostname }}.local:{{ network_info.port }}')">
+                                                <i class="fas fa-external-link-alt"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Troubleshooting Steps -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="info-card p-3 border rounded">
+                                <h5 class="text-primary mb-3">
+                                    <i class="fas fa-question-circle me-2"></i>
+                                    Troubleshooting Steps
+                                </h5>
+                                <div class="troubleshooting-steps">
+                                    <div class="step mb-3">
+                                        <h6 class="text-success">1. Check Windows Firewall</h6>
+                                        <ul class="small">
+                                            <li>Open Windows Defender Firewall</li>
+                                            <li>Click "Allow an app or feature through Windows Defender Firewall"</li>
+                                            <li>Add Python or port 5000 to allowed programs</li>
+                                            <li>Ensure both "Private" and "Public" networks are checked</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="step mb-3">
+                                        <h6 class="text-success">2. Verify Network Connection</h6>
+                                        <ul class="small">
+                                            <li>Ensure both devices are on the same WiFi network</li>
+                                            <li>Check if other devices can see each other on the network</li>
+                                            <li>Try pinging the server IP from the other device</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="step mb-3">
+                                        <h6 class="text-success">3. Test Different URLs</h6>
+                                        <ul class="small">
+                                            <li>Try all the URLs listed above</li>
+                                            <li>Use the IP address instead of hostname</li>
+                                            <li>Check if the port number is correct (5000)</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="step mb-3">
+                                        <h6 class="text-success">4. Router/Network Issues</h6>
+                                        <ul class="small">
+                                            <li>Some routers block device-to-device communication</li>
+                                            <li>Check if "Client Isolation" is enabled (disable it)</li>
+                                            <li>Try connecting both devices to the same access point</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Test -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="info-card p-3 border rounded">
+                                <h5 class="text-primary mb-3">
+                                    <i class="fas fa-play-circle me-2"></i>
+                                    Quick Network Test
+                                </h5>
+                                <p class="mb-3">Test if the server is accessible from the current device:</p>
+                                <button class="btn btn-primary" onclick="runNetworkTest()">
+                                    <i class="fas fa-play me-2"></i>
+                                    Run Network Test
+                                </button>
+                                <div id="test-results" class="mt-3"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="text-center">
+                        <a href="/" class="btn btn-outline-primary me-2">
+                            <i class="fas fa-arrow-left me-2"></i>
+                            Back to Sanctuary
+                        </a>
+                        <button class="btn btn-outline-secondary" onclick="location.reload()">
+                            <i class="fas fa-sync-alt me-2"></i>
+                            Refresh Diagnostics
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function copyToClipboard(element) {
+    element.select();
+    element.setSelectionRange(0, 99999);
+    
+    try {
+        document.execCommand('copy');
+        const button = element.nextElementSibling;
+        const originalText = button.innerHTML;
+        button.innerHTML = '<i class="fas fa-check"></i>';
+        button.classList.add('btn-success');
+        button.classList.remove('btn-outline-secondary');
+        
+        setTimeout(() => {
+            button.innerHTML = originalText;
+            button.classList.remove('btn-success');
+            button.classList.add('btn-outline-secondary');
+        }, 2000);
+    } catch (err) {
+        alert('Failed to copy to clipboard');
+    }
+}
+
+function testUrl(url) {
+    window.open(url, '_blank');
+}
+
+function runNetworkTest() {
+    const resultsDiv = document.getElementById('test-results');
+    resultsDiv.innerHTML = '<div class="alert alert-info"><i class="fas fa-spinner fa-spin me-2"></i>Running network test...</div>';
+    
+    // Test localhost
+    fetch('/api/network-info')
+        .then(response => response.json())
+        .then(data => {
+            resultsDiv.innerHTML = `
+                <div class="alert alert-success">
+                    <h6><i class="fas fa-check-circle me-2"></i>Network Test Results</h6>
+                    <ul class="mb-0">
+                        <li><strong>Server Status:</strong> ✅ Running</li>
+                        <li><strong>Local IP:</strong> ${data.local_ip}</li>
+                        <li><strong>Port:</strong> ${data.port}</li>
+                        <li><strong>Network URL:</strong> ${data.url}</li>
+                    </ul>
+                </div>
+            `;
+        })
+        .catch(error => {
+            resultsDiv.innerHTML = `
+                <div class="alert alert-danger">
+                    <h6><i class="fas fa-exclamation-triangle me-2"></i>Network Test Failed</h6>
+                    <p class="mb-0">The server might not be running or there's a network issue.</p>
+                </div>
+            `;
+        });
+}
+</script>
+
+<style>
+.info-card {
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.url-item {
+    border-left: 3px solid #007bff;
+    padding-left: 15px;
+    margin-bottom: 15px;
+}
+
+.troubleshooting-steps .step {
+    border-left: 3px solid #28a745;
+    padding-left: 15px;
+}
+
+.test-item {
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+code {
+    background-color: #e9ecef;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+</style>
+{% endblock %}

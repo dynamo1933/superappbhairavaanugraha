@@ -1,0 +1,807 @@
+{% extends "base.html" %}
+
+{% block title %}Devotee Registration · Sanctuary of Bhairava Anugraha{% endblock %}
+
+{% block content %}
+<div class="auth-page-sanctuary">
+  <div class="auth-box-container register-container">
+    
+    <div class="auth-sacred-card">
+      <div class="card-glow-edge"></div>
+      
+      <div class="auth-card-hero">
+        <div class="sacred-emblem-ring">
+          <span class="emblem-om">ॐ</span>
+        </div>
+        <h1 class="auth-title">Devotee Spiritual Initiation Intake</h1>
+        <p class="auth-desc">Register your name, location, and sincere spiritual resolve to begin your Diksha journey</p>
+      </div>
+
+      <div class="auth-card-body">
+        <form method="POST" action="{{ url_for('auth.register') }}" class="sacred-auth-form" id="registerForm" novalidate enctype="multipart/form-data">
+          {{ form.hidden_tag() }}
+
+          <!-- SECTION 1: CREDENTIALS -->
+          <div class="reg-section-header">
+            <span class="sec-badge">PART I</span>
+            <h3>Devotee Credentials & Security</h3>
+          </div>
+
+          <div class="reg-grid-2">
+            <div class="auth-field">
+              <label for="{{ form.username.id }}">
+                <i class="fas fa-user-tag"></i> Username <span class="req">*</span>
+              </label>
+              <div class="auth-input-wrap">
+                {{ form.username(class="auth-input", placeholder="Choose unique username", autocomplete="username", **{"required": True}) }}
+                <i class="fas fa-user auth-field-icon"></i>
+              </div>
+              {% if form.username.errors %}
+                <div class="auth-field-error">{{ form.username.errors[0] }}</div>
+              {% endif %}
+            </div>
+
+            <div class="auth-field">
+              <label for="{{ form.email.id }}">
+                <i class="fas fa-envelope"></i> Email Address <span class="req">*</span>
+              </label>
+              <div class="auth-input-wrap">
+                {{ form.email(class="auth-input", placeholder="devotee@sanctuary.com", autocomplete="email", **{"required": True}) }}
+                <i class="fas fa-at auth-field-icon"></i>
+              </div>
+              {% if form.email.errors %}
+                <div class="auth-field-error">{{ form.email.errors[0] }}</div>
+              {% endif %}
+            </div>
+
+            <div class="auth-field">
+              <label for="{{ form.password.id }}">
+                <i class="fas fa-lock"></i> Secret Password <span class="req">*</span>
+              </label>
+              <div class="auth-input-wrap">
+                {{ form.password(class="auth-input", placeholder="Choose secure password", autocomplete="new-password", id="regPassword", **{"required": True}) }}
+                <i class="fas fa-key auth-field-icon"></i>
+                <button type="button" class="auth-eye-btn" onclick="togglePass('regPassword', this)">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+              {% if form.password.errors %}
+                <div class="auth-field-error">{{ form.password.errors[0] }}</div>
+              {% endif %}
+            </div>
+
+            <div class="auth-field">
+              <label for="{{ form.password2.id }}">
+                <i class="fas fa-lock-check"></i> Confirm Password <span class="req">*</span>
+              </label>
+              <div class="auth-input-wrap">
+                {{ form.password2(class="auth-input", placeholder="Repeat sacred password", autocomplete="new-password", id="regPassword2", **{"required": True}) }}
+                <i class="fas fa-shield-halved auth-field-icon"></i>
+                <button type="button" class="auth-eye-btn" onclick="togglePass('regPassword2', this)">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+              {% if form.password2.errors %}
+                <div class="auth-field-error">{{ form.password2.errors[0] }}</div>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- SECTION 2: IDENTITY & LOCATION -->
+          <div class="reg-section-header" style="margin-top: 1.5rem;">
+            <span class="sec-badge">PART II</span>
+            <h3>Personal Identity & Location</h3>
+          </div>
+
+          <div class="reg-grid-2">
+            <div class="auth-field">
+              <label for="{{ form.full_name.id }}">
+                <i class="fas fa-id-card"></i> Full Legal / Spiritual Name <span class="req">*</span>
+              </label>
+              <div class="auth-input-wrap">
+                {{ form.full_name(class="auth-input", placeholder="Enter your full name", **{"required": True}) }}
+                <i class="fas fa-signature auth-field-icon"></i>
+              </div>
+              {% if form.full_name.errors %}
+                <div class="auth-field-error">{{ form.full_name.errors[0] }}</div>
+              {% endif %}
+            </div>
+
+            <div class="auth-field">
+              <label for="{{ form.phone.id }}">
+                <i class="fas fa-phone"></i> Mobile Phone / WhatsApp
+              </label>
+              <div class="auth-input-wrap">
+                {{ form.phone(class="auth-input", placeholder="+91 98765 43210") }}
+                <i class="fas fa-mobile-screen auth-field-icon"></i>
+              </div>
+              {% if form.phone.errors %}
+                <div class="auth-field-error">{{ form.phone.errors[0] }}</div>
+              {% endif %}
+            </div>
+
+            <div class="auth-field">
+              <label for="{{ form.gender.id }}">
+                <i class="fas fa-venus-mars"></i> Gender <span class="req">*</span>
+              </label>
+              <div class="auth-input-wrap">
+                {{ form.gender(class="auth-input auth-select", **{"required": True}) }}
+                <i class="fas fa-chevron-down auth-select-icon"></i>
+              </div>
+              {% if form.gender.errors %}
+                <div class="auth-field-error">{{ form.gender.errors[0] }}</div>
+              {% endif %}
+            </div>
+
+            <div class="auth-field">
+              <label for="{{ form.date_of_birth.id }}">
+                <i class="fas fa-calendar-star"></i> Date of Birth (Optional)
+              </label>
+              <div class="auth-input-wrap">
+                {{ form.date_of_birth(class="auth-input", type="date") }}
+                <i class="fas fa-calendar auth-field-icon"></i>
+              </div>
+              {% if form.date_of_birth.errors %}
+                <div class="auth-field-error">{{ form.date_of_birth.errors[0] }}</div>
+              {% endif %}
+            </div>
+
+            <div class="auth-field">
+              <label for="{{ form.location.id }}">
+                <i class="fas fa-city"></i> City / State / Country <span class="req">*</span>
+              </label>
+              <div class="auth-input-wrap">
+                {{ form.location(class="auth-input", placeholder="e.g. Varanasi, UP, India", **{"required": True}) }}
+                <i class="fas fa-location-dot auth-field-icon"></i>
+              </div>
+              {% if form.location.errors %}
+                <div class="auth-field-error">{{ form.location.errors[0] }}</div>
+              {% endif %}
+            </div>
+
+            <div class="auth-field">
+              <label for="{{ form.preferred_language.id }}">
+                <i class="fas fa-language"></i> Preferred Language <span class="req">*</span>
+              </label>
+              <div class="auth-input-wrap">
+                {{ form.preferred_language(class="auth-input auth-select", **{"required": True}) }}
+                <i class="fas fa-chevron-down auth-select-icon"></i>
+              </div>
+              {% if form.preferred_language.errors %}
+                <div class="auth-field-error">{{ form.preferred_language.errors[0] }}</div>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="auth-field" style="margin-top: 0.5rem;">
+            <label for="{{ form.referral_source.id }}">
+              <i class="fas fa-compass"></i> How did you find the Bhairava Anugraha Lineage? (Optional)
+            </label>
+            <div class="auth-input-wrap">
+              {{ form.referral_source(class="auth-input", placeholder="e.g. YouTube, Book: Life Within & Without, Sadhak Brother") }}
+              <i class="fas fa-magnifying-glass auth-field-icon"></i>
+            </div>
+          </div>
+
+          <!-- SECTION 3: SPIRITUAL INTENT -->
+          <div class="reg-section-header" style="margin-top: 1.5rem;">
+            <span class="sec-badge">PART III</span>
+            <h3>Spiritual Background & Sādhana Intent</h3>
+          </div>
+
+          <div class="auth-field">
+            <label for="{{ form.practice_level.id }}">
+              <i class="fas fa-dharmachakra"></i> Spiritual Experience / Practice Level <span class="req">*</span>
+            </label>
+            <div class="auth-input-wrap">
+              {{ form.practice_level(class="auth-input auth-select", **{"required": True}) }}
+              <i class="fas fa-chevron-down auth-select-icon"></i>
+            </div>
+            {% if form.practice_level.errors %}
+              <div class="auth-field-error">{{ form.practice_level.errors[0] }}</div>
+            {% endif %}
+          </div>
+
+          <div class="auth-field" style="margin-top: 0.75rem;">
+            <label for="{{ form.purpose.id }}">
+              <i class="fas fa-scroll"></i> Devotee Saṅkalpa: Purpose for Starting Bhairava Sādhana <span class="req">*</span>
+            </label>
+            <div class="auth-input-wrap">
+              {{ form.purpose(class="auth-textarea", rows="4", placeholder="Explain with heartfelt sincerity why you feel drawn to Lord Bhairava and what transformation you seek...", **{"required": True}) }}
+            </div>
+            <span class="field-hint">This statement is reviewed by the spiritual administrator to grant Mandala and Diksha stage approvals.</span>
+            {% if form.purpose.errors %}
+              <div class="auth-field-error">{{ form.purpose.errors[0] }}</div>
+            {% endif %}
+          </div>
+
+          <!-- SECTION 4: AVATAR UPLOAD -->
+          <div class="reg-section-header" style="margin-top: 1.5rem;">
+            <span class="sec-badge">PART IV</span>
+            <h3>Devotee Portrait (Optional)</h3>
+          </div>
+
+          <div class="auth-field">
+            <div class="avatar-dropzone">
+              <i class="fas fa-image avatar-drop-icon"></i>
+              <div class="avatar-drop-text">
+                <strong>Upload Spiritual Profile Picture</strong>
+                <span>JPG, PNG or WEBP (up to 5MB)</span>
+              </div>
+              {{ form.profile_picture(class="file-input-native", id="profilePicInput") }}
+            </div>
+          </div>
+
+          <!-- REGISTRATION NOTE -->
+          <div class="reg-sacred-notice">
+            <div class="notice-icon">⚡</div>
+            <div class="notice-body">
+              <strong>Lineage Review Notice:</strong> Following registration, your application will be reviewed by the administrators. Once verified, you will receive access to Stage 1 Mandala vows and the live mentorship desk.
+            </div>
+          </div>
+
+          <!-- SUBMIT CTA -->
+          <div class="auth-btn-row">
+            <button type="submit" class="auth-submit-btn" id="registerBtn">
+              <i class="fas fa-om"></i>
+              <span class="btn-text">Initiate Devotee Spiritual Account</span>
+              <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </form>
+
+        <div class="auth-footer-links">
+          <p class="auth-register-prompt">
+            Already have an initiated account? 
+            <a href="{{ url_for('auth.login') }}" class="gold-link">Sign In to Sanctuary →</a>
+          </p>
+          <div class="auth-home-link">
+            <a href="{{ url_for('home') }}">← Return to Sanctuary Landing</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<style>
+/* ==============================================================================
+   DEVOTEE REGISTRATION STYLING · SACRED DARK-GOLD SANCTUARY THEME
+   ============================================================================== */
+.auth-page-sanctuary {
+  min-height: calc(100vh - 180px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.25rem 4.5rem;
+  background: 
+    radial-gradient(circle at 50% 0%, rgba(212, 166, 74, 0.12) 0%, transparent 60%),
+    radial-gradient(circle at 20% 50%, rgba(106, 16, 16, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(106, 16, 16, 0.08) 0%, transparent 45%),
+    #07060a;
+}
+
+.auth-box-container {
+  width: 100%;
+}
+
+.register-container {
+  max-width: 880px !important;
+}
+
+.auth-sacred-card {
+  position: relative;
+  background: rgba(20, 15, 12, 0.94);
+  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+  border-radius: 20px;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(212, 166, 74, 0.25);
+  overflow: hidden;
+}
+
+.card-glow-edge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #f0d48a, #d4a64a, transparent);
+}
+
+.auth-card-hero {
+  padding: 2.5rem 2rem 1.75rem;
+  text-align: center;
+  background: linear-gradient(180deg, rgba(32, 22, 16, 0.85) 0%, rgba(20, 15, 12, 0.45) 100%);
+  border-bottom: 1px solid rgba(212, 166, 74, 0.18);
+}
+
+.sacred-emblem-ring {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  margin: 0 auto 1.1rem;
+  background: linear-gradient(135deg, rgba(212, 166, 74, 0.22) 0%, rgba(106, 16, 16, 0.35) 100%);
+  border: 1.5px solid var(--gold, #d4a64a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 24px rgba(212, 166, 74, 0.3);
+}
+
+.emblem-om {
+  font-family: var(--skt, serif);
+  font-size: 1.95rem;
+  color: var(--gold-3, #f0d48a);
+  line-height: 1;
+}
+
+.auth-title {
+  font-family: var(--display, serif);
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: var(--paper-bright, #fdfaf2);
+  margin: 0 0 0.45rem;
+  letter-spacing: 0.02em;
+}
+
+.auth-desc {
+  font-size: 0.98rem;
+  line-height: 1.55;
+  color: var(--paper-2, #d6c9a3);
+  margin: 0;
+  max-width: 620px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.auth-card-body {
+  padding: 2.25rem 2.5rem 2.5rem;
+}
+
+@media (max-width: 768px) {
+  .auth-card-body {
+    padding: 1.5rem 1.25rem 2rem;
+  }
+}
+
+.sacred-auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+}
+
+.reg-section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(212, 166, 74, 0.22);
+  margin-bottom: 1.1rem;
+}
+
+.sec-badge {
+  font-family: var(--mono, monospace);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  padding: 3px 9px;
+  border-radius: 4px;
+  background: rgba(212, 166, 74, 0.18);
+  border: 1px solid rgba(212, 166, 74, 0.4);
+  color: var(--gold-3, #f0d48a);
+}
+
+.reg-section-header h3 {
+  font-family: var(--display, serif);
+  font-size: 1.32rem;
+  color: var(--paper-bright, #fdfaf2);
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.reg-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.35rem;
+}
+
+@media (max-width: 768px) {
+  .reg-grid-2 {
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
+  }
+}
+
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.auth-field label {
+  font-size: 0.92rem;
+  color: var(--paper-bright, #fdfaf2);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.auth-field label i {
+  color: var(--gold, #d4a64a);
+  font-size: 0.85rem;
+}
+
+.req {
+  color: #ef4444;
+  font-weight: bold;
+}
+
+.auth-input-wrap {
+  position: relative;
+}
+
+.auth-input {
+  width: 100%;
+  background: rgba(14, 10, 6, 0.88) !important;
+  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35)) !important;
+  border-radius: 8px !important;
+  color: var(--paper-bright, #fdfaf2) !important;
+  font-family: var(--serif, Georgia, serif) !important;
+  font-size: 1rem !important;
+  padding: 0.75rem 2.8rem 0.75rem 2.6rem !important;
+  outline: none !important;
+  transition: all 0.25s ease !important;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6) !important;
+}
+
+.auth-input:focus {
+  border-color: var(--gold-3, #f0d48a) !important;
+  box-shadow: 0 0 15px rgba(212, 166, 74, 0.35), inset 0 2px 6px rgba(0, 0, 0, 0.6) !important;
+}
+
+.auth-field-icon {
+  position: absolute;
+  left: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gold, #d4a64a);
+  opacity: 0.8;
+  font-size: 0.9rem;
+  pointer-events: none;
+}
+
+.auth-eye-btn {
+  position: absolute;
+  right: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--gold, #d4a64a);
+  opacity: 0.75;
+  cursor: pointer;
+  padding: 4px;
+  font-size: 0.95rem;
+  transition: opacity 0.2s ease;
+}
+
+.auth-eye-btn:hover {
+  opacity: 1;
+  color: var(--gold-3, #f0d48a);
+}
+
+.auth-field-error {
+  font-size: 0.82rem;
+  color: #fca5a5;
+  margin-top: 0.2rem;
+}
+
+.auth-textarea {
+  width: 100%;
+  background: rgba(14, 10, 6, 0.88) !important;
+  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35)) !important;
+  border-radius: 8px !important;
+  color: var(--paper-bright, #fdfaf2) !important;
+  font-family: var(--serif, Georgia, serif) !important;
+  font-size: 1rem !important;
+  padding: 0.75rem 1rem !important;
+  outline: none !important;
+  transition: all 0.25s ease !important;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6) !important;
+}
+
+.auth-textarea:focus {
+  border-color: var(--gold-3, #f0d48a) !important;
+  box-shadow: 0 0 15px rgba(212, 166, 74, 0.35), inset 0 2px 6px rgba(0, 0, 0, 0.6) !important;
+}
+
+.auth-select {
+  appearance: none;
+  cursor: pointer;
+  padding-right: 2.25rem !important;
+}
+
+.auth-select option {
+  background: #140f0c;
+  color: #fdfaf2;
+}
+
+.auth-select-icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gold, #d4a64a);
+  pointer-events: none;
+  font-size: 0.8rem;
+}
+
+.avatar-dropzone {
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+  padding: 1.1rem 1.35rem;
+  background: rgba(14, 10, 6, 0.65);
+  border: 1.5px dashed rgba(212, 166, 74, 0.4);
+  border-radius: 12px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.25s ease;
+}
+
+.avatar-dropzone:hover {
+  border-color: var(--gold-3, #f0d48a);
+  background: rgba(28, 20, 16, 0.85);
+  box-shadow: 0 0 20px rgba(212, 166, 74, 0.15);
+}
+
+.avatar-drop-icon {
+  font-size: 1.8rem;
+  color: var(--gold, #d4a64a);
+  flex-shrink: 0;
+}
+
+.avatar-drop-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.avatar-drop-text strong {
+  font-size: 0.98rem;
+  color: var(--paper-bright, #fdfaf2);
+}
+
+.avatar-drop-text span {
+  font-size: 0.82rem;
+  color: var(--ink-mute, rgba(233, 223, 200, 0.68));
+}
+
+.file-input-native {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+.reg-sacred-notice {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 1.1rem 1.35rem;
+  background: rgba(212, 166, 74, 0.08);
+  border: 1px solid rgba(212, 166, 74, 0.32);
+  border-radius: 12px;
+  margin-top: 1.25rem;
+}
+
+.notice-icon {
+  color: var(--gold-3, #f0d48a);
+  font-size: 1.25rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.notice-body {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--paper-2, #d6c9a3);
+}
+
+.notice-body strong {
+  color: var(--gold-3, #f0d48a);
+}
+
+.auth-btn-row {
+  margin-top: 1.25rem;
+}
+
+.auth-submit-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 0.95rem 1.75rem;
+  background: linear-gradient(135deg, #f0d48a 0%, #d4a64a 50%, #b8842a 100%);
+  color: #0e0a06;
+  border: 1px solid #f0d48a;
+  border-radius: 999px;
+  font-family: var(--display, serif);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 6px 25px rgba(212, 166, 74, 0.35);
+}
+
+.auth-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 32px rgba(212, 166, 74, 0.55);
+  background: linear-gradient(135deg, #fff2c4 0%, #f0d48a 50%, #d4a64a 100%);
+}
+
+.auth-footer-links {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(212, 166, 74, 0.18);
+  text-align: center;
+}
+
+.auth-register-prompt {
+  font-size: 0.95rem;
+  color: var(--paper-2, #d6c9a3);
+  margin: 0 0 0.85rem;
+}
+
+.gold-link {
+  color: var(--gold-3, #f0d48a);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.gold-link:hover {
+  color: var(--paper-bright, #fdfaf2);
+  text-decoration: underline;
+}
+
+.auth-home-link a {
+  font-size: 0.88rem;
+  color: var(--ink-mute, rgba(233, 223, 200, 0.68));
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.auth-home-link a:hover {
+  color: var(--paper-bright, #fdfaf2);
+}
+
+/* Mobile Responsive Optimization */
+@media (max-width: 768px) {
+  .auth-page-sanctuary {
+    padding: 1.75rem 1rem 3.5rem;
+  }
+  .auth-sacred-card {
+    border-radius: 16px;
+  }
+  .auth-card-hero {
+    padding: 2rem 1.25rem 1.25rem;
+  }
+  .auth-title {
+    font-size: 1.7rem;
+  }
+  .auth-desc {
+    font-size: 0.9rem;
+  }
+  .auth-card-body {
+    padding: 1.5rem 1.2rem 2rem;
+  }
+  .reg-section-header h3 {
+    font-size: 1.2rem;
+  }
+  .auth-submit-btn {
+    font-size: 1.08rem;
+    padding: 0.85rem 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-page-sanctuary {
+    padding: 1rem 0.6rem 3rem;
+  }
+  .auth-sacred-card {
+    border-radius: 14px;
+  }
+  .auth-card-hero {
+    padding: 1.5rem 1rem 1rem;
+  }
+  .sacred-emblem-ring {
+    width: 52px;
+    height: 52px;
+    margin-bottom: 0.75rem;
+  }
+  .emblem-om {
+    font-size: 1.6rem;
+  }
+  .auth-title {
+    font-size: 1.45rem;
+    line-height: 1.25;
+  }
+  .auth-desc {
+    font-size: 0.84rem;
+  }
+  .auth-card-body {
+    padding: 1.25rem 0.85rem 1.75rem;
+  }
+  .auth-field label {
+    font-size: 0.86rem;
+  }
+  .auth-input,
+  .auth-textarea,
+  .auth-select {
+    font-size: 16px !important; /* Prevents auto-zoom in mobile Safari */
+    padding: 0.7rem 2.5rem 0.7rem 2.4rem !important;
+  }
+  .avatar-dropzone {
+    padding: 0.85rem 1rem;
+    gap: 0.85rem;
+  }
+  .avatar-drop-icon {
+    font-size: 1.5rem;
+  }
+  .avatar-drop-text strong {
+    font-size: 0.9rem;
+  }
+  .avatar-drop-text span {
+    font-size: 0.78rem;
+  }
+  .reg-sacred-notice {
+    padding: 0.9rem 1rem;
+    gap: 10px;
+  }
+  .notice-body {
+    font-size: 0.82rem;
+  }
+  .auth-submit-btn {
+    font-size: 1rem;
+    padding: 0.8rem 1rem;
+    gap: 8px;
+  }
+}
+</style>
+
+<script>
+function togglePass(id, btn) {
+  const el = document.getElementById(id);
+  const icon = btn.querySelector('i');
+  if (el) {
+    const isPass = el.type === 'password';
+    el.type = isPass ? 'text' : 'password';
+    icon.className = isPass ? 'fas fa-eye-slash' : 'fas fa-eye';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const fileInput = document.querySelector('.file-input-native');
+  const dropText = document.querySelector('.avatar-drop-text');
+  if (fileInput && dropText) {
+    fileInput.addEventListener('change', function() {
+      if (this.files && this.files.length > 0) {
+        const name = this.files[0].name;
+        dropText.querySelector('strong').textContent = 'Selected: ' + name;
+        dropText.querySelector('span').textContent = 'Click or drag to replace image';
+      }
+    });
+  }
+});
+</script>
+{% endblock %}

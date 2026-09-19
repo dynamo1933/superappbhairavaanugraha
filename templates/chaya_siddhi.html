@@ -1,0 +1,412 @@
+{% extends "base.html" %}
+
+{% block extra_styles %}
+<style>
+    /* ===== CHAYA PUJA PAGE THEME - SIMILAR TO ASHTAMI ===== */
+
+    /* Hero Section */
+    .chaya-hero {
+        background: linear-gradient(135deg, #1c1917 0%, #450a0a 50%, #7f1d1d 100%);
+        padding: 2rem;
+        position: relative;
+        overflow: hidden;
+        min-height: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .chaya-hero::before {
+        content: '';
+        position: absolute;
+        left: -100px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 500px;
+        height: 500px;
+        background:
+            radial-gradient(circle, transparent 30%, rgba(255, 215, 0, 0.03) 31%, rgba(255, 215, 0, 0.03) 32%, transparent 33%),
+            radial-gradient(circle, transparent 45%, rgba(255, 215, 0, 0.03) 46%, rgba(255, 215, 0, 0.03) 47%, transparent 48%),
+            radial-gradient(circle, transparent 60%, rgba(255, 215, 0, 0.03) 61%, rgba(255, 215, 0, 0.03) 62%, transparent 63%),
+            radial-gradient(circle, transparent 75%, rgba(255, 215, 0, 0.03) 76%, rgba(255, 215, 0, 0.03) 77%, transparent 78%);
+        opacity: 0.8;
+        pointer-events: none;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 3rem;
+        max-width: 900px;
+        width: 100%;
+        margin: 0 auto;
+        text-align: left;
+    }
+
+    .hero-title {
+        font-family: var(--font-mystical);
+        font-size: 3rem;
+        color: #ffd700;
+        margin-bottom: 0.5rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        letter-spacing: 3px;
+    }
+
+    .chaya-image-container {
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0;
+    }
+
+    .chaya-image {
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid rgba(255, 215, 0, 0.8);
+        box-shadow: 0 0 40px rgba(255, 215, 0, 0.5), 0 0 80px rgba(255, 100, 0, 0.3);
+    }
+
+    .hero-text {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .hero-subtitle {
+        color: rgba(255, 255, 255, 0.95);
+        font-size: 1.1rem;
+        font-family: var(--font-sacred);
+        background: rgba(255, 255, 255, 0.1);
+        border: 2px solid rgba(255, 215, 0, 0.4);
+        border-radius: 8px;
+        padding: 0.5rem 2rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-top: 1rem;
+    }
+
+
+    /* Main Content Container */
+    .chaya-main {
+        padding: 2.5rem 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* Section Card Base */
+    .content-card {
+        background: var(--card-bg);
+        border-radius: var(--border-radius-lg);
+        padding: 2.5rem 3rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 20px var(--shadow-color);
+        border: 1px solid var(--border-color);
+    }
+
+    /* Section Titles */
+    .section-title {
+        font-family: var(--font-primary);
+        font-size: 1.6rem;
+        color: var(--primary-red);
+        text-align: center;
+        margin-bottom: 1.5rem;
+        position: relative;
+        padding-bottom: 0.75rem;
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(90deg, var(--primary-red), var(--accent-orange));
+        border-radius: 2px;
+    }
+
+    /* Preparation Card */
+    .preparation-card {
+        background: linear-gradient(135deg, #fff7ed 0%, #fef7ed 100%);
+        border-left: 4px solid var(--accent-gold);
+    }
+
+    .prep-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .prep-list li {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.7);
+        border-radius: var(--border-radius);
+        margin-bottom: 0.75rem;
+        border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+
+    .prep-number {
+        flex-shrink: 0;
+        width: 32px;
+        height: 32px;
+        background: linear-gradient(135deg, var(--primary-red), var(--accent-orange));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-mystical);
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #fff;
+    }
+
+    .prep-text {
+        font-family: var(--font-secondary);
+        color: var(--text-dark);
+        font-size: 1rem;
+        line-height: 1.7;
+    }
+
+    .prep-text strong {
+        color: var(--primary-red);
+    }
+
+    /* Mantra Box */
+    .mantra-box {
+        background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+        border-radius: var(--border-radius);
+        padding: 1.25rem;
+        margin: 1rem 0;
+        border: 1px solid rgba(196, 30, 58, 0.2);
+        text-align: center;
+    }
+
+    .mantra-sanskrit {
+        font-family: var(--font-sacred);
+        font-size: 1.25rem;
+        color: var(--primary-red);
+        line-height: 1.7;
+        margin-bottom: 0.5rem;
+    }
+
+    .mantra-transliteration {
+        font-family: var(--font-sacred);
+        font-size: 1rem;
+        color: var(--text-muted);
+        font-style: italic;
+    }
+
+    .intro-text {
+        font-family: var(--font-secondary);
+        color: var(--text-dark);
+        font-size: 1.1rem;
+        line-height: 1.7;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .intro-text p {
+        margin-bottom: 1rem;
+    }
+
+    /* Warning */
+    .warning-box {
+        background: rgba(220, 38, 38, 0.1);
+        border-left: 4px solid #dc2626;
+        border-radius: var(--border-radius);
+        padding: 1.25rem 1.5rem;
+        margin-top: 2rem;
+        font-family: var(--font-secondary);
+        color: #b91c1c;
+        font-size: 1rem;
+        font-weight: 500;
+        text-align: center;
+    }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="chaya-hero">
+    <div class="hero-content">
+        <div class="chaya-image-container">
+            <img src="{{ url_for('static', filename='images/chaya_bg.jpg') }}" alt="Chaya Puja Image"
+                 class="chaya-image">
+        </div>
+        <div class="hero-text">
+            <h1 class="hero-title">Chāyā Pūjā</h1>
+            <div class="hero-subtitle">Grahaṇa Rahasya Sadhana</div>
+        </div>
+    </div>
+</section>
+
+<!-- Main Content -->
+<div class="chaya-main">
+
+    <div class="intro-text">
+        <p><strong>You are now ready for Grahaṇa Rahasya Sādhana. Follow the steps below with faith, not fear.</strong></p>
+        <p>This practice is simple yet immensely powerful, invoking the combined energies of Śrī Kālabhairava and Śrī Mā Kāmakhyā.</p>
+        <p><strong>Kālabhairava</strong> — Master of time, remover of obstacles, fearless guardian.<br>
+           <strong>Mā Kāmakhyā</strong> — Primordial Shakti, fulfiller of desires, awakener of attraction and inner power.</p>
+        <p>Together, they grant protection, strength, and fulfillment, clearing your path and awakening your deepest potential.</p>
+        <p><em>True Grahaṇa Sādhana blossoms when the mind is free of lust, greed, or anticipation—rooted in devotion and complete surrender.</em></p>
+    </div>
+
+    <!-- Preparation Section -->
+    <div class="content-card preparation-card">
+        <h2 class="section-title">Preparation</h2>
+        <ul class="prep-list">
+            <li>
+                <span class="prep-number">1</span>
+                <span class="prep-text"><strong>Fasting (Upavāsa):</strong> Begin fasting from the previous day afternoon or at least 6 hours before the eclipse. Only water or light fruits allowed.</span>
+            </li>
+            <li>
+                <span class="prep-number">2</span>
+                <span class="prep-text"><strong>Śuddhi (Purification):</strong> Take a bath before and after gharana (Add 1 spoon of turmeric powder to water and take Headbathe). Wear clean clothes (preferably red for Devi or black for Bhairava).</span>
+            </li>
+            <li>
+                <span class="prep-number">3</span>
+                <span class="prep-text"><strong>Āsana:</strong> Prepare a kusha, woolen, or black/red cloth seat facing South only.</span>
+            </li>
+            <li>
+                <span class="prep-number">4</span>
+                <span class="prep-text"><strong>Altar:</strong> Place images/idols of Kala Bhairava and Kāmakhyā Mā on a clean wooden platform or as comfortably as you can arrange. Light a lamp with ghee or sesame oil.</span>
+            </li>
+            <li>
+                <span class="prep-number">5</span>
+                <span class="prep-text"><strong>Offerings:</strong> Flowers (red/white), incense, akṣata, fruits (Pañcamakāra Puja Optional - see below).</span>
+            </li>
+            <li>
+                <span class="prep-number">6</span>
+                <span class="prep-text"><strong>Sankalpa:</strong> Mentally resolve your sādhana intention – protection, siddhi, inner awakening, or fulfillment of a wish.</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Panchamakara Puja Section -->
+    <div class="content-card" style="border-left: 4px solid var(--accent-orange);">
+        <h2 class="section-title">Pañcamakāram Pujā</h2>
+        <p style="text-align: center; margin-bottom: 1.5rem; font-style: italic;">
+            This is the heart of Vāmācāra Sadhana and offer with love and surrender not with fear and lust. If not initiated, use symbolic substitutes.
+        </p>
+        <ul class="prep-list">
+            <li>
+                <span class="prep-number">1</span>
+                <span class="prep-text"><strong>Madya (Wine)</strong> – Drink wine (After Gharana) / substitute with honey or milk.</span>
+            </li>
+            <li>
+                <span class="prep-number">2</span>
+                <span class="prep-text"><strong>Mamsa (Meat)</strong> – Offer meat / substitute with fruits or dry nuts.</span>
+            </li>
+            <li>
+                <span class="prep-number">3</span>
+                <span class="prep-text"><strong>Matsya (Fish)</strong> – Offer fish / substitute with black sesame seeds.</span>
+            </li>
+            <li>
+                <span class="prep-number">4</span>
+                <span class="prep-text"><strong>Mudrā (Gesture / Grain)</strong> – Use hand gestures or offer parched grain.</span>
+            </li>
+            <li>
+                <span class="prep-number">5</span>
+                <span class="prep-text"><strong>Maithuna (Union)</strong> – Symbolic internal union of Shiva & Shakti, Visualize the Shiva Lingam seated upon the Yoni Peeta, radiant with divine energy, uniting Shakti and Shiva in perfect harmony.</span>
+            </li>
+        </ul>
+        
+        <p style="margin-top: 1.5rem; line-height: 1.6; text-align: center;">Arrange the four sacred offerings before the idols of Bhairava and Mā Kāmakhyā, and illuminate a lamp, invoking their blessings with faith and reverence.</p>
+        
+        <div class="mantra-box">
+            <h3 style="color: var(--accent-orange); font-size: 1.1rem; margin-bottom: 0.5rem;">Chant During Offering:</h3>
+            <div class="mantra-sanskrit">"ॐ ह्रीं कामाख्यायै भैरव स्वाहा॥"</div>
+            <div class="mantra-transliteration">"Om Hrīṁ Kāmākhyāyai Bhairavaya Svāhā॥"</div>
+            <br>
+            <div class="mantra-transliteration" style="font-size: 0.9rem; margin-top: 0.5rem;">
+                Om Asya Shri Kamakhya Bhairava Maha-Mantrasya... Brahma Rishi, Gayatri Chhandah, Kamakhya Bhaiarava Devta, Mam Sarva Manokamana Siddhyarthe Jape Viniyoga
+            </div>
+        </div>
+    </div>
+
+    <!-- Nyasa & Mudra Section -->
+    <div class="content-card" style="border-left: 4px solid var(--primary-red);">
+        <h2 class="section-title">Nyāsa & Mudrā</h2>
+        <p style="text-align: center; margin-bottom: 1.5rem;">Perform kara-nyāsa and anga-nyāsa with Bhairava/Kāmakhyā bīja mantras.</p>
+        
+        <ul class="prep-list">
+            <li><span class="prep-number">●</span><span class="prep-text">Place right hand on heart – chant <strong>"Klim-Bum, Hṛdayāya namaḥ"</strong></span></li>
+            <li><span class="prep-number">●</span><span class="prep-text">On head – <strong>"Klim-Bum, Śirase svāhā"</strong></span></li>
+            <li><span class="prep-number">●</span><span class="prep-text">On shoulders – <strong>"Klim-Bum, Śikhāyai vauṣaṭ"</strong></span></li>
+            <li><span class="prep-number">●</span><span class="prep-text">On both eyes – <strong>"Klim-Bum, Kavacāya hum"</strong></span></li>
+            <li><span class="prep-number">●</span><span class="prep-text">Across body – <strong>"Klim-Bum, Astrāya phaṭ"</strong></span></li>
+        </ul>
+    </div>
+
+    <!-- Japa Mantra Section -->
+    <div class="content-card preparation-card">
+        <h2 class="section-title">Japa Mantra</h2>
+        <p style="text-align: center; margin-bottom: 1.5rem;">(11 Mala Each - 1188 japa or as per capacity)</p>
+        
+        <div class="mantra-box">
+            <div class="mantra-sanskrit">ॐ ह्रां ह्रीं ह्रौं कालय भैरवाय नमः॥</div>
+            <div class="mantra-transliteration">Om Hrām Hrīm Hraum Bum Kālabhairavāya Namaḥ॥</div>
+        </div>
+        
+        <div class="mantra-box">
+            <div class="mantra-sanskrit">ॐ क्लीं कामाख्यायै नमः॥</div>
+            <div class="mantra-transliteration">Om Klīṁ Kāmākhyāyai Namaḥ॥</div>
+        </div>
+        
+        <p style="text-align: center; margin-top: 1rem; font-style: italic;">
+            After Mantra japa, recite <strong>"Kleem Kleem Kaamaakhyaa Kleem Kleem namah |"</strong> for 3-5 Malas.
+        </p>
+    </div>
+
+    <!-- Moksha Kala Section -->
+    <div class="content-card" style="border-left: 4px solid var(--accent-gold);">
+        <h2 class="section-title">At Mokṣa Kāla (End of Eclipse)</h2>
+        <ul class="prep-list">
+            <li>
+                <span class="prep-number">●</span>
+                <span class="prep-text">Take a bath immediately after eclipse ends and wear clean clothes again.</span>
+            </li>
+            <li>
+                <span class="prep-number">●</span>
+                <span class="prep-text">Perform pūrṇāhuti - Mantra: <br><strong>ॐ पूर्णमदः पूर्णमिदं पूर्णात् पूर्णमुदच्यते । पूर्णस्य पूर्णमादाय पूर्णमेवावशिष्यते ॥ ॐ शान्तिः शान्तिः शान्तिः ॥</strong></span>
+            </li>
+            <li>
+                <span class="prep-number">●</span>
+                <span class="prep-text">Offer Arghya to Chandra/Surya with water, rice, flowers – praying for calm mind, clarity, blessings (If unable to go out due to climate condition, then close your eyes and visualize the chandra and perform the steps).</span>
+            </li>
+            <li>
+                <span class="prep-number">●</span>
+                <span class="prep-text">Do Kṣamā Prārthanā (asking forgiveness for mistakes in mantra/ritual). Mantra:<br><br>
+                    ॐ सर्वे भवन्तु सुखिनः (Om Sarve Bhavantu Sukhinah)<br>
+                    सर्वे सन्तु निरामयाः (Sarve Santu Niraamayaah) ।<br>
+                    सर्वे भद्राणि पश्यन्तु (Sarve Bhadrani Pashyantu)<br>
+                    मा कश्चिद्दुःखभाग्भवेत् (Maa Kashchit Dukha Bhaag Bhavet) ॥<br>
+                    ॐ शान्तिः शान्तिः शान्तिः ॥ (Om Shanti Shanti Shantih)
+                </span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Disclaimer -->
+    <div class="warning-box">
+        Disclaimer: This sādhana is meant only for performance during the Eclipse (Grahaṇa Kāla).<br>
+        It should not be undertaken as a Mandala practice or as any other form of regular sādhana.
+    </div>
+
+</div>
+{% endblock %}

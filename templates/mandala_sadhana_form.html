@@ -1,0 +1,843 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="mandala-vow-sanctuary">
+  <div class="mandala-container">
+
+    <!-- Sacred Header Hero -->
+    <header class="vow-hero">
+      <div class="vow-badge-pill">
+        <span class="pulse-dot-gold"></span>
+        <span>SACRED RESOLVE · SAṄKALPA ALTAR</span>
+      </div>
+      <h1 class="vow-shloka-title">॥ श्री भैरव संकल्प मण्डल साधना ॥</h1>
+      <h2 class="vow-heading">Sacred Mandala Sādhana Vow Commitment</h2>
+      <p class="vow-lead">
+        "A Mandala is not merely a count of forty-eight sunrises. It is an alchemical fire where habits dissolve, the spine aligns with cosmic grace, and the aspirant’s consciousness is sealed into the protective grace of Guru Bhairava."
+      </p>
+    </header>
+
+    <!-- Niyama & Lineage Principles Guidance Card -->
+    <section class="vow-niyama-card">
+      <div class="card-glow-edge"></div>
+      <div class="niyama-header">
+        <div class="niyama-icon">⚡</div>
+        <div>
+          <h3>The Four Pillars of Mandala Discipline (Niyama)</h3>
+          <p>Read reverently before recording your inner commitment in the sacred register</p>
+        </div>
+      </div>
+
+      <div class="niyama-grid">
+        <div class="niyama-item">
+          <div class="niyama-num">I</div>
+          <div class="niyama-body">
+            <h4>Brahmacharya & Mental Purity</h4>
+            <p>Conservation of vital prana through celibacy in thought, speech, and action throughout the vow cycle.</p>
+          </div>
+        </div>
+
+        <div class="niyama-item">
+          <div class="niyama-num">II</div>
+          <div class="niyama-body">
+            <h4>Sāttvic Diet & Ahara Śuddhi</h4>
+            <p>Partake only in fresh, unpolluted, vegetarian offerings. Complete abstention from alcohol, intoxicants, and tamasic stimulants.</p>
+          </div>
+        </div>
+
+        <div class="niyama-item">
+          <div class="niyama-num">III</div>
+          <div class="niyama-body">
+            <h4>Unbroken Japa & Daily Āsana</h4>
+            <p>Daily mantra offerings done at fixed Sandhyā hours. If a single day is broken, the cycle must be restarted with repentance.</p>
+          </div>
+        </div>
+
+        <div class="niyama-item">
+          <div class="niyama-num">IV</div>
+          <div class="niyama-body">
+            <h4>Silence & Devotional Surrender</h4>
+            <p>Shield your practice from idle gossip and display. Hold the mantra within the cave of the heart in supreme stillness.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Vow Commitment Form Card -->
+    <section class="vow-form-card">
+      <div class="card-glow-edge"></div>
+      <div class="form-card-header">
+        <div class="form-badge">SACRED REGISTRY</div>
+        <h3>Enter Your Vow into the Lineage Codex</h3>
+        <p>This registration records your sacred dates and anchors your progression across the Diksha stages.</p>
+      </div>
+
+      <form method="POST" action="{{ url_for('mandala_sadhana_registration') }}" class="sacred-vow-form" id="mandalaVowForm" novalidate>
+        {{ form.hidden_tag() }}
+
+        <!-- Sadhak Identity Group -->
+        <div class="form-section-title">
+          <span>1. Devotee Identity & Initiation Record</span>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="sacred-field">
+            <label for="{{ form.full_name.id }}">
+              <i class="fas fa-user-circle"></i> Full Name & Geographic Location <span class="req">*</span>
+            </label>
+            <div class="input-wrap">
+              {{ form.full_name(class="sacred-input", placeholder="e.g. Anand Sharma, Varanasi, India", value=current_user.full_name if current_user.is_authenticated else "") }}
+            </div>
+            {% if form.full_name.errors %}
+              <div class="field-error">{{ form.full_name.errors[0] }}</div>
+            {% endif %}
+          </div>
+
+          <div class="sacred-field">
+            <label for="{{ form.email.id }}">
+              <i class="fas fa-envelope"></i> Devotee Email Address <span class="req">*</span>
+            </label>
+            <div class="input-wrap">
+              {{ form.email(class="sacred-input", placeholder="your.email@domain.com", value=current_user.email if current_user.is_authenticated else "") }}
+            </div>
+            {% if form.email.errors %}
+              <div class="field-error">{{ form.email.errors[0] }}</div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Sadhana Category & Start Date -->
+        <div class="form-section-title" style="margin-top: 2rem;">
+          <span>2. Sādhana Path & Beginning Date</span>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="sacred-field">
+            <label for="{{ form.sadhana_type.id }}">
+              <i class="fas fa-dharmachakra"></i> Sādhana Stream & Charaṇa <span class="req">*</span>
+            </label>
+            <div class="select-wrap">
+              {{ form.sadhana_type(class="sacred-select") }}
+              <i class="fas fa-chevron-down select-arrow"></i>
+            </div>
+            {% if form.sadhana_type.errors %}
+              <div class="field-error">{{ form.sadhana_type.errors[0] }}</div>
+            {% endif %}
+          </div>
+
+          <div class="sacred-field">
+            <label for="{{ form.sadhana_start_date.id }}">
+              <i class="fas fa-calendar-star"></i> Sādhana Start Date <span class="req">*</span>
+            </label>
+            <div class="input-wrap">
+              {{ form.sadhana_start_date(class="sacred-input", type="date") }}
+            </div>
+            <span class="field-hint">The date on which you placed the sankalpa water or began unbroken daily practice.</span>
+            {% if form.sadhana_start_date.errors %}
+              <div class="field-error">{{ form.sadhana_start_date.errors[0] }}</div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- 48-Day Commitment Selection -->
+        <div class="form-section-title" style="margin-top: 2rem;">
+          <span>3. The 48-Day Foundation (One Mandala)</span>
+        </div>
+
+        <div class="sacred-field radio-card-group">
+          <p class="field-question">
+            Are you ready to commit to a 48-day (1) Mandala, honoring each day as a step into deeper presence with Bhairava? <span class="req">*</span>
+          </p>
+          <div class="radio-cards-grid">
+            {% for subfield in form.mandala_48_commitment %}
+            <label class="radio-card">
+              {{ subfield(class="radio-native") }}
+              <div class="radio-card-ui">
+                <span class="radio-check-dot"></span>
+                <span class="radio-label-text">{{ subfield.label.text }}</span>
+              </div>
+            </label>
+            {% endfor %}
+          </div>
+          {% if form.mandala_48_commitment.errors %}
+            <div class="field-error">{{ form.mandala_48_commitment.errors[0] }}</div>
+          {% endif %}
+        </div>
+
+        <!-- 144-Day Triad Commitment Selection -->
+        <div class="form-section-title" style="margin-top: 2rem;">
+          <span>4. The 144-Day Pūrṇa Triad (Three Mandalas)</span>
+        </div>
+
+        <div class="sacred-field radio-card-group">
+          <p class="field-question">
+            Do you feel called to walk the full triad of 144-Days (3 Mandalas) — building a sacred foundation for transformation and inner stability? <span class="req">*</span>
+          </p>
+          <div class="radio-cards-grid triad-grid">
+            {% for subfield in form.mandala_144_commitment %}
+            <label class="radio-card">
+              {{ subfield(class="radio-native") }}
+              <div class="radio-card-ui">
+                <span class="radio-check-dot"></span>
+                <span class="radio-label-text">{{ subfield.label.text }}</span>
+              </div>
+            </label>
+            {% endfor %}
+          </div>
+          {% if form.mandala_144_commitment.errors %}
+            <div class="field-error">{{ form.mandala_144_commitment.errors[0] }}</div>
+          {% endif %}
+        </div>
+
+        <!-- Commitment Text / Devotee Statement -->
+        <div class="form-section-title" style="margin-top: 2rem;">
+          <span>5. Personal Saṅkalpa & Steadiness Pledge</span>
+        </div>
+
+        <div class="sacred-field">
+          <label for="{{ form.commitment_text.id }}">
+            <i class="fas fa-scroll"></i> Can you hold your Sādhana with sincerity and steadiness, even when the mind resists or the path feels silent? <span class="req">*</span>
+          </label>
+          <div class="textarea-wrap">
+            {{ form.commitment_text(class="sacred-textarea", rows="4", placeholder="Write your sincere resolve to Lord Bhairava, stating your intention, daily mantra count, and your surrender to the lineage...") }}
+          </div>
+          <div class="field-footer">
+            <span class="field-hint">Minimum 10 characters. Speak with heartfelt reverence.</span>
+          </div>
+          {% if form.commitment_text.errors %}
+            <div class="field-error">{{ form.commitment_text.errors[0] }}</div>
+          {% endif %}
+        </div>
+
+        <!-- Send Copy Checkbox -->
+        <div class="sacred-field checkbox-field" style="margin-top: 1.5rem;">
+          <label class="custom-checkbox-wrap">
+            {{ form.send_copy(class="checkbox-native") }}
+            <span class="custom-checkbox-box"></span>
+            <span class="checkbox-label-text">Email a sealed digital confirmation copy of this sacred vow to my registered email address.</span>
+          </label>
+        </div>
+
+        <!-- Submit Vow CTA -->
+        <div class="form-actions-bar">
+          <button type="submit" class="seal-vow-btn" id="sealVowBtn">
+            <i class="fas fa-om"></i>
+            <span>Seal Sacred Mandala Vow Before Bhairava</span>
+            <i class="fas fa-arrow-right"></i>
+          </button>
+          <div class="vow-shloka-foot">
+            ॥ ॐ भ्रं भैरवाय नमः · सर्वविघ्नोपशान्तये नमः ॥
+          </div>
+        </div>
+
+      </form>
+    </section>
+
+  </div>
+</div>
+
+<style>
+/* ==============================================================================
+   MANDALA VOW SANCTUARY STYLING · SACRED DARK-GOLD THEME
+   ============================================================================== */
+.mandala-vow-sanctuary {
+  background: var(--ink, #0e0a06);
+  color: var(--paper, #e9dfc8);
+  min-height: calc(100vh - 72px);
+  padding: 3rem 1.25rem 5rem;
+  background-image: 
+    radial-gradient(circle at 50% 10%, rgba(212, 166, 74, 0.09) 0%, transparent 60%),
+    radial-gradient(circle at 10% 90%, rgba(106, 16, 16, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 90% 80%, rgba(212, 166, 74, 0.05) 0%, transparent 50%);
+}
+
+.mandala-container {
+  max-width: 1040px;
+  margin: 0 auto;
+}
+
+/* Hero Section */
+.vow-hero {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.vow-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: rgba(212, 166, 74, 0.1);
+  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+  font-family: var(--mono, monospace);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  color: var(--gold-3, #f0d48a);
+  margin-bottom: 1.25rem;
+}
+
+.pulse-dot-gold {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #f0d48a;
+  box-shadow: 0 0 10px #f0d48a;
+  animation: pulseGold 2s infinite;
+}
+
+@keyframes pulseGold {
+  0%, 100% { opacity: 0.4; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.vow-shloka-title {
+  font-family: var(--skt, "Tiro Devanagari Sanskrit", serif);
+  font-size: 1.6rem;
+  color: var(--gold-3, #f0d48a);
+  margin: 0 0 0.5rem;
+  font-weight: 400;
+  text-shadow: 0 0 20px rgba(212, 166, 74, 0.4);
+}
+
+.vow-heading {
+  font-family: var(--display, "Cormorant Garamond", serif);
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: var(--paper-bright, #fdfaf2);
+  margin: 0 0 1rem;
+  letter-spacing: 0.02em;
+}
+
+.vow-lead {
+  font-family: var(--serif, "EB Garamond", serif);
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: var(--paper-2, #d6c9a3);
+  max-width: 820px;
+  margin: 0 auto;
+  font-style: italic;
+}
+
+/* Niyama Card */
+.vow-niyama-card,
+.vow-form-card {
+  position: relative;
+  background: rgba(20, 15, 12, 0.88);
+  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+  border-radius: 16px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.65);
+  margin-bottom: 2.5rem;
+  overflow: hidden;
+}
+
+.card-glow-edge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold, #d4a64a), transparent);
+}
+
+.niyama-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 2rem 1.25rem;
+  border-bottom: 1px solid rgba(212, 166, 74, 0.18);
+  background: rgba(28, 20, 16, 0.6);
+}
+
+.niyama-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: rgba(212, 166, 74, 0.15);
+  border: 1px solid var(--gold, #d4a64a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  color: var(--gold-3, #f0d48a);
+  flex-shrink: 0;
+}
+
+.niyama-header h3 {
+  font-family: var(--display, "Cormorant Garamond", serif);
+  font-size: 1.35rem;
+  color: var(--paper-bright, #fdfaf2);
+  margin: 0 0 0.2rem;
+  font-weight: 700;
+}
+
+.niyama-header p {
+  font-size: 0.9rem;
+  color: var(--ink-mute, rgba(233, 223, 200, 0.68));
+  margin: 0;
+}
+
+.niyama-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  padding: 1.75rem 2rem;
+}
+
+@media (max-width: 768px) {
+  .niyama-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.niyama-item {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1rem;
+  border-radius: 10px;
+  background: rgba(14, 10, 6, 0.5);
+  border: 1px solid rgba(212, 166, 74, 0.15);
+}
+
+.niyama-num {
+  font-family: var(--display, serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--gold-3, #f0d48a);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid rgba(212, 166, 74, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: rgba(212, 166, 74, 0.08);
+}
+
+.niyama-body h4 {
+  font-family: var(--display, serif);
+  font-size: 1.1rem;
+  color: var(--gold-3, #f0d48a);
+  margin: 0 0 0.35rem;
+  font-weight: 600;
+}
+
+.niyama-body p {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--paper-2, #d6c9a3);
+  margin: 0;
+}
+
+/* Form Card Details */
+.form-card-header {
+  padding: 1.75rem 2rem;
+  background: rgba(28, 20, 16, 0.7);
+  border-bottom: 1px solid rgba(212, 166, 74, 0.2);
+}
+
+.form-badge {
+  display: inline-block;
+  font-family: var(--mono, monospace);
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  color: var(--gold, #d4a64a);
+  margin-bottom: 0.4rem;
+}
+
+.form-card-header h3 {
+  font-family: var(--display, serif);
+  font-size: 1.55rem;
+  color: var(--paper-bright, #fdfaf2);
+  margin: 0 0 0.35rem;
+  font-weight: 700;
+}
+
+.form-card-header p {
+  font-size: 0.92rem;
+  color: var(--ink-mute, rgba(233, 223, 200, 0.68));
+  margin: 0;
+}
+
+.sacred-vow-form {
+  padding: 2rem;
+}
+
+.form-section-title {
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(212, 166, 74, 0.2);
+  margin-bottom: 1.25rem;
+}
+
+.form-section-title span {
+  font-family: var(--display, serif);
+  font-size: 1.2rem;
+  color: var(--gold-3, #f0d48a);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .form-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sacred-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.sacred-field label,
+.field-question {
+  font-size: 0.92rem;
+  color: var(--paper-bright, #fdfaf2);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sacred-field label i {
+  color: var(--gold, #d4a64a);
+  font-size: 0.85rem;
+}
+
+.req {
+  color: #ef4444;
+}
+
+.field-hint {
+  font-size: 0.82rem;
+  color: var(--ink-mute, rgba(233, 223, 200, 0.68));
+}
+
+.field-error {
+  font-size: 0.82rem;
+  color: #fca5a5;
+  margin-top: 0.25rem;
+}
+
+/* Inputs & Selects */
+.input-wrap,
+.select-wrap,
+.textarea-wrap {
+  position: relative;
+}
+
+.sacred-input,
+.sacred-select,
+.sacred-textarea {
+  width: 100%;
+  background: rgba(14, 10, 6, 0.85) !important;
+  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35)) !important;
+  border-radius: 8px !important;
+  color: var(--paper-bright, #fdfaf2) !important;
+  font-family: var(--serif, Georgia, serif) !important;
+  font-size: 1rem !important;
+  padding: 0.75rem 1rem !important;
+  outline: none !important;
+  transition: all 0.25s ease !important;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6) !important;
+}
+
+.sacred-input:focus,
+.sacred-select:focus,
+.sacred-textarea:focus {
+  border-color: var(--gold-3, #f0d48a) !important;
+  box-shadow: 0 0 15px rgba(212, 166, 74, 0.3), inset 0 2px 6px rgba(0, 0, 0, 0.6) !important;
+}
+
+.select-wrap select {
+  appearance: none;
+  cursor: pointer;
+  padding-right: 2.5rem !important;
+}
+
+.select-arrow {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gold, #d4a64a);
+  pointer-events: none;
+  font-size: 0.85rem;
+}
+
+/* Radio Cards */
+.radio-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 0.4rem;
+}
+
+.triad-grid {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+@media (max-width: 768px) {
+  .triad-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.radio-card {
+  cursor: pointer;
+  position: relative;
+  display: block;
+}
+
+.radio-native {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.radio-card-ui {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0.9rem 1.25rem;
+  background: rgba(14, 10, 6, 0.7);
+  border: 1px solid rgba(212, 166, 74, 0.25);
+  border-radius: 10px;
+  transition: all 0.25s ease;
+}
+
+.radio-check-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(212, 166, 74, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.radio-card:hover .radio-card-ui {
+  border-color: var(--gold, #d4a64a);
+  background: rgba(28, 20, 16, 0.85);
+}
+
+.radio-native:checked + .radio-card-ui {
+  border-color: var(--gold-3, #f0d48a);
+  background: rgba(212, 166, 74, 0.12);
+  box-shadow: 0 0 15px rgba(212, 166, 74, 0.2);
+}
+
+.radio-native:checked + .radio-card-ui .radio-check-dot {
+  border-color: var(--gold-3, #f0d48a);
+  background: var(--gold, #d4a64a);
+  box-shadow: inset 0 0 0 3px #150f0a;
+}
+
+.radio-label-text {
+  font-size: 0.95rem;
+  color: var(--paper-bright, #fdfaf2);
+  font-weight: 500;
+}
+
+/* Checkbox */
+.custom-checkbox-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox-native {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.custom-checkbox-box {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+  background: rgba(14, 10, 6, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.checkbox-native:checked + .custom-checkbox-box {
+  background: var(--gold, #d4a64a);
+  border-color: var(--gold-3, #f0d48a);
+}
+
+.checkbox-native:checked + .custom-checkbox-box::after {
+  content: '✓';
+  color: #0e0a06;
+  font-weight: 800;
+  font-size: 0.8rem;
+}
+
+.checkbox-label-text {
+  font-size: 0.92rem;
+  color: var(--paper-2, #d6c9a3);
+}
+
+/* Submit Bar */
+.form-actions-bar {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(212, 166, 74, 0.2);
+  text-align: center;
+}
+
+.seal-vow-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 1rem 2.5rem;
+  background: linear-gradient(135deg, #f0d48a 0%, #d4a64a 50%, #b8842a 100%);
+  color: #0e0a06;
+  border: 1px solid #f0d48a;
+  border-radius: 999px;
+  font-family: var(--display, serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 30px rgba(212, 166, 74, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.seal-vow-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(212, 166, 74, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  background: linear-gradient(135deg, #fff3c9 0%, #f0d48a 50%, #d4a64a 100%);
+}
+
+.seal-vow-btn:active {
+  transform: translateY(0);
+}
+
+.vow-shloka-foot {
+  margin-top: 1.25rem;
+  font-family: var(--skt, serif);
+  color: var(--gold, #d4a64a);
+  font-size: 1rem;
+  opacity: 0.85;
+}
+
+/* Mobile Responsive Optimization for Mandala Vow Form */
+@media (max-width: 768px) {
+  .mandala-vow-sanctuary {
+    padding: 2rem 1rem 4rem;
+  }
+  .vow-heading {
+    font-size: clamp(1.8rem, 6vw, 2.3rem);
+  }
+  .vow-shloka-title {
+    font-size: 1.3rem;
+  }
+  .vow-lead {
+    font-size: 1.02rem;
+  }
+  .radio-cards-grid {
+    grid-template-columns: 1fr;
+  }
+  .sacred-vow-form {
+    padding: 1.5rem 1.25rem;
+  }
+  .seal-vow-btn {
+    width: 100%;
+    max-width: 440px;
+    font-size: 1.12rem;
+    padding: 0.95rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .mandala-vow-sanctuary {
+    padding: 1.25rem 0.65rem 3.5rem;
+  }
+  .vow-heading {
+    font-size: 1.6rem;
+  }
+  .vow-shloka-title {
+    font-size: 1.15rem;
+  }
+  .vow-lead {
+    font-size: 0.92rem;
+  }
+  .vow-badge-pill {
+    font-size: 0.7rem;
+    padding: 4px 10px;
+  }
+  .vow-niyama-card,
+  .vow-form-card {
+    border-radius: 12px;
+    margin-bottom: 1.75rem;
+  }
+  .niyama-header,
+  .form-card-header {
+    padding: 1.1rem 0.9rem;
+  }
+  .niyama-icon {
+    width: 38px;
+    height: 38px;
+    font-size: 1.1rem;
+  }
+  .niyama-grid {
+    padding: 1rem 0.85rem;
+  }
+  .niyama-item {
+    padding: 0.85rem;
+    gap: 0.75rem;
+  }
+  .sacred-vow-form {
+    padding: 1.1rem 0.85rem;
+  }
+  .sacred-input,
+  .sacred-select,
+  .sacred-textarea {
+    font-size: 16px !important; /* Prevents auto-zoom in mobile Safari */
+    padding: 0.7rem 0.85rem !important;
+  }
+  .radio-card-ui {
+    padding: 0.75rem 1rem;
+  }
+  .radio-label-text {
+    font-size: 0.88rem;
+  }
+  .custom-checkbox-wrap {
+    gap: 10px;
+  }
+  .checkbox-label-text {
+    font-size: 0.84rem;
+  }
+  .seal-vow-btn {
+    font-size: 0.98rem;
+    padding: 0.85rem 1rem;
+    gap: 8px;
+  }
+  .vow-shloka-foot {
+    font-size: 0.84rem;
+  }
+}
+</style>
+{% endblock %}

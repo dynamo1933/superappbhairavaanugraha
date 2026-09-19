@@ -1,0 +1,363 @@
+{% extends "base.html" %}
+
+{% block extra_styles %}
+<style>
+    /* ===== ABOUT DAIVA ANUGHARA THEME ===== */
+
+    /* Hero Section */
+    .about-hero {
+        background: linear-gradient(135deg, #8b1538 0%, #b91c1c 30%, #c2410c 70%, #ea580c 100%);
+        padding: 3rem 1rem;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        border-bottom: 3px solid var(--accent-gold, #d4af37);
+    }
+
+    .about-hero::before {
+        content: '';
+        position: absolute;
+        left: -10%;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 600px;
+        height: 600px;
+        background:
+            radial-gradient(circle, transparent 30%, rgba(255, 215, 0, 0.04) 31%, rgba(255, 215, 0, 0.04) 32%, transparent 33%),
+            radial-gradient(circle, transparent 45%, rgba(255, 215, 0, 0.04) 46%, rgba(255, 215, 0, 0.04) 47%, transparent 48%);
+        opacity: 0.8;
+        pointer-events: none;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        max-width: 800px;
+    }
+
+    .hero-title {
+        font-family: var(--font-mystical, 'Cinzel', serif);
+        font-size: 2.8rem;
+        color: #ffd700;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+        letter-spacing: 2px;
+        margin-bottom: 0.5rem;
+    }
+
+    .hero-subtitle {
+        color: rgba(255, 255, 255, 0.95);
+        font-size: 1.25rem;
+        font-family: var(--font-sacred, 'Open Sans', sans-serif);
+        font-style: italic;
+        letter-spacing: 1px;
+    }
+
+    /* Main Content Container */
+    .about-main {
+        padding: 3rem 1.25rem;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    /* Section Card Base */
+    .content-card {
+        background: var(--card-bg, #ffffff);
+        border-radius: var(--border-radius-lg, 12px);
+        padding: 3rem 2.5rem;
+        margin-bottom: 2.5rem;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+        border: 1px solid var(--border-color, #f0f0f0);
+        position: relative;
+    }
+
+    .sacred-card {
+        background: linear-gradient(135deg, #fffcf8 0%, #fef7ed 100%);
+        border-left: 5px solid var(--accent-gold, #d4af37);
+    }
+
+    .compassion-card {
+        background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+        border-left: 5px solid var(--primary-red, #c41e3a);
+    }
+
+    /* Section Titles */
+    .section-title {
+        font-family: var(--font-primary, 'Cinzel', serif);
+        font-size: 2rem;
+        color: var(--primary-red, #c41e3a);
+        text-align: center;
+        margin-bottom: 2rem;
+        position: relative;
+        padding-bottom: 1rem;
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 3px;
+        background: linear-gradient(90deg, var(--primary-red, #c41e3a), var(--accent-orange, #ea580c));
+        border-radius: 2px;
+    }
+
+    /* Grid Layouts */
+    .values-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+    }
+
+    .value-item {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 10px;
+        padding: 2rem 1.5rem;
+        border: 1px solid rgba(196, 30, 58, 0.1);
+        text-align: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    }
+
+    .value-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        border-color: rgba(234, 88, 12, 0.3);
+    }
+
+    .value-icon {
+        font-size: 2.5rem;
+        color: var(--accent-orange, #ea580c);
+        margin-bottom: 1.25rem;
+        background: linear-gradient(135deg, var(--primary-red, #c41e3a), var(--accent-orange, #ea580c));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .value-title {
+        font-family: var(--font-primary, 'Cinzel', serif);
+        font-size: 1.3rem;
+        color: var(--primary-red, #c41e3a);
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .value-text {
+        font-family: var(--font-secondary, 'Open Sans', sans-serif);
+        color: var(--text-dark, #333);
+        font-size: 1rem;
+        line-height: 1.7;
+    }
+
+    /* Text Typography */
+    .sacred-text {
+        font-family: var(--font-secondary, 'Open Sans', sans-serif);
+        color: var(--text-dark, #444);
+        font-size: 1.1rem;
+        line-height: 1.8;
+        margin-bottom: 1.5rem;
+        text-align: justify;
+    }
+
+    .sacred-text:last-child {
+        margin-bottom: 0;
+    }
+
+    .om-symbol {
+        font-size: 3rem;
+        color: var(--accent-orange, #ea580c);
+        text-align: center;
+        margin-bottom: 1.5rem;
+        text-shadow: 0 2px 10px rgba(234, 88, 12, 0.2);
+    }
+
+    /* Contact & Links */
+    .contact-box {
+        text-align: center;
+        background: rgba(255, 255, 255, 0.7);
+        padding: 2.5rem;
+        border-radius: 12px;
+        border: 1px dashed var(--primary-red, #c41e3a);
+    }
+
+    .external-link-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        background: linear-gradient(135deg, var(--primary-red, #c41e3a), var(--accent-orange, #ea580c));
+        color: white;
+        padding: 0.85rem 2rem;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 1.05rem;
+        transition: all 0.3s ease;
+        margin-top: 1.5rem;
+        box-shadow: 0 4px 15px rgba(196, 30, 58, 0.3);
+    }
+
+    .external-link-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(196, 30, 58, 0.4);
+        color: white;
+    }
+
+    @media (max-width: 768px) {
+        .hero-title { font-size: 2.2rem; }
+        .section-title { font-size: 1.6rem; }
+        .content-card { padding: 2rem 1.5rem; }
+        .about-main { padding: 2rem 1rem; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="about-hero">
+    <div class="hero-content">
+        <h1 class="hero-title">About Daiva Anughara</h1>
+        <p class="hero-subtitle">A sanctuary for authentic spiritual transmission</p>
+    </div>
+</section>
+
+<div class="about-main">
+
+    <!-- Mission Statement -->
+    <div class="content-card sacred-card" data-aos="fade-up" data-aos-duration="800">
+        <div class="om-symbol">🕉️</div>
+        <h2 class="section-title">Our Sacred Mission</h2>
+        <p class="sacred-text">
+            Daiva Anughara is conceived as a spiritual sanctuary dedicated to preserving, sharing, and facilitating the practice of ancient wisdom, with a profound focus on the sacred tradition of <strong>Bhairava Sadhana</strong> and <strong>Sādhanā Paddhati</strong>.
+        </p>
+        <p class="sacred-text">
+            Our sole intent is to make authentic spiritual knowledge accessible to sincere seekers. We believe true spiritual wisdom is a transmission of divine grace, meant to be shared freely from the heart, stripped of commercial transactions, yet preserved with the utmost reverence and purity it demands.
+        </p>
+    </div>
+
+    <!-- Personal Intro -->
+    <div class="content-card" data-aos="fade-up" data-aos-duration="800">
+        <h2 class="section-title">From the Heart</h2>
+        <p class="sacred-text">
+            I am Manjunath Mahendrakar, a humble seeker walking the timeless path of <strong>Maa Kamakhya Bhairava tattva</strong>. Guided unconditionally by the blessings of my Diksha Guru, the Avadhutas, and the boundless grace of the Siddhars, I act merely as a vessel.
+        </p>
+        <p class="sacred-text">
+            What is shared here are not mere teachings, but sacred glimpses—tiny, luminous ripples from the vast ocean of His consciousness. This offering is a living prayer to Guru Bhairava; a space born entirely from love, devotion, and reverence for the fierce compassion of our Iṣṭa Devatā and the hidden, mystical treasures of the Puranas.
+        </p>
+    </div>
+
+    <!-- Core Values & Approach -->
+    <div class="content-card" data-aos="fade-up" data-aos-duration="800">
+        <h2 class="section-title">Our Guiding Principles</h2>
+        
+        <div class="values-grid">
+            <div class="value-item">
+                <div class="value-icon"><i class="fas fa-om"></i></div>
+                <h3 class="value-title">Devotion (Bhakti)</h3>
+                <p class="value-text">Approaching all practices with deep reverence, recognizing the divinity in the knowledge we share.</p>
+            </div>
+            
+            <div class="value-item">
+                <div class="value-icon"><i class="fas fa-hand-holding-heart"></i></div>
+                <h3 class="value-title">Selfless Service (Seva)</h3>
+                <p class="value-text">Serving humanity without expectation of reward, embodying the spirit of pure selflessness.</p>
+            </div>
+            
+            <div class="value-item">
+                <div class="value-icon"><i class="fas fa-scroll"></i></div>
+                <h3 class="value-title">Authentic Lineage</h3>
+                <p class="value-text">Committed to traditional, unaltered knowledge passed down through legitimate spiritual Gurus.</p>
+            </div>
+
+            <div class="value-item">
+                <div class="value-icon"><i class="fas fa-gift"></i></div>
+                <h3 class="value-title">Free Offering</h3>
+                <p class="value-text">All sacred guidance is offered freely, as an unconditioned transmission of divine grace.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Prani Daya Sanga -->
+    <div class="content-card compassion-card" data-aos="fade-up" data-aos-duration="800">
+        <h2 class="section-title">Prāṇi Daya Sanga</h2>
+        <p class="sacred-text" style="text-align: center; font-style: italic; color: var(--primary-red); font-weight: 500;">
+            "The Assembly of Compassion for All Beings"
+        </p>
+        <p class="sacred-text" style="text-align: center;">
+            <strong>Prāṇi Daya Sanga</strong> is the beating heart of our charitable endeavors. It reflects our unyielding commitment to extending unconditional love, care, and protection to every living creature around us.
+        </p>
+        
+        <div class="values-grid" style="margin-top: 2.5rem;">
+            <div class="value-item" style="background: transparent; border: none; box-shadow: none; padding: 1rem;">
+                <h3 class="value-title" style="color: var(--accent-orange);">Animal Welfare</h3>
+                <p class="value-text">Providing nourishment, care, and safe haven for animals in need.</p>
+            </div>
+            <div class="value-item" style="background: transparent; border: none; box-shadow: none; padding: 1rem;">
+                <h3 class="value-title" style="color: var(--accent-orange);">Children's Education</h3>
+                <p class="value-text">Supporting the educational journey of children from Blind Schools and special needs institutions.</p>
+            </div>
+            <div class="value-item" style="background: transparent; border: none; box-shadow: none; padding: 1rem;">
+                <h3 class="value-title" style="color: var(--accent-orange);">Community Upliftment</h3>
+                <p class="value-text">Extending a helping hand to foster well-being and harmony in society.</p>
+            </div>
+        </div>
+
+        <div class="contact-box" style="margin-top: 2rem; background: rgba(254, 242, 242, 0.5); border-color: rgba(196, 30, 58, 0.3);">
+            <p class="value-text"><strong>Seva Opportunity:</strong> If your heart feels moved to support these initiatives, you may offer seva. This is purely voluntary—a silent offering from soul to soul. There are no tax benefits or formal receipts, only grace.</p>
+        </div>
+    </div>
+
+    <!-- Contact & Links -->
+    <div class="content-card" data-aos="fade-up" data-aos-duration="800">
+        <h2 class="section-title">Connect With Us</h2>
+        <div class="contact-box">
+            <p class="sacred-text" style="text-align: center;">
+                For spiritual guidance, questions regarding your Sadhana, or to participate in our Prāṇi Daya initiatives, we welcome your connection.
+            </p>
+            <p class="value-text" style="margin: 1.5rem 0;">
+                <strong>Important:</strong> We humbly request you to approach with the reverence this sacred space commands.
+            </p>
+            <p class="value-text">
+                <i class="fab fa-telegram" style="color: #0088cc; font-size: 1.4rem; vertical-align: middle;"></i> <strong>Reach out via Telegram</strong> or Direct Message and we shall respond as guided by Him.
+            </p>
+            
+            <hr style="margin: 2.5rem 0; border-top: 1px solid rgba(0,0,0,0.08);">
+            
+            <h3 class="value-title">Related Organization</h3>
+            <p class="value-text">Discover more about our partner organization's spiritual and charitable initiatives.</p>
+            <a href="https://vaastueazz.com/taattvakula-ngo" target="_blank" rel="noopener noreferrer" class="external-link-btn">
+                <i class="fas fa-external-link-alt"></i> Vaastu Eazz NGO - Taattvakula
+            </a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof AOS !== 'undefined') {
+            // Force refresh AOS after layout calculations
+            setTimeout(function() {
+                AOS.init({
+                    once: true, // Only animate once per element to prevent the appear/disappear loop
+                    offset: 50, // Offset from original trigger point
+                    duration: 800, // Duration of animation
+                    easing: 'ease-out-cubic',
+                    disable: 'mobile' // Optional: Disable on mobile if layout shifts are severe
+                });
+                AOS.refresh();
+            }, 100);
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,2018 @@
+{% extends "base.html" %}
+
+{% block extra_styles %}
+<style>
+/* ===== BHAIRAVA ANUGRAHA PAGE - STAGE 7 ===== */
+
+/* Hero Section */
+.bhairava-hero {
+    background: linear-gradient(135deg, #8b1538 0%, #b91c1c 30%, #c2410c 70%, #ea580c 100%);
+    padding: 2rem 1.5rem;
+    position: relative;
+    overflow: hidden;
+    min-height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bhairava-hero::before {
+    content: '';
+    position: absolute;
+    right: -100px;
+    bottom: -50px;
+    width: 400px;
+    height: 400px;
+    background-image: url('/static/images/bhairava_black.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.15;
+    pointer-events: none;
+}
+
+.bhairava-hero::after {
+    content: '';
+    position: absolute;
+    left: -100px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 500px;
+    height: 500px;
+    background: 
+        radial-gradient(circle, transparent 30%, rgba(255,215,0,0.03) 31%, rgba(255,215,0,0.03) 32%, transparent 33%),
+        radial-gradient(circle, transparent 45%, rgba(255,215,0,0.03) 46%, rgba(255,215,0,0.03) 47%, transparent 48%),
+        radial-gradient(circle, transparent 60%, rgba(255,215,0,0.03) 61%, rgba(255,215,0,0.03) 62%, transparent 63%);
+    opacity: 0.8;
+    pointer-events: none;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero-badge {
+    display: inline-block;
+    background: rgba(255, 215, 0, 0.2);
+    color: #ffd700;
+    padding: 6px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.hero-title {
+    font-family: var(--font-mystical);
+    font-size: 2.8rem;
+    color: #ffd700;
+    margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+}
+
+.hero-subtitle {
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 1.1rem;
+    font-style: italic;
+    font-family: var(--font-sacred);
+}
+
+@media (max-width: 767px) {
+    .bhairava-hero {
+        padding: 1.5rem 1rem;
+        min-height: auto;
+    }
+    
+    .hero-title {
+        font-size: 1.8rem;
+        letter-spacing: 2px;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.95rem;
+    }
+}
+
+/* Tab Navigation */
+.tab-navigation {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    background: linear-gradient(135deg, #1f1f1f 0%, #2d2d2d 100%);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.tab-btn {
+    flex: 1;
+    max-width: 300px;
+    padding: 1.25rem 2rem;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    font-family: var(--font-primary);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.tab-btn::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-red), var(--accent-orange));
+    transition: width 0.3s ease;
+}
+
+.tab-btn:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.tab-btn.active {
+    color: #ffd700;
+    background: rgba(255, 215, 0, 0.1);
+}
+
+.tab-btn.active::after {
+    width: 80%;
+}
+
+.tab-btn i {
+    margin-right: 0.5rem;
+}
+
+@media (max-width: 600px) {
+    .tab-btn {
+        padding: 1rem 0.75rem;
+        font-size: 0.85rem;
+        letter-spacing: 0;
+    }
+    
+    .tab-btn i {
+        display: block;
+        margin: 0 auto 0.25rem;
+        font-size: 1.2rem;
+    }
+}
+
+/* Tab Content */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Main Content Container */
+.anugraha-main {
+    padding: 2rem 1.25rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    background: linear-gradient(180deg, #fefaf6 0%, #fff 100%);
+}
+
+@media (min-width: 768px) {
+    .anugraha-main {
+        padding: 2.5rem 2rem;
+    }
+}
+
+/* Content Card Base */
+.content-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius-lg);
+    padding: 2rem 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 20px var(--shadow-color);
+    border: 1px solid var(--border-color);
+    position: relative;
+}
+
+@media (min-width: 768px) {
+    .content-card {
+        padding: 2.5rem 3rem;
+        margin-bottom: 2rem;
+    }
+}
+
+/* Welcome Card - Special styling */
+.welcome-card {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border-left: 5px solid var(--accent-orange);
+    position: relative;
+    overflow: hidden;
+}
+
+.welcome-card::before {
+    content: '';
+    position: absolute;
+    right: -50px;
+    bottom: -50px;
+    width: 200px;
+    height: 200px;
+    background-image: url('/static/images/bhairav_with_sadhak.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.08;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.welcome-greeting {
+    font-family: var(--font-mystical);
+    font-size: 1.4rem;
+    color: var(--primary-red);
+    margin-bottom: 1.5rem;
+    font-style: italic;
+}
+
+.welcome-text {
+    font-family: var(--font-secondary);
+    color: var(--text-dark);
+    font-size: 1.05rem;
+    line-height: 2;
+    text-align: justify;
+    position: relative;
+    z-index: 1;
+}
+
+.welcome-text p {
+    margin-bottom: 1.25rem;
+}
+
+.welcome-text p:last-child {
+    margin-bottom: 0;
+}
+
+.welcome-text strong {
+    color: var(--primary-red);
+}
+
+.welcome-text em {
+    color: var(--accent-orange);
+    font-style: normal;
+    font-weight: 600;
+}
+
+.sacred-closing {
+    font-family: var(--font-mystical);
+    font-size: 1.2rem;
+    color: var(--primary-red);
+    text-align: center;
+    margin-top: 1.5rem;
+    font-style: italic;
+}
+
+/* Section Title */
+.section-title {
+    font-family: var(--font-primary);
+    font-size: 1.6rem;
+    color: var(--primary-red);
+    text-align: center;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-bottom: 0.75rem;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-red), var(--accent-orange));
+    border-radius: 2px;
+}
+
+/* Preparation Card */
+.preparation-card {
+    background: linear-gradient(135deg, #fff7ed 0%, #fef7ed 100%);
+    border-left: 4px solid var(--accent-gold);
+}
+
+.video-note {
+    background: rgba(255, 215, 0, 0.1);
+    border-radius: var(--border-radius);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    font-family: var(--font-secondary);
+    color: var(--text-dark);
+}
+
+.video-note strong {
+    color: var(--primary-red);
+}
+
+/* Practice Items */
+.practice-section {
+    margin-bottom: 1.5rem;
+}
+
+.practice-title {
+    font-family: var(--font-primary);
+    font-size: 1.15rem;
+    color: var(--primary-red);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.practice-title .number {
+    background: linear-gradient(135deg, var(--primary-red), var(--accent-orange));
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.practice-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.practice-list li {
+    padding: 0.5rem 0 0.5rem 1.5rem;
+    position: relative;
+    font-family: var(--font-secondary);
+    color: var(--text-dark);
+    line-height: 1.7;
+}
+
+.practice-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--accent-orange);
+    font-size: 1.2rem;
+}
+
+.practice-list li strong {
+    color: var(--primary-red);
+}
+
+/* Sankalpa Box */
+.sankalpa-box {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    border-radius: var(--border-radius);
+    padding: 1.25rem;
+    margin-top: 1.5rem;
+    border: 1px solid rgba(196, 30, 58, 0.2);
+    text-align: center;
+}
+
+.sankalpa-title {
+    font-family: var(--font-primary);
+    font-size: 1.1rem;
+    color: var(--primary-red);
+    margin-bottom: 0.75rem;
+}
+
+.sankalpa-text {
+    font-family: var(--font-sacred);
+    font-size: 1rem;
+    color: var(--text-dark);
+    font-style: italic;
+    line-height: 1.8;
+}
+
+.sankalpa-note {
+    font-family: var(--font-secondary);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-top: 0.75rem;
+}
+
+/* Day 3 Card */
+.initiation-card {
+    background: linear-gradient(135deg, #fef2f2 0%, #fff1f2 100%);
+    border-left: 4px solid var(--primary-red);
+}
+
+.initiation-intro {
+    font-family: var(--font-secondary);
+    color: var(--text-dark);
+    font-size: 1.05rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.initiation-intro strong {
+    color: var(--primary-red);
+}
+
+/* Component Cards */
+.component-card {
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: var(--border-radius);
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(196, 30, 58, 0.1);
+}
+
+.component-title {
+    font-family: var(--font-primary);
+    font-size: 1.1rem;
+    color: var(--primary-red);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.component-title .number {
+    background: linear-gradient(135deg, var(--primary-red), #991b1b);
+    color: white;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.component-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.component-list li {
+    padding: 0.4rem 0 0.4rem 1.25rem;
+    position: relative;
+    font-family: var(--font-secondary);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+.component-list li::before {
+    content: '▪';
+    position: absolute;
+    left: 0;
+    color: var(--primary-red);
+}
+
+.component-list li strong {
+    color: var(--primary-red);
+}
+
+.inner-list {
+    margin-left: 1rem;
+    margin-top: 0.25rem;
+}
+
+.inner-list li {
+    font-size: 0.95rem;
+}
+
+.inner-list li::before {
+    content: '▸';
+    color: var(--accent-orange);
+}
+
+.mantra-highlight {
+    background: rgba(255, 215, 0, 0.15);
+    padding: 0.75rem 1rem;
+    border-radius: var(--border-radius);
+    margin: 0.75rem 0;
+    text-align: center;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.mantra-highlight strong {
+    font-family: var(--font-sacred);
+    color: var(--primary-red);
+    font-size: 1.1rem;
+}
+
+.invocation-text {
+    font-family: var(--font-sacred);
+    font-style: italic;
+    color: var(--text-dark);
+    text-align: center;
+    padding: 0.75rem;
+    background: rgba(196, 30, 58, 0.05);
+    border-radius: var(--border-radius);
+    margin-top: 0.5rem;
+}
+
+.sealing-text {
+    font-family: var(--font-sacred);
+    font-style: italic;
+    color: var(--primary-red);
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+/* Readiness Card */
+.readiness-card {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border-left: 4px solid #22c55e;
+}
+
+.readiness-section {
+    margin-bottom: 1.5rem;
+}
+
+.readiness-title {
+    font-family: var(--font-primary);
+    font-size: 1.15rem;
+    color: #166534;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.readiness-title .number {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.readiness-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.readiness-list li {
+    padding: 0.4rem 0 0.4rem 1.25rem;
+    position: relative;
+    font-family: var(--font-secondary);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+.readiness-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: #22c55e;
+    font-size: 1.2rem;
+}
+
+.readiness-list li strong {
+    color: #166534;
+}
+
+.sub-title {
+    font-family: var(--font-primary);
+    font-size: 1rem;
+    color: #166534;
+    margin: 0.75rem 0 0.5rem 0;
+    font-weight: 600;
+}
+
+.prayer-text {
+    font-family: var(--font-sacred);
+    font-style: italic;
+    color: var(--text-dark);
+    padding: 0.75rem;
+    background: rgba(34, 197, 94, 0.1);
+    border-radius: var(--border-radius);
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+/* Final Notes Card */
+.final-notes-card {
+    background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+    border-left: 4px solid #9333ea;
+}
+
+.notes-section {
+    margin-bottom: 1.5rem;
+}
+
+.notes-title {
+    font-family: var(--font-primary);
+    font-size: 1.2rem;
+    color: #7c3aed;
+    margin-bottom: 0.75rem;
+}
+
+.notes-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.notes-list li {
+    padding: 0.4rem 0 0.4rem 1.25rem;
+    position: relative;
+    font-family: var(--font-secondary);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+.notes-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: #9333ea;
+    font-size: 1.2rem;
+}
+
+.notes-list li strong {
+    color: #7c3aed;
+}
+
+/* Mantra Transmission Card */
+.mantra-card {
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
+    color: white;
+    border: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.mantra-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('/static/images/bhairava_black_v2.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.15;
+    pointer-events: none;
+}
+
+.mantra-card .section-title {
+    color: #ffd700;
+}
+
+.mantra-card .section-title::after {
+    background: linear-gradient(90deg, #ffd700, #f59e0b);
+}
+
+.mantra-intro {
+    font-family: var(--font-secondary);
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.05rem;
+    line-height: 1.9;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 1.5rem;
+}
+
+.mantra-intro em {
+    color: #ffd700;
+    font-style: italic;
+}
+
+.mantra-warning {
+    background: rgba(255, 215, 0, 0.15);
+    border-radius: var(--border-radius);
+    padding: 1.25rem;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    position: relative;
+    z-index: 1;
+    margin-bottom: 1.5rem;
+}
+
+.mantra-warning-title {
+    font-family: var(--font-primary);
+    font-size: 1rem;
+    color: #ffd700;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.mantra-warning-text {
+    font-family: var(--font-secondary);
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.7;
+}
+
+.mantra-warning-text strong {
+    color: #ffd700;
+}
+
+.mantra-guidance {
+    font-family: var(--font-secondary);
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 1rem;
+    line-height: 1.9;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 1.5rem;
+}
+
+.mantra-ready {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.mantra-ready-text {
+    font-family: var(--font-sacred);
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.mantra-ready-final {
+    font-family: var(--font-secondary);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.95rem;
+}
+
+/* ===== POST-INITIATION STYLES ===== */
+
+/* Dhyana Card */
+.dhyana-card {
+    background: linear-gradient(135deg, #fef7ed 0%, #fff7ed 100%);
+    border-left: 4px solid var(--accent-orange);
+    position: relative;
+    overflow: hidden;
+}
+
+.dhyana-card::before {
+    content: '';
+    position: absolute;
+    right: -80px;
+    bottom: -80px;
+    width: 300px;
+    height: 300px;
+    background-image: url('/static/images/bhairava_black.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.06;
+    pointer-events: none;
+}
+
+.purpose-text {
+    font-family: var(--font-secondary);
+    color: var(--text-dark);
+    font-size: 1.05rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+}
+
+.purpose-label {
+    font-family: var(--font-primary);
+    font-weight: 600;
+    color: var(--primary-red);
+}
+
+/* Sanskrit Box */
+.sanskrit-box {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(196, 30, 58, 0.2);
+    text-align: center;
+}
+
+.sanskrit-label {
+    font-family: var(--font-primary);
+    font-size: 1rem;
+    color: var(--primary-red);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.sanskrit-text {
+    font-family: var(--font-sacred);
+    font-size: 1.2rem;
+    color: var(--text-dark);
+    line-height: 2;
+    margin-bottom: 1rem;
+}
+
+.transliteration-text {
+    font-family: var(--font-sacred);
+    font-size: 1rem;
+    color: var(--text-muted);
+    font-style: italic;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+}
+
+.kannada-text {
+    font-family: var(--font-secondary);
+    font-size: 1rem;
+    color: var(--text-dark);
+    line-height: 1.8;
+    padding-top: 1rem;
+    border-top: 1px dashed rgba(196, 30, 58, 0.2);
+}
+
+/* Meaning Box */
+.meaning-box {
+    background: rgba(255, 215, 0, 0.1);
+    border-radius: var(--border-radius);
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.meaning-label {
+    font-family: var(--font-primary);
+    font-size: 1rem;
+    color: var(--accent-orange);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.meaning-text {
+    font-family: var(--font-sacred);
+    font-size: 1rem;
+    color: var(--text-dark);
+    font-style: italic;
+    line-height: 1.8;
+}
+
+/* Visualization Box */
+.visualization-box {
+    background: rgba(196, 30, 58, 0.05);
+    border-radius: var(--border-radius);
+    padding: 1.25rem;
+    border-left: 3px solid var(--primary-red);
+}
+
+.visualization-title {
+    font-family: var(--font-primary);
+    font-size: 1rem;
+    color: var(--primary-red);
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+}
+
+.visualization-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.visualization-list li {
+    padding: 0.4rem 0 0.4rem 1.25rem;
+    position: relative;
+    font-family: var(--font-secondary);
+    color: var(--text-dark);
+    line-height: 1.7;
+}
+
+.visualization-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--primary-red);
+    font-size: 1.2rem;
+}
+
+.visualization-list li strong {
+    color: var(--primary-red);
+}
+
+.visualization-list li em {
+    color: var(--accent-orange);
+    font-style: italic;
+}
+
+/* Sankalpa Card */
+.sankalpa-card {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border-left: 4px solid #22c55e;
+}
+
+/* Viniyoga Card */
+.viniyoga-card {
+    background: linear-gradient(135deg, #fef2f2 0%, #fff1f2 100%);
+    border-left: 4px solid var(--primary-red);
+}
+
+.breakdown-box {
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: var(--border-radius);
+    padding: 1.25rem;
+    margin-top: 1.5rem;
+}
+
+.breakdown-title {
+    font-family: var(--font-primary);
+    font-size: 1.1rem;
+    color: var(--primary-red);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.breakdown-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.breakdown-list li {
+    padding: 0.5rem 0;
+    font-family: var(--font-secondary);
+    color: var(--text-dark);
+    line-height: 1.6;
+    border-bottom: 1px solid rgba(196, 30, 58, 0.1);
+}
+
+.breakdown-list li:last-child {
+    border-bottom: none;
+}
+
+.breakdown-list li em {
+    color: var(--primary-red);
+    font-style: italic;
+    font-weight: 500;
+}
+
+.breakdown-list li strong {
+    color: var(--primary-red);
+}
+
+/* Nyasa Card */
+.nyasa-card {
+    background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+    border-left: 4px solid #9333ea;
+}
+
+.nyasa-section {
+    margin-bottom: 2rem;
+}
+
+.nyasa-section:last-child {
+    margin-bottom: 0;
+}
+
+.nyasa-subtitle {
+    font-family: var(--font-primary);
+    font-size: 1.15rem;
+    color: #7c3aed;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.nyasa-instruction {
+    font-family: var(--font-secondary);
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    font-style: italic;
+}
+
+.nyasa-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nyasa-list li {
+    padding: 0.6rem 0 0.6rem 1.25rem;
+    position: relative;
+    font-family: var(--font-secondary);
+    color: var(--text-dark);
+    line-height: 1.6;
+    border-bottom: 1px solid rgba(147, 51, 234, 0.1);
+}
+
+.nyasa-list li:last-child {
+    border-bottom: none;
+}
+
+.nyasa-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: #9333ea;
+    font-size: 1.2rem;
+}
+
+.nyasa-list li em {
+    color: #7c3aed;
+    font-style: italic;
+}
+
+.nyasa-list li strong {
+    color: #9333ea;
+}
+
+.nyasa-closing {
+    font-family: var(--font-secondary);
+    color: var(--text-dark);
+    font-size: 1rem;
+    line-height: 1.8;
+    text-align: center;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(147, 51, 234, 0.2);
+}
+
+/* Final Japa Card */
+.japa-card {
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
+    color: white;
+    border: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.japa-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('/static/images/bhairava_black_v2.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.12;
+    pointer-events: none;
+}
+
+.japa-card .section-title {
+    color: #ffd700;
+}
+
+.japa-card .section-title::after {
+    background: linear-gradient(90deg, #ffd700, #f59e0b);
+}
+
+.japa-prep-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
+    position: relative;
+    z-index: 1;
+}
+
+.japa-prep-list li {
+    padding: 0.5rem 0 0.5rem 1.5rem;
+    position: relative;
+    font-family: var(--font-secondary);
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.7;
+}
+
+.japa-prep-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: #ffd700;
+    font-size: 1.2rem;
+}
+
+.japa-prep-list li strong {
+    color: #ffd700;
+}
+
+.main-mantra-box {
+    background: rgba(255, 215, 0, 0.15);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.main-mantra-sanskrit {
+    font-family: var(--font-sacred);
+    font-size: 1.5rem;
+    color: #ffd700;
+    margin-bottom: 0.5rem;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.main-mantra-trans {
+    font-family: var(--font-sacred);
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-style: italic;
+    margin-bottom: 0.5rem;
+}
+
+.main-mantra-kannada {
+    font-family: var(--font-secondary);
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.japa-instruction {
+    font-family: var(--font-secondary);
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    line-height: 1.8;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.japa-instruction strong {
+    color: #ffd700;
+}
+
+/* Closing Card */
+.closing-card {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border-left: 5px solid var(--accent-orange);
+    position: relative;
+    overflow: hidden;
+}
+
+.closing-card::before {
+    content: '';
+    position: absolute;
+    right: -100px;
+    bottom: -100px;
+    width: 350px;
+    height: 350px;
+    background-image: url('/static/images/bhairava_black.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.05;
+    pointer-events: none;
+}
+
+.closing-text {
+    font-family: var(--font-secondary);
+    color: var(--text-dark);
+    font-size: 1.05rem;
+    line-height: 2;
+    position: relative;
+    z-index: 1;
+}
+
+.closing-text p {
+    margin-bottom: 1.25rem;
+}
+
+.closing-text p:last-child {
+    margin-bottom: 0;
+}
+
+.closing-emphasis {
+    font-family: var(--font-mystical);
+    font-size: 1.3rem;
+    color: var(--primary-red);
+    text-align: center;
+    margin-top: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* Back Button */
+.stage-actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+.btn-back {
+    background: white;
+    color: var(--primary-red);
+    padding: 12px 24px;
+    border: 2px solid var(--primary-red);
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-back:hover {
+    background: var(--primary-red);
+    color: white;
+}
+
+/* Yantra Card Styles */
+.yantra-card {
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
+    color: white;
+    border: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.yantra-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(255,215,0,0.1) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.yantra-card .section-title {
+    color: #ffd700;
+}
+
+.yantra-card .section-title::after {
+    background: linear-gradient(90deg, #ffd700, #f59e0b);
+}
+
+.yantra-message {
+    font-family: var(--font-secondary);
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.05rem;
+    line-height: 1.9;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 1.5rem;
+}
+
+.yantra-message strong {
+    color: #ffd700;
+}
+
+.yantra-note {
+    font-family: var(--font-sacred);
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.95rem;
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+.yantra-embed {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    position: relative;
+    z-index: 1;
+}
+
+.yantra-embed iframe {
+    display: block;
+    width: 100%;
+    height: 500px;
+    border: none;
+}
+
+@media (max-width: 768px) {
+    .yantra-embed iframe {
+        height: 400px;
+    }
+}
+
+.yantra-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+}
+
+.btn-yantra {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-yantra-view {
+    background: rgba(255, 215, 0, 0.15);
+    color: #ffd700;
+    border: 2px solid rgba(255, 215, 0, 0.5);
+}
+
+.btn-yantra-view:hover {
+    background: rgba(255, 215, 0, 0.25);
+    border-color: #ffd700;
+    transform: translateY(-2px);
+}
+
+.btn-yantra-download {
+    background: linear-gradient(135deg, #ffd700 0%, #f59e0b 100%);
+    color: #1e1b4b;
+    border: none;
+}
+
+.btn-yantra-download:hover {
+    background: linear-gradient(135deg, #fef08a 0%, #fbbf24 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bhairava-hero">
+    <div class="hero-content">
+        <div class="hero-badge">Pratham Charana</div>
+        <h1 class="hero-title">Bhairava Anugraha</h1>
+        <p class="hero-subtitle">Sacred Initiation into the Path of Guru Bhairava</p>
+    </div>
+</section>
+
+<!-- Tab Navigation -->
+<div class="tab-navigation">
+    <button class="tab-btn active" data-tab="pre-initiation">
+        <i class="fas fa-om"></i>
+        Pre-Initiation
+    </button>
+    <button class="tab-btn" data-tab="post-initiation">
+        <i class="fas fa-fire"></i>
+        Post-Initiation
+    </button>
+</div>
+
+<!-- Main Content -->
+<div class="anugraha-main">
+    
+    <!-- PRE-INITIATION TAB CONTENT -->
+    <div id="pre-initiation" class="tab-content active">
+        
+        <!-- Sacred Yantra Card -->
+        <div class="content-card yantra-card">
+            <h2 class="section-title">🙏 Sacred Yantra for Initiation</h2>
+            
+            <p class="yantra-message">
+                Kindly take a <strong>printout and laminate</strong> — keep it with you on the day of initiation.<br>
+                This is not just another yantra — it is a <strong>living space</strong>, shared with deep grace.<br>
+                Receive it with surrender and reverence.
+            </p>
+            <p class="yantra-note">(Yantra can be used in daily Puja vedi)</p>
+            
+            <div class="yantra-embed">
+                <iframe 
+                    src="https://drive.google.com/file/d/11JYCDg6BzNtz5JqBgCWEsbW9Zl2TyPIj/preview"
+                    allow="autoplay"
+                    allowfullscreen>
+                </iframe>
+            </div>
+            
+            <div class="yantra-actions">
+                <a href="https://drive.google.com/file/d/11JYCDg6BzNtz5JqBgCWEsbW9Zl2TyPIj/view" 
+                   target="_blank" 
+                   class="btn-yantra btn-yantra-view">
+                    <i class="fas fa-external-link-alt"></i>
+                    View in New Tab
+                </a>
+                <a href="https://drive.google.com/uc?export=download&id=11JYCDg6BzNtz5JqBgCWEsbW9Zl2TyPIj" 
+                   target="_blank" 
+                   class="btn-yantra btn-yantra-download">
+                    <i class="fas fa-download"></i>
+                    Download Yantra
+                </a>
+            </div>
+        </div>
+        
+        <!-- Welcome Card -->
+        <div class="content-card welcome-card">
+            <div class="welcome-greeting">Namaskaram,</div>
+            <div class="welcome-text">
+                <p>If these words have reached you, and you find yourself here, pause for a moment... for this is not a coincidence.</p>
+                
+                <p>You are here because <strong>Guru Bhairava</strong> has called you—not through sound, but through an invisible stirring of the soul. It is <strong>His kripa (grace)</strong> that has gently pulled you to this doorway, the Prathamaha Charanah—the <em>First Step</em> on a sacred journey unlike any other.</p>
+                
+                <p>This is not just a beginning—it is a <strong>returning</strong>. A remembrance of something ancient, silent, and deeply alive within you.</p>
+                
+                <p>Here begins your walk on the path of <em>inner transformation</em>, where the noise of the outer world softens, and the voice of the inner Self begins to rise. Here begins your entry into the ocean of <strong>Tantric wisdom</strong>, not as mere knowledge, but as a living fire that reveals, burns, and blesses.</p>
+                
+                <p>Here begins your <strong>surrender</strong>—not to an idea or a form, but to the Presence of Bhairava Himself, who is <strong>truth beyond fear, protection beyond form, and light that dissolves illusion.</strong></p>
+                
+                <p>To walk this path is to let go of what no longer serves, to sit in silence where others speak, to bow where the world resists, and to listen where the mind once shouted.</p>
+                
+                <p>You have not come here by effort. You have been <em>called</em>.<br>
+                And now... you are being <em>received</em>.</p>
+                
+                <p>Welcome, again. Let us take this first step—together, with ista, Guru Bhairava Sadahana.</p>
+                
+                <p>So lets dwell into his grace</p>
+            </div>
+            <div class="sacred-closing">~Jai Bhairava Jai Kamakya</div>
+        </div>
+
+        <!-- Pre-Initiation Preparation (Days 1 & 2) -->
+        <div class="content-card preparation-card">
+            <h2 class="section-title">Pre-Initiation Preparation (Days 1 & 2)</h2>
+            
+            <div class="video-note">
+                Please <strong>watch the preparatory video</strong> shared via Bhairava Anughra. It provides essential insights for the upcoming three-day process.
+            </div>
+            
+            <h3 style="font-family: var(--font-primary); color: var(--text-dark); margin-bottom: 1rem;">Core Practices for the Preparatory Phase</h3>
+            
+            <div class="practice-section">
+                <div class="practice-title">
+                    <span class="number">1</span>
+                    Inner Discipline (Antar Tapasya)
+                </div>
+                <ul class="practice-list">
+                    <li>Observe a <strong>vow of silence (mauna)</strong> for at least <strong>2–3 hours daily.</strong></li>
+                    <li>Use this time for reflection and inner withdrawal.</li>
+                </ul>
+            </div>
+            
+            <div class="practice-section">
+                <div class="practice-title">
+                    <span class="number">2</span>
+                    Devotional Practice (Bhakti Bhāva)
+                </div>
+                <ul class="practice-list">
+                    <li>Light a <strong>deepam (lamp)</strong> every morning and evening before Bhairava's image or yantra.</li>
+                    <li>Offer <strong>flowers and incense.</strong></li>
+                    <li>Chant <strong>Ashta Bhairava</strong> or <strong>108 names of Bhairava</strong> with deep devotion.</li>
+                </ul>
+            </div>
+            
+            <div class="practice-section">
+                <div class="practice-title">
+                    <span class="number">3</span>
+                    Energetic Alignment (Prāna Shuddhi)
+                </div>
+                <ul class="practice-list">
+                    <li>Practice <strong>Nadi Shodhana</strong> or <strong>Kapalabhati Pranayama,</strong> 8 rounds, both morning and evening.</li>
+                </ul>
+            </div>
+            
+            <div class="practice-section">
+                <div class="practice-title">
+                    <span class="number">4</span>
+                    Scriptural Anchoring (Shastra Sravana)
+                </div>
+                <ul class="practice-list">
+                    <li>Watch the <strong>Diava Anughara video</strong> for inner alignment and deeper understanding of Bhairava tattva.</li>
+                </ul>
+            </div>
+            
+            <div class="sankalpa-box">
+                <div class="sankalpa-title">5. Sankalpa (Intention Declaration) – Only on Day 1</div>
+                <p class="sankalpa-text">"O Bhairava, I invoke Thee with all humility and yearning. Guide me into Thy path. Accept me as Thy disciple, in thought, word, and deed."</p>
+                <p class="sankalpa-note">(No need to repeat this on Day 2.)</p>
+            </div>
+        </div>
+
+        <!-- Day 3 - Deeksha Tithi -->
+        <div class="content-card initiation-card">
+            <h2 class="section-title">Day 3 – Deeksha Tithi (Initiation Day)</h2>
+            
+            <p class="initiation-intro">
+                This is a <strong>sacred and subtle</strong> turning point. Bhairava's initiation is not theatrical—it is <strong>mystical, silent, and powerful.</strong> The <strong>mantra becomes a living force</strong> inside you.
+            </p>
+            
+            <h3 style="font-family: var(--font-primary); color: var(--text-dark); margin-bottom: 1rem;">Initiation Day Components</h3>
+            
+            <div class="component-card">
+                <div class="component-title">
+                    <span class="number">1</span>
+                    Sacred Bath (Snāna Vidhi)
+                </div>
+                <ul class="component-list">
+                    <li>Take a ritual bath before sunrise.</li>
+                    <li>Mix <strong>turmeric, black sesame seeds, and vibhuti</strong> in the water.</li>
+                </ul>
+            </div>
+            
+            <div class="component-card">
+                <div class="component-title">
+                    <span class="number">2</span>
+                    Altar Preparation (Puja Mandala)
+                </div>
+                <ul class="component-list">
+                    <li>Prepare a simple altar with Bhairava's <strong>image, yantra, or Shiva Linga.</strong></li>
+                    <li>Offer <strong>sesame oil or ghee lamp, black mustard seeds, red flowers, incense, and a piece of iron or black cloth.</strong></li>
+                </ul>
+            </div>
+            
+            <div class="component-card">
+                <div class="component-title">
+                    <span class="number">3</span>
+                    Invocation and Surrender
+                </div>
+                <ul class="component-list">
+                    <li>Chant Bhairava Dhyana Sloka (provided).</li>
+                    <li>Perform a short avahana (invocation) and mentally offer:</li>
+                </ul>
+                <div class="invocation-text">
+                    "From today, I walk your path. Guide me. Teach me. Burn away all that must be burned."
+                </div>
+            </div>
+            
+            <div class="component-card">
+                <div class="component-title">
+                    <span class="number">4</span>
+                    Mantra Transmission
+                </div>
+                <div class="mantra-highlight">
+                    <strong>"Om Bhairavaya Namaha"</strong>
+                </div>
+                <ul class="component-list">
+                    <li>Chant minimum <strong>108 times</strong> (or 1008, if possible).</li>
+                    <li>Let each repetition carry <strong>intensity, emotion, and presence.</strong></li>
+                </ul>
+            </div>
+            
+            <div class="component-card">
+                <div class="component-title">
+                    <span class="number">5</span>
+                    Establishing Bhāva (Inner Orientation)
+                </div>
+                <ul class="component-list">
+                    <li>Sit in silence. Visualize:
+                        <ul class="inner-list">
+                            <li>Bhairava in the <strong>heart center,</strong> or</li>
+                            <li>Blazing light in the <strong>Ajna Chakra (third eye).</strong></li>
+                        </ul>
+                    </li>
+                    <li>Allow feelings of <strong>fearlessness, clarity, and divine guidance</strong> to arise.</li>
+                </ul>
+            </div>
+            
+            <div class="component-card">
+                <div class="component-title">
+                    <span class="number">6</span>
+                    Sealing the Connection
+                </div>
+                <ul class="component-list">
+                    <li>Offer a simple Naivedya (milk, fruit, etc.).</li>
+                    <li>Inwardly say:</li>
+                </ul>
+                <div class="sealing-text">
+                    "Let this link be eternal. Let Bhairava walk with me, in me, as me."
+                </div>
+            </div>
+        </div>
+
+        <!-- Readiness from Upasaka on Day 3 -->
+        <div class="content-card readiness-card">
+            <h2 class="section-title">Readiness from Upasaka on Day 3:<br>Deeksha – Prathamaha Charanah</h2>
+            
+            <div class="readiness-section">
+                <div class="readiness-title">
+                    <span class="number">1</span>
+                    Outer Preparation (Bahya Shuddhi)
+                </div>
+                <ul class="readiness-list">
+                    <li><strong>Head bath with Cleanse the body</strong> with intention (adapt as per location/climate).</li>
+                    <li>Wear <strong>simple, light-colored/red/yellow/white cotton</strong> dress.</li>
+                    <li>Avoid perfumes; attar for ritual only.</li>
+                    <li>Set up a clean space with:
+                        <ul class="inner-list">
+                            <li><strong>Kusha/Wool/Cotton asana</strong> (red preferred).</li>
+                            <li>Face <strong>South,</strong> with <strong>Bhairava image or yantra,</strong> and Lamp of ghee or <strong>sesame lamp.</strong></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="readiness-section">
+                <div class="readiness-title">
+                    <span class="number">2</span>
+                    Posture & Sitting (Asana Siddhi)
+                </div>
+                <ul class="readiness-list">
+                    <li>Sit in <strong>Padmasana, Siddhasana, or Sukhasana</strong> (as comfortable).</li>
+                    <li>Spine straight, shoulders relaxed.</li>
+                    <li>Hands in <strong>Dhyana Mudra</strong> or <strong>Chin Mudra.</strong></li>
+                    <li>Face <strong>East or North</strong> (unless instructed otherwise).</li>
+                </ul>
+            </div>
+            
+            <div class="readiness-section">
+                <div class="readiness-title">
+                    <span class="number">3</span>
+                    Inner Readiness (Antah Shuddhi)
+                </div>
+                
+                <div class="sub-title">a. Breath Awareness (Prāna Sthirata)</div>
+                <ul class="readiness-list">
+                    <li>Breathe gently. Observe without force.</li>
+                </ul>
+                
+                <div class="sub-title">b. Mental Calm (Manah Shuddhi)</div>
+                <div class="prayer-text">
+                    "O Guru Bhairava, I offer my mind to you. Guide me. Purify me. Make me worthy of your grace."
+                </div>
+                
+                <div class="sub-title">c. Sankalpa (Intention)</div>
+                <div class="prayer-text">
+                    "With faith and humility, I now prepare to receive the first light of Sadhana. May Guru Bhairava bless me."
+                </div>
+            </div>
+            
+            <div class="readiness-section">
+                <div class="readiness-title">
+                    <span class="number">4</span>
+                    Humble Bhāva (Inner Feeling)
+                </div>
+                <ul class="readiness-list">
+                    <li>Approach with <strong>surrender,</strong> not expectation.</li>
+                    <li>Feel Bhairava's <strong>guidance and presence.</strong></li>
+                    <li>Be like an <strong>empty vessel,</strong> ready to receive divine light.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Final Notes -->
+        <div class="content-card final-notes-card">
+            <div class="notes-section">
+                <h3 class="notes-title">Final Note Before Deeksha or Sadhana</h3>
+                <ul class="notes-list">
+                    <li><strong>Avoid meat, alcohol, anger, gossip</strong> for 1–3 days prior.</li>
+                    <li>Practice <strong>silence (mauna)</strong> or minimal speech.</li>
+                    <li><strong>Disconnect</strong> from distractions before beginning.</li>
+                </ul>
+            </div>
+            
+            <div class="notes-section">
+                <h3 class="notes-title">After Initiation</h3>
+                <ul class="notes-list">
+                    <li>Continue <strong>daily mantra japa</strong> for 21 days (ideally up to 48 days / 1–3 Mandalas).</li>
+                    <li>On Day 22 or 49, perform <strong>Purnahuti</strong>—mentally offer all efforts at Bhairava's feet and visit to Bhaiarva temple and offer any seva.</li>
+                    <li>Keep a <strong>spiritual journal</strong> — dreams, signs, insights.</li>
+                    <li>Let the <strong>experience mature in silence</strong>—do not rush to share.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Day 3: Receiving the Guru Mantra -->
+        <div class="content-card mantra-card">
+            <h2 class="section-title">Day 3: Receiving the Guru Mantra</h2>
+            
+            <p class="mantra-intro">
+                On the third day of your sacred journey, you will receive a short audio or video transmission of the <em>Guru Mantra</em>. This is not just a sound — it is a spark of living presence, a moment where the energy of Guru Bhairava touches your inner space.
+            </p>
+            
+            <div class="mantra-warning">
+                <div class="mantra-warning-title">
+                    <i class="fas fa-exclamation-circle"></i>
+                    Please note:
+                </div>
+                <p class="mantra-warning-text">
+                    This mantra will remain accessible for <strong>only 21 minutes</strong> before it dissolves (Auto deleted) — just like a sacred flame that appears and then returns to the subtle. It is designed to be received with full presence, not stored.
+                </p>
+            </div>
+            
+            <p class="mantra-guidance">
+                That is why it is essential to have completed all preparatory steps with devotion and focus. Let your space, mind, and heart be fully aligned and ready — so that when the mantra arrives, it can root itself deeply within you, like a seed falling on fertile ground.
+            </p>
+            
+            <p class="mantra-guidance">
+                This is your moment of Diksha — initiation through sound and grace.<br>
+                Approach it not with haste, but with reverence.
+            </p>
+            
+            <div class="mantra-ready">
+                <p class="mantra-ready-text">• <em>Be ready, be open, be present.</em></p>
+                <p class="mantra-ready-final">What is meant to awaken within you, will happen.</p>
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- POST-INITIATION TAB CONTENT -->
+    <div id="post-initiation" class="tab-content">
+        
+        <!-- 1. Dhyāna – Meditative Invocation -->
+        <div class="content-card dhyana-card">
+            <h2 class="section-title">1. Dhyāna – Meditative Invocation of the Form</h2>
+            
+            <p class="purpose-text">
+                <span class="purpose-label">Purpose:</span> To bring the living presence of Guru Bhairava into your mind and subtle space through inner vision and heartfelt connection.
+            </p>
+            
+            <div class="sanskrit-box">
+                <div class="sanskrit-label">Dhyāna Mantra:</div>
+                <div class="sanskrit-text">
+                    शान्ताकारं महादेवं वज्रदंष्ट्रं दिगम्बरम्।<br>
+                    गुरुं भैरवरूपं च ध्यानं कुर्याद् विचक्षणः॥
+                </div>
+                <div class="transliteration-text">
+                    Śāntākāram Mahādevam Vajradamstram Digambaram<br>
+                    Gurum Bhairava Rūpam ca Dhyānam Kuryād Vicaksanah
+                </div>
+                <div class="kannada-text">
+                    ಶಾಂತಾಕಾರಂ ಮಹಾದೇವಂ ವಜ್ರದಂಷ್ಟ್ರಂ ದಿಗಂಬರಂ ।<br>
+                    ಗುರುಂ ಭೈರವ ರೂಪಂ ಚ ಧ್ಯಾನಂ ಕುರ್ಯಾದ್ವಿಚಕ್ಷಣಃ ॥
+                </div>
+            </div>
+            
+            <div class="meaning-box">
+                <div class="meaning-label">Meaning:</div>
+                <p class="meaning-text">
+                    "The wise should meditate on Guru Bhairava as Mahadeva — peaceful in essence, fierce with thunder-like fangs, and sky-clad, beyond all bondage. He is the Guru who liberates."
+                </p>
+            </div>
+            
+            <div class="visualization-box">
+                <div class="visualization-title">Visualization Tip:</div>
+                <ul class="visualization-list">
+                    <li>See Bhairava seated in a blazing <strong>mandala of wisdom fire,</strong> radiating clarity and protection.</li>
+                    <li>His eyes burn with the light of knowing — they see through all illusions.</li>
+                    <li>He holds the <strong>Trishula</strong> (trident) and <strong>Damaru,</strong> symbols of balance and creation.</li>
+                    <li>The mantra <em>"Om Hreem Guru Bhairavaya Namaha"</em> resonates in your inner space like a sacred hum, awakening the subtle body.</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- 2. Sankalpa – Setting the Sacred Intention -->
+        <div class="content-card sankalpa-card">
+            <h2 class="section-title">2. Sankalpa – Setting the Sacred Intention</h2>
+            
+            <p class="purpose-text">
+                <span class="purpose-label">Purpose:</span> To declare clearly, humbly, and from the heart your wish for transformation through the grace of Guru Bhairava. Sankalpa aligns your will with divine will.
+            </p>
+            
+            <div class="sanskrit-box">
+                <div class="sanskrit-label">Sankalpa Mantra (Template):</div>
+                <div class="sanskrit-text">
+                    मम आत्मानः ज्ञानसिद्ध्यर्थं<br>
+                    श्रीगुरुभैरवस्य प्रसादसिद्ध्यर्थं<br>
+                    अहम् अस्य मन्त्रस्य जपं करिष्ये।
+                </div>
+                <div class="transliteration-text">
+                    Mama ātmānah jñāna-siddhyartham<br>
+                    Śrī Guru Bhairavasya prasāda-siddhyartham<br>
+                    Aham asya mantrasya japam karisye.
+                </div>
+                <div class="kannada-text">
+                    ಮಮ ಆತ್ಮಾನಃ ಜ್ಞಾನಸಿದ್ಧ್ಯರ್ಥಂ<br>
+                    ಶ್ರೀ ಗುರು ಭೈರವಸ್ಯ ಪ್ರಸಾದಸಿದ್ಧ್ಯರ್ಥಂ<br>
+                    ಅಹಂ ಅಸ್ಯ ಮಂತ್ರಸ್ಯ ಜಪಂ ಕರಿಷ್ಯೇ।
+                </div>
+            </div>
+            
+            <div class="meaning-box">
+                <div class="meaning-label">Meaning:</div>
+                <p class="meaning-text">
+                    "For the awakening of inner wisdom and to receive the grace of Guru Bhairava, I now undertake the chanting of this sacred mantra."
+                </p>
+            </div>
+            
+            <div class="visualization-box">
+                <div class="visualization-title">Optional Personalization:</div>
+                <ul class="visualization-list">
+                    <li>Add your name, location, time, or a specific inner goal (e.g., "May ignorance be removed," or "May I find my true path under Guru's light.")</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- 3. Viniyoga – Ritual Purpose of the Mantra -->
+        <div class="content-card viniyoga-card">
+            <h2 class="section-title">3. Viniyoga – Ritual Purpose of the Mantra</h2>
+            
+            <p class="purpose-text">
+                <span class="purpose-label">Purpose:</span> To honor the lineage, the energy, and the intention behind the mantra. This is the ritual dedication that makes your practice aligned and auspicious.
+            </p>
+            
+            <div class="sanskrit-box">
+                <div class="sanskrit-label">Viniyoga for "Om Hreem Guru Bhairavaya Namaha":</div>
+                <div class="sanskrit-text">
+                    ॐ अस्य श्रीगुरुभैरवमन्त्रस्य<br>
+                    ब्रह्मा ऋषिः ।<br>
+                    अनुष्टुप् छन्दः ।<br>
+                    गुरु भैरवो देवता ।<br>
+                    ज्ञानप्राप्त्यर्थं जपे विनियोगः॥
+                </div>
+                <div class="transliteration-text">
+                    Om asya Śrī Guru Bhairava mantrasya<br>
+                    Brahmā rsih | Anustup chandah |<br>
+                    Guru Bhairava devatā |<br>
+                    Jñāna-prāptyarthan jape viniyogah ||
+                </div>
+                <div class="kannada-text">
+                    ಓಂ ಅಸ್ಯ ಶ್ರೀ ಗುರು ಭೈರವ ಮಂತ್ರಸ್ಯ<br>
+                    ಬ್ರಹ್ಮಾ ಋಷಿಃ | ಅನುಷ್ಟುಪ್ ಛಂದಃ |<br>
+                    ಗುರು ಭೈರವ ದೇವತಾ |<br>
+                    ಜ್ಞಾನ ಪ್ರಾಪ್ತ್ಯರ್ಥಂ ಜಪೇ ವಿನಿಯೋಗಃ ॥
+                </div>
+            </div>
+            
+            <div class="breakdown-box">
+                <div class="breakdown-title">Meaning Breakdown:</div>
+                <ul class="breakdown-list">
+                    <li><em>Rashi (Seer):</em> Brahma — origin of divine sound</li>
+                    <li><em>Chandah (Meter):</em> Anushtup — the meter of order and rhythm</li>
+                    <li><em>Devatā (Deity):</em> Guru Bhairava — the divine guide and revealer</li>
+                    <li><em>Purpose:</em> For the <strong>attainment of divine knowledge</strong> and wisdom</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- 4. Nyāsa – Installing the Mantra into the Body -->
+        <div class="content-card nyasa-card">
+            <h2 class="section-title">4. Nyāsa – Installing the Mantra into the Body</h2>
+            
+            <p class="purpose-text">
+                <span class="purpose-label">Purpose:</span> Nyāsa is the sacred act of installing mantric energy into your own body, transforming it into a temple for the divine to dwell. This brings Shakti directly into your subtle being.
+            </p>
+            
+            <div class="nyasa-section">
+                <h3 class="nyasa-subtitle">A. Kara Nyāsa – Energizing the Hands</h3>
+                <p class="nyasa-instruction">Chant each line while gently touching the respective finger:</p>
+                <ul class="nyasa-list">
+                    <li><em>Om Guru Bhairavaya</em> <strong>Angusthabhyam Namah</strong> – (Thumbs)</li>
+                    <li><em>Om Hreem</em> <strong>Tarjaneebhyam Namah</strong> – (Index fingers)</li>
+                    <li><em>Om Bhairavaya</em> <strong>Madhyamabhyam Namah</strong> – (Middle fingers)</li>
+                    <li><em>Om Namah</em> <strong>Anamikabhyam Namah</strong> – (Ring fingers)</li>
+                    <li><em>Om Hreem</em> <strong>Kanishtikabhyam Namah</strong> – (Little fingers)</li>
+                    <li><em>Om Guru Bhairavaya</em> <strong>Karatalakaraprsthabhyām Namah</strong> – (Palms & back of hands)</li>
+                </ul>
+            </div>
+            
+            <div class="nyasa-section">
+                <h3 class="nyasa-subtitle">B. Anga Nyāsa – Energizing the Six Sacred Points</h3>
+                <p class="nyasa-instruction">Chant the following, lightly touching each part as you do:</p>
+                <ul class="nyasa-list">
+                    <li><em>Om Guru Bhairavaya Hridayaya Namah</em> – (Heart)</li>
+                    <li><em>Om Hreem Shirase Swaha</em> – (Head)</li>
+                    <li><em>Om Bhairavaya Shikhayai Vashat</em> – (Crown/top of head)</li>
+                    <li><em>Om Namah Kavachaya Hum</em> – (Touch both shoulders)</li>
+                    <li><em>Om Hreem Netra Trayaya Vaushat</em> – (Eyes or Ajna chakra)</li>
+                    <li><em>Om Guru Bhairavaya Astraya Phat</em> – (Make a mudra like throwing divine fire outward)</li>
+                </ul>
+            </div>
+            
+            <p class="nyasa-closing">
+                This process purifies the body, aligns your energy, and prepares you for mantra japa or deeper Tantric practices.
+            </p>
+        </div>
+        
+        <!-- Final Preparation – Entering Japa -->
+        <div class="content-card japa-card">
+            <h2 class="section-title">Final Preparation – Entering Japa</h2>
+            
+            <ul class="japa-prep-list">
+                <li>Sit in <strong>Padmasana</strong> or <strong>Sukhasana.</strong></li>
+                <li>Place your hands in <strong>Jnana Mudra</strong> or <strong>Dhyana Mudra.</strong></li>
+                <li>Let your breath become calm.</li>
+                <li>Begin <strong>japa</strong> with the mantra:</li>
+            </ul>
+            
+            <div class="main-mantra-box">
+                <div class="main-mantra-sanskrit">"ॐ ह्रीं गुरु भैरवाय नमः"</div>
+                <div class="main-mantra-trans">(Om Hreem Guru Bhairavaya Namaha)</div>
+                <div class="main-mantra-kannada">ಓಂ ಹ್ರೀಂ ಗುರು ಭೈರವಾಯ ನಮಃ</div>
+            </div>
+            
+            <p class="japa-instruction">
+                Recite it <strong>21 Mala's (108 each),</strong> or more as guided by your heart. Let it become your breath, your mind, your offering.
+            </p>
+        </div>
+        
+        <!-- Closing Thought -->
+        <div class="content-card closing-card">
+            <h2 class="section-title">Closing Thought</h2>
+            
+            <div class="closing-text">
+                <p>As you complete these sacred steps of Guru Bhairava Puja, pause for a moment and gently remind your heart — you are not inviting Bhairava from outside into yourself. You are simply lifting the veils, one breath and one mantra at a time, that have hidden His presence within you all along.</p>
+                
+                <p>He has never been distant.<br>
+                He has never been absent.<br>
+                He has been waiting, patiently, as the silent witness in your breath, in your longing, and in your courage to walk this path.</p>
+                
+                <p>Feel the quiet smile of the Guru arising from within — not just in your heart, but in your awareness.</p>
+                
+                <p>Let his mantra be the thread that holds your mind steady.<br>
+                Let his form become the mirror in which your higher self awakens.<br>
+                And let the inner fire, kindled through devotion and discipline, be your constant companion and purifier.</p>
+                
+                <p>Every step you take on this path is already held in his grace.<br>
+                May that grace guide you, protect you, and transform you — until the seeker, the path, and the Guru become One.</p>
+            </div>
+            
+            <div class="closing-emphasis">Jai Guru Bhairava.</div>
+        </div>
+        
+    </div>
+
+    <!-- Actions -->
+    <div class="stage-actions">
+        <a href="/padati" class="btn-back">
+            <i class="fas fa-arrow-left"></i>
+            Back to Progress
+        </a>
+    </div>
+    
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Tab functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const tabId = this.getAttribute('data-tab');
+            
+            // Remove active class from all buttons and contents
+            tabBtns.forEach(b => b.classList.remove('active'));
+            tabContents.forEach(c => c.classList.remove('active'));
+            
+            // Add active class to clicked button and corresponding content
+            this.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+            
+            // Scroll to top of content area
+            document.querySelector('.anugraha-main').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+    
+    // Smooth scroll animations for cards
+    const cards = document.querySelectorAll('.content-card');
+    
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = `opacity 0.6s ease ${(index % 6) * 0.1}s, transform 0.6s ease ${(index % 6) * 0.1}s`;
+        observer.observe(card);
+    });
+});
+</script>
+{% endblock %}
+
+

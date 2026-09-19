@@ -1,0 +1,1433 @@
+{% extends "base.html" %}
+
+{% block extra_styles %}
+<style>
+/* ==========================================================================
+   ADMIN USER MANAGEMENT · SACRED DARK-GOLD LUXURY THEME
+   ========================================================================== */
+.admin-dashboard {
+  background: var(--ink, #0e0a06);
+  color: var(--paper, #e9dfc8);
+  min-height: calc(100vh - 72px);
+  padding: 2.5rem 1.25rem 4rem;
+  background-image: 
+    radial-gradient(circle at 50% 10%, rgba(212, 166, 74, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at 90% 80%, rgba(106, 16, 16, 0.07) 0%, transparent 50%);
+}
+
+.admin-dashboard .container {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+/* Header */
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding: 1.5rem 2rem;
+  background: rgba(20, 15, 12, 0.9);
+  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+.dashboard-title-section {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.dashboard-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(212, 166, 74, 0.25) 0%, rgba(106, 16, 16, 0.35) 100%);
+  border: 1px solid var(--gold, #d4a64a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  color: var(--gold-3, #f0d48a);
+  box-shadow: 0 0 20px rgba(212, 166, 74, 0.25);
+}
+
+.dashboard-title h1 {
+  font-family: var(--display, serif);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--paper-bright, #fdfaf2);
+  margin: 0 0 0.2rem;
+  letter-spacing: 0.02em;
+}
+
+.dashboard-title p {
+  font-size: 0.92rem;
+  color: var(--paper-2, #d6c9a3);
+  margin: 0;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.65rem 1.4rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f0d48a 0%, #d4a64a 50%, #b8842a 100%);
+  color: #0e0a06 !important;
+  border: 1px solid #f0d48a;
+  font-family: var(--serif, serif);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 15px rgba(212, 166, 74, 0.35);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(212, 166, 74, 0.55);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.65rem 1.4rem;
+  border-radius: 999px;
+  background: rgba(14, 10, 6, 0.8);
+  color: var(--paper-bright, #fdfaf2);
+  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+  font-family: var(--serif, serif);
+  font-size: 0.95rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-secondary:hover {
+  border-color: var(--gold, #d4a64a);
+  color: var(--gold-3, #f0d48a);
+  background: rgba(28, 20, 16, 0.9);
+}
+
+/* KPI Quick Stats */
+.quick-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: rgba(20, 15, 12, 0.88);
+  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+}
+
+.stat-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.stat-icon.total { background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(59, 130, 246, 0.4); color: #93c5fd; }
+.stat-icon.approved { background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); color: #6ee7b7; }
+.stat-icon.pending { background: rgba(245, 158, 11, 0.2); border: 1px solid rgba(245, 158, 11, 0.4); color: #fcd34d; }
+.stat-icon.suspended { background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); color: #fca5a5; }
+
+.stat-info h3 {
+  font-family: var(--display, serif);
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--paper-bright, #fdfaf2);
+  margin: 0;
+  line-height: 1;
+}
+
+.stat-info p {
+  margin: 4px 0 0;
+  color: var(--ink-mute, rgba(233, 223, 200, 0.68));
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Search Section */
+.search-section {
+  background: rgba(20, 15, 12, 0.88);
+  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+}
+
+.search-header h3 {
+  font-family: var(--display, serif);
+  font-size: 1.15rem;
+  color: var(--gold-3, #f0d48a);
+  margin: 0 0 1rem;
+}
+
+.search-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr auto;
+  gap: 1.25rem;
+  align-items: end;
+}
+
+.search-input-group label {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--ink-mute, rgba(233, 223, 200, 0.68));
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.search-input-wrapper {
+  position: relative;
+}
+
+.search-input-wrapper i {
+  position: absolute;
+  left: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gold, #d4a64a);
+  font-size: 0.85rem;
+}
+
+.search-input,
+.filter-select {
+  width: 100%;
+  background: rgba(14, 10, 6, 0.85) !important;
+  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35)) !important;
+  border-radius: 8px !important;
+  color: var(--paper-bright, #fdfaf2) !important;
+  font-family: var(--serif, Georgia, serif) !important;
+  font-size: 0.95rem !important;
+  padding: 0.65rem 1rem !important;
+  outline: none !important;
+  transition: all 0.25s ease !important;
+}
+
+.search-input {
+  padding-left: 2.4rem !important;
+}
+
+.search-input:focus,
+.filter-select:focus {
+  border-color: var(--gold-3, #f0d48a) !important;
+  box-shadow: 0 0 15px rgba(212, 166, 74, 0.3) !important;
+}
+
+.search-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Content Grid */
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 2rem;
+}
+
+@media (max-width: 1100px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Users List Section */
+.users-section {
+  background: rgba(20, 15, 12, 0.9);
+  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+.section-header-bar {
+  background: linear-gradient(135deg, rgba(212, 166, 74, 0.25) 0%, rgba(106, 16, 16, 0.3) 100%);
+  border-bottom: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.section-header-bar h2 {
+  font-family: var(--display, serif);
+  font-size: 1.3rem;
+  color: var(--paper-bright, #fdfaf2);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-count-badge {
+  background: rgba(212, 166, 74, 0.15);
+  color: var(--gold-3, #f0d48a);
+  border: 1px solid rgba(212, 166, 74, 0.35);
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-family: var(--mono, monospace);
+}
+
+.users-list {
+  padding: 1.25rem;
+  max-height: 800px;
+  overflow-y: auto;
+}
+
+/* User Card */
+.user-card-new {
+  background: rgba(22, 17, 26, 0.95);
+  border: 1px solid rgba(212, 166, 74, 0.28);
+  border-radius: 14px;
+  margin-bottom: 1.25rem;
+  transition: all 0.25s ease;
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
+}
+
+.user-card-new:hover {
+  transform: translateY(-2px);
+  border-color: var(--gold, #d4a64a);
+  box-shadow: 0 8px 24px rgba(212, 166, 74, 0.18);
+}
+
+.user-card-new.approved { border-left: 4px solid #10b981; }
+.user-card-new.pending { border-left: 4px solid #f59e0b; }
+.user-card-new.suspended { border-left: 4px solid #ef4444; }
+.user-card-new.admin { border-left: 4px solid #3b82f6; }
+
+.user-card-header {
+  display: flex;
+  align-items: center;
+  padding: 1.25rem;
+  gap: 1.25rem;
+}
+
+.user-avatar-new {
+  width: 54px;
+  height: 54px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1.5px solid var(--gold, #d4a64a);
+}
+
+.user-avatar-new img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.user-info-new {
+  flex: 1;
+  min-width: 0;
+}
+
+.user-fullname {
+  font-family: var(--display, serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--gold-3, #f0d48a);
+  margin: 0;
+}
+
+.user-spiritual {
+  font-size: 0.9rem;
+  color: var(--gold, #d4a64a);
+  font-style: italic;
+}
+
+.user-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+
+.user-username-new,
+.user-email-new {
+  color: var(--paper-2, #d6c9a3);
+  font-size: 0.85rem;
+}
+
+.user-badges {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.badge-new {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-admin { background: rgba(59, 130, 246, 0.2); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.4); }
+.badge-approved { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); }
+.badge-pending { background: rgba(245, 158, 11, 0.2); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.4); }
+.badge-suspended { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); }
+.badge-role { background: rgba(157, 78, 221, 0.2); color: #d8b4fe; border: 1px solid rgba(157, 78, 221, 0.4); }
+
+.user-card-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.action-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+  background: rgba(14, 10, 6, 0.8);
+  color: var(--paper-bright, #fdfaf2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.88rem;
+  text-decoration: none;
+}
+
+.action-btn.view:hover { background: rgba(59, 130, 246, 0.3); color: #93c5fd; border-color: #3b82f6; }
+.action-btn.approve:hover { background: rgba(16, 185, 129, 0.3); color: #6ee7b7; border-color: #10b981; }
+.action-btn.reject:hover, .action-btn.suspend:hover { background: rgba(239, 68, 68, 0.3); color: #fca5a5; border-color: #ef4444; }
+
+.user-card-body {
+  padding: 0 1.25rem 1.25rem;
+  border-top: 1px solid rgba(212, 166, 74, 0.12);
+}
+
+.user-details-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  padding-top: 1rem;
+}
+
+.detail-item {
+  background: rgba(14, 10, 6, 0.7);
+  border: 1px solid rgba(212, 166, 74, 0.15);
+  border-radius: 8px;
+  padding: 0.6rem;
+  text-align: center;
+}
+
+.detail-item i {
+  color: var(--gold, #d4a64a);
+  margin-bottom: 2px;
+}
+
+.detail-label {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--ink-mute, rgba(233, 223, 200, 0.68));
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.detail-value {
+  display: block;
+  font-weight: 600;
+  color: var(--paper-bright, #fdfaf2);
+  font-size: 0.85rem;
+}
+
+.purpose-section {
+  margin-top: 0.85rem;
+  padding: 0.85rem;
+  background: rgba(14, 10, 6, 0.7);
+  border: 1px solid rgba(212, 166, 74, 0.15);
+  border-radius: 8px;
+}
+
+.purpose-section h4 {
+  font-size: 0.75rem;
+  color: var(--gold, #d4a64a);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 4px 0;
+}
+
+.purpose-text-new {
+  font-size: 0.88rem;
+  color: var(--paper-2, #d6c9a3);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Sidebar Section */
+.sidebar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.requests-card,
+.chart-card {
+  background: rgba(20, 15, 12, 0.9);
+  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+.requests-header {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.3) 0%, rgba(106, 16, 16, 0.3) 100%);
+  border-bottom: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.requests-header h3,
+.chart-header h3 {
+  font-family: var(--display, serif);
+  font-size: 1.15rem;
+  color: var(--paper-bright, #fdfaf2);
+  margin: 0;
+}
+
+.requests-count-badge {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fcd34d;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+}
+
+.requests-list {
+  padding: 1rem;
+  max-height: 380px;
+  overflow-y: auto;
+}
+
+.request-card {
+  background: rgba(14, 10, 6, 0.7);
+  border: 1px solid rgba(212, 166, 74, 0.2);
+  border-radius: 10px;
+  padding: 0.85rem;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.request-info {
+  flex: 1;
+}
+
+.request-name {
+  font-weight: 600;
+  color: var(--gold-3, #f0d48a);
+  font-size: 0.9rem;
+}
+
+.request-stage {
+  font-size: 0.8rem;
+  color: var(--paper-2, #d6c9a3);
+}
+
+.request-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.request-btn.approve { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); }
+.request-btn.approve:hover { background: rgba(16, 185, 129, 0.4); }
+.request-btn.reject { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); }
+.request-btn.reject:hover { background: rgba(239, 68, 68, 0.4); }
+
+.empty-requests {
+  padding: 2rem;
+  text-align: center;
+}
+
+.empty-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 0.75rem;
+  color: #6ee7b7;
+  font-size: 1.4rem;
+}
+
+.empty-requests p {
+  font-size: 0.9rem;
+  color: var(--ink-mute, rgba(233, 223, 200, 0.68));
+  margin: 0;
+}
+
+.chart-card {
+  padding: 1.5rem;
+}
+
+.chart-header {
+  border-bottom: 1px solid rgba(212, 166, 74, 0.15);
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.stat-bar-item {
+  margin-bottom: 0.85rem;
+}
+
+.stat-bar-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  color: var(--paper-2, #d6c9a3);
+  margin-bottom: 4px;
+}
+
+.stat-bar-track {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(14, 10, 6, 0.8);
+  border: 1px solid rgba(212, 166, 74, 0.15);
+  overflow: hidden;
+}
+
+.stat-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--gold, #d4a64a), var(--gold-3, #f0d48a));
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="admin-dashboard">
+    <div class="container">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <div class="dashboard-title-section">
+                <div class="dashboard-icon">👥</div>
+                <div class="dashboard-title">
+                    <h1>User Management</h1>
+                    <p>Manage users, approvals, and access requests</p>
+                </div>
+            </div>
+            <div class="dashboard-actions">
+                <a href="{{ url_for('auth.user_report') }}" class="btn btn-primary" id="downloadBtn">
+                    <i class="fas fa-download"></i>
+                    <span>Export Report</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="quick-stats">
+            <div class="stat-card">
+                <div class="stat-icon total">👤</div>
+                <div class="stat-info">
+                    <h3 id="stat-total">--</h3>
+                    <p>Total Users</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon approved">✓</div>
+                <div class="stat-info">
+                    <h3 id="stat-approved">--</h3>
+                    <p>Approved</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon pending">⏳</div>
+                <div class="stat-info">
+                    <h3 id="stat-pending">--</h3>
+                    <p>Pending</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon suspended">⛔</div>
+                <div class="stat-info">
+                    <h3 id="stat-suspended">--</h3>
+                    <p>Suspended</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CSRF Token for AJAX requests -->
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <!-- Search & Filter -->
+        <div class="search-section">
+            <div class="search-header">
+                <h3><i class="fas fa-filter"></i> Search & Filter</h3>
+            </div>
+            <form method="GET" action="{{ url_for('auth.admin_users') }}" id="searchForm">
+                <div class="search-grid">
+                    <div class="search-input-group">
+                        <label>Search Users</label>
+                        <div class="search-input-wrapper">
+                            <i class="fas fa-search"></i>
+                            {{ search_form.search_term(class="search-input", placeholder="Search by name, username, or email...", id="searchInput") }}
+                        </div>
+                    </div>
+                    <div class="search-input-group">
+                        <label>Status</label>
+                        {{ search_form.status_filter(class="filter-select", id="statusFilter") }}
+                    </div>
+                    <div class="search-input-group">
+                        <label>Role</label>
+                        {{ search_form.role_filter(class="filter-select", id="roleFilter") }}
+                    </div>
+                    <div class="search-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                        <a href="{{ url_for('auth.admin_users') }}" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Clear
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="content-grid">
+            <!-- Users Section -->
+            <div class="users-section">
+                <div class="section-header-bar">
+                    <h2><i class="fas fa-users"></i> Users</h2>
+                    <span class="user-count-badge">{{ users|length }} user{{ 's' if users|length != 1 else '' }}</span>
+                </div>
+                
+                <div class="users-list" id="usersGrid">
+                    {% if users %}
+                        {% for user in users %}
+                        <div class="user-card-new {% if user.is_admin() %}admin{% elif not user.is_active %}suspended{% elif not user.is_approved %}pending{% else %}approved{% endif %}" data-user-id="{{ user.id }}">
+                            <div class="user-card-header">
+                                <div class="user-avatar-new">
+                                    {% if user.profile_picture %}
+                                        <img src="{{ url_for('static', filename=user.profile_picture) }}" alt="{{ user.full_name }}" loading="lazy">
+                                    {% else %}
+                                        <img src="https://i.pravatar.cc/112?u={{ user.id }}" alt="{{ user.full_name }}" loading="lazy">
+                                    {% endif %}
+                                </div>
+                                <div class="user-info-new">
+                                    <div class="user-name-row">
+                                        <h4 class="user-fullname">{{ user.full_name }}</h4>
+                                        {% if user.spiritual_name %}
+                                            <span class="user-spiritual">({{ user.spiritual_name }})</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="user-meta">
+                                        <span class="user-username-new">@{{ user.username }}</span>
+                                        <span class="user-email-new"><i class="fas fa-envelope"></i> {{ user.email }}</span>
+                                    </div>
+                                </div>
+                                <div class="user-badges">
+                                    {% if user.is_admin() %}
+                                        <span class="badge-new badge-admin">Admin</span>
+                                    {% elif user.is_approved %}
+                                        <span class="badge-new badge-approved">Approved</span>
+                                    {% elif not user.is_active %}
+                                        <span class="badge-new badge-suspended">Suspended</span>
+                                    {% else %}
+                                        <span class="badge-new badge-pending">Pending</span>
+                                    {% endif %}
+                                    <span class="badge-new badge-role">{{ user.role|title }}</span>
+                                </div>
+                                <div class="user-card-actions">
+                                    <a href="{{ url_for('auth.admin_user_detail', user_id=user.id) }}" class="action-btn view" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    {% if not user.is_admin() %}
+                                        {% if user.is_approved and user.is_active %}
+                                            <button class="action-btn suspend suspend-user" data-user-id="{{ user.id }}" title="Suspend User">
+                                                <i class="fas fa-ban"></i>
+                                            </button>
+                                        {% elif not user.is_approved and user.is_active %}
+                                            <button class="action-btn approve approve-user" data-user-id="{{ user.id }}" title="Approve User">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                            <button class="action-btn reject reject-user" data-user-id="{{ user.id }}" title="Reject User">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        {% elif not user.is_active %}
+                                            <button class="action-btn reactivate reactivate-user" data-user-id="{{ user.id }}" title="Reactivate User">
+                                                <i class="fas fa-undo"></i>
+                                            </button>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="user-card-body">
+                                <div class="user-details-grid">
+                                    <div class="detail-item">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span class="detail-label">Joined</span>
+                                        <span class="detail-value">{{ user.created_at.strftime('%b %d, %Y') }}</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <i class="fas fa-clock"></i>
+                                        <span class="detail-label">Last Active</span>
+                                        <span class="detail-value last-active-time" data-timestamp="{{ user.last_active.isoformat() if user.last_active else '' }}">
+                                            {% if user.last_active %}
+                                                {{ user.last_active.strftime('%b %d, %I:%M %p') }}
+                                            {% else %}
+                                                Never
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <i class="fas fa-layer-group"></i>
+                                        <span class="detail-label">Stage Access</span>
+                                        <span class="detail-value">
+                                            {% if user.mandala_3_access %}Stage 3
+                                            {% elif user.mandala_2_access %}Stage 2
+                                            {% elif user.mandala_1_access %}Stage 1
+                                            {% else %}None{% endif %}
+                                        </span>
+                                    </div>
+                                </div>
+                                {% if user.purpose %}
+                                <div class="purpose-section">
+                                    <h4><i class="fas fa-heart"></i> Purpose for Sadhana</h4>
+                                    <p class="purpose-text-new">{{ user.purpose[:150] }}{% if user.purpose|length > 150 %}...{% endif %}</p>
+                                    {% if user.purpose|length > 150 %}
+                                        <button class="read-more-btn show-full-purpose" data-purpose="{{ user.purpose }}">Read more</button>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">
+                            <div class="empty-icon">🔍</div>
+                            <h3>No Users Found</h3>
+                            <p>No users match your search criteria. Try adjusting your filters.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar-section">
+                <!-- Pending Requests -->
+                <div class="requests-card">
+                    <div class="requests-header">
+                        <h3><i class="fas fa-clock"></i> Stage Access Requests</h3>
+                        <span class="requests-count">{{ pending_requests|length if pending_requests else 0 }}</span>
+                    </div>
+                    <div class="requests-list-new">
+                        {% if pending_requests %}
+                            {% for request in pending_requests %}
+                            <div class="request-item-new" data-request-id="{{ request.id }}">
+                                <div class="request-user-row">
+                                    <div class="request-avatar">
+                                        {% if request.user.profile_picture %}
+                                            <img src="{{ url_for('static', filename=request.user.profile_picture) }}" alt="{{ request.user.full_name }}">
+                                        {% else %}
+                                            <img src="https://i.pravatar.cc/80?u={{ request.user_id }}" alt="User">
+                                        {% endif %}
+                                    </div>
+                                    <div class="request-user-info">
+                                        <div class="request-user-name">{{ request.user.full_name }}</div>
+                                        <div class="request-user-handle">@{{ request.user.username }}</div>
+                                    </div>
+                                </div>
+                                <div class="request-stage">
+                                    <div class="request-stage-name">{{ request.get_stage_name() }}</div>
+                                    <div class="request-date">Requested {{ request.requested_at.strftime('%b %d at %I:%M %p') }}</div>
+                                </div>
+                                <div class="request-actions-row">
+                                    <button class="request-btn approve btn-approve-request" data-request-id="{{ request.id }}">
+                                        <i class="fas fa-check"></i> Approve
+                                    </button>
+                                    <button class="request-btn reject btn-reject-request" data-request-id="{{ request.id }}">
+                                        <i class="fas fa-times"></i> Reject
+                                    </button>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="no-requests-state">
+                                <div class="no-requests-icon">✅</div>
+                                <p>No pending access requests</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Analytics Charts -->
+                <div class="charts-card">
+                    <div class="charts-header">
+                        <h3><i class="fas fa-chart-pie"></i> Analytics</h3>
+                    </div>
+                    <div class="charts-body">
+                        <div class="chart-container">
+                            <h4>User Status Distribution</h4>
+                            <canvas id="userStatusChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h4>Stage Access Distribution</h4>
+                            <canvas id="mandalaAccessChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Purpose Modal -->
+<div class="modal-overlay" id="purposeModal">
+    <div class="modal-box">
+        <div class="modal-box-header">
+            <h3><i class="fas fa-heart"></i> Purpose for Sadhana</h3>
+            <button class="modal-close-btn" onclick="closePurposeModal()">×</button>
+        </div>
+        <div class="modal-box-body" id="purposeModalBody">
+            <!-- Content inserted here -->
+        </div>
+    </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div class="modal-overlay" id="confirmModal">
+    <div class="modal-box">
+        <div class="modal-box-header">
+            <h3><i class="fas fa-exclamation-triangle"></i> Confirm Action</h3>
+            <button class="modal-close-btn" onclick="closeConfirmModal()">×</button>
+        </div>
+        <div class="modal-box-body">
+            <p id="confirmMessage"></p>
+        </div>
+        <div class="modal-box-footer">
+            <button class="btn btn-secondary" onclick="closeConfirmModal()">Cancel</button>
+            <button class="btn btn-danger" id="confirmActionBtn">Confirm</button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Fetch and display stats
+    fetchStats();
+    
+    // Setup event listeners
+    setupSearchFilters();
+    setupUserActions();
+    setupRequestActions();
+    setupPurposeModals();
+    
+    // Format last active times as relative time
+    formatLastActiveTimes();
+});
+
+function formatLastActiveTimes() {
+    const elements = document.querySelectorAll('.last-active-time');
+    elements.forEach(el => {
+        const timestamp = el.dataset.timestamp;
+        if (timestamp) {
+            const date = new Date(timestamp + 'Z'); // Add Z to treat as UTC
+            const now = new Date();
+            const diffMs = now - date;
+            const diffSecs = Math.floor(diffMs / 1000);
+            const diffMins = Math.floor(diffSecs / 60);
+            const diffHours = Math.floor(diffMins / 60);
+            const diffDays = Math.floor(diffHours / 24);
+            
+            let relativeTime;
+            if (diffSecs < 60) {
+                relativeTime = 'Just now';
+            } else if (diffMins < 60) {
+                relativeTime = `${diffMins} min${diffMins > 1 ? 's' : ''} ago`;
+            } else if (diffHours < 24) {
+                relativeTime = `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+            } else if (diffDays < 7) {
+                relativeTime = `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+            } else {
+                // Show date for older entries
+                relativeTime = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            }
+            
+            // Add indicator for recently active users
+            if (diffMins < 5) {
+                el.innerHTML = `<span style="color: #22c55e;">● ${relativeTime}</span>`;
+            } else if (diffMins < 30) {
+                el.innerHTML = `<span style="color: #f59e0b;">● ${relativeTime}</span>`;
+            } else {
+                el.textContent = relativeTime;
+            }
+            
+            // Add tooltip with exact time
+            el.title = date.toLocaleString();
+        }
+    });
+    
+    // Update every minute
+    setTimeout(formatLastActiveTimes, 60000);
+}
+
+function fetchStats() {
+    fetch('{{ url_for("auth.user_kpi_data") }}')
+        .then(response => response.json())
+        .then(data => {
+            // Animate stats
+            animateValue('stat-total', 0, data.kpis.total_users, 1000);
+            animateValue('stat-approved', 0, data.kpis.approved_users, 1000);
+            animateValue('stat-pending', 0, data.kpis.pending_users, 1000);
+            animateValue('stat-suspended', 0, data.kpis.suspended_users, 1000);
+            
+            // Render charts
+            renderCharts(data.charts);
+        })
+        .catch(error => {
+            console.error('Error fetching stats:', error);
+            document.getElementById('stat-total').textContent = '?';
+            document.getElementById('stat-approved').textContent = '?';
+            document.getElementById('stat-pending').textContent = '?';
+            document.getElementById('stat-suspended').textContent = '?';
+        });
+}
+
+function animateValue(id, start, end, duration) {
+    const obj = document.getElementById(id);
+    const range = end - start;
+    const startTime = performance.now();
+    
+    function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeProgress = 1 - Math.pow(1 - progress, 3);
+        obj.textContent = Math.floor(start + range * easeProgress);
+        
+        if (progress < 1) {
+            requestAnimationFrame(update);
+        }
+    }
+    requestAnimationFrame(update);
+}
+
+function renderCharts(chartData) {
+    if (typeof Chart === 'undefined') {
+        console.warn('Chart.js library is not loaded yet');
+        return;
+    }
+    // User Status Chart
+    const statusCtx = document.getElementById('userStatusChart');
+    if (statusCtx) {
+        new Chart(statusCtx, {
+            type: 'doughnut',
+            data: {
+                labels: chartData.user_status_distribution.labels,
+                datasets: [{
+                    data: chartData.user_status_distribution.data,
+                    backgroundColor: [
+                        'rgba(34, 197, 94, 0.8)',
+                        'rgba(245, 158, 11, 0.8)',
+                        'rgba(239, 68, 68, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(34, 197, 94, 1)',
+                        'rgba(245, 158, 11, 1)',
+                        'rgba(239, 68, 68, 1)'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
+                cutout: '60%'
+            }
+        });
+    }
+    
+    // Mandala Access Chart
+    const mandalaCtx = document.getElementById('mandalaAccessChart');
+    if (mandalaCtx) {
+        new Chart(mandalaCtx, {
+            type: 'bar',
+            data: {
+                labels: chartData.mandala_access_distribution.labels,
+                datasets: [{
+                    label: 'Users',
+                    data: chartData.mandala_access_distribution.data,
+                    backgroundColor: [
+                        'rgba(196, 30, 58, 0.8)',
+                        'rgba(234, 88, 12, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(196, 30, 58, 1)',
+                        'rgba(234, 88, 12, 1)'
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { precision: 0 }
+                    }
+                }
+            }
+        });
+    }
+}
+
+function setupSearchFilters() {
+    const searchInput = document.getElementById('searchInput');
+    const statusFilter = document.getElementById('statusFilter');
+    const roleFilter = document.getElementById('roleFilter');
+    const userCards = document.querySelectorAll('.user-card-new');
+    
+    let searchTimeout;
+    
+    function filterUsers() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const statusValue = statusFilter.value.toLowerCase();
+        const roleValue = roleFilter.value.toLowerCase();
+        let visibleCount = 0;
+        
+        userCards.forEach(card => {
+            const fullname = card.querySelector('.user-fullname').textContent.toLowerCase();
+            const username = card.querySelector('.user-username-new').textContent.toLowerCase();
+            const email = card.querySelector('.user-email-new').textContent.toLowerCase();
+            const badges = card.querySelectorAll('.badge-new');
+            
+            let status = '';
+            let role = '';
+            badges.forEach(badge => {
+                const text = badge.textContent.toLowerCase().trim();
+                if (['admin', 'approved', 'pending', 'suspended'].includes(text)) {
+                    status = text;
+                } else {
+                    role = text;
+                }
+            });
+            
+            const searchMatch = fullname.includes(searchTerm) || 
+                               username.includes(searchTerm) || 
+                               email.includes(searchTerm);
+            const statusMatch = statusValue === 'all' || status === statusValue;
+            const roleMatch = roleValue === 'all' || role === roleValue;
+            
+            if (searchMatch && statusMatch && roleMatch) {
+                card.style.display = '';
+                card.style.animation = 'fadeInUp 0.3s ease-out';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+        
+        // Update count badge
+        const countBadge = document.querySelector('.user-count-badge');
+        if (countBadge) {
+            countBadge.textContent = `${visibleCount} user${visibleCount !== 1 ? 's' : ''}`;
+        }
+    }
+    
+    searchInput.addEventListener('input', function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(filterUsers, 300);
+    });
+    
+    statusFilter.addEventListener('change', filterUsers);
+    roleFilter.addEventListener('change', filterUsers);
+}
+
+function setupUserActions() {
+    // Approve User
+    document.querySelectorAll('.approve-user').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const userId = this.dataset.userId;
+            executeUserAction(userId, 'approve', 'Approved via quick action');
+        });
+    });
+    
+    // Reject User
+    document.querySelectorAll('.reject-user').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const userId = this.dataset.userId;
+            openConfirmModal('Are you sure you want to reject this user?', function() {
+                executeUserAction(userId, 'reject', 'Rejected via quick action');
+            });
+        });
+    });
+    
+    // Suspend User
+    document.querySelectorAll('.suspend-user').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const userId = this.dataset.userId;
+            openConfirmModal('Are you sure you want to suspend this user?', function() {
+                executeUserAction(userId, 'suspend', 'Suspended via quick action');
+            });
+        });
+    });
+    
+    // Reactivate User
+    document.querySelectorAll('.reactivate-user').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const userId = this.dataset.userId;
+            executeUserAction(userId, 'approve', 'Reactivated via quick action');
+        });
+    });
+}
+
+function setupRequestActions() {
+    document.querySelectorAll('.btn-approve-request').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const requestId = this.dataset.requestId;
+            handleStageRequest(requestId, 'approve');
+        });
+    });
+    
+    document.querySelectorAll('.btn-reject-request').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const requestId = this.dataset.requestId;
+            openConfirmModal('Are you sure you want to reject this access request?', function() {
+                handleStageRequest(requestId, 'reject');
+            });
+        });
+    });
+}
+
+function setupPurposeModals() {
+    document.querySelectorAll('.show-full-purpose').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const purpose = this.dataset.purpose;
+            document.getElementById('purposeModalBody').innerHTML = `<p style="line-height: 1.8;">${purpose}</p>`;
+            document.getElementById('purposeModal').classList.add('active');
+        });
+    });
+}
+
+function closePurposeModal() {
+    document.getElementById('purposeModal').classList.remove('active');
+}
+
+function openConfirmModal(message, onConfirm) {
+    document.getElementById('confirmMessage').textContent = message;
+    document.getElementById('confirmModal').classList.add('active');
+    
+    const confirmBtn = document.getElementById('confirmActionBtn');
+    confirmBtn.onclick = function() {
+        onConfirm();
+        closeConfirmModal();
+    };
+}
+
+function closeConfirmModal() {
+    document.getElementById('confirmModal').classList.remove('active');
+}
+
+function executeUserAction(userId, action, notes) {
+    const csrfToken = document.querySelector('input[name="csrf_token"]');
+    if (!csrfToken) {
+        showToast('Security token not found. Please refresh the page.', 'error');
+        return;
+    }
+    
+    fetch('{{ url_for("auth.approve_user") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            'user_id': userId,
+            'action': action,
+            'notes': notes,
+            'csrf_token': csrfToken.value
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast(data.message, 'success');
+            setTimeout(() => location.reload(), 1500);
+        } else {
+            showToast('Error: ' + data.message, 'error');
+        }
+    })
+    .catch(error => {
+        showToast('An error occurred. Please try again.', 'error');
+        console.error('Error:', error);
+    });
+}
+
+function handleStageRequest(requestId, action) {
+    const csrfToken = document.querySelector('input[name="csrf_token"]');
+    if (!csrfToken) {
+        showToast('Security token not found. Please refresh the page.', 'error');
+        return;
+    }
+    
+    const btn = document.querySelector(`.btn-approve-request[data-request-id="${requestId}"], .btn-reject-request[data-request-id="${requestId}"]`);
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    }
+    
+    fetch(`{{ url_for('auth.approve_stage_request', request_id=0) }}`.replace('0', requestId), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            'action': action,
+            'csrf_token': csrfToken.value
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast(data.message, 'success');
+            
+            const requestItem = document.querySelector(`.request-item-new[data-request-id="${requestId}"]`);
+            if (requestItem) {
+                requestItem.style.animation = 'fadeOut 0.3s ease-out forwards';
+                setTimeout(() => {
+                    requestItem.remove();
+                    
+                    const requestsList = document.querySelector('.requests-list-new');
+                    const remainingItems = requestsList.querySelectorAll('.request-item-new');
+                    
+                    const countBadge = document.querySelector('.requests-count');
+                    if (countBadge) {
+                        countBadge.textContent = remainingItems.length;
+                    }
+                    
+                    if (remainingItems.length === 0) {
+                        requestsList.innerHTML = `
+                            <div class="no-requests-state">
+                                <div class="no-requests-icon">✅</div>
+                                <p>No pending access requests</p>
+                            </div>
+                        `;
+                    }
+                }, 300);
+            }
+        } else {
+            showToast('Error: ' + data.message, 'error');
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = action === 'approve' ? '<i class="fas fa-check"></i> Approve' : '<i class="fas fa-times"></i> Reject';
+            }
+        }
+    })
+    .catch(error => {
+        showToast('An error occurred. Please try again.', 'error');
+        console.error('Error:', error);
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = action === 'approve' ? '<i class="fas fa-check"></i> Approve' : '<i class="fas fa-times"></i> Reject';
+        }
+    });
+}
+
+function showToast(message, type) {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `
+        <span class="toast-icon">
+            <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+        </span>
+        <span class="toast-content">${message}</span>
+        <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+    `;
+    container.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.style.animation = 'toastSlide 0.3s ease-out reverse forwards';
+        setTimeout(() => toast.remove(), 300);
+    }, 5000);
+}
+
+// Close modals on outside click
+document.querySelectorAll('.modal-overlay').forEach(modal => {
+    modal.addEventListener('click', function(e) {
+        if (e.target === this) {
+            this.classList.remove('active');
+        }
+    });
+});
+
+// Keyboard accessibility
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+            modal.classList.remove('active');
+        });
+    }
+});
+</script>
+{% endblock %}

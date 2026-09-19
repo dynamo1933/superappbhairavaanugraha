@@ -1,0 +1,934 @@
+{% extends "base.html" %}
+
+{% block title %}Spiritual Profile · {{ current_user.full_name or current_user.username }} - Bhairava Anugraha{% endblock %}
+
+{% block content %}
+<div class="profile-page-sanctuary">
+  <div class="profile-max-container">
+
+    <!-- Devotee Hero Banner -->
+    <header class="profile-hero-card">
+      <div class="card-glow-edge"></div>
+      
+      <div class="profile-avatar-wrap">
+        <div class="profile-avatar-ring">
+          {% if current_user.profile_picture %}
+            <img src="{{ url_for('auth.profile_picture', user_id=current_user.id) }}" alt="{{ current_user.full_name }}" class="profile-img-lg" />
+          {% else %}
+            <div class="profile-initials-lg">
+              {{ current_user.full_name[0] if current_user.full_name else current_user.username[0] }}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="profile-title-area">
+        <div class="profile-badges-row">
+          {% if current_user.is_admin() %}
+            <span class="badge-pill badge-admin"><i class="fas fa-shield-halved"></i> Administrator</span>
+          {% endif %}
+          {% if current_user.is_approved %}
+            <span class="badge-pill badge-approved"><i class="fas fa-circle-check"></i> Initiated & Approved</span>
+          {% else %}
+            <span class="badge-pill badge-pending"><i class="fas fa-hourglass-half"></i> Pending Review</span>
+          {% endif %}
+          <span class="badge-pill badge-member"><i class="fas fa-calendar-check"></i> Member since {{ current_user.created_at.strftime('%b %Y') }}</span>
+        </div>
+
+        <h1 class="profile-devotee-name">{{ current_user.full_name or current_user.username }}</h1>
+        {% if current_user.spiritual_name %}
+          <div class="profile-spiritual-title">॥ {{ current_user.spiritual_name }} ॥</div>
+        {% endif %}
+        <p class="profile-location-sub">
+          <i class="fas fa-location-dot"></i> {{ current_user.location or 'Sacred Earth Realm' }} · 
+          <i class="fas fa-envelope"></i> {{ current_user.email }}
+        </p>
+      </div>
+
+      <div class="profile-hero-actions">
+        <button type="button" onclick="openEditModal()" class="btn-profile-gold" title="Edit Profile">
+          <i class="fas fa-feather"></i>
+          <span>Edit Profile</span>
+        </button>
+        <a href="{{ url_for('sadhana_paddhati_page') }}" class="btn-profile-subtle" title="Open Sadhana Paddhati">
+          <i class="fas fa-route"></i>
+          <span>Sādhana Path</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Content 2-Column Grid -->
+    <div class="profile-content-grid">
+
+      <!-- Left Column: Spiritual Progress & Stages Matrix -->
+      <div class="profile-left-col">
+        
+        <!-- Sādhana Progression Matrix Card -->
+        <section class="profile-card">
+          <div class="card-glow-edge"></div>
+          <div class="pcard-header">
+            <div class="pcard-icon"><i class="fas fa-dharmachakra"></i></div>
+            <div>
+              <h3>Initiated Stages & Mandalas</h3>
+              <p>Your journey across the Nine Bhairava Mandalas and Devi Streams</p>
+            </div>
+          </div>
+          <div class="pcard-body">
+            <div class="stages-pills-matrix">
+              <div class="stage-status-box {% if current_user.mandala_1_access %}unlocked{% else %}locked{% endif %}">
+                <span class="st-num">1</span>
+                <span class="st-title">Mandala 1</span>
+                <span class="st-tag">{% if current_user.stage_1_completed %}Done ✓{% elif current_user.mandala_1_access %}Active{% else %}Locked 🔒{% endif %}</span>
+              </div>
+              <div class="stage-status-box {% if current_user.mandala_2_access %}unlocked{% else %}locked{% endif %}">
+                <span class="st-num">2</span>
+                <span class="st-title">Mandala 2</span>
+                <span class="st-tag">{% if current_user.stage_2_completed %}Done ✓{% elif current_user.mandala_2_access %}Active{% else %}Locked 🔒{% endif %}</span>
+              </div>
+              <div class="stage-status-box {% if current_user.mandala_3_access %}unlocked{% else %}locked{% endif %}">
+                <span class="st-num">3</span>
+                <span class="st-title">Mandala 3</span>
+                <span class="st-tag">{% if current_user.stage_3_completed %}Done ✓{% elif current_user.mandala_3_access %}Active{% else %}Locked 🔒{% endif %}</span>
+              </div>
+              <div class="stage-status-box {% if current_user.charana_1_access %}unlocked{% else %}locked{% endif %}">
+                <span class="st-num">4</span>
+                <span class="st-title">Pratham Charana</span>
+                <span class="st-tag">{% if current_user.charana_1_completed %}Done ✓{% elif current_user.charana_1_access %}Active{% else %}Locked 🔒{% endif %}</span>
+              </div>
+              <div class="stage-status-box {% if current_user.rudraksha_8_access %}unlocked{% else %}locked{% endif %}">
+                <span class="st-num">5</span>
+                <span class="st-title">8 Mukhi Rudraksha</span>
+                <span class="st-tag">{% if current_user.rudraksha_8_completed %}Done ✓{% elif current_user.rudraksha_8_access %}Active{% else %}Locked 🔒{% endif %}</span>
+              </div>
+              <div class="stage-status-box {% if current_user.rudraksha_11_access %}unlocked{% else %}locked{% endif %}">
+                <span class="st-num">6</span>
+                <span class="st-title">11 Mukhi Rudraksha</span>
+                <span class="st-tag">{% if current_user.rudraksha_11_completed %}Done ✓{% elif current_user.rudraksha_11_access %}Active{% else %}Locked 🔒{% endif %}</span>
+              </div>
+              <div class="stage-status-box {% if current_user.charana_2_access %}unlocked{% else %}locked{% endif %}">
+                <span class="st-num">7</span>
+                <span class="st-title">Dutiya Charana</span>
+                <span class="st-tag">{% if current_user.charana_2_completed %}Done ✓{% elif current_user.charana_2_access %}Active{% else %}Locked 🔒{% endif %}</span>
+              </div>
+              <div class="stage-status-box {% if current_user.rudraksha_14_access %}unlocked{% else %}locked{% endif %}">
+                <span class="st-num">8</span>
+                <span class="st-title">14 Mukhi Rudraksha</span>
+                <span class="st-tag">{% if current_user.rudraksha_14_completed %}Done ✓{% elif current_user.rudraksha_14_access %}Active{% else %}Locked 🔒{% endif %}</span>
+              </div>
+              <div class="stage-status-box {% if current_user.charana_3_access %}unlocked{% else %}locked{% endif %}">
+                <span class="st-num">9</span>
+                <span class="st-title">Tritiya Charana</span>
+                <span class="st-tag">{% if current_user.charana_3_completed %}Done ✓{% elif current_user.charana_3_access %}Active{% else %}Locked 🔒{% endif %}</span>
+              </div>
+            </div>
+
+            <div class="pcard-cta-row">
+              <a href="{{ url_for('sadhana_paddhati_page') }}" class="btn-portal-entry">
+                <span>View Full Sādhana Paddhati Flow & Stage Details</span>
+                <i class="fas fa-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Devotee Spiritual Purpose & Saṅkalpa -->
+        {% if current_user.purpose %}
+        <section class="profile-card">
+          <div class="card-glow-edge"></div>
+          <div class="pcard-header">
+            <div class="pcard-icon"><i class="fas fa-scroll"></i></div>
+            <div>
+              <h3>Devotee Saṅkalpa & Spiritual Resolve</h3>
+              <p>Personal intention submitted during initiation</p>
+            </div>
+          </div>
+          <div class="pcard-body">
+            <blockquote class="devotee-sankalpa-quote">
+              "{{ current_user.purpose }}"
+            </blockquote>
+          </div>
+        </section>
+        {% endif %}
+
+      </div>
+
+      <!-- Right Column: Devotee Personal & Account Details -->
+      <div class="profile-right-col">
+        
+        <!-- Devotee Account Details -->
+        <section class="profile-card">
+          <div class="card-glow-edge"></div>
+          <div class="pcard-header">
+            <div class="pcard-icon"><i class="fas fa-id-badge"></i></div>
+            <div>
+              <h3>Account & Practice Details</h3>
+              <p>Registered contact and initiation data</p>
+            </div>
+          </div>
+          <div class="pcard-body">
+            <div class="details-list">
+              <div class="d-row">
+                <span class="d-label">Username</span>
+                <span class="d-val">@{{ current_user.username }}</span>
+              </div>
+              <div class="d-row">
+                <span class="d-label">Email Address</span>
+                <span class="d-val">{{ current_user.email }}</span>
+              </div>
+              <div class="d-row">
+                <span class="d-label">Mobile Phone</span>
+                <span class="d-val">{{ current_user.phone or 'Not provided' }}</span>
+              </div>
+              <div class="d-row">
+                <span class="d-label">Gender</span>
+                <span class="d-val">{{ current_user.gender or 'Not specified' }}</span>
+              </div>
+              <div class="d-row">
+                <span class="d-label">Language</span>
+                <span class="d-val">{{ current_user.preferred_language or 'English' }}</span>
+              </div>
+              <div class="d-row">
+                <span class="d-label">Practice Level</span>
+                <span class="d-val gold-accent">{{ current_user.practice_level or 'Initiate' }}</span>
+              </div>
+              {% if current_user.address %}
+              <div class="d-row">
+                <span class="d-label">Physical Address</span>
+                <span class="d-val">{{ current_user.address }}</span>
+              </div>
+              {% endif %}
+              <div class="d-row">
+                <span class="d-label">Lineage Role</span>
+                <span class="d-val role-badge">{{ current_user.role|title }}</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Sacred Guidance & Quick Actions -->
+        <section class="profile-card guidance-card">
+          <div class="card-glow-edge"></div>
+          <div class="pcard-body">
+            <div class="guidance-quote">
+              <span class="guidance-om">ॐ</span>
+              <p>"The path of sadhana is a sacred journey. Every breath dedicated to Bhairava awakens the boundless light of Shiva within."</p>
+              <div class="guidance-foot">— Lineage Blessing · Bhairava Anugraha</div>
+            </div>
+
+            <div class="profile-bottom-actions">
+              <a href="{{ url_for('mandala_sadhana_registration') }}" class="btn-action-outline">
+                <i class="fas fa-om"></i> Commit to Mandala Vow
+              </a>
+              <a href="{{ url_for('home') }}" class="btn-action-outline">
+                <i class="fas fa-arrow-left"></i> Back to Home
+              </a>
+              <a href="{{ url_for('auth.logout') }}" class="btn-action-danger">
+                <i class="fas fa-arrow-right-from-bracket"></i> Sign Out
+              </a>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- Edit Profile Modal -->
+<div id="editProfileModal" class="sacred-modal-overlay" style="display: none;">
+  <div class="sacred-modal-card">
+    <div class="card-glow-edge"></div>
+    <div class="smodal-header">
+      <div class="smodal-title">
+        <i class="fas fa-feather"></i>
+        <h3>Edit Spiritual Profile</h3>
+      </div>
+      <button type="button" onclick="closeEditModal()" class="smodal-close-btn">&times;</button>
+    </div>
+
+    <div class="smodal-body">
+      <form method="POST" action="{{ url_for('auth.profile') }}" class="sacred-auth-form">
+        {{ form.hidden_tag() }}
+
+        <div class="auth-field">
+          <label for="phone"><i class="fas fa-phone"></i> Phone / WhatsApp Number</label>
+          <div class="auth-input-wrap">
+            {{ form.phone(class="auth-input", placeholder="+91 98765 43210") }}
+          </div>
+          {% if form.phone.errors %}
+            <div class="auth-field-error">{{ form.phone.errors[0] }}</div>
+          {% endif %}
+        </div>
+
+        <div class="auth-field" style="margin-top: 1rem;">
+          <label for="address"><i class="fas fa-map-marker-alt"></i> Physical Address</label>
+          <div class="auth-input-wrap">
+            {{ form.address(class="auth-textarea", rows="2", placeholder="Your address or ashram location") }}
+          </div>
+          {% if form.address.errors %}
+            <div class="auth-field-error">{{ form.address.errors[0] }}</div>
+          {% endif %}
+        </div>
+
+        <div class="auth-field" style="margin-top: 1rem;">
+          <label for="purpose"><i class="fas fa-scroll"></i> Purpose for Sādhana</label>
+          <div class="auth-input-wrap">
+            {{ form.purpose(class="auth-textarea", rows="4", placeholder="Explain your heartfelt spiritual resolve...") }}
+          </div>
+          {% if form.purpose.errors %}
+            <div class="auth-field-error">{{ form.purpose.errors[0] }}</div>
+          {% endif %}
+        </div>
+
+        <div class="smodal-actions">
+          <button type="button" onclick="closeEditModal()" class="btn-action-outline">Cancel</button>
+          <button type="submit" class="auth-submit-btn" style="width: auto; padding: 0.65rem 1.8rem;">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<style>
+/* ==============================================================================
+   DEVOTEE SPIRITUAL PROFILE STYLING · SACRED DARK-GOLD THEME
+   ============================================================================== */
+.profile-page-sanctuary {
+  background: var(--ink, #0e0a06);
+  color: var(--paper, #e9dfc8);
+  min-height: calc(100vh - 72px);
+  padding: 2.5rem 1.25rem 4rem;
+  background-image: 
+    radial-gradient(circle at 50% 10%, rgba(212, 166, 74, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at 10% 80%, rgba(106, 16, 16, 0.07) 0%, transparent 50%);
+}
+
+.profile-max-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Hero Header Card */
+.profile-hero-card {
+  position: relative;
+  background: rgba(20, 15, 12, 0.92);
+  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+  border-radius: 18px;
+  padding: 2rem 2.25rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.65);
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.profile-avatar-wrap {
+  flex-shrink: 0;
+}
+
+.profile-avatar-ring {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 2.5px solid var(--gold, #d4a64a);
+  box-shadow: 0 0 25px rgba(212, 166, 74, 0.35);
+  overflow: hidden;
+  background: rgba(14, 10, 6, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-img-lg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-initials-lg {
+  font-family: var(--display, serif);
+  font-size: 3rem;
+  color: var(--gold-3, #f0d48a);
+  font-weight: 700;
+}
+
+.profile-title-area {
+  flex: 1;
+  min-width: 280px;
+}
+
+.profile-badges-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.badge-pill {
+  font-size: 0.75rem;
+  padding: 3px 10px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.badge-admin {
+  background: rgba(212, 166, 74, 0.2);
+  color: #f0d48a;
+  border: 1px solid rgba(212, 166, 74, 0.5);
+}
+
+.badge-approved {
+  background: rgba(16, 185, 129, 0.2);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.5);
+}
+
+.badge-pending {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fcd34d;
+  border: 1px solid rgba(245, 158, 11, 0.5);
+}
+
+.badge-member {
+  background: rgba(233, 223, 200, 0.08);
+  color: #d6c9a3;
+  border: 1px solid rgba(233, 223, 200, 0.2);
+}
+
+.profile-devotee-name {
+  font-family: var(--display, serif);
+  font-size: 2.2rem;
+  color: var(--paper-bright, #fdfaf2);
+  margin: 0 0 0.2rem;
+  font-weight: 700;
+}
+
+.profile-spiritual-title {
+  font-family: var(--skt, serif);
+  font-size: 1.15rem;
+  color: var(--gold-3, #f0d48a);
+  margin-bottom: 0.4rem;
+}
+
+.profile-location-sub {
+  font-size: 0.92rem;
+  color: var(--paper-2, #d6c9a3);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.profile-location-sub i {
+  color: var(--gold, #d4a64a);
+}
+
+.profile-hero-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.btn-profile-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.65rem 1.3rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f0d48a 0%, #d4a64a 50%, #b8842a 100%);
+  color: #0e0a06;
+  border: 1px solid #f0d48a;
+  font-family: var(--serif, serif);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 15px rgba(212, 166, 74, 0.35);
+}
+
+.btn-profile-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(212, 166, 74, 0.5);
+}
+
+.btn-profile-subtle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.65rem 1.3rem;
+  border-radius: 999px;
+  background: rgba(14, 10, 6, 0.8);
+  color: var(--paper-bright, #fdfaf2);
+  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+  font-family: var(--serif, serif);
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.btn-profile-subtle:hover {
+  border-color: var(--gold, #d4a64a);
+  color: var(--gold-3, #f0d48a);
+  background: rgba(28, 20, 16, 0.85);
+}
+
+/* 2-Column Content Grid */
+.profile-content-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 1.75rem;
+}
+
+@media (max-width: 900px) {
+  .profile-content-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.profile-card {
+  position: relative;
+  background: rgba(20, 15, 12, 0.88);
+  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  margin-bottom: 1.75rem;
+  overflow: hidden;
+}
+
+.pcard-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 1.25rem 1.5rem;
+  background: rgba(28, 20, 16, 0.65);
+  border-bottom: 1px solid rgba(212, 166, 74, 0.18);
+}
+
+.pcard-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(212, 166, 74, 0.15);
+  border: 1px solid rgba(212, 166, 74, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold-3, #f0d48a);
+  font-size: 1.1rem;
+}
+
+.pcard-header h3 {
+  font-family: var(--display, serif);
+  font-size: 1.3rem;
+  color: var(--paper-bright, #fdfaf2);
+  margin: 0 0 0.15rem;
+  font-weight: 700;
+}
+
+.pcard-header p {
+  font-size: 0.85rem;
+  color: var(--ink-mute, rgba(233, 223, 200, 0.68));
+  margin: 0;
+}
+
+.pcard-body {
+  padding: 1.5rem;
+}
+
+/* Stages Matrix */
+.stages-pills-matrix {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.85rem;
+}
+
+@media (max-width: 600px) {
+  .stages-pills-matrix {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.stage-status-box {
+  padding: 0.85rem;
+  border-radius: 10px;
+  background: rgba(14, 10, 6, 0.7);
+  border: 1px solid rgba(212, 166, 74, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stage-status-box.unlocked {
+  border-color: rgba(212, 166, 74, 0.45);
+  background: rgba(212, 166, 74, 0.08);
+}
+
+.stage-status-box.locked {
+  opacity: 0.65;
+}
+
+.st-num {
+  font-family: var(--mono, monospace);
+  font-size: 0.72rem;
+  color: var(--gold, #d4a64a);
+}
+
+.st-title {
+  font-family: var(--serif, serif);
+  font-size: 0.95rem;
+  color: var(--paper-bright, #fdfaf2);
+  font-weight: 600;
+}
+
+.st-tag {
+  font-size: 0.75rem;
+  color: #6ee7b7;
+  font-weight: 600;
+}
+
+.stage-status-box.locked .st-tag {
+  color: #fca5a5;
+}
+
+.pcard-cta-row {
+  margin-top: 1.25rem;
+}
+
+.btn-portal-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1.25rem;
+  background: rgba(212, 166, 74, 0.1);
+  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+  border-radius: 8px;
+  color: var(--gold-3, #f0d48a);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-portal-entry:hover {
+  background: rgba(212, 166, 74, 0.2);
+  border-color: var(--gold, #d4a64a);
+  transform: translateX(3px);
+}
+
+/* Devotee Sankalpa Quote */
+.devotee-sankalpa-quote {
+  font-family: var(--serif, serif);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--paper-bright, #fdfaf2);
+  margin: 0;
+  font-style: italic;
+  padding-left: 1.25rem;
+  border-left: 3px solid var(--gold, #d4a64a);
+}
+
+/* Details List */
+.details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.d-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(212, 166, 74, 0.12);
+  gap: 12px;
+}
+
+.d-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.d-label {
+  font-size: 0.85rem;
+  color: var(--ink-mute, rgba(233, 223, 200, 0.68));
+}
+
+.d-val {
+  font-size: 0.92rem;
+  color: var(--paper-bright, #fdfaf2);
+  font-weight: 600;
+  text-align: right;
+}
+
+.gold-accent {
+  color: var(--gold-3, #f0d48a);
+}
+
+.role-badge {
+  background: rgba(212, 166, 74, 0.15);
+  border: 1px solid rgba(212, 166, 74, 0.35);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.78rem;
+  color: var(--gold-3, #f0d48a);
+}
+
+/* Guidance Quote */
+.guidance-quote {
+  text-align: center;
+  padding: 0.5rem 0 1.25rem;
+}
+
+.guidance-om {
+  font-family: var(--skt, serif);
+  font-size: 1.6rem;
+  color: var(--gold-3, #f0d48a);
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.guidance-quote p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--paper-2, #d6c9a3);
+  font-style: italic;
+  margin: 0 0 0.4rem;
+}
+
+.guidance-foot {
+  font-size: 0.8rem;
+  color: var(--gold, #d4a64a);
+  font-family: var(--display, serif);
+  letter-spacing: 0.05em;
+}
+
+.profile-bottom-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 1rem;
+}
+
+.btn-action-outline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  background: rgba(14, 10, 6, 0.7);
+  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+  color: var(--paper-bright, #fdfaf2);
+  font-size: 0.92rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-action-outline:hover {
+  background: rgba(28, 20, 16, 0.9);
+  border-color: var(--gold, #d4a64a);
+  color: var(--gold-3, #f0d48a);
+}
+
+.btn-action-danger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  background: rgba(128, 20, 20, 0.35);
+  border: 1px solid rgba(239, 68, 68, 0.45);
+  color: #fecaca;
+  font-size: 0.92rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-action-danger:hover {
+  background: rgba(185, 28, 28, 0.65);
+  color: var(--paper-bright, #fdfaf2);
+}
+
+/* Sacred Modal Overlay */
+.sacred-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.sacred-modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  background: rgba(20, 15, 12, 0.96);
+  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+  overflow: hidden;
+  animation: modalFadeIn 0.25s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.smodal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  background: rgba(28, 20, 16, 0.7);
+  border-bottom: 1px solid rgba(212, 166, 74, 0.2);
+}
+
+.smodal-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.smodal-title i {
+  color: var(--gold, #d4a64a);
+}
+
+.smodal-title h3 {
+  font-family: var(--display, serif);
+  font-size: 1.35rem;
+  color: var(--paper-bright, #fdfaf2);
+  margin: 0;
+}
+
+.smodal-close-btn {
+  background: none;
+  border: none;
+  color: var(--gold, #d4a64a);
+  font-size: 1.6rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.smodal-body {
+  padding: 1.5rem;
+}
+
+.smodal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(212, 166, 74, 0.15);
+}
+
+/* Mobile Responsive Optimization for Profile */
+@media (max-width: 768px) {
+  .profile-sanctuary {
+    padding: 1.75rem 1rem 3.5rem;
+  }
+  .profile-hero-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.75rem 1.25rem;
+    gap: 1.25rem;
+  }
+  .profile-title-area {
+    min-width: unset;
+    width: 100%;
+  }
+  .profile-badges-row,
+  .profile-location-sub {
+    justify-content: center;
+  }
+  .profile-hero-actions {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .stages-pills-matrix {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-sanctuary {
+    padding: 1.25rem 0.65rem 3rem;
+  }
+  .profile-avatar-ring {
+    width: 88px;
+    height: 88px;
+  }
+  .profile-devotee-name {
+    font-size: 1.65rem;
+  }
+  .profile-spiritual-title {
+    font-size: 1rem;
+  }
+  .profile-hero-actions .btn-profile-gold,
+  .profile-hero-actions .btn-profile-subtle {
+    font-size: 0.88rem;
+    padding: 0.55rem 1rem;
+    width: 100%;
+    justify-content: center;
+  }
+  .stages-pills-matrix {
+    grid-template-columns: 1fr;
+  }
+  .pcard-header {
+    padding: 1rem 1.1rem;
+  }
+  .pcard-body {
+    padding: 1.1rem 0.95rem;
+  }
+  .sacred-modal-card {
+    max-width: 92vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 14px;
+  }
+  .modal-input,
+  .modal-select {
+    font-size: 16px !important; /* Prevents auto-zoom in mobile Safari */
+  }
+}
+</style>
+
+<script>
+function openEditModal() {
+  const modal = document.getElementById('editProfileModal');
+  if (modal) modal.style.display = 'flex';
+}
+
+function closeEditModal() {
+  const modal = document.getElementById('editProfileModal');
+  if (modal) modal.style.display = 'none';
+}
+
+// Close on background click
+window.addEventListener('click', function(e) {
+  const modal = document.getElementById('editProfileModal');
+  if (e.target === modal) {
+    closeEditModal();
+  }
+});
+</script>
+{% endblock %}

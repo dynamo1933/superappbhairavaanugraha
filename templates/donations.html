@@ -1,0 +1,1220 @@
+{% extends "base.html" %}
+
+{% block extra_styles %}
+<style>
+/* ==============================================================================
+   SACRED BHIKSHA OFFERINGS · SUPER APP SACRED DARK-GOLD THEME
+   ============================================================================== */
+
+/* Page Header */
+.padati-header {
+    background: 
+        radial-gradient(circle at 50% 20%, rgba(212, 166, 74, 0.15) 0%, transparent 65%),
+        linear-gradient(180deg, #07060a 0%, #151013 60%, #0a0709 100%);
+    padding: 3rem 1.5rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(212, 166, 74, 0.25);
+}
+
+.padati-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(106, 16, 16, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.header-layout {
+    position: relative;
+    z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2.25rem;
+}
+
+@media (max-width: 768px) {
+    .header-layout {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.25rem;
+    }
+}
+
+.header-image {
+    flex-shrink: 0;
+    position: relative;
+}
+
+.header-image-ring {
+    position: relative;
+    padding: 4px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f0d48a 0%, #d4a64a 50%, #9a6820 100%);
+    box-shadow: 0 0 28px rgba(212, 166, 74, 0.4), 0 8px 30px rgba(0, 0, 0, 0.8);
+    display: inline-block;
+}
+
+.header-image img {
+    width: 124px;
+    height: 124px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    border: 2px solid #0e0a06;
+    transition: transform 0.4s ease;
+}
+
+.header-image:hover img {
+    transform: scale(1.04);
+}
+
+.header-content {
+    text-align: left;
+}
+
+@media (max-width: 768px) {
+    .header-content {
+        text-align: center;
+    }
+}
+
+.header-sanskrit-chant {
+    font-family: var(--skt, serif);
+    font-size: 1.05rem;
+    color: var(--gold-3, #f0d48a);
+    letter-spacing: 0.15em;
+    margin-bottom: 0.35rem;
+    text-shadow: 0 0 12px rgba(212, 166, 74, 0.4);
+}
+
+.header-title {
+    font-family: var(--display, 'Cormorant Garamond', Georgia, serif);
+    font-size: 2.75rem;
+    font-weight: 700;
+    margin: 0 0 0.4rem;
+    letter-spacing: 0.04em;
+    background: linear-gradient(135deg, #fff3cd 0%, #f0d48a 50%, #d4a64a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+}
+
+.header-subtitle {
+    font-family: var(--serif, 'EB Garamond', Georgia, serif);
+    color: var(--paper-2, #d6c9a3);
+    font-size: 1.15rem;
+    margin: 0;
+    font-style: italic;
+    line-height: 1.5;
+}
+
+/* Main Content Area */
+.padati-main {
+    background: 
+        radial-gradient(circle at 50% 0%, rgba(212, 166, 74, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 15% 40%, rgba(106, 16, 16, 0.09) 0%, transparent 45%),
+        #07060a;
+    min-height: 80vh;
+    padding: 2.75rem 1.25rem 5rem;
+    position: relative;
+}
+
+.padati-container {
+    max-width: 1140px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+/* Sacred Reminder Card */
+.sacred-reminder {
+    display: flex;
+    flex-direction: column;
+    background: rgba(20, 15, 12, 0.94);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 2.25rem;
+    border-radius: 20px;
+    margin-bottom: 2.75rem;
+    border: 1px solid rgba(212, 166, 74, 0.35);
+    box-shadow: 0 16px 45px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(212, 166, 74, 0.2);
+}
+
+.reminder-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(212, 166, 74, 0.2);
+    padding-bottom: 1rem;
+}
+
+.reminder-title {
+    font-family: var(--display, serif);
+    font-size: 1.65rem;
+    font-weight: 600;
+    color: var(--paper-bright, #fdfaf2);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+
+.reminder-title i {
+    color: var(--gold-3, #f0d48a);
+}
+
+.reminder-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+@media (max-width: 768px) {
+    .reminder-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
+
+.reminder-item {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+}
+
+.reminder-icon-box {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(212, 166, 74, 0.22) 0%, rgba(106, 16, 16, 0.35) 100%);
+    border: 1.5px solid rgba(212, 166, 74, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold-3, #f0d48a);
+    font-size: 1.35rem;
+    flex-shrink: 0;
+    box-shadow: 0 4px 16px rgba(212, 166, 74, 0.18);
+}
+
+.reminder-content h6 {
+    color: var(--paper-bright, #fdfaf2);
+    font-family: var(--display, serif);
+    font-size: 1.28rem;
+    font-weight: 600;
+    margin: 0 0 0.4rem;
+    letter-spacing: 0.01em;
+}
+
+.reminder-content p {
+    color: var(--paper-2, #d6c9a3);
+    font-size: 0.96rem;
+    line-height: 1.6;
+    margin: 0;
+    font-family: var(--serif, Georgia, serif);
+}
+
+/* Payment CTAs */
+.qr-button-container {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin: -0.5rem 0 3rem;
+    position: relative;
+    z-index: 2;
+}
+
+.qr-offer-btn {
+    background: linear-gradient(135deg, #f0d48a 0%, #d4a64a 50%, #b8842a 100%);
+    color: #0e0a06;
+    border: 1px solid #f0d48a;
+    padding: 0.95rem 2rem;
+    border-radius: 50px;
+    font-family: var(--display, serif);
+    font-weight: 700;
+    font-size: 1.15rem;
+    letter-spacing: 0.03em;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 6px 25px rgba(212, 166, 74, 0.35);
+}
+
+.qr-offer-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 32px rgba(212, 166, 74, 0.55);
+    background: linear-gradient(135deg, #fff2c4 0%, #f0d48a 50%, #d4a64a 100%);
+    color: #0e0a06;
+}
+
+.qr-bank-btn {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%) !important;
+    border: 1.5px solid rgba(212, 166, 74, 0.45) !important;
+    color: var(--gold-3, #f0d48a) !important;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5) !important;
+}
+
+.qr-bank-btn:hover {
+    border-color: var(--gold-3, #f0d48a) !important;
+    color: #ffffff !important;
+    box-shadow: 0 10px 30px rgba(212, 166, 74, 0.3) !important;
+    background: linear-gradient(135deg, rgba(45, 55, 75, 0.95) 0%, rgba(20, 30, 50, 0.98) 100%) !important;
+}
+
+/* Sacred Tabs */
+.sacred-tabs {
+    margin-top: 2rem;
+}
+
+.sacred-tabs-nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 1.75rem;
+    background: rgba(20, 15, 12, 0.85);
+    padding: 0.45rem;
+    border-radius: 50px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid rgba(212, 166, 74, 0.3);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+}
+
+.sacred-tab-item {
+    background: transparent;
+    border: none;
+    padding: 0.65rem 1.35rem;
+    border-radius: 25px;
+    font-family: var(--serif, Georgia, serif);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--paper-2, #d6c9a3);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+}
+
+.sacred-tab-item:hover {
+    color: var(--paper-bright, #fdfaf2);
+    background: rgba(212, 166, 74, 0.12);
+}
+
+.sacred-tab-item.active {
+    background: linear-gradient(135deg, #f0d48a 0%, #d4a64a 100%);
+    color: #0e0a06;
+    font-weight: 700;
+    box-shadow: 0 4px 16px rgba(212, 166, 74, 0.35);
+}
+
+.sacred-tab-item .badge {
+    background: rgba(212, 166, 74, 0.18);
+    color: var(--gold-3, #f0d48a);
+    font-size: 0.76rem;
+    font-family: var(--mono, monospace);
+    font-weight: 700;
+    padding: 0.2rem 0.55rem;
+    border-radius: 12px;
+}
+
+.sacred-tab-item.active .badge {
+    background: rgba(0, 0, 0, 0.25);
+    color: #0e0a06;
+}
+
+/* Sacred Table Card */
+.sacred-card {
+    background: rgba(20, 15, 12, 0.94);
+    border-radius: 20px;
+    box-shadow: 0 16px 45px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(212, 166, 74, 0.2);
+    border: 1px solid rgba(212, 166, 74, 0.35);
+    overflow: hidden;
+}
+
+.sacred-card-header {
+    padding: 1.35rem 2rem;
+    background: linear-gradient(180deg, rgba(32, 22, 16, 0.85) 0%, rgba(20, 15, 12, 0.5) 100%);
+    border-bottom: 1px solid rgba(212, 166, 74, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sacred-card-header h5 {
+    margin: 0;
+    color: var(--paper-bright, #fdfaf2);
+    font-family: var(--display, serif);
+    font-size: 1.35rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.sacred-card-header h5 i {
+    color: var(--gold-3, #f0d48a);
+}
+
+.table-meta-badge {
+    font-size: 0.82rem;
+    color: var(--paper-2, #d6c9a3);
+    font-family: var(--mono, monospace);
+    background: rgba(212, 166, 74, 0.1);
+    border: 1px solid rgba(212, 166, 74, 0.25);
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.sacred-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: var(--paper-bright, #fdfaf2);
+}
+
+.sacred-table th {
+    background: rgba(28, 20, 16, 0.75);
+    padding: 1rem 1.5rem;
+    text-align: left;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    font-family: var(--mono, monospace);
+    color: var(--gold-3, #f0d48a);
+    border-bottom: 1px solid rgba(212, 166, 74, 0.25);
+}
+
+.sacred-table td {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid rgba(212, 166, 74, 0.1);
+    vertical-align: middle;
+    transition: background 0.2s;
+    font-size: 0.95rem;
+}
+
+.sacred-table tbody tr:hover td {
+    background: rgba(212, 166, 74, 0.06);
+}
+
+.sacred-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.donor-name {
+    font-weight: 600;
+    color: var(--paper-bright, #fdfaf2);
+    font-size: 1rem;
+}
+
+.donor-email {
+    font-size: 0.82rem;
+    color: var(--paper-2, #d6c9a3);
+    opacity: 0.8;
+}
+
+.donation-amount {
+    font-family: var(--display, serif);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--gold-3, #f0d48a);
+}
+
+/* Badges */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.status-verified {
+    background: rgba(16, 185, 129, 0.18);
+    color: #6ee7b7;
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.15);
+}
+
+.status-pending {
+    background: rgba(245, 158, 11, 0.18);
+    color: #fcd34d;
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.15);
+}
+
+.method-badge {
+    background: rgba(212, 166, 74, 0.12);
+    color: var(--paper-2, #d6c9a3);
+    padding: 0.3rem 0.7rem;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    border: 1px solid rgba(212, 166, 74, 0.25);
+    font-family: var(--mono, monospace);
+}
+
+/* Empty State */
+.sacred-empty {
+    text-align: center;
+    padding: 4.5rem 2rem;
+    color: var(--paper-2, #d6c9a3);
+}
+
+.sacred-empty i {
+    font-size: 3.5rem;
+    color: var(--gold, #d4a64a);
+    margin-bottom: 1.25rem;
+    opacity: 0.65;
+}
+
+.sacred-empty h3 {
+    font-family: var(--display, serif);
+    color: var(--paper-bright, #fdfaf2);
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Modals */
+.sacred-modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(7, 6, 10, 0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.sacred-modal-content {
+    background: rgba(20, 15, 12, 0.97);
+    padding: 0;
+    border-radius: 22px;
+    max-width: 460px;
+    width: 100%;
+    position: relative;
+    border: 1px solid rgba(212, 166, 74, 0.4);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 35px rgba(212, 166, 74, 0.2);
+    overflow: hidden;
+    animation: modalScaleUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalScaleUp {
+    from {
+        transform: scale(0.85);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 34px;
+    height: 34px;
+    background: rgba(212, 166, 74, 0.15);
+    border: 1px solid rgba(212, 166, 74, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--gold-3, #f0d48a);
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.modal-close:hover {
+    background: rgba(212, 166, 74, 0.35);
+    color: #ffffff;
+    transform: rotate(90deg);
+}
+
+.modal-hero {
+    background: linear-gradient(180deg, rgba(38, 26, 18, 0.95) 0%, rgba(20, 15, 12, 0.7) 100%);
+    border-bottom: 1px solid rgba(212, 166, 74, 0.22);
+    padding: 2.25rem 1.5rem 1.5rem;
+    text-align: center;
+}
+
+.modal-hero-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.modal-hero h3 {
+    font-family: var(--display, serif);
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: var(--paper-bright, #fdfaf2);
+    letter-spacing: 0.03em;
+    margin-bottom: 0.35rem;
+}
+
+.modal-hero p {
+    margin: 0;
+    color: var(--paper-2, #d6c9a3);
+    font-size: 0.95rem;
+    font-style: italic;
+}
+
+.modal-hero-bank {
+    background: linear-gradient(180deg, rgba(20, 30, 50, 0.95) 0%, rgba(15, 20, 35, 0.7) 100%);
+}
+
+.modal-qr-container {
+    padding: 2rem 1.5rem;
+    text-align: center;
+    background: rgba(14, 10, 6, 0.92);
+}
+
+.qr-image-frame {
+    display: inline-block;
+    padding: 12px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 2px solid var(--gold, #d4a64a);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(212, 166, 74, 0.3);
+}
+
+.qr-image {
+    max-width: 220px;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+}
+
+.upi-scan-text {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--paper-bright, #fdfaf2);
+    margin: 1.25rem 0 0.5rem;
+}
+
+.upi-icons-row {
+    display: flex;
+    gap: 1.25rem;
+    justify-content: center;
+    color: var(--gold-3, #f0d48a);
+    font-size: 1.5rem;
+    opacity: 0.9;
+}
+
+.modal-info {
+    padding: 1.25rem;
+    background: rgba(28, 20, 16, 0.85);
+    border-top: 1px solid rgba(212, 166, 74, 0.2);
+    text-align: center;
+}
+
+.modal-info p {
+    font-size: 0.92rem;
+    color: var(--paper-2, #d6c9a3);
+    margin-bottom: 0;
+    line-height: 1.45;
+}
+
+/* Bank Details Modal Body */
+.modal-bank-body {
+    padding: 1.75rem 1.5rem;
+    background: rgba(14, 10, 6, 0.92);
+}
+
+.bank-detail-group {
+    margin-bottom: 1.25rem;
+}
+
+.bank-label {
+    display: block;
+    font-size: 0.76rem;
+    text-transform: uppercase;
+    color: var(--gold-3, #f0d48a);
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.08em;
+    font-family: var(--mono, monospace);
+}
+
+.bank-input-group {
+    display: flex;
+    gap: 0.6rem;
+}
+
+.bank-value-box {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    background: rgba(28, 20, 16, 0.7);
+    border: 1px solid rgba(212, 166, 74, 0.35);
+    border-radius: 10px;
+    font-weight: 600;
+    color: var(--paper-bright, #fdfaf2);
+    font-family: var(--serif, Georgia, serif);
+    font-size: 1.05rem;
+    letter-spacing: 0.02em;
+}
+
+.bank-copy-btn {
+    padding: 0 1.15rem;
+    border: 1px solid rgba(212, 166, 74, 0.35);
+    background: rgba(212, 166, 74, 0.15);
+    border-radius: 10px;
+    color: var(--gold-3, #f0d48a);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+}
+
+.bank-copy-btn:hover {
+    background: rgba(212, 166, 74, 0.3);
+    border-color: var(--gold-3, #f0d48a);
+    color: #ffffff;
+}
+
+/* Mobile Responsive Optimization for Bhiksha */
+@media (max-width: 768px) {
+    .padati-header {
+        padding: 2.25rem 1rem 2rem;
+    }
+    .header-image img {
+        width: 104px;
+        height: 104px;
+    }
+    .header-title {
+        font-size: clamp(1.8rem, 6vw, 2.3rem);
+    }
+    .header-subtitle {
+        font-size: 1.02rem;
+    }
+    .padati-main {
+        padding: 1.75rem 1rem 4rem;
+    }
+    .sacred-reminder {
+        padding: 1.5rem 1.25rem;
+        margin-bottom: 2rem;
+        border-radius: 16px;
+    }
+    .reminder-title {
+        font-size: 1.35rem;
+    }
+    .reminder-content h6 {
+        font-size: 1.15rem;
+    }
+    .qr-button-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2.5rem;
+    }
+    .qr-offer-btn {
+        width: 100%;
+        max-width: 340px;
+        justify-content: center;
+        padding: 0.85rem 1.5rem;
+        font-size: 1.05rem;
+    }
+    .sacred-tabs-nav {
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        justify-content: flex-start;
+        padding: 0.35rem;
+        border-radius: 12px;
+    }
+    .sacred-tab-item {
+        white-space: nowrap;
+        padding: 0.55rem 1rem;
+        font-size: 0.88rem;
+    }
+    .sacred-card {
+        border-radius: 16px;
+    }
+    .sacred-card-header {
+        padding: 1.1rem 1.25rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.4rem;
+    }
+    .sacred-table th,
+    .sacred-table td {
+        padding: 0.9rem 1rem;
+    }
+    .sacred-modal-content {
+        max-width: 92vw;
+        max-height: 90vh;
+        overflow-y: auto;
+        border-radius: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .padati-header {
+        padding: 1.75rem 0.75rem 1.5rem;
+    }
+    .header-image img {
+        width: 88px;
+        height: 88px;
+    }
+    .header-sanskrit-chant {
+        font-size: 0.9rem;
+    }
+    .header-title {
+        font-size: 1.65rem;
+    }
+    .header-subtitle {
+        font-size: 0.92rem;
+    }
+    .padati-main {
+        padding: 1.25rem 0.65rem 3.5rem;
+    }
+    .sacred-reminder {
+        padding: 1.25rem 0.9rem;
+    }
+    .reminder-icon-box {
+        width: 44px;
+        height: 44px;
+        font-size: 1.15rem;
+        border-radius: 10px;
+    }
+    .qr-offer-btn {
+        max-width: 100%;
+        font-size: 0.98rem;
+        padding: 0.8rem 1rem;
+    }
+    .qr-image {
+        max-width: 190px;
+    }
+    .modal-bank-body {
+        padding: 1.25rem 1rem;
+    }
+    .bank-value-box {
+        font-size: 0.95rem;
+        padding: 0.65rem 0.75rem;
+    }
+    .bank-copy-btn {
+        padding: 0 0.85rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="padati-header">
+    <div class="header-layout">
+        <div class="header-image">
+            <div class="header-image-ring">
+                <img src="{{ url_for('static', filename='images/donation_page.jpg') }}" alt="Bhiksha Offering">
+            </div>
+        </div>
+        <div class="header-content">
+            <div class="header-sanskrit-chant">॥ पवित्र भिक्षा समर्पणम् ॥</div>
+            <h1 class="header-title">Sacred Bhiksha</h1>
+            <p class="header-subtitle">The sacred offering that sustains wisdom, dharma, and seekers worldwide</p>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="padati-main">
+    <div class="padati-container">
+
+        <!-- Devotional Content Section -->
+        <div class="sacred-reminder">
+            <div class="reminder-header">
+                <h5 class="reminder-title">
+                    <i class="fas fa-hand-holding-heart"></i> The Sacred Principle of Bhiksha
+                </h5>
+            </div>
+            <div class="reminder-grid">
+                <div class="reminder-item">
+                    <div class="reminder-icon-box">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <div class="reminder-content">
+                        <h6>Sustaining the Digital Sanctum</h6>
+                        <p>Your offering directly sustains the technical infrastructure, sanctum servers, and sacred archive that preserves and transmits this eternal wisdom to sadhaks worldwide.</p>
+                    </div>
+                </div>
+                <div class="reminder-item">
+                    <div class="reminder-icon-box">
+                        <i class="fas fa-dove"></i>
+                    </div>
+                    <div class="reminder-content">
+                        <h6>Extending Divine Compassion</h6>
+                        <p>Special opportunities to support selfless dharma such as Gau Seva (Goshala protection) and serving the visually impaired (Blind School Seva) allow your grace to uplift lives.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Centered Offering CTA Triggers -->
+        <div class="qr-button-container">
+            <button class="qr-offer-btn" id="openQRModal">
+                <i class="fas fa-qrcode"></i>
+                <span>Offer Bhiksha via QR Code</span>
+            </button>
+            <button class="qr-offer-btn qr-bank-btn" id="openBankModal">
+                <i class="fas fa-university"></i>
+                <span>Offer Bhiksha via Account Transfer</span>
+            </button>
+        </div>
+
+        {% if all_worksheet_data and all_worksheet_data|length > 0 %}
+        <!-- Tabs & Table Section -->
+        <div class="sacred-tabs">
+            <!-- Navigation -->
+            <div class="sacred-tabs-nav">
+                {% for worksheet_name, worksheet_data in all_worksheet_data.items() %}
+                <button class="sacred-tab-item {% if loop.first %}active{% endif %}"
+                    data-tab="{{ worksheet_name|replace(' ', '')|lower }}">
+                    <i class="fas fa-folder-open"></i>
+                    <span>{{ worksheet_name }}</span>
+                    <span class="badge">{{ worksheet_data.summary.total_donations }}</span>
+                </button>
+                {% endfor %}
+            </div>
+
+            <!-- Tab Content -->
+            <div class="sacred-tab-content">
+                {% for worksheet_name, worksheet_data in all_worksheet_data.items() %}
+                <div class="enterprise-tab-pane {% if loop.first %}active{% endif %}"
+                    id="{{ worksheet_name|replace(' ', '')|lower }}" style="display: none; height: 100%;">
+
+                    <div class="sacred-card">
+                        <div class="sacred-card-header">
+                            <h5>
+                                <i class="fas fa-table me-2"></i>
+                                {{ worksheet_name }} Offerings Ledger
+                            </h5>
+                            <span class="table-meta-badge">
+                                <i class="fas fa-sync-alt me-1"></i> Synchronized Ledger
+                            </span>
+                        </div>
+
+                        {% if worksheet_data.donations %}
+                        <div class="table-responsive">
+                            <table class="sacred-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Bhikshuk / Devotee</th>
+                                        <th>Sacred Amount</th>
+                                        <th>Method</th>
+                                        <th>Verification</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for donation in worksheet_data.donations %}
+                                    <tr>
+                                        <td>
+                                            <div style="font-weight: 500; font-family: var(--serif, serif);">
+                                                {% if donation.donation_date %}
+                                                {{ donation.donation_date if donation.donation_date is string else
+                                                donation.donation_date.strftime('%B %d, %Y') }}
+                                                {% else %}
+                                                <span style="opacity: 0.6;">–</span>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex flex-column">
+                                                <span class="donor-name">{{ donation.donor_name }}</span>
+                                                {% if donation.donor_email %}
+                                                <span class="donor-email">{{ donation.donor_email }}</span>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="donation-amount">
+                                                {{ donation.currency }} {{ "%.2f"|format(donation.amount) }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="method-badge">
+                                                {{ donation.payment_method }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {% if donation.is_verified or donation.status == 'Verified' %}
+                                            <span class="status-badge status-verified">
+                                                <i class="fas fa-check-circle"></i> Verified
+                                            </span>
+                                            {% else %}
+                                            <span class="status-badge status-pending">
+                                                <i class="fas fa-clock"></i> Pending
+                                            </span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% else %}
+                        <div class="sacred-empty">
+                            <i class="fas fa-hands-praying"></i>
+                            <h3>No Bhiksha Recorded</h3>
+                            <p>No offerings recorded for this category yet.</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <!-- Universal Empty State -->
+        <div class="sacred-card" style="margin-top: 2rem;">
+            <div class="sacred-empty">
+                <i class="fas fa-hand-holding-dollar"></i>
+                <h3>Devotional Offerings Ledger</h3>
+                <p>Verified devotee offerings will appear here as they are sanctified by temple administrators.</p>
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+
+<!-- Payment QR Modal -->
+<div id="paymentQRModal" class="sacred-modal">
+    <div class="sacred-modal-content">
+        <div class="modal-close" id="closeQRModal">
+            <i class="fas fa-times"></i>
+        </div>
+        <div class="modal-hero">
+            <div class="modal-hero-icon">🚩</div>
+            <h3>Bhiksha Offering</h3>
+            <p>Your contribution sustains the sacred path</p>
+        </div>
+        <div class="modal-qr-container">
+            <div class="qr-image-frame">
+                <img src="{{ url_for('static', filename='images/payment_qr.png') }}" alt="Payment QR Code" class="qr-image">
+            </div>
+            <div class="upi-scan-text">Scan with any UPI App</div>
+            <div class="upi-icons-row">
+                <i class="fab fa-google-pay" title="Google Pay"></i>
+                <i class="fab fa-phonepe" title="PhonePe"></i>
+                <i class="fab fa-paytm" title="Paytm"></i>
+            </div>
+        </div>
+        <div class="modal-info">
+            <p>॥ ॐ भैरवाय नमः ॥ &nbsp;·&nbsp; May your offering bring spiritual abundance and grace</p>
+        </div>
+    </div>
+</div>
+
+<!-- Bank Transfer Modal -->
+<div id="bankTransferModal" class="sacred-modal">
+    <div class="sacred-modal-content">
+        <div class="modal-close" id="closeBankModal">
+            <i class="fas fa-times"></i>
+        </div>
+        <div class="modal-hero modal-hero-bank">
+            <div class="modal-hero-icon">🏦</div>
+            <h3>Direct Bank Transfer</h3>
+            <p>Direct bank transfer for your offering</p>
+        </div>
+
+        <div class="modal-bank-body">
+            <!-- Bank Name -->
+            <div class="bank-detail-group">
+                <label class="bank-label">Bank Name</label>
+                <div class="bank-input-group">
+                    <div class="bank-value-box">IndusInd Bank</div>
+                    <button class="bank-copy-btn" onclick="copyToClipboard('IndusInd Bank', this)" title="Copy to Clipboard">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Account Name -->
+            <div class="bank-detail-group">
+                <label class="bank-label">Account Name</label>
+                <div class="bank-input-group">
+                    <div class="bank-value-box">VASTUEZZ</div>
+                    <button class="bank-copy-btn" onclick="copyToClipboard('VASTUEZZ', this)" title="Copy to Clipboard">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Account Number -->
+            <div class="bank-detail-group">
+                <label class="bank-label">Account Number</label>
+                <div class="bank-input-group">
+                    <div class="bank-value-box">253695969369</div>
+                    <button class="bank-copy-btn" onclick="copyToClipboard('253695969369', this)" title="Copy to Clipboard">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- IFSC Code -->
+            <div class="bank-detail-group" style="margin-bottom: 0;">
+                <label class="bank-label">IFSC Code</label>
+                <div class="bank-input-group">
+                    <div class="bank-value-box">INDB0001013</div>
+                    <button class="bank-copy-btn" onclick="copyToClipboard('INDB0001013', this)" title="Copy to Clipboard">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-info">
+            <p>May your sacred contribution bring prosperity and spiritual elevation back to you.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const tabs = document.querySelectorAll('.sacred-tab-item');
+    const panes = document.querySelectorAll('.enterprise-tab-pane');
+
+    function switchTab(clickedTab) {
+        const targetId = clickedTab.getAttribute('data-tab');
+
+        // Deactivate all
+        tabs.forEach(t => t.classList.remove('active'));
+        panes.forEach(p => {
+            p.style.display = 'none';
+            p.classList.remove('active');
+        });
+
+        // Activate clicked
+        clickedTab.classList.add('active');
+        const targetPane = document.getElementById(targetId);
+        if (targetPane) {
+            targetPane.style.display = 'block';
+            setTimeout(() => targetPane.classList.add('active'), 10);
+        }
+    }
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', (e) => {
+            e.preventDefault();
+            switchTab(tab);
+        });
+    });
+
+    if (tabs.length > 0) {
+        switchTab(tabs[0]);
+    }
+
+    // QR Modal Logic
+    const qrModal = document.getElementById('paymentQRModal');
+    const openBtn = document.getElementById('openQRModal');
+    const closeBtn = document.getElementById('closeQRModal');
+
+    if (openBtn && qrModal) {
+        openBtn.addEventListener('click', () => {
+            qrModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        });
+    }
+
+    if (closeBtn && qrModal) {
+        closeBtn.addEventListener('click', () => {
+            qrModal.style.display = 'none';
+            document.body.style.overflow = '';
+        });
+    }
+
+    // Bank Modal Logic
+    const bankModal = document.getElementById('bankTransferModal');
+    const openBankBtn = document.getElementById('openBankModal');
+    const closeBankBtn = document.getElementById('closeBankModal');
+
+    if (openBankBtn && bankModal) {
+        openBankBtn.addEventListener('click', () => {
+            bankModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        });
+    }
+
+    if (closeBankBtn && bankModal) {
+        closeBankBtn.addEventListener('click', () => {
+            bankModal.style.display = 'none';
+            document.body.style.overflow = '';
+        });
+    }
+
+    // Close on clicking outside (for both modals)
+    window.addEventListener('click', (event) => {
+        if (event.target === qrModal) {
+            qrModal.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+        if (event.target === bankModal) {
+            bankModal.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+    });
+
+    // Close on Escape key
+    window.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            if (qrModal) qrModal.style.display = 'none';
+            if (bankModal) bankModal.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+    });
+});
+
+// Copy to Clipboard Function with emerald feedback
+function copyToClipboard(text, btnElement) {
+    navigator.clipboard.writeText(text).then(() => {
+        const originalHtml = btnElement.innerHTML;
+        btnElement.innerHTML = '<i class="fas fa-check" style="color: #6ee7b7;"></i>';
+        btnElement.style.borderColor = '#10b981';
+        btnElement.style.background = 'rgba(16, 185, 129, 0.2)';
+
+        setTimeout(() => {
+            btnElement.innerHTML = originalHtml;
+            btnElement.style.borderColor = 'rgba(212, 166, 74, 0.35)';
+            btnElement.style.background = 'rgba(212, 166, 74, 0.15)';
+        }, 2000);
+    }).catch(err => {
+        console.error('Failed to copy: ', err);
+        btnElement.innerHTML = '<i class="fas fa-exclamation-circle" style="color: #ef4444;"></i>';
+        setTimeout(() => {
+            btnElement.innerHTML = '<i class="far fa-copy"></i>';
+        }, 2000);
+    });
+}
+</script>
+{% endblock %}

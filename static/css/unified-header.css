@@ -53,15 +53,15 @@ header.chrome,
 }
 
 .chrome-inner {
-  max-width: 1280px !important;
+  max-width: 1440px !important;
   width: 100% !important;
   margin: 0 auto !important;
-  padding: 0 24px !important;
+  padding: 0 16px !important;
   display: flex !important;
   grid-template-columns: none !important; /* overrides legacy grid display */
   align-items: center !important;
   justify-content: space-between !important;
-  gap: 20px !important;
+  gap: 8px !important;
   box-sizing: border-box !important;
 }
 
@@ -72,7 +72,7 @@ header.chrome,
 .chrome-inner .left {
   display: flex !important;
   align-items: center !important;
-  gap: 12px !important;
+  gap: 10px !important;
   flex-shrink: 0 !important;
   text-decoration: none !important;
   color: inherit !important;
@@ -82,7 +82,7 @@ header.chrome,
 .chrome .om,
 .chrome .left .om {
   font-family: var(--chrome-skt, "Tiro Devanagari Sanskrit", serif) !important;
-  font-size: 28px !important;
+  font-size: 26px !important;
   color: #f0d48a !important;
   text-shadow: 0 0 16px rgba(212, 166, 74, 0.35) !important;
   line-height: 1 !important;
@@ -98,9 +98,9 @@ header.chrome,
 .chrome .b,
 .chrome .left .b {
   font-family: var(--chrome-display, "Cormorant Garamond", Georgia, serif) !important;
-  font-size: 21px !important;
+  font-size: 19px !important;
   font-weight: 600 !important;
-  letter-spacing: 0.04em !important;
+  letter-spacing: 0.03em !important;
   color: #fdfaf2 !important;
   font-style: normal !important;
   white-space: nowrap !important;
@@ -117,9 +117,9 @@ header.chrome,
 .badge-super,
 .chrome .badge-super {
   font-family: var(--chrome-mono, "JetBrains Mono", monospace) !important;
-  font-size: 9px !important;
-  letter-spacing: 0.18em !important;
-  padding: 3px 7px !important;
+  font-size: 8.5px !important;
+  letter-spacing: 0.15em !important;
+  padding: 2px 6px !important;
   background: rgba(212, 166, 74, 0.12) !important;
   color: #f0d48a !important;
   border: 1px solid rgba(212, 166, 74, 0.35) !important;
@@ -129,7 +129,7 @@ header.chrome,
   white-space: nowrap !important;
   display: inline-block !important;
   line-height: normal !important;
-  margin-left: 4px !important;
+  margin-left: 2px !important;
 }
 
 /* ==========================================================================
@@ -138,17 +138,18 @@ header.chrome,
 .chrome-nav {
   display: flex !important;
   align-items: center !important;
-  gap: 6px !important;
+  gap: 3px !important;
   list-style: none !important;
   margin: 0 !important;
   padding: 0 !important;
+  flex-shrink: 1 !important;
 }
 
 .chrome-nav .nav-item {
   font-family: var(--chrome-serif, "EB Garamond", Georgia, serif) !important;
-  font-size: 16px !important;
-  color: rgba(233, 223, 200, 0.68) !important;
-  padding: 8px 14px !important;
+  font-size: 14.5px !important;
+  color: rgba(233, 223, 200, 0.72) !important;
+  padding: 5px 8px !important;
   border-radius: 4px !important;
   position: relative !important;
   transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
@@ -177,8 +178,8 @@ header.chrome,
   content: "" !important;
   position: absolute !important;
   bottom: 0 !important;
-  left: 14px !important;
-  right: 14px !important;
+  left: 8px !important;
+  right: 8px !important;
   height: 2px !important;
   background: linear-gradient(90deg, transparent, #d4a64a, transparent) !important;
   border-radius: 2px !important;
@@ -188,6 +189,7 @@ header.chrome,
   border: 1px solid rgba(212, 166, 74, 0.35) !important;
   background: rgba(212, 166, 74, 0.08) !important;
   font-weight: 500 !important;
+  padding: 4px 8px !important;
 }
 
 .chrome-nav .nav-pill-super:hover {
@@ -196,26 +198,26 @@ header.chrome,
 }
 
 /* ==========================================================================
-   4. RIGHT CONTROLS (Audio, Search, Mobile Toggle)
+   4. RIGHT CONTROLS (Audio, Search, User, Direct Logout)
    ========================================================================== */
 .chrome .right,
 .chrome-inner .right {
   display: flex !important;
   align-items: center !important;
-  gap: 12px !important;
+  gap: 8px !important;
   flex-shrink: 0 !important;
 }
 
 .audio-toggle-btn {
   display: inline-flex !important;
   align-items: center !important;
-  gap: 6px !important;
-  padding: 7px 12px !important;
+  gap: 4px !important;
+  padding: 5px 9px !important;
   background: rgba(26, 20, 16, 0.7) !important;
   border: 1px solid rgba(212, 166, 74, 0.25) !important;
   border-radius: 4px !important;
   color: rgba(233, 223, 200, 0.68) !important;
-  font-size: 13px !important;
+  font-size: 12px !important;
   font-family: var(--chrome-mono, "JetBrains Mono", monospace) !important;
   transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
   cursor: pointer !important;
@@ -231,14 +233,14 @@ header.chrome,
 .search-btn {
   display: inline-flex !important;
   align-items: center !important;
-  gap: 8px !important;
-  padding: 7px 14px !important;
+  gap: 6px !important;
+  padding: 5px 10px !important;
   background: rgba(26, 20, 16, 0.8) !important;
   border: 1px solid rgba(212, 166, 74, 0.35) !important;
   border-radius: 4px !important;
   color: #d6c9a3 !important;
   font-family: var(--chrome-serif, "EB Garamond", Georgia, serif) !important;
-  font-size: 14px !important;
+  font-size: 13px !important;
   transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
   cursor: pointer !important;
   text-transform: none !important;
@@ -255,12 +257,43 @@ header.chrome,
 
 .search-btn .kbd {
   font-family: var(--chrome-mono, "JetBrains Mono", monospace) !important;
-  font-size: 10px !important;
+  font-size: 9px !important;
   background: rgba(233, 223, 200, 0.12) !important;
-  padding: 2px 6px !important;
+  padding: 1px 5px !important;
   border-radius: 3px !important;
   border: 1px solid rgba(233, 223, 200, 0.2) !important;
   color: inherit !important;
+}
+
+/* Direct One-Click Sign Out Button */
+.signout-direct-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 5px 11px !important;
+  background: rgba(128, 20, 20, 0.4) !important;
+  border: 1px solid rgba(239, 68, 68, 0.5) !important;
+  border-radius: 999px !important;
+  color: #fecaca !important;
+  font-family: var(--chrome-serif, "EB Garamond", serif) !important;
+  font-size: 0.88rem !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  white-space: nowrap !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35) !important;
+}
+
+.signout-direct-btn:hover {
+  background: rgba(185, 28, 28, 0.7) !important;
+  border-color: #ef4444 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.45) !important;
+  transform: translateY(-1px) !important;
+}
+
+.signout-direct-btn i {
+  font-size: 0.82rem !important;
 }
 
 .mobile-toggle {
@@ -272,6 +305,111 @@ header.chrome,
   background: none !important;
   border: none !important;
 }
+
+/* User Account & Profile Dropdown in Header */
+.user-menu-wrap {
+  position: relative !important;
+  display: inline-block !important;
+}
+
+.user-btn-trigger {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  background: rgba(28, 22, 36, 0.9) !important;
+  border: 1px solid rgba(212, 166, 74, 0.35) !important;
+  padding: 0.4rem 0.85rem !important;
+  border-radius: 999px !important;
+  color: #fdfaf2 !important;
+  font-family: var(--chrome-serif, 'EB Garamond', serif) !important;
+  font-size: 0.95rem !important;
+  cursor: pointer !important;
+  transition: all 0.25s ease !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+}
+
+.user-btn-trigger:hover {
+  border-color: #f0d48a !important;
+  background: rgba(212, 166, 74, 0.2) !important;
+  color: #f0d48a !important;
+}
+
+.user-avatar-mini {
+  width: 22px !important;
+  height: 22px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  border: 1px solid #d4a64a !important;
+}
+
+.admin-badge-mini {
+  background: linear-gradient(135deg, #d4af37, #9a7218) !important;
+  color: #000 !important;
+  font-size: 0.65rem !important;
+  padding: 0.15rem 0.45rem !important;
+  border-radius: 4px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+}
+
+.user-dropdown-menu {
+  display: none;
+  position: absolute !important;
+  top: calc(100% + 8px) !important;
+  right: 0 !important;
+  min-width: 220px !important;
+  background: linear-gradient(180deg, rgba(24, 19, 32, 0.98) 0%, rgba(14, 11, 20, 0.98) 100%) !important;
+  border: 1px solid rgba(212, 166, 74, 0.35) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.85) !important;
+  padding: 0.5rem 0 !important;
+  z-index: 1100 !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+
+.user-menu-wrap:hover .user-dropdown-menu,
+.user-menu-wrap:focus-within .user-dropdown-menu {
+  display: block !important;
+}
+
+.user-dropdown-header {
+  padding: 0.75rem 1.25rem !important;
+  border-bottom: 1px solid rgba(212, 166, 74, 0.15) !important;
+  font-size: 0.85rem !important;
+  color: #f0d48a !important;
+  text-align: left !important;
+}
+
+.user-dropdown-menu a {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+  padding: 0.7rem 1.25rem !important;
+  color: #fdfaf2 !important;
+  text-decoration: none !important;
+  font-size: 0.92rem !important;
+  transition: all 0.2s ease !important;
+  text-align: left !important;
+}
+
+.user-dropdown-menu a:hover {
+  background: rgba(212, 166, 74, 0.15) !important;
+  color: #f0d48a !important;
+}
+
+.user-dropdown-menu .divider {
+  height: 1px !important;
+  background: rgba(212, 166, 74, 0.15) !important;
+  margin: 0.4rem 0 !important;
+}
+
+.is-admin-pill {
+  color: #f0d48a !important;
+  border-color: #d4a64a !important;
+}
+
 
 /* ==========================================================================
    5. ASHTAMI ALERT RIBBON
@@ -563,35 +701,31 @@ header.chrome,
     justify-content: center !important;
     width: 38px !important;
     height: 38px !important;
-    font-size: 22px !important;
+    font-size: 20px !important;
     color: #d4a64a !important;
     background: rgba(212, 166, 74, 0.1) !important;
     border: 1px solid rgba(212, 166, 74, 0.35) !important;
-    border-radius: 4px !important;
+    border-radius: 6px !important;
     cursor: pointer !important;
+    flex-shrink: 0 !important;
   }
 
   .chrome-inner {
-    padding: 0 16px !important;
-    gap: 12px !important;
+    padding: 0 14px !important;
+    gap: 8px !important;
   }
 
   .chrome .b,
   .chrome .left .b {
-    font-size: 19px !important;
+    font-size: 18px !important;
   }
 
   .chrome .om,
   .chrome .left .om {
-    font-size: 24px !important;
+    font-size: 23px !important;
   }
 
-  .search-btn {
-    padding: 6px 10px !important;
-    font-size: 13px !important;
-  }
-
-  .search-btn .kbd {
+  .audio-toggle-btn .btn-label-text {
     display: none !important;
   }
 
@@ -600,9 +734,28 @@ header.chrome,
     font-size: 12px !important;
   }
 
+  .search-btn {
+    padding: 6px 8px !important;
+    font-size: 13px !important;
+  }
+
+  .search-btn .kbd {
+    display: none !important;
+  }
+
+  .signout-direct-btn {
+    padding: 6px 9px !important;
+    font-size: 0.8rem !important;
+  }
+
+  .user-btn-trigger {
+    padding: 0.35rem 0.65rem !important;
+    font-size: 0.88rem !important;
+  }
+
   .ashtami-banner {
     padding: 8px 12px !important;
-    font-size: 13px !important;
+    font-size: 12px !important;
   }
 
   .ashtami-inner {
@@ -617,7 +770,29 @@ header.chrome,
   }
 }
 
-/* Small Smartphone Screens */
+/* Medium Phone Screens (<= 640px) */
+@media (max-width: 640px) {
+  .signout-direct-btn span {
+    display: none !important;
+  }
+
+  .signout-direct-btn {
+    padding: 6px 10px !important;
+    border-radius: 6px !important;
+  }
+
+  .user-btn-trigger span {
+    max-width: 80px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .user-btn-trigger i.fa-chevron-down {
+    display: none !important;
+  }
+}
+
+/* Small Smartphone Screens (<= 480px) */
 @media (max-width: 480px) {
   .badge-super,
   .chrome .badge-super {
@@ -626,21 +801,21 @@ header.chrome,
 
   .chrome .b,
   .chrome .left .b {
-    font-size: 17px !important;
+    font-size: 16px !important;
   }
 
   .chrome .om,
   .chrome .left .om {
-    font-size: 22px !important;
+    font-size: 21px !important;
   }
 
   .chrome-inner {
-    padding: 0 12px !important;
+    padding: 0 10px !important;
   }
 
   .chrome .right,
   .chrome-inner .right {
-    gap: 6px !important;
+    gap: 5px !important;
   }
 
   .search-btn span:first-child {
@@ -653,6 +828,25 @@ header.chrome,
   }
 
   .audio-toggle-btn span {
-    font-size: 11px !important;
+    font-size: 12px !important;
+  }
+
+  .user-btn-trigger {
+    padding: 0.35rem 0.5rem !important;
+  }
+
+  .user-btn-trigger span {
+    display: none !important;
+  }
+
+  .mobile-drawer {
+    width: 270px !important;
+    padding: 20px 16px !important;
+  }
+
+  .drawer-links a {
+    font-size: 16px !important;
+    padding: 9px 10px !important;
   }
 }
+

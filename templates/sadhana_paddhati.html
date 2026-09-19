@@ -1454,6 +1454,68 @@
 {% endblock %}
 
 {% block content %}
+{% set is_admin = current_user.is_authenticated and current_user.is_admin() %}
+{% set is_auth = current_user.is_authenticated %}
+{% set acc_1 = is_auth and (is_admin or current_user.mandala_1_access) %}
+{% set comp_1 = is_auth and current_user.mandala_1_completed_at %}
+{% set acc_2 = is_auth and (is_admin or current_user.mandala_2_access) %}
+{% set comp_2 = is_auth and current_user.mandala_2_completed_at %}
+{% set acc_3 = is_auth and (is_admin or current_user.mandala_3_access) %}
+{% set comp_3 = is_auth and current_user.mandala_3_completed_at %}
+{% set acc_7 = is_auth and (is_admin or current_user.pratham_charana_diksha_access) %}
+{% set comp_7 = is_auth and current_user.pratham_charana_diksha_completed_at %}
+{% set acc_4 = is_auth and (is_admin or current_user.rudraksha_8_mukhi_access) %}
+{% set comp_4 = is_auth and current_user.rudraksha_8_mukhi_completed_at %}
+{% set acc_5 = is_auth and (is_admin or current_user.rudraksha_11_mukhi_access) %}
+{% set comp_5 = is_auth and current_user.rudraksha_11_mukhi_completed_at %}
+{% set acc_8 = is_auth and (is_admin or current_user.dutiya_charana_access) %}
+{% set comp_8 = is_auth and current_user.dutiya_charana_completed_at %}
+{% set acc_6 = is_auth and (is_admin or current_user.rudraksha_14_mukhi_access) %}
+{% set comp_6 = is_auth and current_user.rudraksha_14_mukhi_completed_at %}
+{% set acc_9 = is_auth and (is_admin or current_user.tritiya_charana_access) %}
+{% set comp_9 = is_auth and current_user.tritiya_charana_completed_at %}
+{% set acc_d1 = is_auth and (is_admin or current_user.devi_mandala_1_access) %}
+{% set acc_d2 = is_auth and (is_admin or current_user.devi_mandala_2_access) %}
+{% set acc_d3 = is_auth and (is_admin or current_user.devi_mandala_3_access) %}
+
+<!-- Sadhak Live Status Banner -->
+<div class="sadhak-status-banner" style="max-width: 1440px; width: 95%; margin: 1.5rem auto -1rem; padding: 1.25rem 2rem; background: linear-gradient(135deg, rgba(28, 22, 36, 0.95), rgba(15, 12, 20, 0.95)); border: 1px solid var(--gold-border); border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+  {% if current_user.is_authenticated %}
+    <div style="display: flex; align-items: center; gap: 1.25rem;">
+      <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), #7a1515); border: 2px solid var(--gold-bright); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #fff; box-shadow: 0 0 15px rgba(212,175,55,0.4);">
+        ॐ
+      </div>
+      <div>
+        <div style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--gold-bright);">Initiated Sadhak Status</div>
+        <h3 style="margin: 0; font-family: var(--display); font-size: 1.45rem; color: var(--paper-bright);">{{ current_user.full_name or current_user.username }}</h3>
+        <div style="font-size: 0.85rem; color: var(--paper-dim);">Current Stage: <span class="gold" style="font-weight: 600;">Stage {{ current_user.get_current_stage() }}</span> · Practice Level: <span class="gold">{{ current_user.practice_level or 'Seeker' }}</span></div>
+      </div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <a href="/mandala-sadhana" class="btn-gold" style="font-size: 0.9rem; padding: 0.55rem 1.15rem; text-decoration: none;"><i class="fas fa-scroll"></i> Commit to Mandala Vow</a>
+      <a href="/auth/profile" class="btn-outline" style="font-size: 0.9rem; padding: 0.55rem 1.15rem; text-decoration: none;"><i class="fas fa-id-badge"></i> Spiritual Profile</a>
+      {% if current_user.is_admin() %}
+      <a href="/auth/admin/users" class="btn-outline" style="font-size: 0.9rem; padding: 0.55rem 1.15rem; border-color: var(--gold); text-decoration: none;"><i class="fas fa-shield-halved"></i> Admin Desk</a>
+      {% endif %}
+    </div>
+  {% else %}
+    <div style="display: flex; align-items: center; gap: 1.25rem;">
+      <div style="width: 50px; height: 50px; border-radius: 50%; background: rgba(212, 175, 55, 0.15); border: 1px solid var(--gold); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--gold-bright);">
+        🔱
+      </div>
+      <div>
+        <div style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--gold-bright);">The Path of Bhairava & Devi</div>
+        <h3 style="margin: 0; font-family: var(--display); font-size: 1.35rem; color: var(--paper-bright);">Track Your Mandalas & Rudraksha Diksha Journey</h3>
+        <div style="font-size: 0.85rem; color: var(--paper-dim);">Sign in to record stage completions, submit sacred vows, and receive lineage stage access approvals.</div>
+      </div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+      <a href="/auth/login?next=/sadhana-paddhati" class="btn-gold" style="font-size: 0.9rem; padding: 0.55rem 1.25rem; text-decoration: none;"><i class="fas fa-sign-in-alt"></i> Sign In to Sādhana Portal</a>
+      <a href="/auth/register" class="btn-outline" style="font-size: 0.9rem; padding: 0.55rem 1.25rem; text-decoration: none;"><i class="fas fa-user-plus"></i> Register as Sadhak</a>
+    </div>
+  {% endif %}
+</div>
+
 <!-- ==================== HERO SECTION ==================== -->
 <section class="paddhati-hero">
   <div class="skt-badge">॥ श्री भैरव साधना एवं श्री कामाख्या कृपा पद्धतिः ॥</div>
@@ -1533,16 +1595,16 @@
 
             <div class="flow-cards">
               <!-- Mandala 1 -->
-              <div class="stage-card" onclick="openStageModal(1)" role="button" tabindex="0">
+              <div class="stage-card {% if comp_1 %}is-completed{% elif acc_1 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="openStageModal(1)" role="button" tabindex="0">
                 <div class="card-status-icon">
-                  <i class="fas fa-unlock"></i>
+                  {% if comp_1 %}<i class="fas fa-check" style="color:var(--admin-success);"></i>{% elif acc_1 %}<i class="fas fa-unlock" style="color:var(--gold-bright);"></i>{% elif is_auth %}<i class="fas fa-lock" style="color:#9ca3af;"></i>{% else %}<i class="fas fa-om"></i>{% endif %}
                 </div>
                 <div class="card-body">
                   <img src="{{ url_for('static', filename='images/stage_headers/mandala_1_header.jpg') }}" alt="Mandala 1" class="mandala-img" onerror="this.src='/static/images/logo.jpeg'" />
                   <div class="card-title">Mandala 1</div>
                   <div class="card-days">21 / 41 Days</div>
                   <div class="card-essence">Asana Siddhi &amp; Prana Stillness</div>
-                  <div class="card-status-text">Ready · Tap to Explore</div>
+                  <div class="card-status-text">{% if comp_1 %}<span style="color:#34d399;">Completed ✓</span>{% elif acc_1 %}<span class="gold">Unlocked · Enter Portal →</span>{% elif is_auth %}<span style="color:#9ca3af;">Locked 🔒 · Tap to Request</span>{% else %}Ready · Tap to Explore{% endif %}</div>
                 </div>
               </div>
 
@@ -1554,16 +1616,16 @@
               </div>
 
               <!-- Mandala 2 -->
-              <div class="stage-card" onclick="openStageModal(2)" role="button" tabindex="0">
+              <div class="stage-card {% if comp_2 %}is-completed{% elif acc_2 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="openStageModal(2)" role="button" tabindex="0">
                 <div class="card-status-icon">
-                  <i class="fas fa-unlock"></i>
+                  {% if comp_2 %}<i class="fas fa-check" style="color:var(--admin-success);"></i>{% elif acc_2 %}<i class="fas fa-unlock" style="color:var(--gold-bright);"></i>{% elif is_auth %}<i class="fas fa-lock" style="color:#9ca3af;"></i>{% else %}<i class="fas fa-om"></i>{% endif %}
                 </div>
                 <div class="card-body">
                   <img src="{{ url_for('static', filename='images/stage_headers/mandala_2_header.jpg') }}" alt="Mandala 2" class="mandala-img" onerror="this.src='/static/images/logo.jpeg'" />
                   <div class="card-title">Mandala 2</div>
                   <div class="card-days">41 Days</div>
                   <div class="card-essence">Internal Purification &amp; Spanda</div>
-                  <div class="card-status-text">Ready · Tap to Explore</div>
+                  <div class="card-status-text">{% if comp_2 %}<span style="color:#34d399;">Completed ✓</span>{% elif acc_2 %}<span class="gold">Unlocked · Enter Portal →</span>{% elif is_auth %}<span style="color:#9ca3af;">Locked 🔒 · Tap to Request</span>{% else %}Ready · Tap to Explore{% endif %}</div>
                 </div>
               </div>
 
@@ -1575,16 +1637,16 @@
               </div>
 
               <!-- Mandala 3 -->
-              <div class="stage-card" onclick="openStageModal(3)" role="button" tabindex="0">
+              <div class="stage-card {% if comp_3 %}is-completed{% elif acc_3 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="openStageModal(3)" role="button" tabindex="0">
                 <div class="card-status-icon">
-                  <i class="fas fa-unlock"></i>
+                  {% if comp_3 %}<i class="fas fa-check" style="color:var(--admin-success);"></i>{% elif acc_3 %}<i class="fas fa-unlock" style="color:var(--gold-bright);"></i>{% elif is_auth %}<i class="fas fa-lock" style="color:#9ca3af;"></i>{% else %}<i class="fas fa-om"></i>{% endif %}
                 </div>
                 <div class="card-body">
                   <img src="{{ url_for('static', filename='images/stage_headers/mandala_3_header.jpg') }}" alt="Mandala 3" class="mandala-img" onerror="this.src='/static/images/logo.jpeg'" />
                   <div class="card-title">Mandala 3</div>
                   <div class="card-days">41 Days</div>
                   <div class="card-essence">Foundational Mastery &amp; Grounding</div>
-                  <div class="card-status-text">Ready · Tap to Explore</div>
+                  <div class="card-status-text">{% if comp_3 %}<span style="color:#34d399;">Completed ✓</span>{% elif acc_3 %}<span class="gold">Unlocked · Enter Portal →</span>{% elif is_auth %}<span style="color:#9ca3af;">Locked 🔒 · Tap to Request</span>{% else %}Ready · Tap to Explore{% endif %}</div>
                 </div>
               </div>
             </div>
@@ -1622,16 +1684,16 @@
 
             <div class="flow-cards">
               <!-- Pratham Charana -->
-              <div class="stage-card" onclick="openStageModal(7)" role="button" tabindex="0">
+              <div class="stage-card {% if comp_7 %}is-completed{% elif acc_7 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="openStageModal(7)" role="button" tabindex="0">
                 <div class="card-status-icon">
-                  <i class="fas fa-om"></i>
+                  {% if comp_7 %}<i class="fas fa-check" style="color:var(--admin-success);"></i>{% elif acc_7 %}<i class="fas fa-unlock" style="color:var(--gold-bright);"></i>{% elif is_auth %}<i class="fas fa-lock" style="color:#9ca3af;"></i>{% else %}<i class="fas fa-om"></i>{% endif %}
                 </div>
                 <div class="card-body diksha-body">
                   <img src="{{ url_for('static', filename='images/pratam_charana_header.jpg') }}" alt="Pratham Charana" class="rudraksha-img" onerror="this.src='/static/images/logo.jpeg'" />
                   <div class="card-title">Pratham Charana</div>
                   <div class="card-days">Diksha Initiation</div>
                   <div class="card-essence">Guru Sankalpa &amp; Lineage Transmission</div>
-                  <div class="card-status-text">Ready · Tap to Explore</div>
+                  <div class="card-status-text">{% if comp_7 %}<span style="color:#34d399;">Completed ✓</span>{% elif acc_7 %}<span class="gold">Unlocked · Enter Portal →</span>{% elif is_auth %}<span style="color:#9ca3af;">Locked 🔒 · Tap to Request</span>{% else %}Ready · Tap to Explore{% endif %}</div>
                 </div>
               </div>
 
@@ -1643,16 +1705,16 @@
               </div>
 
               <!-- 8 Mukhi -->
-              <div class="stage-card" onclick="openStageModal(4)" role="button" tabindex="0">
+              <div class="stage-card {% if comp_4 %}is-completed{% elif acc_4 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="openStageModal(4)" role="button" tabindex="0">
                 <div class="card-status-icon">
-                  <i class="fas fa-circle-dot"></i>
+                  {% if comp_4 %}<i class="fas fa-check" style="color:var(--admin-success);"></i>{% elif acc_4 %}<i class="fas fa-unlock" style="color:var(--gold-bright);"></i>{% elif is_auth %}<i class="fas fa-lock" style="color:#9ca3af;"></i>{% else %}<i class="fas fa-om"></i>{% endif %}
                 </div>
                 <div class="card-body rudraksha-body">
                   <img src="{{ url_for('static', filename='images/8 Mukhi _ Achtgesicht Rudraksha Nepal 20-22 mm.jpeg') }}" alt="8 Mukhi Rudraksha" class="rudraksha-img" onerror="this.src='/static/images/logo.jpeg'" />
                   <div class="card-title">8 Mukhi Rudraksha</div>
                   <div class="card-days">Lord Ganesha &amp; Ashta Bhairava</div>
                   <div class="card-essence">Obstacle Dissolution &amp; Grounding</div>
-                  <div class="card-status-text">Ready · Tap to Explore</div>
+                  <div class="card-status-text">{% if comp_4 %}<span style="color:#34d399;">Completed ✓</span>{% elif acc_4 %}<span class="gold">Unlocked · Enter Portal →</span>{% elif is_auth %}<span style="color:#9ca3af;">Locked 🔒 · Tap to Request</span>{% else %}Ready · Tap to Explore{% endif %}</div>
                 </div>
               </div>
 
@@ -1664,16 +1726,16 @@
               </div>
 
               <!-- 11 Mukhi -->
-              <div class="stage-card" onclick="openStageModal(5)" role="button" tabindex="0">
+              <div class="stage-card {% if comp_5 %}is-completed{% elif acc_5 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="openStageModal(5)" role="button" tabindex="0">
                 <div class="card-status-icon">
-                  <i class="fas fa-circle-dot"></i>
+                  {% if comp_5 %}<i class="fas fa-check" style="color:var(--admin-success);"></i>{% elif acc_5 %}<i class="fas fa-unlock" style="color:var(--gold-bright);"></i>{% elif is_auth %}<i class="fas fa-lock" style="color:#9ca3af;"></i>{% else %}<i class="fas fa-om"></i>{% endif %}
                 </div>
                 <div class="card-body rudraksha-body">
                   <img src="{{ url_for('static', filename='images/rudraksha/rudrakha_11_mukhi.jpeg') }}" alt="11 Mukhi Rudraksha" class="rudraksha-img" onerror="this.src='/static/images/logo.jpeg'" />
                   <div class="card-title">11 Mukhi Rudraksha</div>
                   <div class="card-days">Ekadasha Rudra Spanda</div>
                   <div class="card-essence">Fearlessness &amp; Psychic Protection</div>
-                  <div class="card-status-text">Ready · Tap to Explore</div>
+                  <div class="card-status-text">{% if comp_5 %}<span style="color:#34d399;">Completed ✓</span>{% elif acc_5 %}<span class="gold">Unlocked · Enter Portal →</span>{% elif is_auth %}<span style="color:#9ca3af;">Locked 🔒 · Tap to Request</span>{% else %}Ready · Tap to Explore{% endif %}</div>
                 </div>
               </div>
             </div>
@@ -1711,16 +1773,16 @@
 
             <div class="flow-cards">
               <!-- Dutiya Charana -->
-              <div class="stage-card" onclick="openStageModal(8)" role="button" tabindex="0">
+              <div class="stage-card {% if comp_8 %}is-completed{% elif acc_8 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="openStageModal(8)" role="button" tabindex="0">
                 <div class="card-status-icon">
-                  <i class="fas fa-om"></i>
+                  {% if comp_8 %}<i class="fas fa-check" style="color:var(--admin-success);"></i>{% elif acc_8 %}<i class="fas fa-unlock" style="color:var(--gold-bright);"></i>{% elif is_auth %}<i class="fas fa-lock" style="color:#9ca3af;"></i>{% else %}<i class="fas fa-om"></i>{% endif %}
                 </div>
                 <div class="card-body charana-body">
                   <img src="{{ url_for('static', filename='images/bhairava_black.jpg') }}" alt="Dutiya Charana" class="mandala-img" onerror="this.src='/static/images/logo.jpeg'" />
                   <div class="card-title">Dutiya Charana</div>
                   <div class="card-days">Deep Antar-Sadhana</div>
                   <div class="card-essence">Inner Mouna &amp; Chidakasha Contemplation</div>
-                  <div class="card-status-text">Ready · Tap to Explore</div>
+                  <div class="card-status-text">{% if comp_8 %}<span style="color:#34d399;">Completed ✓</span>{% elif acc_8 %}<span class="gold">Unlocked · Enter Portal →</span>{% elif is_auth %}<span style="color:#9ca3af;">Locked 🔒 · Tap to Request</span>{% else %}Ready · Tap to Explore{% endif %}</div>
                 </div>
               </div>
 
@@ -1732,16 +1794,16 @@
               </div>
 
               <!-- 14 Mukhi -->
-              <div class="stage-card" onclick="openStageModal(6)" role="button" tabindex="0">
+              <div class="stage-card {% if comp_6 %}is-completed{% elif acc_6 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="openStageModal(6)" role="button" tabindex="0">
                 <div class="card-status-icon">
-                  <i class="fas fa-circle-dot"></i>
+                  {% if comp_6 %}<i class="fas fa-check" style="color:var(--admin-success);"></i>{% elif acc_6 %}<i class="fas fa-unlock" style="color:var(--gold-bright);"></i>{% elif is_auth %}<i class="fas fa-lock" style="color:#9ca3af;"></i>{% else %}<i class="fas fa-om"></i>{% endif %}
                 </div>
                 <div class="card-body rudraksha-body">
                   <img src="{{ url_for('static', filename='images/rudraksha/rudarakha_14_muki.jpeg') }}" alt="14 Mukhi Rudraksha" class="rudraksha-img" onerror="this.src='/static/images/logo.jpeg'" />
                   <div class="card-title">14 Mukhi Rudraksha</div>
                   <div class="card-days">Deva Mani · Ajna Awakening</div>
                   <div class="card-essence">Third Eye Opening &amp; Direct Intuition</div>
-                  <div class="card-status-text">Ready · Tap to Explore</div>
+                  <div class="card-status-text">{% if comp_6 %}<span style="color:#34d399;">Completed ✓</span>{% elif acc_6 %}<span class="gold">Unlocked · Enter Portal →</span>{% elif is_auth %}<span style="color:#9ca3af;">Locked 🔒 · Tap to Request</span>{% else %}Ready · Tap to Explore{% endif %}</div>
                 </div>
               </div>
 
@@ -1753,16 +1815,16 @@
               </div>
 
               <!-- Tritiya Charana -->
-              <div class="stage-card" onclick="openStageModal(9)" role="button" tabindex="0">
+              <div class="stage-card {% if comp_9 %}is-completed{% elif acc_9 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="openStageModal(9)" role="button" tabindex="0">
                 <div class="card-status-icon">
-                  <i class="fas fa-star"></i>
+                  {% if comp_9 %}<i class="fas fa-check" style="color:var(--admin-success);"></i>{% elif acc_9 %}<i class="fas fa-unlock" style="color:var(--gold-bright);"></i>{% elif is_auth %}<i class="fas fa-lock" style="color:#9ca3af;"></i>{% else %}<i class="fas fa-om"></i>{% endif %}
                 </div>
                 <div class="card-body charana-body">
                   <img src="{{ url_for('static', filename='images/bhairava_eight_hands.jpeg') }}" alt="Tritiya Charana" class="mandala-img" onerror="this.src='/static/images/logo.jpeg'" />
                   <div class="card-title">Tritiya Charana</div>
                   <div class="card-days">Purna Samadhi &amp; Union</div>
                   <div class="card-essence">Sarvam Bhairava Swaroopam Realization</div>
-                  <div class="card-status-text">Ready · Tap to Explore</div>
+                  <div class="card-status-text">{% if comp_9 %}<span style="color:#34d399;">Completed ✓</span>{% elif acc_9 %}<span class="gold">Unlocked · Enter Portal →</span>{% elif is_auth %}<span style="color:#9ca3af;">Locked 🔒 · Tap to Request</span>{% else %}Ready · Tap to Explore{% endif %}</div>
                 </div>
               </div>
             </div>
@@ -1958,16 +2020,16 @@
 
           <div class="flow-cards">
             <!-- Devi Mandala 1 -->
-            <div class="stage-card" onclick="openStageModal(101)" role="button" tabindex="0">
+            <div class="stage-card {% if acc_d1 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="openStageModal(101)" role="button" tabindex="0">
               <div class="card-status-icon">
-                <i class="fas fa-unlock"></i>
+                {% if acc_d1 %}<i class="fas fa-unlock" style="color:var(--gold-bright);"></i>{% elif is_auth %}<i class="fas fa-lock" style="color:#9ca3af;"></i>{% else %}<i class="fas fa-om"></i>{% endif %}
               </div>
               <div class="card-body">
                 <img src="{{ url_for('static', filename='images/kamakhaya_maa_mandla_1_header.jpg') }}" alt="Devi Mandala 1" class="mandala-img" onerror="this.src='/static/images/stage_headers/mandala_1_header.jpg'" />
                 <div class="card-title">Devi Mandala 1</div>
                 <div class="card-days">33 Days</div>
                 <div class="card-essence">Womb of Grace &amp; Maternal Refuge</div>
-                <div class="card-status-text">Ready · Tap to Explore</div>
+                <div class="card-status-text">{% if acc_d1 %}<span class="gold">Unlocked · Enter Portal →</span>{% elif is_auth %}<span style="color:#9ca3af;">Locked 🔒 · Tap to Request</span>{% else %}Ready · Tap to Explore{% endif %}</div>
               </div>
             </div>
 
@@ -1979,16 +2041,16 @@
             </div>
 
             <!-- Devi Mandala 2 -->
-            <div class="stage-card" onclick="openStageModal(102)" role="button" tabindex="0">
+            <div class="stage-card {% if acc_d2 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="openStageModal(102)" role="button" tabindex="0">
               <div class="card-status-icon">
-                <i class="fas fa-unlock"></i>
+                {% if acc_d2 %}<i class="fas fa-unlock" style="color:var(--gold-bright);"></i>{% elif is_auth %}<i class="fas fa-lock" style="color:#9ca3af;"></i>{% else %}<i class="fas fa-om"></i>{% endif %}
               </div>
               <div class="card-body">
                 <img src="{{ url_for('static', filename='images/kamakhaya_maa_mandla_2_header.jpg') }}" alt="Devi Mandala 2" class="mandala-img" onerror="this.src='/static/images/stage_headers/mandala_2_header.jpg'" />
                 <div class="card-title">Devi Mandala 2</div>
                 <div class="card-days">66 Days</div>
                 <div class="card-essence">Dynamic Spanda of Cosmic Shakti</div>
-                <div class="card-status-text">Ready · Tap to Explore</div>
+                <div class="card-status-text">{% if acc_d2 %}<span class="gold">Unlocked · Enter Portal →</span>{% elif is_auth %}<span style="color:#9ca3af;">Locked 🔒 · Tap to Request</span>{% else %}Ready · Tap to Explore{% endif %}</div>
               </div>
             </div>
 
@@ -2000,16 +2062,16 @@
             </div>
 
             <!-- Devi Mandala 3 -->
-            <div class="stage-card" onclick="openStageModal(103)" role="button" tabindex="0">
+            <div class="stage-card {% if acc_d3 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="openStageModal(103)" role="button" tabindex="0">
               <div class="card-status-icon">
-                <i class="fas fa-unlock"></i>
+                {% if acc_d3 %}<i class="fas fa-unlock" style="color:var(--gold-bright);"></i>{% elif is_auth %}<i class="fas fa-lock" style="color:#9ca3af;"></i>{% else %}<i class="fas fa-om"></i>{% endif %}
               </div>
               <div class="card-body">
                 <img src="{{ url_for('static', filename='images/kamakhaya_maa_mandla_3_header.jpg') }}" alt="Devi Mandala 3" class="mandala-img" onerror="this.src='/static/images/stage_headers/mandala_3_header.jpg'" />
                 <div class="card-title">Devi Mandala 3</div>
                 <div class="card-days">99 Days</div>
                 <div class="card-essence">Purna Devi Samarpanam &amp; Union</div>
-                <div class="card-status-text">Ready · Tap to Explore</div>
+                <div class="card-status-text">{% if acc_d3 %}<span class="gold">Unlocked · Enter Portal →</span>{% elif is_auth %}<span style="color:#9ca3af;">Locked 🔒 · Tap to Request</span>{% else %}Ready · Tap to Explore{% endif %}</div>
               </div>
             </div>
           </div>
@@ -2088,12 +2150,15 @@
         </div>
       </div>
 
-      <div class="modal-cta-wrap">
-        <a href="https://t.me/+tM8pVCZWG8cxYjc1" target="_blank" rel="noopener" class="modal-btn-telegram">
+      <div class="modal-cta-wrap" id="modal-cta-dynamic" style="display: flex; flex-direction: column; gap: 0.75rem; width: 100%;">
+        <!-- Injected via JavaScript -->
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; width: 100%;">
+        <a href="https://t.me/+tM8pVCZWG8cxYjc1" target="_blank" rel="noopener" class="modal-btn-telegram" style="text-decoration: none;">
           <i class="fab fa-telegram"></i>
-          <span>Ask in Telegram Community</span>
+          <span>Ask in Telegram</span>
         </a>
-        <button type="button" class="btn-ctrl" onclick="closeStageModal()" style="padding: 0.75rem 1.25rem;">Close</button>
+        <button type="button" class="btn-ctrl" onclick="closeStageModal()" style="padding: 0.55rem 1.15rem;">Close</button>
       </div>
     </div>
   </div>
@@ -2103,6 +2168,71 @@
 {% block extra_scripts %}
 <script>
   // ==========================================================================
+  
+  // User stage accessibility map injected from backend
+  const USER_ACCESS = {
+    1: {{ 'true' if acc_1 else 'false' }},
+    2: {{ 'true' if acc_2 else 'false' }},
+    3: {{ 'true' if acc_3 else 'false' }},
+    4: {{ 'true' if acc_4 else 'false' }},
+    5: {{ 'true' if acc_5 else 'false' }},
+    6: {{ 'true' if acc_6 else 'false' }},
+    7: {{ 'true' if acc_7 else 'false' }},
+    8: {{ 'true' if acc_8 else 'false' }},
+    9: {{ 'true' if acc_9 else 'false' }},
+    101: {{ 'true' if acc_d1 else 'false' }},
+    102: {{ 'true' if acc_d2 else 'false' }},
+    103: {{ 'true' if acc_d3 else 'false' }}
+  };
+  const IS_AUTHENTICATED = {{ 'true' if is_auth else 'false' }};
+
+  function handleStageClick(stageId) {
+    openStageModal(stageId);
+  }
+
+  function requestStageAccess(stageId, btnElement) {
+    const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+    const csrfToken = csrfMeta ? csrfMeta.getAttribute('content') : '';
+
+    if (btnElement) {
+      btnElement.disabled = true;
+      btnElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting Request...';
+    }
+
+    const endpoint = stageId >= 100 ? '/auth/request-devi-stage-access' : '/auth/request-stage-access';
+    const payload = stageId >= 100 ? { mandala_number: stageId - 100 } : { stage_number: stageId };
+
+    fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken
+      },
+      body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert('🔱 Sacred Request Submitted!\n\n' + (data.message || 'Your access request has been sent to the Gurukula Administration for review.'));
+        closeStageModal();
+        window.location.reload();
+      } else {
+        alert('Notice: ' + (data.message || data.error || 'Could not submit request.'));
+        if (btnElement) {
+          btnElement.disabled = false;
+          btnElement.innerHTML = '<i class="fas fa-hand-holding-heart"></i> Request Stage Access';
+        }
+      }
+    })
+    .catch(err => {
+      alert('Error submitting access request. Please verify network connection.');
+      if (btnElement) {
+        btnElement.disabled = false;
+        btnElement.innerHTML = '<i class="fas fa-hand-holding-heart"></i> Request Stage Access';
+      }
+    });
+  }
+
   // STAGE DATA REPOSITORY FOR MODALS
   // ==========================================================================
   const STAGE_DATA = {
@@ -2287,6 +2417,35 @@
     document.getElementById('modal-desc').textContent = data.desc;
     document.getElementById('modal-duration').textContent = data.duration;
     document.getElementById('modal-focus').textContent = data.focus;
+
+    // Populate dynamic CTA
+    const ctaWrap = document.getElementById('modal-cta-dynamic');
+    if (ctaWrap) {
+      ctaWrap.innerHTML = '';
+      const isAccessible = USER_ACCESS[stageId];
+      if (isAccessible) {
+        const portalUrl = stageId >= 100 ? `/devi-stage/${stageId - 100}` : `/stage/${stageId}`;
+        ctaWrap.innerHTML = `
+          <a href="${portalUrl}" class="btn-gold" style="text-align: center; text-decoration: none; padding: 0.8rem 1.5rem; font-size: 1.05rem; border-radius: 10px;">
+            <i class="fas fa-door-open"></i> Enter Sacred Stage Portal →
+          </a>
+        `;
+      } else if (IS_AUTHENTICATED) {
+        ctaWrap.innerHTML = `
+          <button type="button" class="btn-gold" onclick="requestStageAccess(${stageId}, this)" style="width: 100%; padding: 0.8rem 1.5rem; font-size: 1.05rem; border-radius: 10px; cursor: pointer;">
+            <i class="fas fa-hand-holding-heart"></i> Request Stage Access from Admin
+          </button>
+          <div style="font-size: 0.8rem; color: var(--gold-3); text-align: center;">Stage is currently locked. Tap above to notify administrator.</div>
+        `;
+      } else {
+        const nextUrl = stageId >= 100 ? `/devi-stage/${stageId - 100}` : `/stage/${stageId}`;
+        ctaWrap.innerHTML = `
+          <a href="/auth/login?next=${encodeURIComponent(nextUrl)}" class="btn-gold" style="text-align: center; text-decoration: none; padding: 0.8rem 1.5rem; font-size: 1.05rem; border-radius: 10px;">
+            <i class="fas fa-sign-in-alt"></i> Sign In to Unlock &amp; Practice
+          </a>
+        `;
+      }
+    }
 
     const modal = document.getElementById('stage-modal');
     modal.classList.add('is-active');

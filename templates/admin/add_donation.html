@@ -1,0 +1,602 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-3 mb-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+            <!-- Compact Header -->
+            <div class="compact-form-header">
+                <h2 class="compact-header-title">
+                    <i class="fas fa-donate me-2"></i>Add New Donation
+                </h2>
+            </div>
+
+            <!-- Main Form Card -->
+            <div class="compact-form-card">
+                <div class="compact-form-body">
+                    <form method="POST" novalidate id="donation-form">
+                        {{ form.hidden_tag() }}
+                        
+                        <!-- Row 1: Donor Name, Email, Phone, Date -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-3">
+                                <div class="form-group-compact" style="position: relative;">
+                                    <label for="donor_name" class="form-label-compact">
+                                        Donor Name <span class="required">*</span>
+                                    </label>
+                                    {{ form.donor_name(class="form-control-compact" + (" is-invalid" if form.donor_name.errors else ""), id="donor_name", autocomplete="off", placeholder="Search user...") }}
+                                    <div id="donor-autocomplete" class="autocomplete-dropdown" style="display: none;"></div>
+                                    {% if form.donor_name.errors %}
+                                        <div class="invalid-feedback-compact">
+                                            {% for error in form.donor_name.errors %}{{ error }}{% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <div class="form-group-compact">
+                                    <label for="donor_email" class="form-label-compact">Email</label>
+                                    {{ form.donor_email(class="form-control-compact" + (" is-invalid" if form.donor_email.errors else ""), id="donor_email", placeholder="email@example.com") }}
+                                    {% if form.donor_email.errors %}
+                                        <div class="invalid-feedback-compact">
+                                            {% for error in form.donor_email.errors %}{{ error }}{% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <div class="form-group-compact">
+                                    <label for="donor_phone" class="form-label-compact">Phone</label>
+                                    {{ form.donor_phone(class="form-control-compact" + (" is-invalid" if form.donor_phone.errors else ""), id="donor_phone", placeholder="+91 1234567890") }}
+                                    {% if form.donor_phone.errors %}
+                                        <div class="invalid-feedback-compact">
+                                            {% for error in form.donor_phone.errors %}{{ error }}{% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <div class="form-group-compact">
+                                    <label for="donation_date" class="form-label-compact">
+                                        Date <span class="required">*</span>
+                                    </label>
+                                    {{ form.donation_date(class="form-control-compact" + (" is-invalid" if form.donation_date.errors else ""), type="date", id="donation_date") }}
+                                    {% if form.donation_date.errors %}
+                                        <div class="invalid-feedback-compact">
+                                            {% for error in form.donation_date.errors %}{{ error }}{% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Row 2: Amount, Currency, Payment Method, Purpose -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-3">
+                                <div class="form-group-compact">
+                                    <label for="amount" class="form-label-compact">
+                                        Amount <span class="required">*</span>
+                                    </label>
+                                    <div class="input-group-compact">
+                                        {{ form.amount(class="form-control-compact" + (" is-invalid" if form.amount.errors else ""), id="amount", placeholder="0.00") }}
+                                        <span class="input-group-text-compact" id="currency-symbol">₹</span>
+                                    </div>
+                                    {% if form.amount.errors %}
+                                        <div class="invalid-feedback-compact">
+                                            {% for error in form.amount.errors %}{{ error }}{% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-2">
+                                <div class="form-group-compact">
+                                    <label for="currency" class="form-label-compact">Currency</label>
+                                    {{ form.currency(class="form-select-compact" + (" is-invalid" if form.currency.errors else ""), id="currency") }}
+                                    {% if form.currency.errors %}
+                                        <div class="invalid-feedback-compact">
+                                            {% for error in form.currency.errors %}{{ error }}{% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-2">
+                                <div class="form-group-compact">
+                                    <label for="payment_method" class="form-label-compact">
+                                        Payment <span class="required">*</span>
+                                    </label>
+                                    {{ form.payment_method(class="form-select-compact" + (" is-invalid" if form.payment_method.errors else ""), id="payment_method") }}
+                                    {% if form.payment_method.errors %}
+                                        <div class="invalid-feedback-compact">
+                                            {% for error in form.payment_method.errors %}{{ error }}{% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <div class="form-group-compact">
+                                    <label for="purpose_id" class="form-label-compact">
+                                        Purpose <span class="required">*</span>
+                                    </label>
+                                    {{ form.purpose_id(class="form-select-compact" + (" is-invalid" if form.purpose_id.errors else ""), id="purpose_id") }}
+                                    {% if form.purpose_id.errors %}
+                                        <div class="invalid-feedback-compact">
+                                            {% for error in form.purpose_id.errors %}{{ error }}{% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-2">
+                                <div class="form-group-compact">
+                                    <label for="reference_number" class="form-label-compact">Reference</label>
+                                    {{ form.reference_number(class="form-control-compact" + (" is-invalid" if form.reference_number.errors else ""), id="reference_number", placeholder="Ref. number") }}
+                                    {% if form.reference_number.errors %}
+                                        <div class="invalid-feedback-compact">
+                                            {% for error in form.reference_number.errors %}{{ error }}{% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Row 3: Notes -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-12">
+                                <div class="form-group-compact">
+                                    <label for="notes" class="form-label-compact">Additional Notes</label>
+                                    {{ form.notes(class="form-control-compact" + (" is-invalid" if form.notes.errors else ""), id="notes", rows="2", placeholder="Optional notes about this donation...") }}
+                                    {% if form.notes.errors %}
+                                        <div class="invalid-feedback-compact">
+                                            {% for error in form.notes.errors %}{{ error }}{% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="form-actions-compact">
+                            <a href="{{ url_for('admin_donations') }}" class="btn-compact btn-compact-secondary">
+                                <i class="fas fa-times me-1"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn-compact btn-compact-primary">
+                                <i class="fas fa-save me-1"></i>Save Donation
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Sacred Dark-Gold Compact Form Styles */
+.compact-form-header {
+    margin-bottom: 1.5rem;
+    padding: 1rem 0;
+    border-bottom: 2px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+}
+
+.compact-header-title {
+    font-family: var(--display, 'Cormorant Garamond', serif);
+    color: var(--paper-bright, #fdfaf2);
+    font-size: 1.85rem;
+    font-weight: 700;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.03em;
+}
+
+.compact-header-title i {
+    font-size: 1.5rem;
+    color: var(--gold-3, #f0d48a);
+}
+
+/* Compact Form Card */
+.compact-form-card {
+    background: rgba(20, 16, 24, 0.94);
+    border-radius: 16px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.6);
+    border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+    overflow: hidden;
+    position: relative;
+}
+
+.compact-form-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold, #d4a64a), transparent);
+}
+
+.compact-form-body {
+    padding: 2rem;
+}
+
+/* Form Groups */
+.form-group-compact {
+    margin-bottom: 0;
+}
+
+.form-label-compact {
+    display: block;
+    font-weight: 600;
+    color: var(--paper-2, #d6c9a3);
+    margin-bottom: 0.4rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-family: var(--serif, serif);
+}
+
+.required {
+    color: var(--gold-3, #f0d48a);
+    font-weight: 700;
+}
+
+.form-control-compact,
+.form-select-compact {
+    width: 100%;
+    padding: 0.65rem 0.95rem;
+    border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+    border-radius: 8px;
+    font-size: 0.92rem;
+    transition: all 0.2s ease;
+    background: rgba(14, 10, 6, 0.85);
+    color: var(--paper-bright, #fdfaf2);
+}
+
+.form-control-compact:focus,
+.form-select-compact:focus {
+    outline: none;
+    border-color: var(--gold-3, #f0d48a);
+    box-shadow: 0 0 12px rgba(212, 166, 74, 0.3);
+    background: rgba(22, 16, 10, 0.95);
+}
+
+.form-control-compact::placeholder {
+    color: var(--ink-mute, rgba(233, 223, 200, 0.4));
+    font-size: 0.88rem;
+}
+
+.input-group-compact {
+    display: flex;
+    align-items: stretch;
+}
+
+.input-group-compact .form-control-compact {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none;
+}
+
+.input-group-text-compact {
+    padding: 0.65rem 1rem;
+    background: linear-gradient(135deg, rgba(212, 166, 74, 0.25), rgba(184, 132, 42, 0.4));
+    color: var(--gold-3, #f0d48a);
+    border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+    border-left: none;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+}
+
+.invalid-feedback-compact {
+    display: block;
+    width: 100%;
+    margin-top: 0.3rem;
+    font-size: 0.75rem;
+    color: #fca5a5;
+    font-weight: 500;
+}
+
+/* Form Actions */
+.form-actions-compact {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(212, 166, 74, 0.2);
+}
+
+.btn-compact {
+    padding: 0.65rem 1.6rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    font-family: var(--serif, serif);
+}
+
+.btn-compact-primary {
+    background: linear-gradient(135deg, #f0d48a 0%, #d4a64a 50%, #b8842a 100%);
+    color: #0e0a06;
+    box-shadow: 0 4px 15px rgba(212, 166, 74, 0.35);
+    border: 1px solid #f0d48a;
+}
+
+.btn-compact-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(212, 166, 74, 0.5);
+    color: #0e0a06;
+}
+
+.btn-compact-secondary {
+    background: rgba(14, 10, 6, 0.85);
+    color: var(--paper-bright, #fdfaf2);
+    border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+}
+
+.btn-compact-secondary:hover {
+    background: rgba(212, 166, 74, 0.15);
+    border-color: var(--gold, #d4a64a);
+    color: var(--gold-3, #f0d48a);
+    transform: translateY(-2px);
+}
+
+/* Autocomplete Dropdown */
+.autocomplete-dropdown {
+    position: absolute;
+    z-index: 1000;
+    background: #141018;
+    border: 1px solid var(--gold, #d4a64a);
+    border-radius: 10px;
+    max-height: 250px;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+    margin-top: 4px;
+    width: 100%;
+}
+
+.autocomplete-item {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(212, 166, 74, 0.15);
+    transition: all 0.2s ease;
+}
+
+.autocomplete-item:hover,
+.autocomplete-item.active {
+    background: rgba(212, 166, 74, 0.18);
+    border-left: 3px solid var(--gold, #d4a64a);
+}
+
+.autocomplete-item:last-child {
+    border-bottom: none;
+}
+
+.autocomplete-item-name {
+    font-weight: 700;
+    color: var(--paper-bright, #fdfaf2);
+    margin-bottom: 0.2rem;
+    font-size: 0.9rem;
+    font-family: var(--display, serif);
+}
+
+.autocomplete-item-email {
+    font-size: 0.8rem;
+    color: var(--paper-2, #d6c9a3);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .compact-form-body {
+        padding: 1.25rem;
+    }
+    
+    .form-actions-compact {
+        flex-direction: column;
+    }
+    
+    .btn-compact {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .compact-header-title {
+        font-size: 1.5rem;
+    }
+    
+    .compact-form-body {
+        padding: 1rem;
+    }
+}
+</style>
+
+<script>
+// Update currency symbol based on selected currency
+document.getElementById('currency').addEventListener('change', function() {
+    const symbols = {
+        'INR': '₹',
+        'USD': '$',
+        'EUR': '€',
+        'GBP': '£'
+    };
+    document.getElementById('currency-symbol').textContent = symbols[this.value] || '₹';
+});
+
+// Set today's date as default for donation date
+document.addEventListener('DOMContentLoaded', function() {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('donation_date').value = today;
+    
+    // Initialize autocomplete
+    initDonorAutocomplete();
+});
+
+let autocompleteTimeout;
+let selectedUserId = null;
+let autocompleteDropdown = null;
+
+function initDonorAutocomplete() {
+    const donorNameInput = document.getElementById('donor_name');
+    const donorEmailInput = document.getElementById('donor_email');
+    const donorPhoneInput = document.getElementById('donor_phone');
+    
+    // Create dropdown element
+    autocompleteDropdown = document.getElementById('donor-autocomplete');
+    
+    // Position dropdown relative to input
+    function positionDropdown() {
+        const inputRect = donorNameInput.getBoundingClientRect();
+        const parentRect = donorNameInput.closest('.form-group-compact').getBoundingClientRect();
+        autocompleteDropdown.style.width = inputRect.width + 'px';
+        autocompleteDropdown.style.position = 'absolute';
+        autocompleteDropdown.style.top = (inputRect.bottom - parentRect.top) + 'px';
+        autocompleteDropdown.style.left = '0px';
+    }
+    
+    // Search users as user types
+    donorNameInput.addEventListener('input', function() {
+        const query = this.value.trim();
+        
+        // Clear previous timeout
+        clearTimeout(autocompleteTimeout);
+        
+        // If query is too short, hide dropdown and clear selection
+        if (query.length < 2) {
+            hideAutocomplete();
+            clearUserDetails();
+            return;
+        }
+        
+        // Debounce search
+        autocompleteTimeout = setTimeout(() => {
+            searchUsers(query);
+        }, 300);
+    });
+    
+    // Handle keyboard navigation
+    let selectedIndex = -1;
+    donorNameInput.addEventListener('keydown', function(e) {
+        const items = autocompleteDropdown.querySelectorAll('.autocomplete-item');
+        
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+            updateSelection(items);
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            selectedIndex = Math.max(selectedIndex - 1, -1);
+            updateSelection(items);
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            if (selectedIndex >= 0 && items[selectedIndex]) {
+                selectUser(items[selectedIndex]);
+            }
+        } else if (e.key === 'Escape') {
+            hideAutocomplete();
+        }
+    });
+    
+    // Hide dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!donorNameInput.contains(e.target) && !autocompleteDropdown.contains(e.target)) {
+            hideAutocomplete();
+        }
+    });
+    
+    function updateSelection(items) {
+        items.forEach((item, index) => {
+            item.classList.toggle('active', index === selectedIndex);
+        });
+    }
+    
+    function searchUsers(query) {
+        fetch(`/admin/api/search-users?q=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.users && data.users.length > 0) {
+                    showAutocomplete(data.users);
+                    selectedIndex = -1;
+                } else {
+                    hideAutocomplete();
+                }
+            })
+            .catch(error => {
+                console.error('Error searching users:', error);
+                hideAutocomplete();
+            });
+    }
+    
+    function showAutocomplete(users) {
+        positionDropdown();
+        autocompleteDropdown.innerHTML = '';
+        
+        users.forEach((user, index) => {
+            const item = document.createElement('div');
+            item.className = 'autocomplete-item';
+            item.dataset.userId = user.id;
+            item.innerHTML = `
+                <div class="autocomplete-item-name">${escapeHtml(user.full_name)}</div>
+                <div class="autocomplete-item-email">${escapeHtml(user.email || '')}</div>
+            `;
+            
+            item.addEventListener('click', () => selectUser(item));
+            autocompleteDropdown.appendChild(item);
+        });
+        
+        autocompleteDropdown.style.display = 'block';
+    }
+    
+    function hideAutocomplete() {
+        autocompleteDropdown.style.display = 'none';
+    }
+    
+    function selectUser(itemElement) {
+        const userId = itemElement.dataset.userId;
+        
+        // Fetch full user details
+        fetch(`/admin/api/user-details/${userId}`)
+            .then(response => response.json())
+            .then(user => {
+                // Fill in the form fields
+                donorNameInput.value = user.full_name;
+                donorEmailInput.value = user.email || '';
+                donorPhoneInput.value = user.phone || '';
+                
+                selectedUserId = user.id;
+                hideAutocomplete();
+            })
+            .catch(error => {
+                console.error('Error fetching user details:', error);
+            });
+    }
+    
+    function clearUserDetails() {
+        selectedUserId = null;
+        // Don't clear the fields - let user continue typing if they want
+    }
+    
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+}
+</script>
+{% endblock %}
