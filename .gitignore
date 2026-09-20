@@ -12,10 +12,11 @@ ENV/
 raw_bhairavaanugraha.html
 full_site_scrape.json
 scraped_images.json
-# Database & Runtime Instance
-instance/
-*.db
-*.sqlite3
+# Database Runtime Journals
+*.db-journal
+*.db-wal
+*.db-shm
+
 
 # Scratch & Temporary Scripts
 scratch/

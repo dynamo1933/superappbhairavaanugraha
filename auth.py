@@ -68,8 +68,14 @@ def register():
             file = form.profile_picture.data
             if file and file.filename:
                 # Create uploads directory if it doesn't exist
-                upload_dir = os.path.join(os.getcwd(), 'static', 'uploads', 'profiles')
-                os.makedirs(upload_dir, exist_ok=True)
+                if os.getenv('VERCEL'):
+                    upload_dir = os.path.join('/tmp', 'static', 'uploads', 'profiles')
+                else:
+                    upload_dir = os.path.join(os.getcwd(), 'static', 'uploads', 'profiles')
+                try:
+                    os.makedirs(upload_dir, exist_ok=True)
+                except Exception:
+                    pass
                 
                 # Generate secure filename
                 filename = secure_filename(file.filename)
@@ -420,6 +426,10 @@ def profile_picture(user_id):
     """Serve user profile picture or fallback avatar"""
     user = User.query.get_or_404(user_id)
     if user.profile_picture:
+        if os.getenv('VERCEL'):
+            full_path = os.path.join('/tmp', 'static', user.profile_picture.replace('/', os.sep))
+            if os.path.exists(full_path):
+                return send_from_directory(os.path.dirname(full_path), os.path.basename(full_path))
         full_path = os.path.join(os.getcwd(), 'static', user.profile_picture.replace('/', os.sep))
         if os.path.exists(full_path):
             return send_from_directory(os.path.dirname(full_path), os.path.basename(full_path))

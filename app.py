@@ -30,6 +30,11 @@ from flask_wtf.csrf import CSRFProtect, generate_csrf, CSRFError
 # BASE PATHS & DIRECTORY STRUCTURE
 # ==============================================================================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
+
+IS_VERCEL = bool(os.getenv('VERCEL') or os.getenv('AWS_LAMBDA_FUNCTION_NAME'))
+
 LOCAL_BHAIRVA = r'C:\Users\dynam\Desktop\Bhairva'
 LOCAL_INSTA = r'C:\Users\dynam\Desktop\instagram_scrap'
 
@@ -43,11 +48,20 @@ if not INSTA_DIR:
     local_data_insta = os.path.join(BASE_DIR, 'data', 'instagram_scrap')
     INSTA_DIR = local_data_insta if os.path.exists(local_data_insta) else LOCAL_INSTA
 
-# Ensure runtime directories exist
-instance_dir = os.path.join(BASE_DIR, 'instance')
-os.makedirs(instance_dir, exist_ok=True)
-uploads_dir = os.path.join(BASE_DIR, 'uploads')
-os.makedirs(uploads_dir, exist_ok=True)
+# Ensure runtime directories exist safely (use /tmp on Vercel read-only filesystem)
+if IS_VERCEL:
+    instance_dir = os.path.join('/tmp', 'instance')
+    uploads_dir = os.path.join('/tmp', 'uploads')
+else:
+    instance_dir = os.path.join(BASE_DIR, 'instance')
+    uploads_dir = os.path.join(BASE_DIR, 'uploads')
+
+for d in (instance_dir, uploads_dir):
+    try:
+        os.makedirs(d, exist_ok=True)
+    except Exception as e:
+        print(f"[*] Note: Could not create directory {d}: {e}", file=sys.stderr)
+
 
 # Add paths for optional helper imports
 if os.path.exists(BHAIRVA_DIR) and BHAIRVA_DIR not in sys.path:
@@ -96,10 +110,22 @@ if db_url and db_url.startswith("sqlite+libsql://"):
     try:
         import sqlalchemy_libsql
     except ImportError:
-        print("[*] Note: 'sqlalchemy-libsql' driver is not installed. Using local SQLite instance/daiva_anughara.db")
+        print("[*] Note: 'sqlalchemy-libsql' driver is not installed. Using local SQLite database.", file=sys.stderr)
         db_url = None
 
-local_db_path = os.path.join(instance_dir, 'daiva_anughara.db').replace('\\', '/')
+if IS_VERCEL:
+    local_db_path = os.path.join('/tmp', 'daiva_anughara.db')
+    bundled_db = os.path.join(BASE_DIR, 'instance', 'daiva_anughara.db')
+    if os.path.exists(bundled_db) and not os.path.exists(local_db_path):
+        try:
+            import shutil
+            shutil.copy2(bundled_db, local_db_path)
+            print("[*] Seeded database copied to /tmp/daiva_anughara.db", file=sys.stderr)
+        except Exception as e:
+            print(f"[*] Could not copy seeded database: {e}", file=sys.stderr)
+else:
+    local_db_path = os.path.join(instance_dir, 'daiva_anughara.db').replace('\\', '/')
+
 app.config['SQLALCHEMY_DATABASE_URI'] = db_url or f"sqlite:///{local_db_path}"
 
 # Engine options configuration
@@ -192,9 +218,21 @@ def initialize_database():
                 db.session.commit()
                 print("[+] Admin user verified/initialized: admin / admin123")
     except Exception as e:
-        print(f"[-] Database initialization notice: {e}")
+        print(f"[-] Database initialization notice: {e}", file=sys.stderr)
 
-initialize_database()
+_db_initialized = False
+
+@app.before_request
+def ensure_db_initialized():
+    global _db_initialized
+    if not _db_initialized:
+        _db_initialized = True
+        initialize_database()
+
+try:
+    initialize_database()
+except Exception as e:
+    print(f"[-] Initial database setup notice: {e}", file=sys.stderr)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -1154,11 +1192,16 @@ def not_found_error(error):
 @app.errorhandler(500)
 def internal_error(error):
     db.session.rollback()
+    import traceback
+    traceback.print_exc(file=sys.stderr)
     return render_template('500.html', page_title='Internal Sanctuary Error'), 500
 
 # ==============================================================================
-# MAIN ENTRYPOINT
+# SERVERLESS WSGI ENTRYPOINTS FOR VERCEL
 # ==============================================================================
+application = app
+handler = app
+
 if __name__ == '__main__':
     PORT = int(os.getenv('PORT', 5000))
     print(f"==================================================================")
