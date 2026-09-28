@@ -84,8 +84,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Production Security & Session Cookie settings
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
-if IS_PRODUCTION:
-    app.config['SESSION_COOKIE_SECURE'] = True
+# Enforce HTTPS-only cookies when configured in environment (recommended in production HTTPS)
+app.config['SESSION_COOKIE_SECURE'] = os.getenv('SESSION_COOKIE_SECURE', 'false').lower() in ('true', '1')
 
 # Support standard reverse proxies (Nginx, Cloudflare, Render, Railway, Vercel)
 from werkzeug.middleware.proxy_fix import ProxyFix
