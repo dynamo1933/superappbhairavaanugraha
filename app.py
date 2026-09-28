@@ -34,19 +34,11 @@ if BASE_DIR not in sys.path:
     sys.path.insert(0, BASE_DIR)
 
 IS_VERCEL = bool(os.getenv('VERCEL') or os.getenv('AWS_LAMBDA_FUNCTION_NAME'))
+IS_PRODUCTION = os.getenv('FLASK_ENV') == 'production' or os.getenv('PRODUCTION', '').lower() in ('true', '1') or IS_VERCEL
 
-LOCAL_BHAIRVA = r'C:\Users\dynam\Desktop\Bhairva'
-LOCAL_INSTA = r'C:\Users\dynam\Desktop\instagram_scrap'
-
-BHAIRVA_DIR = os.environ.get('BHAIRVA_DIR')
-if not BHAIRVA_DIR:
-    local_data_bhairva = os.path.join(BASE_DIR, 'data', 'bhairva')
-    BHAIRVA_DIR = local_data_bhairva if os.path.exists(local_data_bhairva) else LOCAL_BHAIRVA
-
-INSTA_DIR = os.environ.get('INSTA_DIR')
-if not INSTA_DIR:
-    local_data_insta = os.path.join(BASE_DIR, 'data', 'instagram_scrap')
-    INSTA_DIR = local_data_insta if os.path.exists(local_data_insta) else LOCAL_INSTA
+# Self-contained bundled data repositories (no machine-specific local paths)
+BHAIRVA_DIR = os.environ.get('BHAIRVA_DIR', os.path.join(BASE_DIR, 'data', 'bhairva'))
+INSTA_DIR = os.environ.get('INSTA_DIR', os.path.join(BASE_DIR, 'data', 'instagram_scrap'))
 
 # Ensure runtime directories exist safely (use /tmp on Vercel read-only filesystem)
 if IS_VERCEL:
@@ -82,12 +74,22 @@ app = Flask(
     template_folder=os.path.join(BASE_DIR, 'templates'),
     static_folder=os.path.join(BASE_DIR, 'static')
 )
-app.config['TEMPLATES_AUTO_RELOAD'] = True
-app.jinja_env.auto_reload = True
+app.config['TEMPLATES_AUTO_RELOAD'] = not IS_PRODUCTION
+app.jinja_env.auto_reload = not IS_PRODUCTION
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'bhairava-anugraha-superapp-sacred-key-2026')
 app.config['UPLOAD_FOLDER'] = uploads_dir
 app.config['MAX_CONTENT_LENGTH'] = int(os.getenv('MAX_CONTENT_LENGTH', 16 * 1024 * 1024))
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Production Security & Session Cookie settings
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+if IS_PRODUCTION:
+    app.config['SESSION_COOKIE_SECURE'] = True
+
+# Support standard reverse proxies (Nginx, Cloudflare, Render, Railway, Vercel)
+from werkzeug.middleware.proxy_fix import ProxyFix
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 
 # Database URI configuration with Turso / PostgreSQL / local SQLite fallbacks
 db_url = os.getenv('DATABASE_URL') or os.getenv('SQLALCHEMY_DATABASE_URI')
@@ -401,8 +403,8 @@ def qna_redirect():
 
 @app.route('/bhairav-loka')
 def bhairav_loka_page():
-    """Bhairav Loka Sahasralinga Codex Page"""
-    return render_template('bhairav_loka.html', total_posts=len(CACHED_POSTS), active_page='bhairav_loka', page_title='Bhairav Loka Codex')
+    """Redirect deprecated Bhairav Loka route to Sādhana Paddhati"""
+    return redirect(url_for('sadhana_paddhati_page'), code=302)
 
 @app.route('/sadhana-paddhati', endpoint='sadhana_paddhati_page')
 @app.route('/padati', endpoint='padati')
@@ -420,18 +422,22 @@ def sadhana_paddhati_page():
         'stage_id': stage_id,
         'page_title': 'Sādhana Paddhati · Bhairava & Devi Flow',
         'is_auth': is_auth,
+        'is_admin': is_admin,
+        # First card (Mandala 1) is accessible to all seekers by default!
         'acc_1': True,
-        'acc_2': True,
-        'acc_3': True,
-        'acc_4': True,
-        'acc_5': True,
-        'acc_6': True,
-        'acc_7': True,
-        'acc_8': True,
-        'acc_9': True,
+        # Stages 2 through 9 require admin access approval
+        'acc_2': is_admin or (is_auth and current_user.has_mandala_access(2)),
+        'acc_3': is_admin or (is_auth and current_user.has_mandala_access(3)),
+        'acc_4': is_admin or (is_auth and current_user.has_mandala_access(4)),
+        'acc_5': is_admin or (is_auth and current_user.has_mandala_access(5)),
+        'acc_6': is_admin or (is_auth and current_user.has_mandala_access(6)),
+        'acc_7': is_admin or (is_auth and current_user.has_mandala_access(7)),
+        'acc_8': is_admin or (is_auth and current_user.has_mandala_access(8)),
+        'acc_9': is_admin or (is_auth and current_user.has_mandala_access(9)),
+        # Devi Mandala 1 is accessible by default; Devi 2 & 3 require admin access
         'acc_d1': True,
-        'acc_d2': True,
-        'acc_d3': True,
+        'acc_d2': is_admin or (is_auth and current_user.has_devi_mandala_access(2)),
+        'acc_d3': is_admin or (is_auth and current_user.has_devi_mandala_access(3)),
         'comp_1': current_user.is_stage_completed(1) if is_auth else False,
         'comp_2': current_user.is_stage_completed(2) if is_auth else False,
         'comp_3': current_user.is_stage_completed(3) if is_auth else False,
@@ -451,9 +457,9 @@ def devi_padathi_redirect():
     return redirect('/sadhana-paddhati?view=devi#devi-section')
 
 @app.route('/vishesh-sadhana')
-def vishesh_sadhana_redirect():
-    """Convenience redirect to Vishesh Sadhana section"""
-    return redirect('/sadhana-paddhati?view=devi#potent-timings')
+def vishesh_sadhana_page():
+    """Vishesh Sadhana page with Sacred Dark-Gold Temple Codex layout"""
+    return render_template('vishesh_sadhana.html', active_page='vishesh_sadhana', page_title='Vishesh Sādhana - Bhairava Anugraha')
 
 @app.route('/documents')
 def documents_page():
@@ -471,11 +477,13 @@ def ashtami_page():
 
 @app.route('/guru-bhairava')
 def guru_bhairava():
-    return render_template('guru_bhairava.html', page_title='Guru Bhairava - Bhairava Anugraha')
+    """Guru Bhairava (Lord Dattatreya) page with Sacred Dark-Gold Temple Codex layout"""
+    return render_template('guru_bhairava.html', active_page='guru_bhairava', page_title='Guru Bhairava - Bhairava Anugraha')
 
 @app.route('/prana-pratisthana')
 def prana_pratisthana():
-    return render_template('prana_pratisthana.html', page_title='Prāṇa Pratiṣṭhāna - Bhairava Anugraha')
+    """Prāṇa Pratiṣṭhāna sacred consecration guide with Sacred Dark-Gold Temple Codex layout"""
+    return render_template('prana_pratisthana.html', active_page='prana_pratisthana', page_title='Prāṇa Pratiṣṭhāna - Bhairava Anugraha')
 
 @app.route('/about')
 def about():
@@ -510,10 +518,17 @@ def download_presentation_pptx():
 # STAGE PROGRESSION & ACCESS CONTROL
 # ==============================================================================
 @app.route('/stage/<int:stage_num>')
+@login_required
 def stage_page(stage_num):
-    """Individual stage portal with Sacred Dark-Gold Temple Codex layout"""
+    """Individual stage portal with Sacred Dark-Gold Temple Codex layout and admin access enforcement"""
     if stage_num < 1 or stage_num > 9:
         flash('Invalid stage identifier.', 'error')
+        return redirect(url_for('sadhana_paddhati_page'))
+
+    # First card (Mandala 1) is accessible to ALL logged-in seekers by default!
+    # Stages 2 through 9 require admin access approval
+    if stage_num > 1 and not (current_user.is_admin() or current_user.has_mandala_access(stage_num)):
+        flash('You do not have access to this sacred stage yet. Please complete previous mandalas or submit an access request to the administrator.', 'warning')
         return redirect(url_for('sadhana_paddhati_page'))
 
     stage_info = None
@@ -615,10 +630,17 @@ def stage_page(stage_num):
     )
 
 @app.route('/devi-stage/<int:stage_num>')
+@login_required
 def devi_stage_page(stage_num):
-    """Individual Devi Mandala stage page"""
+    """Individual Devi Mandala stage page with admin access enforcement"""
     if stage_num < 1 or stage_num > 3:
         flash('Invalid Devi Mandala identifier.', 'error')
+        return redirect(url_for('sadhana_paddhati_page'))
+
+    # Devi Mandala 1 is accessible to ALL logged-in seekers by default!
+    # Devi Mandalas 2 & 3 require admin access approval
+    if stage_num > 1 and not (current_user.is_admin() or current_user.has_devi_mandala_access(stage_num)):
+        flash('You do not have access to this Devi Mandala yet. Please submit an access request to the administrator.', 'warning')
         return redirect(url_for('sadhana_paddhati_page'))
 
     stage_data = {
@@ -1245,26 +1267,34 @@ def internal_error(error):
     db.session.rollback()
     import traceback
     traceback.print_exc(file=sys.stderr)
-    return render_template('500.html', page_title='Internal Sanctuary Error'), 500
+@app.after_request
+def apply_security_headers(response):
+    """Enforce production security headers on all responses"""
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'SAMEORIGIN'
+    response.headers['X-XSS-Protection'] = '1; mode=block'
+    response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+    return response
 
 # ==============================================================================
-# SERVERLESS WSGI ENTRYPOINTS FOR VERCEL
+# SERVERLESS WSGI ENTRYPOINTS & PRODUCTION RUNNER
 # ==============================================================================
 application = app
 handler = app
 
 if __name__ == '__main__':
-    PORT = int(os.getenv('PORT', 5000))
+    HOST = os.getenv('HOST', '0.0.0.0')
+    PORT = int(os.getenv('PORT', 5080))
+    DEBUG = os.getenv('FLASK_DEBUG', 'false').lower() in ('true', '1')
+    display_host = HOST if HOST != '0.0.0.0' else '127.0.0.1'
+    
     print(f"==================================================================")
-    print(f"✦ SUPER APPLICATION BHAIRAVA ANUGRAHA WITH FULL ADMIN SUITE")
-    print(f"✦ Server listening at: http://localhost:{PORT}")
-    print(f"✦ Landing Page:        http://localhost:{PORT}/")
-    print(f"✦ Sādhana Paddhati:    http://localhost:{PORT}/sadhana-paddhati")
-    print(f"✦ Admin Users Portal:  http://localhost:{PORT}/auth/admin/users")
-    print(f"✦ Admin Donations:     http://localhost:{PORT}/admin/donations")
-    print(f"✦ Admin Mandala Vows:  http://localhost:{PORT}/admin/mandala-sadhana")
-    print(f"✦ Admin Mentorship:    http://localhost:{PORT}/admin/chat")
-    print(f"✦ QnA Codex:           http://localhost:{PORT}/jnana-samvada")
-    print(f"✦ Bhairav Loka Codex:  http://localhost:{PORT}/bhairav-loka")
+    print(f"✦ SUPER APPLICATION BHAIRAVA ANUGRAHA - PRODUCTION READY")
+    print(f"✦ Mode:                {'DEVELOPMENT' if DEBUG else 'PRODUCTION'}")
+    print(f"✦ Bound Address:       {HOST}:{PORT}")
+    print(f"✦ Direct Route:        http://{display_host}:{PORT}/")
+    print(f"✦ Sādhana Paddhati:    http://{display_host}:{PORT}/sadhana-paddhati")
+    print(f"✦ Admin Portal:        http://{display_host}:{PORT}/auth/admin/users")
+    print(f"✦ Jnāna Samvāda Codex: http://{display_host}:{PORT}/jnana-samvada")
     print(f"==================================================================")
-    app.run(host='0.0.0.0', port=PORT, debug=False)
+    app.run(host=HOST, port=PORT, debug=DEBUG)

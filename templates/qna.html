@@ -31,10 +31,36 @@
       <nav class="chrome-nav">
         <a href="/" class="nav-item">Home</a>
         <a href="/jnana-samvada" class="nav-item nav-pill-super is-active" title="Open Jnāna Samvāda Codex">☸ Jnāna Samvāda</a>
-        <a href="/bhairav-loka" class="nav-item nav-pill-super" title="Open Bhairav Loka Sahasralinga Codex">✦ Bhairav Loka</a>
         <a href="/sadhana-paddhati" class="nav-item">Sādhana Paddhati</a>
         <a href="/mandala-sadhana" class="nav-item">Mandala Vows</a>
-        <a href="/ashtami" class="nav-item">Ashtami</a>
+        <div class="nav-dropdown-wrap">
+          <button type="button" class="nav-item nav-dropdown-btn">
+            <span>Resources</span>
+            <i class="fas fa-chevron-down nav-dropdown-arrow"></i>
+          </button>
+          <div class="nav-dropdown-menu">
+            <a href="/ashtami">
+              <i class="fas fa-moon"></i>
+              <span>Krishna Paksha Ashtami</span>
+            </a>
+            <a href="/documents">
+              <i class="fas fa-scroll"></i>
+              <span>Sacred Documents</span>
+            </a>
+            <a href="/guru-bhairava">
+              <i class="fas fa-fire-alt"></i>
+              <span>Guru Bhairava</span>
+            </a>
+            <a href="/vishesh-sadhana">
+              <i class="fas fa-fire"></i>
+              <span>Vishesh Sādhana</span>
+            </a>
+            <a href="/prana-pratisthana">
+              <i class="fas fa-gem"></i>
+              <span>Prāṇa Pratiṣṭhāna</span>
+            </a>
+          </div>
+        </div>
         <a href="/bhiksha" class="nav-item">Bhiksha</a>
 
         {% if current_user.is_authenticated and current_user.is_admin() %}
@@ -138,10 +164,24 @@
     <ul class="drawer-links">
       <li><a href="/">Home</a></li>
       <li><a href="/jnana-samvada" style="color:var(--gold-3)">☸ Jnāna Samvāda</a></li>
-      <li><a href="/bhairav-loka" style="color:var(--gold-3)">✦ Bhairav Loka</a></li>
       <li><a href="/sadhana-paddhati">Sādhana Paddhati</a></li>
       <li><a href="/mandala-sadhana">Mandala Vows</a></li>
-      <li><a href="/ashtami">Ashtami Portal</a></li>
+      <li class="drawer-dropdown-item">
+        <button type="button" class="drawer-dropdown-toggle" onclick="this.parentElement.classList.toggle('is-open')">
+          <span style="display:flex; align-items:center; gap:8px;">
+            <i class="fas fa-book-open" style="color:var(--gold); font-size:15px;"></i>
+            <span>Resources</span>
+          </span>
+          <i class="fas fa-chevron-down drawer-arrow" style="font-size:12px; transition:transform 0.3s ease;"></i>
+        </button>
+        <ul class="drawer-submenu">
+          <li><a href="/ashtami">🌙 Krishna Paksha Ashtami</a></li>
+          <li><a href="/documents">📜 Sacred Documents</a></li>
+          <li><a href="/guru-bhairava">🔥 Guru Bhairava</a></li>
+          <li><a href="/vishesh-sadhana">🔥 Vishesh Sādhana</a></li>
+          <li><a href="/prana-pratisthana">💎 Prāṇa Pratiṣṭhāna</a></li>
+        </ul>
+      </li>
       <li><a href="/bhiksha">Sacred Bhiksha</a></li>
 
       {% if current_user.is_authenticated %}
@@ -420,7 +460,7 @@
         <h4>Connect</h4>
         <ul>
           <li><a href="https://t.me/+tM8pVCZWG8cxYjc1" target="_blank" rel="noopener noreferrer">Telegram</a></li>
-          <li><a href="http://instagram.com/bhairava_anugraha/">Instagram</a></li>
+          <li><a href="https://www.instagram.com/bhairavayuga?igsh=YTJoY25lcmU2Z2xx&utm_source=qr" target="_blank" rel="noopener noreferrer">Instagram</a></li>
           <li><a data-scroll="#guruji" href="#guruji">About Guruji</a></li>
         </ul>
       </div>

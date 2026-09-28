@@ -2,8 +2,7 @@ import sys
 import os
 import re
 
-# Add project root to path
-BASE_DIR = r"c:\Users\dynam\Desktop\superappbhairavaanugraha"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, BASE_DIR)
 
 from app import app, db

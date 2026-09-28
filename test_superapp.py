@@ -1,19 +1,22 @@
 import urllib.request
 import json
 import sys
+import os
 
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
 
-BASE_URL = "http://127.0.0.1:5050"
+BASE_URL = os.environ.get("BASE_URL", "http://127.0.0.1:5080")
 
 tests = [
     ("/", 200, "Journey into the Sacred Inner Realm"),
     ("/jnana-samvada", 200, "Bhairava"),
     ("/qna", 200, "Bhairava"),
-    ("/bhairav-loka", 200, "Bhairava Loka"),
     ("/sadhana-paddhati", 200, "Sacred Sādhana Paddhati"),
     ("/ashtami", 200, "What Is Bhairava Waiting for on Ashtami?"),
+    ("/guru-bhairava", 200, "Guru Bhairava"),
+    ("/vishesh-sadhana", 200, "Vishesh"),
+    ("/prana-pratisthana", 200, "Prāṇa Pratiṣṭhāna"),
     ("/api/qna", 200, None),
     ("/api/posts", 200, None),
     ("/api/stats", 200, None),

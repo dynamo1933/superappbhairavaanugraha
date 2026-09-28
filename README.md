@@ -115,17 +115,43 @@ The Super Application guarantees that existing source repositories remain comple
    pip install -r requirements.txt
    ```
 
-3. Launch the Super Application server:
+3. Launch the Application:
    ```bash
+   # Development Server
    python app.py
+
+   # Production WSGI (Linux/Docker/Cloud)
+   gunicorn wsgi:app --workers 4 --threads 2 --bind 0.0.0.0:5080
+
+   # Production WSGI (Windows)
+   waitress-serve --listen=0.0.0.0:5080 wsgi:app
    ```
 
-4. Open your browser:
-   - **Main Portal**: `http://localhost:5050/`
-   - **Jnāna Samvāda Codex**: `http://localhost:5050/jnana-samvada`
-   - **Bhairav Loka**: `http://localhost:5050/bhairav-loka`
-   - **Sādhana Paddhati**: `http://localhost:5050/sadhana-paddhati`
-   - **Ashtami Gateways**: `http://localhost:5050/ashtami`
+4. Available Gateways & Codex Routes:
+   - **Landing Sanctuary**: `/`
+   - **Jnāna Samvāda Codex**: `/jnana-samvada`
+   - **Sādhana Paddhati**: `/sadhana-paddhati`
+   - **Krishna Paksha Ashtami**: `/ashtami`
+   - **Guru Bhairava Paddhati**: `/guru-bhairava`
+   - **Vishesh Sādhana**: `/vishesh-sadhana`
+   - **Prāṇa Pratiṣṭhāna**: `/prana-pratisthana`
+   - **Sacred Documents**: `/documents`
+   - **Mandala Sādhana Vow**: `/mandala-sadhana`
+   - **Bhiksha Offerings**: `/bhiksha`
+   - **Admin Management**: `/auth/admin/users`
+
+---
+
+## ✦ Production Environment Configuration
+
+| Variable | Description | Default |
+| :--- | :--- | :--- |
+| `PORT` | Listening port for the application | `5080` |
+| `HOST` | Bind address (`0.0.0.0` for all interfaces) | `0.0.0.0` |
+| `SECRET_KEY` | Cryptographic session signing key | Set strong secret in production |
+| `DATABASE_URL` | PostgreSQL, Turso, or SQLite URI | `sqlite:///instance/daiva_anughara.db` |
+| `FLASK_ENV` | Environment mode (`production` / `development`) | `production` |
+| `BASE_URL` | Target base URL for test suites | `http://127.0.0.1:5080` |
 
 ---
 
@@ -136,10 +162,10 @@ Run the automated endpoint verification suite:
 python test_superapp.py
 ```
 Checks:
-- All HTML page routes (`/`, `/jnana-samvada`, `/qna` redirect, `/bhairav-loka`, `/sadhana-paddhati`, `/ashtami`)
+- All HTML page routes (`/`, `/jnana-samvada`, `/sadhana-paddhati`, `/ashtami`, `/guru-bhairava`, `/vishesh-sadhana`, `/prana-pratisthana`)
 - All API endpoints (`/api/qna`, `/api/posts`, `/api/stats`)
 - Sub-app proxied stylesheets, scripts, and media files
-- Returns `200 OK` across all 17 integration checkpoints.
+- Returns `200 OK` across all checkpoints.
 
 ---
 

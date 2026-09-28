@@ -96,24 +96,38 @@ class User(UserMixin, db.Model):
     
     def has_mandala_access(self, stage_number):
         """Check if user has access to a specific stage (mandala or rudraksha)"""
+        if self.is_admin():
+            return True
         if stage_number == 1:
-            return self.mandala_1_access
+            return bool(self.mandala_1_access)
         elif stage_number == 2:
-            return self.mandala_2_access
+            return bool(self.mandala_2_access)
         elif stage_number == 3:
-            return self.mandala_3_access
+            return bool(self.mandala_3_access)
         elif stage_number == 4:  # Rudraksha 8 Mukhi
-            return self.rudraksha_8_mukhi_access
+            return bool(self.rudraksha_8_mukhi_access)
         elif stage_number == 5:  # Rudraksha 11 Mukhi
-            return self.rudraksha_11_mukhi_access
+            return bool(self.rudraksha_11_mukhi_access)
         elif stage_number == 6:  # Rudraksha 14 Mukhi
-            return self.rudraksha_14_mukhi_access
+            return bool(self.rudraksha_14_mukhi_access)
         elif stage_number == 7:  # Pratham Charana Diksha
-            return self.pratham_charana_diksha_access
+            return bool(self.pratham_charana_diksha_access)
         elif stage_number == 8:  # Dutiya Charana
-            return self.dutiya_charana_access
+            return bool(self.dutiya_charana_access)
         elif stage_number == 9:  # Tritiya Charana
-            return self.tritiya_charana_access
+            return bool(self.tritiya_charana_access)
+        return False
+
+    def has_devi_mandala_access(self, mandala_number):
+        """Check if user has access to a Devi mandala"""
+        if self.is_admin():
+            return True
+        if mandala_number == 1:
+            return bool(self.devi_mandala_1_access)
+        elif mandala_number == 2:
+            return bool(self.devi_mandala_2_access)
+        elif mandala_number == 3:
+            return bool(self.devi_mandala_3_access)
         return False
 
     def get_current_stage(self):

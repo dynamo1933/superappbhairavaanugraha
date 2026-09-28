@@ -3,8 +3,9 @@ import re
 import sys
 
 sys.stdout.reconfigure(encoding='utf-8')
+import os
 
-BASE_URL = "http://127.0.0.1:5050"
+BASE_URL = os.environ.get("BASE_URL", "http://127.0.0.1:5080")
 
 def test_sadhana():
     print("=== TESTING SADHANA PADDHATI PAGE ===")

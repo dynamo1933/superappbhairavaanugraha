@@ -297,6 +297,59 @@
         box-shadow: 0 6px 25px rgba(212, 175, 55, 0.35);
     }
 
+    /* Collapsible 6-Step Sādhana Codex Accordion */
+    .stage-guide-accordion {
+        margin-top: 28px;
+        background: var(--stage-card-bg);
+        border: 1px solid var(--stage-border);
+        border-radius: 14px;
+        overflow: hidden;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .stage-guide-accordion:hover {
+        border-color: var(--stage-border-glow);
+    }
+
+    .stage-guide-accordion summary {
+        padding: 16px 22px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-family: var(--font-primary, 'Cinzel', serif);
+        font-size: 1.05rem;
+        color: var(--stage-gold-bright);
+        list-style: none;
+        user-select: none;
+        transition: background 0.3s ease;
+    }
+
+    .stage-guide-accordion summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .stage-guide-accordion summary:hover {
+        background: rgba(212, 175, 55, 0.08);
+    }
+
+    .stage-guide-accordion .accordion-arrow {
+        font-size: 0.85rem;
+        color: var(--stage-paper-dim);
+        transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .stage-guide-accordion[open] .accordion-arrow {
+        transform: rotate(180deg);
+        color: var(--stage-gold-bright);
+    }
+
+    .stage-guide-accordion-content {
+        padding: 14px 22px 28px;
+        border-top: 1px solid rgba(212, 175, 55, 0.15);
+    }
+
     /* ===== GURU BHAIRAVA THEME STEPS FOR STAGE 1 ===== */
     .steps-grid {
         display: grid;
@@ -730,11 +783,45 @@
 <!-- Stage Body -->
 <div class="stage-body">
 
-    {% if stage_num == 1 %}
-    <!-- Stage 1 Custom 6-Step Sadhana Layout -->
-    <div class="ornamental-line">Bhairava Anugraha</div>
+    {% if stage_num in [1, 2, 3] %}
+    <!-- Sacred Document Card for Mandalas 1, 2 and 3 -->
+    <div class="stage-card">
+        <div class="doc-header">
+            <div class="doc-icon">📜</div>
+            <h3 class="doc-title">{{ stage_data.name }} - Sacred Teachings</h3>
+            <p class="doc-subtitle">
+                {% if stage_num == 1 %}Begin your spiritual journey with the first mandala
+                {% elif stage_num == 2 %}Deepen your practice with the second mandala
+                {% else %}Complete the first phase with the third mandala{% endif %}
+            </p>
+        </div>
 
-    <div class="steps-grid">
+        <div class="doc-embed">
+            <iframe src="https://drive.google.com/file/d/1ef_LIP8Tn9HI_A_1f12IcNr2CuwiKG4r/preview" allow="autoplay"
+                allowfullscreen>
+            </iframe>
+        </div>
+
+        <div class="doc-actions">
+            <a href="https://drive.google.com/file/d/1ef_LIP8Tn9HI_A_1f12IcNr2CuwiKG4r/view" target="_blank"
+                class="btn-external">
+                <i class="fas fa-external-link-alt"></i>
+                Open in New Tab
+            </a>
+        </div>
+    </div>
+
+    {% if stage_num == 1 %}
+    <!-- Optional: Expandable 6-Step Sādhana Codex & Chanting Guide -->
+    <details class="stage-guide-accordion">
+        <summary>
+            <span><i class="fas fa-om" style="margin-right: 10px; color: var(--stage-gold);"></i> View 6-Step Sādhana Paddhati & Chanting Codex</span>
+            <span class="accordion-arrow">▼</span>
+        </summary>
+        <div class="stage-guide-accordion-content">
+            <div class="ornamental-line">Bhairava Anugraha</div>
+
+            <div class="steps-grid">
         <!-- Step 1: Dhyanam -->
         <div class="step-card dhyanam-card">
             <div class="step-header">
@@ -911,33 +998,10 @@
         <p class="guarded-secret-blessing">May Bhairava's grace illuminate your path!</p>
         <p class="guarded-secret-mantra">|| ॐ भैरवाय नमः ॐ कामाख्यै नमः ||</p>
     </div>
-
-    {% elif stage_num in [2, 3] %}
-    <!-- Original Document Card for Mandala 2 and 3 -->
-    <div class="stage-card">
-        <div class="doc-header">
-            <div class="doc-icon">📜</div>
-            <h3 class="doc-title">{{ stage_data.name }} - Sacred Teachings</h3>
-            <p class="doc-subtitle">
-                {% if stage_num == 2 %}Deepen your practice with the second mandala
-                {% else %}Complete the first phase with the third mandala{% endif %}
-            </p>
         </div>
+    </details>
+    {% endif %}
 
-        <div class="doc-embed">
-            <iframe src="https://drive.google.com/file/d/1ef_LIP8Tn9HI_A_1f12IcNr2CuwiKG4r/preview" allow="autoplay"
-                allowfullscreen>
-            </iframe>
-        </div>
-
-        <div class="doc-actions">
-            <a href="https://drive.google.com/file/d/1ef_LIP8Tn9HI_A_1f12IcNr2CuwiKG4r/view" target="_blank"
-                class="btn-external">
-                <i class="fas fa-external-link-alt"></i>
-                Open in New Tab
-            </a>
-        </div>
-    </div>
     {% else %}
     <!-- Placeholder -->
     <div class="stage-card">

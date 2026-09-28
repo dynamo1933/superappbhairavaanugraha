@@ -1456,27 +1456,27 @@
 {% block content %}
 {% set is_admin = current_user.is_authenticated and current_user.is_admin() %}
 {% set is_auth = current_user.is_authenticated %}
-{% set acc_1 = is_auth and (is_admin or current_user.mandala_1_access) %}
+{% set acc_1 = True %}
 {% set comp_1 = is_auth and current_user.mandala_1_completed_at %}
-{% set acc_2 = is_auth and (is_admin or current_user.mandala_2_access) %}
+{% set acc_2 = is_admin or (is_auth and current_user.mandala_2_access) %}
 {% set comp_2 = is_auth and current_user.mandala_2_completed_at %}
-{% set acc_3 = is_auth and (is_admin or current_user.mandala_3_access) %}
+{% set acc_3 = is_admin or (is_auth and current_user.mandala_3_access) %}
 {% set comp_3 = is_auth and current_user.mandala_3_completed_at %}
-{% set acc_7 = is_auth and (is_admin or current_user.pratham_charana_diksha_access) %}
+{% set acc_7 = is_admin or (is_auth and current_user.pratham_charana_diksha_access) %}
 {% set comp_7 = is_auth and current_user.pratham_charana_diksha_completed_at %}
-{% set acc_4 = is_auth and (is_admin or current_user.rudraksha_8_mukhi_access) %}
+{% set acc_4 = is_admin or (is_auth and current_user.rudraksha_8_mukhi_access) %}
 {% set comp_4 = is_auth and current_user.rudraksha_8_mukhi_completed_at %}
-{% set acc_5 = is_auth and (is_admin or current_user.rudraksha_11_mukhi_access) %}
+{% set acc_5 = is_admin or (is_auth and current_user.rudraksha_11_mukhi_access) %}
 {% set comp_5 = is_auth and current_user.rudraksha_11_mukhi_completed_at %}
-{% set acc_8 = is_auth and (is_admin or current_user.dutiya_charana_access) %}
+{% set acc_8 = is_admin or (is_auth and current_user.dutiya_charana_access) %}
 {% set comp_8 = is_auth and current_user.dutiya_charana_completed_at %}
-{% set acc_6 = is_auth and (is_admin or current_user.rudraksha_14_mukhi_access) %}
+{% set acc_6 = is_admin or (is_auth and current_user.rudraksha_14_mukhi_access) %}
 {% set comp_6 = is_auth and current_user.rudraksha_14_mukhi_completed_at %}
-{% set acc_9 = is_auth and (is_admin or current_user.tritiya_charana_access) %}
+{% set acc_9 = is_admin or (is_auth and current_user.tritiya_charana_access) %}
 {% set comp_9 = is_auth and current_user.tritiya_charana_completed_at %}
-{% set acc_d1 = is_auth and (is_admin or current_user.devi_mandala_1_access) %}
-{% set acc_d2 = is_auth and (is_admin or current_user.devi_mandala_2_access) %}
-{% set acc_d3 = is_auth and (is_admin or current_user.devi_mandala_3_access) %}
+{% set acc_d1 = True %}
+{% set acc_d2 = is_admin or (is_auth and current_user.devi_mandala_2_access) %}
+{% set acc_d3 = is_admin or (is_auth and current_user.devi_mandala_3_access) %}
 
 <!-- Sadhak Live Status Banner -->
 <div class="sadhak-status-banner" style="max-width: 1440px; width: 95%; margin: 1.5rem auto -1rem; padding: 1.25rem 2rem; background: linear-gradient(135deg, rgba(28, 22, 36, 0.95), rgba(15, 12, 20, 0.95)); border: 1px solid var(--gold-border); border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
@@ -2187,8 +2187,15 @@
   const IS_AUTHENTICATED = {{ 'true' if is_auth else 'false' }};
 
   function handleStageCardClick(stageId) {
+    const isAccessible = !!USER_ACCESS[stageId];
     const portalUrl = stageId >= 100 ? `/devi-stage/${stageId - 100}` : `/stage/${stageId}`;
-    window.location.href = portalUrl;
+    if (isAccessible) {
+      window.location.href = portalUrl;
+    } else if (IS_AUTHENTICATED) {
+      openStageModal(stageId);
+    } else {
+      window.location.href = `/auth/login?next=${encodeURIComponent(portalUrl)}`;
+    }
   }
 
   function handleStageClick(stageId) {

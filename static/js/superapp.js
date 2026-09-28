@@ -161,8 +161,8 @@ function initCommandPalette() {
   const SEARCH_ITEMS = [
     { title: "Home · Sacred Portal", url: "/", tag: "Super App" },
     { title: "Jnāna Samvāda · Bhairava Codex & Inquiry", url: "/jnana-samvada", tag: "Codex" },
-    { title: "Bhairav Loka · Sahasralinga Codex", url: "/bhairav-loka", tag: "App" },
     { title: "Sādhana Paddhati · Three Steps to Union", url: "/sadhana-paddhati", tag: "Discourse" },
+    { title: "Mandala Sādhana · Sacred Vows & Sankalpa", url: "/mandala-sadhana", tag: "Vow" },
     { title: "Ashtami · Krishna Paksha Inner Gateways", url: "/ashtami", tag: "Calendar" },
     { title: "Daiva Anugraha Videos · YouTube Discourses", url: "/#videos", tag: "Media" },
     { title: "Life Within or Without · Book & Teachings", url: "/#book", tag: "Book" },

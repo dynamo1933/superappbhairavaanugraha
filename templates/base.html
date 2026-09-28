@@ -45,10 +45,36 @@
       <nav class="chrome-nav">
         <a href="/" class="nav-item {% if active_page == 'home' %}is-active{% endif %}">Home</a>
         <a href="/jnana-samvada" class="nav-item nav-pill-super {% if active_page == 'jnana_samvada' %}is-active{% endif %}" title="Open Jnāna Samvāda Codex">☸ Jnāna Samvāda</a>
-        <a href="/bhairav-loka" class="nav-item nav-pill-super {% if active_page == 'bhairav_loka' %}is-active{% endif %}" title="Open Bhairav Loka Sahasralinga Codex">✦ Bhairav Loka</a>
         <a href="/sadhana-paddhati" class="nav-item {% if active_page == 'sadhana' %}is-active{% endif %}">Sādhana Paddhati</a>
         <a href="/mandala-sadhana" class="nav-item {% if active_page == 'mandala_vow' %}is-active{% endif %}">Mandala Vows</a>
-        <a href="/ashtami" class="nav-item {% if active_page == 'ashtami' %}is-active{% endif %}">Ashtami</a>
+        <div class="nav-dropdown-wrap">
+          <button type="button" class="nav-item nav-dropdown-btn {% if active_page in ['ashtami', 'resources', 'documents', 'guru_bhairava', 'vishesh_sadhana', 'prana_pratisthana'] %}is-active{% endif %}">
+            <span>Resources</span>
+            <i class="fas fa-chevron-down nav-dropdown-arrow"></i>
+          </button>
+          <div class="nav-dropdown-menu">
+            <a href="/ashtami" class="{% if active_page == 'ashtami' %}is-active{% endif %}">
+              <i class="fas fa-moon"></i>
+              <span>Krishna Paksha Ashtami</span>
+            </a>
+            <a href="/documents" class="{% if active_page == 'documents' %}is-active{% endif %}">
+              <i class="fas fa-scroll"></i>
+              <span>Sacred Documents</span>
+            </a>
+            <a href="/guru-bhairava" class="{% if active_page == 'guru_bhairava' %}is-active{% endif %}">
+              <i class="fas fa-fire-alt"></i>
+              <span>Guru Bhairava</span>
+            </a>
+            <a href="/vishesh-sadhana" class="{% if active_page == 'vishesh_sadhana' %}is-active{% endif %}">
+              <i class="fas fa-fire"></i>
+              <span>Vishesh Sādhana</span>
+            </a>
+            <a href="/prana-pratisthana" class="{% if active_page == 'prana_pratisthana' %}is-active{% endif %}">
+              <i class="fas fa-gem"></i>
+              <span>Prāṇa Pratiṣṭhāna</span>
+            </a>
+          </div>
+        </div>
         <a href="/bhiksha" class="nav-item {% if active_page == 'bhiksha' %}is-active{% endif %}">Bhiksha</a>
 
         {% if current_user.is_authenticated and current_user.is_admin() %}
@@ -177,7 +203,6 @@
         <ul class="footer-links">
           <li><a href="/">Landing Sanctuary</a></li>
           <li><a href="/jnana-samvada">Jnāna Samvāda (Bhairava Codex)</a></li>
-          <li><a href="/bhairav-loka">Bhairav Loka Sahasralinga</a></li>
           <li><a href="/sadhana-paddhati">Sādhana Paddhati (Three Steps)</a></li>
           <li><a href="/mandala-sadhana">Mandala Sādhana Vow</a></li>
           <li><a href="/ashtami">Ashtami Sacred Gateways</a></li>
@@ -226,10 +251,24 @@
     <ul class="drawer-links">
       <li><a href="/">Home</a></li>
       <li><a href="/jnana-samvada" style="color:var(--gold-3)">☸ Jnāna Samvāda</a></li>
-      <li><a href="/bhairav-loka" style="color:var(--gold-3)">✦ Bhairav Loka</a></li>
       <li><a href="/sadhana-paddhati">Sādhana Paddhati</a></li>
       <li><a href="/mandala-sadhana">Mandala Vows</a></li>
-      <li><a href="/ashtami">Ashtami Portal</a></li>
+      <li class="drawer-dropdown-item">
+        <button type="button" class="drawer-dropdown-toggle" onclick="this.parentElement.classList.toggle('is-open')">
+          <span style="display:flex; align-items:center; gap:8px;">
+            <i class="fas fa-book-open" style="color:var(--gold); font-size:15px;"></i>
+            <span>Resources</span>
+          </span>
+          <i class="fas fa-chevron-down drawer-arrow" style="font-size:12px; transition:transform 0.3s ease;"></i>
+        </button>
+        <ul class="drawer-submenu">
+          <li><a href="/ashtami">🌙 Krishna Paksha Ashtami</a></li>
+          <li><a href="/documents">📜 Sacred Documents</a></li>
+          <li><a href="/guru-bhairava">🔥 Guru Bhairava</a></li>
+          <li><a href="/vishesh-sadhana">🔥 Vishesh Sādhana</a></li>
+          <li><a href="/prana-pratisthana">💎 Prāṇa Pratiṣṭhāna</a></li>
+        </ul>
+      </li>
       <li><a href="/bhiksha">Sacred Bhiksha</a></li>
 
       {% if current_user.is_authenticated %}

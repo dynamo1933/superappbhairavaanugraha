@@ -410,6 +410,177 @@ header.chrome,
   border-color: #d4a64a !important;
 }
 
+/* ==========================================================================
+   NAVIGATION DROPDOWN (Resources & Sacred Modules)
+   ========================================================================== */
+.nav-dropdown-wrap {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+.nav-dropdown-btn {
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  padding: 5px 8px !important;
+  font-family: var(--chrome-serif, "EB Garamond", Georgia, serif) !important;
+  font-size: 14.5px !important;
+  color: rgba(233, 223, 200, 0.72) !important;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  border-radius: 4px !important;
+}
+
+.nav-dropdown-btn:hover {
+  color: #f0d48a !important;
+  background: rgba(212, 166, 74, 0.12) !important;
+}
+
+.nav-dropdown-btn.is-active {
+  color: #f0d48a !important;
+  font-weight: 600 !important;
+}
+
+.nav-dropdown-arrow {
+  font-size: 0.65rem !important;
+  transition: transform 0.25s ease !important;
+  color: rgba(212, 166, 74, 0.7) !important;
+  margin-top: 1px !important;
+}
+
+.nav-dropdown-wrap:hover .nav-dropdown-arrow,
+.nav-dropdown-wrap:focus-within .nav-dropdown-arrow {
+  transform: rotate(180deg) !important;
+  color: #f0d48a !important;
+}
+
+.nav-dropdown-menu {
+  display: none;
+  position: absolute !important;
+  top: calc(100% + 8px) !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  min-width: 220px !important;
+  background: linear-gradient(180deg, rgba(24, 18, 28, 0.98) 0%, rgba(14, 11, 18, 0.98) 100%) !important;
+  border: 1px solid rgba(212, 166, 74, 0.35) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.85), 0 0 20px rgba(212, 166, 74, 0.12) !important;
+  padding: 0.5rem 0 !important;
+  z-index: 1200 !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+
+.nav-dropdown-wrap:hover .nav-dropdown-menu,
+.nav-dropdown-wrap:focus-within .nav-dropdown-menu {
+  display: block !important;
+  animation: navDropdownFade 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+@keyframes navDropdownFade {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -6px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.nav-dropdown-menu a {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+  padding: 0.65rem 1.15rem !important;
+  color: #fdfaf2 !important;
+  text-decoration: none !important;
+  font-size: 0.95rem !important;
+  font-family: var(--chrome-serif, "EB Garamond", Georgia, serif) !important;
+  transition: all 0.2s ease !important;
+  text-align: left !important;
+  white-space: nowrap !important;
+}
+
+.nav-dropdown-menu a:hover {
+  background: rgba(212, 166, 74, 0.14) !important;
+  color: #f0d48a !important;
+  padding-left: 1.35rem !important;
+}
+
+.nav-dropdown-menu a i {
+  color: #d4a64a !important;
+  font-size: 0.85rem !important;
+  width: 16px !important;
+  text-align: center !important;
+}
+
+.nav-dropdown-menu a.is-active {
+  color: #f0d48a !important;
+  background: rgba(212, 166, 74, 0.18) !important;
+  font-weight: 600 !important;
+}
+
+/* Mobile Drawer Dropdown for Resources */
+.drawer-dropdown-item {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.drawer-dropdown-toggle {
+  width: 100% !important;
+  font-size: 18px !important;
+  color: #e9dfc8 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 10px 12px !important;
+  border-radius: 6px !important;
+  border: 1px solid rgba(212, 166, 74, 0.12) !important;
+  background: rgba(26, 20, 16, 0.5) !important;
+  cursor: pointer !important;
+  transition: all 0.28s ease !important;
+  box-sizing: border-box !important;
+}
+
+.drawer-dropdown-toggle:hover {
+  background: rgba(42, 31, 21, 0.75) !important;
+  border-color: #d4a64a !important;
+  color: #f0d48a !important;
+}
+
+.drawer-dropdown-item.is-open .drawer-arrow {
+  transform: rotate(180deg) !important;
+  color: #f0d48a !important;
+}
+
+.drawer-submenu {
+  display: none;
+  list-style: none !important;
+  margin: 6px 0 0 10px !important;
+  padding: 0 !important;
+  border-left: 2px solid rgba(212, 166, 74, 0.3) !important;
+  padding-left: 8px !important;
+  gap: 6px !important;
+}
+
+.drawer-dropdown-item.is-open .drawer-submenu {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.drawer-submenu a {
+  font-size: 15px !important;
+  padding: 7px 10px !important;
+  color: #d6c9a3 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
 
 /* ==========================================================================
    5. ASHTAMI ALERT RIBBON
