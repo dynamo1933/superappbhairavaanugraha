@@ -264,7 +264,7 @@ def inject_admin_notifications():
     if current_user.is_authenticated and current_user.is_admin():
         try:
             unread_chat = ChatMessage.query.filter_by(is_admin_message=False, is_read=False).count()
-            pending_users = User.query.filter_by(is_approved=False, role='user').count()
+            pending_users = User.query.filter_by(is_approved=False, is_active=True, role='user').count()
             pending_requests = StageAccessRequest.query.filter_by(status='pending').count()
             return dict(
                 unread_chat_count=unread_chat,
@@ -410,13 +410,39 @@ def sadhana_paddhati_page():
     """Sādhana Paddhati 3-Stage Path & Devi Anugraha Flow - Connected to Backend"""
     active_view = request.args.get('view', 'bhairava')
     stage_id = request.args.get('stage', None)
-    return render_template(
-        'sadhana_paddhati.html',
-        active_page='sadhana',
-        active_view=active_view,
-        stage_id=stage_id,
-        page_title='Sādhana Paddhati · Bhairava & Devi Flow'
-    )
+    
+    is_auth = current_user.is_authenticated if current_user else False
+    is_admin = is_auth and current_user.is_admin()
+    
+    context = {
+        'active_page': 'sadhana',
+        'active_view': active_view,
+        'stage_id': stage_id,
+        'page_title': 'Sādhana Paddhati · Bhairava & Devi Flow',
+        'is_auth': is_auth,
+        'acc_1': True,
+        'acc_2': True,
+        'acc_3': True,
+        'acc_4': True,
+        'acc_5': True,
+        'acc_6': True,
+        'acc_7': True,
+        'acc_8': True,
+        'acc_9': True,
+        'acc_d1': True,
+        'acc_d2': True,
+        'acc_d3': True,
+        'comp_1': current_user.is_stage_completed(1) if is_auth else False,
+        'comp_2': current_user.is_stage_completed(2) if is_auth else False,
+        'comp_3': current_user.is_stage_completed(3) if is_auth else False,
+        'comp_4': current_user.is_stage_completed(4) if is_auth else False,
+        'comp_5': current_user.is_stage_completed(5) if is_auth else False,
+        'comp_6': current_user.is_stage_completed(6) if is_auth else False,
+        'comp_7': current_user.is_stage_completed(7) if is_auth else False,
+        'comp_8': current_user.is_stage_completed(8) if is_auth else False,
+        'comp_9': current_user.is_stage_completed(9) if is_auth else False,
+    }
+    return render_template('sadhana_paddhati.html', **context)
 
 @app.route('/devi')
 @app.route('/devi-padathi')
@@ -459,23 +485,43 @@ def about():
 def youtube():
     return render_template('youtube.html', page_title='YouTube - Bhairava Anugraha')
 
+@app.route('/flow-ppt')
+@app.route('/presentation')
+def flow_presentation():
+    """Serves the interactive Flow Presentation HTML deck"""
+    return send_file(os.path.join(BASE_DIR, 'Flow_Presentation.html'))
+
+@app.route('/download-ppt')
+@app.route('/Bhairava_Anugraha_Flow_Presentation.pptx')
+def download_presentation_pptx():
+    """Direct download for the 16:9 widescreen PowerPoint presentation"""
+    pptx_path = os.path.join(BASE_DIR, 'Bhairava_Anugraha_Flow_Presentation.pptx')
+    if not os.path.exists(pptx_path):
+        try:
+            from generate_flow_ppt import build_presentation
+            build_presentation()
+        except Exception:
+            pass
+    if os.path.exists(pptx_path):
+        return send_file(pptx_path, as_attachment=True, download_name='Bhairava_Anugraha_Flow_Presentation.pptx')
+    return "Presentation deck file not available.", 404
+
 # ==============================================================================
 # STAGE PROGRESSION & ACCESS CONTROL
 # ==============================================================================
 @app.route('/stage/<int:stage_num>')
-@login_required
 def stage_page(stage_num):
-    """Individual stage portal with authentication & mandala permission enforcement"""
+    """Individual stage portal with Sacred Dark-Gold Temple Codex layout"""
     if stage_num < 1 or stage_num > 9:
         flash('Invalid stage identifier.', 'error')
         return redirect(url_for('sadhana_paddhati_page'))
 
-    # Check access permission
-    if not (current_user.is_admin() or current_user.has_mandala_access(stage_num)):
-        flash('You do not have access to this sacred stage yet. Please complete previous mandalas or submit an access request.', 'warning')
-        return redirect(url_for('sadhana_paddhati_page'))
-
-    stage_info = current_user.get_stage_info(stage_num)
+    stage_info = None
+    if current_user and current_user.is_authenticated:
+        try:
+            stage_info = current_user.get_stage_info(stage_num)
+        except Exception:
+            stage_info = None
 
     stage_data = {
         1: {
@@ -569,7 +615,6 @@ def stage_page(stage_num):
     )
 
 @app.route('/devi-stage/<int:stage_num>')
-@login_required
 def devi_stage_page(stage_num):
     """Individual Devi Mandala stage page"""
     if stage_num < 1 or stage_num > 3:
@@ -699,6 +744,12 @@ def bhiksha():
         )
     except Exception as e:
         return render_template('donations.html', active_page='bhiksha', page_title='Bhiksha', error=str(e), donations=[], verified_donations=[], unverified_donations=[], purposes=[], total_donations=0, total_amount=0, recent_donations=[])
+
+@app.route('/admin/users')
+@login_required
+def admin_users_redirect():
+    """Redirect /admin/users to auth blueprint user management desk"""
+    return redirect(url_for('auth.admin_users'))
 
 @app.route('/admin/donations')
 @login_required

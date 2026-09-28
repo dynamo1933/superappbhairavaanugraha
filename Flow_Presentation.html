@@ -1,0 +1,1780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bhairava Anugraha Super App - Flow Presentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Tiro+Devanagari+Sanskrit&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-void: #07060a;
+      --bg-ink: #0e0a06;
+      --bg-card: #16120e;
+      --bg-card-light: #201a14;
+      --gold-primary: #d4a64a;
+      --gold-bright: #f5de96;
+      --gold-dark: #a67a2c;
+      --gold-border: #604922;
+      --crimson-accent: #9e1e1e;
+      --crimson-bg: #2e0e0e;
+      --text-light: #eee6da;
+      --text-muted: #a89e92;
+      --accent-green: #2e7d32;
+      --accent-blue: #1e64a0;
+      --accent-amber: #d97706;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-void);
+      color: var(--text-light);
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      user-select: none;
+    }
+
+    /* Top presentation control bar */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 52px;
+      background: rgba(14, 10, 6, 0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--gold-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 1000;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand .om {
+      font-family: 'Tiro Devanagari Sanskrit', serif;
+      font-size: 24px;
+      color: var(--gold-primary);
+      text-shadow: 0 0 10px rgba(212, 166, 74, 0.6);
+    }
+
+    .brand .title {
+      font-family: 'Cinzel', serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--gold-bright);
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn {
+      background: var(--bg-card);
+      border: 1px solid var(--gold-border);
+      color: var(--gold-bright);
+      padding: 6px 14px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background: var(--gold-dark);
+      color: #fff;
+      border-color: var(--gold-primary);
+      box-shadow: 0 0 12px rgba(212, 166, 74, 0.3);
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, #a67a2c, #d4a64a);
+      color: #0c0a08;
+      font-weight: 600;
+      border-color: var(--gold-primary);
+    }
+
+    .btn-gold:hover {
+      background: linear-gradient(135deg, #d4a64a, #f5de96);
+      color: #0c0a08;
+    }
+
+    .slide-select {
+      background: var(--bg-card);
+      border: 1px solid var(--gold-border);
+      color: var(--gold-bright);
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      outline: none;
+    }
+
+    /* Main Deck Stage */
+    .deck-container {
+      position: absolute;
+      top: 52px;
+      bottom: 40px;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      max-width: 1280px;
+      height: 100%;
+      max-height: 720px;
+      background: var(--bg-ink);
+      border: 1px solid var(--gold-border);
+      border-radius: 8px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(212, 166, 74, 0.08);
+      position: relative;
+      overflow-y: auto;
+      padding: 32px 40px;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .slide.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Slide Header */
+    .slide-header {
+      border-bottom: 1px solid var(--gold-border);
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+      flex-shrink: 0;
+    }
+
+    .slide-category {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--gold-primary);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .slide-title {
+      font-family: 'Cinzel', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--gold-bright);
+      margin-top: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    /* Cards & Layout Grids */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1.25fr;
+      gap: 20px;
+      flex: 1;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      flex: 1;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      flex: 1;
+    }
+
+    .grid-5 {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      flex: 1;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--gold-border);
+      border-radius: 6px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover {
+      border-color: var(--gold-primary);
+    }
+
+    .card-title {
+      font-family: 'Cinzel', serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--gold-primary);
+      border-bottom: 1px solid rgba(96, 73, 34, 0.4);
+      padding-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      background: var(--crimson-bg);
+      color: var(--gold-bright);
+      border: 1px solid var(--crimson-accent);
+    }
+
+    .badge-green {
+      background: rgba(46, 125, 50, 0.2);
+      color: #81c784;
+      border-color: var(--accent-green);
+    }
+
+    .badge-blue {
+      background: rgba(30, 100, 160, 0.2);
+      color: #90caf9;
+      border-color: var(--accent-blue);
+    }
+
+    .badge-amber {
+      background: rgba(217, 119, 6, 0.2);
+      color: #ffb74d;
+      border-color: var(--accent-amber);
+    }
+
+    .card-body {
+      font-size: 12.5px;
+      line-height: 1.6;
+      color: var(--text-light);
+    }
+
+    .card-body ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    .card-body li {
+      margin-bottom: 8px;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    .card-body li::before {
+      content: "▸";
+      color: var(--gold-primary);
+      flex-shrink: 0;
+    }
+
+    .callout {
+      background: var(--bg-card-light);
+      border: 1px solid var(--gold-primary);
+      border-radius: 6px;
+      padding: 12px 18px;
+      font-size: 12px;
+      color: var(--gold-bright);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 14px;
+      flex-shrink: 0;
+    }
+
+    .code-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      background: #000;
+      color: var(--gold-bright);
+      padding: 2px 6px;
+      border-radius: 3px;
+      border: 1px solid var(--gold-border);
+    }
+
+    /* Title Slide Specifics */
+    .title-slide {
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle at center, #1a1209 0%, #07060a 100%);
+    }
+
+    .title-om {
+      font-family: 'Tiro Devanagari Sanskrit', serif;
+      font-size: 48px;
+      color: var(--gold-primary);
+      text-shadow: 0 0 25px rgba(212, 166, 74, 0.7);
+      margin-bottom: 8px;
+    }
+
+    .title-inv {
+      font-family: 'Cinzel', serif;
+      font-size: 16px;
+      letter-spacing: 2px;
+      color: var(--gold-bright);
+      margin-bottom: 16px;
+    }
+
+    .title-main {
+      font-family: 'Cinzel', serif;
+      font-size: 38px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 2px;
+      text-shadow: 0 0 30px rgba(212, 166, 74, 0.4);
+      margin-bottom: 12px;
+    }
+
+    .title-sub {
+      font-size: 16px;
+      color: var(--text-light);
+      max-width: 800px;
+      margin: 0 auto 30px;
+      line-height: 1.6;
+    }
+
+    .title-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 30px;
+    }
+
+    .title-pill {
+      background: var(--bg-card);
+      border: 1px solid var(--gold-border);
+      border-radius: 6px;
+      padding: 10px 18px;
+      text-align: left;
+    }
+
+    .title-pill-name {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gold-primary);
+    }
+
+    .title-pill-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* Bottom Status Bar */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 40px;
+      background: var(--bg-void);
+      border-top: 1px solid rgba(96, 73, 34, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      font-size: 11px;
+      color: var(--text-muted);
+      z-index: 1000;
+    }
+
+    .bottom-bar .tagline {
+      font-family: 'Tiro Devanagari Sanskrit', serif;
+      color: var(--gold-primary);
+    }
+
+    /* Flow Chart Diagram Boxes */
+    .flow-step-box {
+      background: var(--bg-card);
+      border: 1px solid var(--gold-border);
+      border-radius: 6px;
+      padding: 14px;
+      position: relative;
+    }
+
+    .flow-step-badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--gold-bright);
+      background: var(--crimson-bg);
+      border: 1px solid var(--crimson-accent);
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+
+    .flow-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold-primary);
+      font-size: 18px;
+    }
+
+    /* Speaker Notes Modal */
+    .notes-drawer {
+      display: none;
+      position: absolute;
+      bottom: 40px;
+      left: 20px;
+      right: 20px;
+      background: rgba(14, 10, 6, 0.96);
+      border: 1px solid var(--gold-primary);
+      border-radius: 6px 6px 0 0;
+      padding: 16px 24px;
+      font-size: 13px;
+      color: var(--gold-bright);
+      line-height: 1.6;
+      box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.7);
+      z-index: 500;
+    }
+
+    .notes-drawer.open {
+      display: block;
+    }
+
+    /* Stage Matrix */
+    .stage-item {
+      background: var(--bg-card);
+      border: 1px solid var(--gold-border);
+      border-radius: 4px;
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .stage-item-title {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gold-primary);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .stage-item-desc {
+      font-size: 11px;
+      color: var(--text-light);
+      line-height: 1.4;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-void);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--gold-border);
+      border-radius: 3px;
+    }
+    /* Slide 6 Enhanced Stepper & Swimlane Styles */
+    .flow-stepper-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 14px;
+      padding: 8px 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--gold-border);
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+    .stepper-node {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--text-light);
+    }
+    .stepper-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--gold-dark);
+      color: #0c0a08;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      flex-shrink: 0;
+    }
+    .stepper-arrow {
+      color: var(--gold-primary);
+      font-size: 13px;
+      opacity: 0.6;
+    }
+    .flow-tab-btns {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-shrink: 0;
+    }
+    .flow-tab-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--gold-border);
+      color: var(--gold-bright);
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .flow-tab-btn.active, .flow-tab-btn:hover {
+      background: var(--gold-dark);
+      color: #fff;
+      border-color: var(--gold-primary);
+    }
+    .flow-tab-content {
+      display: none;
+      flex: 1;
+    }
+    .flow-tab-content.active {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .swimlane-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      flex: 1;
+    }
+    .swimlane-card {
+      background: var(--bg-card);
+      border: 1px solid var(--gold-border);
+      border-radius: 6px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .swimlane-card:hover {
+      border-color: var(--gold-primary);
+    }
+    .swimlane-header {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      font-weight: 700;
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(96, 73, 34, 0.4);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .flow-matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      text-align: left;
+    }
+    .flow-matrix-table th {
+      background: var(--bg-card-light);
+      color: var(--gold-primary);
+      padding: 8px 10px;
+      border: 1px solid var(--gold-border);
+      font-family: 'Cinzel', serif;
+      font-weight: 600;
+    }
+    .flow-matrix-table td {
+      padding: 8px 10px;
+      border: 1px solid rgba(96, 73, 34, 0.35);
+      color: var(--text-light);
+    }
+    .status-pill {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-size: 9.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar Controls -->
+  <div class="top-bar">
+    <div class="brand">
+      <span class="om">ॐ</span>
+      <span class="title">BHAIRAVA ANUGRAHA • FLOW PRESENTATION</span>
+    </div>
+
+    <div class="controls">
+      <button class="btn" id="btnNotes" title="Toggle Speaker Notes (N)">📝 Notes</button>
+      <button class="btn" id="btnPrev" title="Previous Slide (← / PageUp)">◀ Prev</button>
+      <select class="slide-select" id="slideSelect"></select>
+      <button class="btn" id="btnNext" title="Next Slide (→ / Space / PageDown)">Next ▶</button>
+      <button class="btn" id="btnFullscreen" title="Toggle Fullscreen (F)">⛶ Fullscreen</button>
+      <a href="Bhairava_Anugraha_Flow_Presentation.pptx" download class="btn btn-gold" title="Download Official PowerPoint Presentation File">📥 Download PPTX</a>
+    </div>
+  </div>
+
+  <!-- Deck Stage -->
+  <div class="deck-container">
+
+    <!-- SLIDE 1: COVER -->
+    <div class="slide active title-slide" data-title="Cover & Title" data-notes="Welcome to the Bhairava Anugraha Super App Flow Presentation. This deck provides an executive and architectural walkthrough of the entire platform, its user flows, spiritual progression logic, and administration.">
+      <div class="title-om">॥ ॐ श्री महाकाल भैरवाय नमः ॥</div>
+      <div class="title-inv">SACRED PORTAL & ENTERPRISE CODEX SYSTEM</div>
+      <h1 class="title-main">BHAIRAVA ANUGRAHA SUPER APP</h1>
+      <p class="title-sub">
+        Comprehensive End-to-End System Architecture, User Journeys, Sādhana Progression Hierarchy & Operational Governance Deck
+      </p>
+
+      <div class="title-pills">
+        <div class="title-pill">
+          <div class="title-pill-name">1. Official Sanctuary</div>
+          <div class="title-pill-desc">Landing, Ashtami Ribbon & YouTube Media</div>
+        </div>
+        <div class="title-pill">
+          <div class="title-pill-name">2. Jnāna Samvāda</div>
+          <div class="title-pill-desc">257+ Guruji Q&A Codex & ⌘K Search</div>
+        </div>
+        <div class="title-pill">
+          <div class="title-pill-name">3. Bhairav Loka</div>
+          <div class="title-pill-desc">324 Sahasralinga Celestial Spiral</div>
+        </div>
+        <div class="title-pill">
+          <div class="title-pill-name">4. Sādhana Diksha</div>
+          <div class="title-pill-desc">9-Stage Gated Spiritual Progression</div>
+        </div>
+        <div class="title-pill">
+          <div class="title-pill-name">5. Admin Governance</div>
+          <div class="title-pill-desc">Chat, Excel Analytics & Sheets Sync</div>
+        </div>
+      </div>
+
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--gold-dark);">
+        Python Flask 3 • SQLAlchemy ORM • Zero-Modification Proxy • Dark-Gold Temple Codex Aesthetics
+      </div>
+    </div>
+
+    <!-- SLIDE 2: EXECUTIVE OVERVIEW -->
+    <div class="slide" data-title="Executive Vision & Overview" data-notes="Slide 2 presents the strategic motivation: unifiying distinct sub-apps and physical records into a single web sanctuary with zero upstream code friction.">
+      <div class="slide-header">
+        <div class="slide-category">✦ Platform Overview</div>
+        <h2 class="slide-title">Executive Vision & Platform Unification</h2>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">The Sacred Dilemma & Solution</div>
+          <div class="card-body">
+            <p style="margin-bottom: 12px;">
+              Prior to unification, seekers encountered disparate platforms: the official bhairavaanugraha.com website, an offline archive of Guruji Q&As, and an Instagram-scraped Sahasralinga darshan feed.
+            </p>
+            <ul>
+              <li><strong>Unified Experience:</strong> Single persistent header chrome, seamless routing, and synchronized aesthetics.</li>
+              <li><strong>Zero-Modification Guarantee:</strong> Underlying upstream repositories remain completely pristine without git conflicts.</li>
+              <li><strong>Gated Spiritual Hierarchy:</strong> Esoteric mantras and rituals protected behind human-approved progression gates.</li>
+              <li><strong>Authentic Aesthetics:</strong> Void charcoal (#07060a), gold leaf (#d4a64a), Devanagari typography, and meditative bell acoustics.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div class="card">
+            <div class="card-title">
+              1. Official Sanctuary Portal
+              <span class="code-tag">Route: /</span>
+            </div>
+            <div class="card-body">
+              Live Krishna Paksha Ashtami countdown ribbon, Guruji video discourses, sacred lineage history (Maa Kamakhya & Siddhars), book presentation ("Life Within or Without"), and Telegram/WhatsApp direct channels.
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">
+              2. Jnāna Samvāda Codex
+              <span class="code-tag">Route: /jnana-samvada</span>
+            </div>
+            <div class="card-body">
+              257+ verified answers by Guruji categorized into 6 sacred Folios (Mantra, Puja, Mandala, Sādhana Experiences, Advanced, Women & Sādhana) with instant universal ⌘K fuzzy search.
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">
+              3. Bhairav Loka Sahasralinga
+              <span class="code-tag">Route: /bhairav-loka</span>
+            </div>
+            <div class="card-body">
+              Interactive HTML5 canvas rendering 324 consecrated Shiva Lingams in a celestial logarithmic spiral with 4 view modes and darshan lightbox.
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">
+              4. Sādhana Progression Engine
+              <span class="code-tag">Routes: /sadhana-paddhati, /stage/&lt;n&gt;</span>
+            </div>
+            <div class="card-body">
+              Hierarchical 9-stage spiritual path spanning foundational 48-day Mandalas, Rudraksha Diksha tiers (8, 11, 14 Mukhi), and advanced Charana initiations.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <span>✦</span>
+        <span><strong>Key Value Delivered:</strong> A seeker can explore the public sanctuary, query esoteric texts, view 324 consecrated Shiva Lingams, apply for initiations, and chat directly with Guruji in one cohesive portal.</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: 4-TIER TECHNICAL ARCHITECTURE -->
+    <div class="slide" data-title="System Architecture (4 Tiers)" data-notes="Slide 3 breaks down the 4-tier technical architecture from the frontend chrome through the Flask routing engine to data persistence.">
+      <div class="slide-header">
+        <div class="slide-category">✦ Technical Foundations</div>
+        <h2 class="slide-title">System Architecture: 4-Tier Enterprise Flow</h2>
+      </div>
+
+      <div class="grid-4">
+        <div class="card">
+          <div class="card-title">
+            Tier 1: Presentation
+            <span class="card-badge badge-amber">UI / UX</span>
+          </div>
+          <div class="card-body">
+            <ul>
+              <li><strong>Unified Header:</strong> Glowing Devanagari ॐ, direct portal switches, Web Audio chime.</li>
+              <li><strong>Design Tokens:</strong> Void background (#07060a), radiant gold (#d4a64a).</li>
+              <li><strong>Interactive Canvas:</strong> Particle embers and logarithmic spiral math.</li>
+              <li><strong>Command Modal:</strong> ⌘K universal search overlay across all folios.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            Tier 2: Flask Controller
+            <span class="card-badge badge-blue">Routing</span>
+          </div>
+          <div class="card-body">
+            <ul>
+              <li><strong>WSGI Server (app.py):</strong> Primary routing, template rendering, and error handling.</li>
+              <li><strong>Auth Blueprint:</strong> Flask-Login session management and registration queue.</li>
+              <li><strong>Security:</strong> CSRF protection, PBKDF2 password hashing, RBAC decorators.</li>
+              <li><strong>Sub-App Proxy:</strong> Direct streaming proxy to local filesystem archives.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            Tier 3: Domain Logic
+            <span class="card-badge badge-green">Services</span>
+          </div>
+          <div class="card-body">
+            <ul>
+              <li><strong>Stage Gatekeeper:</strong> Calculates user stage access, durations, and dependencies.</li>
+              <li><strong>Ashtami Calculator:</strong> Live algorithmic computation of Krishna Paksha Ashtamis.</li>
+              <li><strong>Chat Dispatcher:</strong> In-app messaging service between Seekers and Admin.</li>
+              <li><strong>Google Sheets Sync:</strong> Cloud service account pull/push for donations.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            Tier 4: Persistence
+            <span class="card-badge">Data Layer</span>
+          </div>
+          <div class="card-body">
+            <ul>
+              <li><strong>SQLAlchemy Models:</strong> User, StageAccessRequest, ChatMessage, Donations.</li>
+              <li><strong>Q&A JSON & CSV:</strong> 257+ verified answers indexed in memory.</li>
+              <li><strong>Media Storage:</strong> 324 high-res Shiva Lingam photos & transcripts.</li>
+              <li><strong>openpyxl Engine:</strong> Dynamic Excel reporting with embedded charts.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <span>⚙</span>
+        <span><strong>Zero-Modification Ingestion:</strong> The proxy routes (<span class="code-tag">/api/qna</span>, <span class="code-tag">/api/posts</span>, <span class="code-tag">/media/&lt;file&gt;</span>) read directly from disk, ensuring underlying Git submodules remain 100% untouched.</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: PUBLIC DISCOVERY FLOW -->
+    <div class="slide" data-title="Public Seeker Discovery Flow" data-notes="Slide 4 describes the user journey for unauthenticated seekers discovering the portal, exploring knowledge, and entering the sadhana funnel.">
+      <div class="slide-header">
+        <div class="slide-category">✦ User Journey Flow 1</div>
+        <h2 class="slide-title">Public Seeker Discovery & Knowledge Exploration Flow</h2>
+      </div>
+
+      <div class="grid-5" style="align-items: stretch;">
+        <div class="flow-step-box">
+          <span class="flow-step-badge">STAGE 1</span>
+          <h4 style="font-family: 'Cinzel', serif; color: var(--gold-primary); margin-bottom: 6px;">Sanctuary Entry</h4>
+          <div class="code-tag" style="margin-bottom: 8px;">GET /</div>
+          <p style="font-size: 11px; line-height: 1.5; color: var(--text-light);">
+            Seeker arrives at official homepage. Live Ashtami banner displays countdown. Traditional invocation and Web Audio bell chime welcome the seeker.
+          </p>
+        </div>
+
+        <div class="flow-step-box">
+          <span class="flow-step-badge">STAGE 2</span>
+          <h4 style="font-family: 'Cinzel', serif; color: var(--gold-primary); margin-bottom: 6px;">Discourses & Media</h4>
+          <div class="code-tag" style="margin-bottom: 8px;">GET /guru-bhairava</div>
+          <p style="font-size: 11px; line-height: 1.5; color: var(--text-light);">
+            Seeker watches embedded YouTube darshan discourses, reads on Maa Kamakhya, Guru Bhairava, and the Avadhuta lineage. Book showcase link for orders.
+          </p>
+        </div>
+
+        <div class="flow-step-box">
+          <span class="flow-step-badge">STAGE 3</span>
+          <h4 style="font-family: 'Cinzel', serif; color: var(--gold-primary); margin-bottom: 6px;">Codex Exploration</h4>
+          <div class="code-tag" style="margin-bottom: 8px;">GET /jnana-samvada</div>
+          <p style="font-size: 11px; line-height: 1.5; color: var(--text-light);">
+            Seeker queries 257+ Q&As via universal ⌘K search and navigates the 324 Shiva Lingam Sahasralinga spiral on HTML5 canvas.
+          </p>
+        </div>
+
+        <div class="flow-step-box">
+          <span class="flow-step-badge">STAGE 4</span>
+          <h4 style="font-family: 'Cinzel', serif; color: var(--gold-primary); margin-bottom: 6px;">Sādhana Guidance</h4>
+          <div class="code-tag" style="margin-bottom: 8px;">GET /sadhana-paddhati</div>
+          <p style="font-size: 11px; line-height: 1.5; color: var(--text-light);">
+            Reviews 3-step discipline (Inner Dawn, Divine Deepening, Sacred Union), Rudraksha initiation requirements, and Devi Kamakhya mandalas.
+          </p>
+        </div>
+
+        <div class="flow-step-box">
+          <span class="flow-step-badge">STAGE 5</span>
+          <h4 style="font-family: 'Cinzel', serif; color: var(--gold-primary); margin-bottom: 6px;">Registration Gateway</h4>
+          <div class="code-tag" style="margin-bottom: 8px;">GET /auth/register</div>
+          <p style="font-size: 11px; line-height: 1.5; color: var(--text-light);">
+            Seeker formally submits an application profile with spiritual practice history and sadhana purpose to enter the gated community.
+          </p>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-top: 20px;">
+        <span>➔</span>
+        <span><strong>Conversion Funnel:</strong> Unauthenticated visitors are drawn into the sacred ecosystem via high-reverence media, authoritative Q&A codices, and clear pathways to formal registration.</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: CODEX SYSTEMS -->
+    <div class="slide" data-title="Codex Systems Deep Dive" data-notes="Slide 5 covers the data and interaction mechanics of the two core archives: Jnana Samvada and Bhairav Loka.">
+      <div class="slide-header">
+        <div class="slide-category">✦ Sacred Knowledge Archives</div>
+        <h2 class="slide-title">Jnāna Samvāda & Bhairav Loka Codex Mechanics</h2>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">
+            ☸ Jnāna Samvāda (257+ Q&A Codex)
+            <span class="card-badge badge-amber">Instant Fuzzy Search</span>
+          </div>
+          <div class="card-body">
+            <p style="margin-bottom: 10px;">
+              Curated repository of foundational and esoteric seeker inquiries answered by Guruji, categorized into 6 sacred Folios:
+            </p>
+            <ul>
+              <li><strong>Folio I - Mantra & Japa:</strong> Seed syllables, japa counts, mala selection, and purascharana rules.</li>
+              <li><strong>Folio II - Pūjā, Āratī & Rituals:</strong> Mustard oil lamp offerings, altar orientation, and Ashtami timings.</li>
+              <li><strong>Folio III - Maṇḍala & Anuṣṭhāna:</strong> 48/144-day unbroken discipline, dietary tapasya, and brahmacharya.</li>
+              <li><strong>Folio IV - Sādhanā Experiences:</strong> Visions, inner heat, clearing of karmic blocks, and spiritual dreams.</li>
+              <li><strong>Folio V - Advanced Topics:</strong> Kundalini dynamics, cremation ground symbolism, and Bhairava tattva.</li>
+              <li><strong>Folio VI - Women & Sādhanā:</strong> Dedicated guidance during lunar cycles and maternal sadhanas.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            ✦ Bhairav Loka (324 Shiva Lingam Codex)
+            <span class="card-badge badge-blue">Interactive Canvas</span>
+          </div>
+          <div class="card-body">
+            <p style="margin-bottom: 10px;">
+              Conveys the living darshan of 324 consecrated Shiva Lingams arranged along a logarithmic spiral:
+            </p>
+            <ul>
+              <li><strong>Logarithmic Celestial Spiral:</strong> Mathematical golden-ratio canvas plot with interactive pan, zoom, and node hover.</li>
+              <li><strong>4 Unified View Modes:</strong> Seamlessly toggle between Spiral Canvas, Darshan Grid, Dense Matrix, and Expanded Cards.</li>
+              <li><strong>Modal Darshan Lightbox:</strong> High-resolution imagery, full discourse transcriptions, consecration details, and sacred tags.</li>
+              <li><strong>Zero-Mod Scraper Proxy:</strong> Images and JSON served directly from instagram_scrap archives at near-zero latency.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <span>⌘K</span>
+        <span><strong>Universal Command Palette:</strong> Seekers can press <span class="code-tag">⌘K</span> or <span class="code-tag">Ctrl+K</span> anywhere on the site to trigger instant client-side fuzzy search across all 257+ questions and folios.</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: REGISTRATION & APPROVAL WORKFLOW -->
+    <div class="slide" data-title="Seeker Registration & Approval Flow" data-notes="Slide 6 details the complete end-to-end journey from seeker intake and cryptographic storage, to gatekeeper pending state, admin vetting, and Mandala 1 activation.">
+      <div class="slide-header">
+        <div class="slide-category">✦ User Journey Flow 2</div>
+        <h2 class="slide-title">Seeker Registration, Gated Vetting & Admin Approval Architecture</h2>
+      </div>
+
+      <!-- Top Interactive Stepper Pipeline -->
+      <div class="flow-stepper-bar">
+        <div class="stepper-node">
+          <div class="stepper-num">1</div>
+          <span>Seeker Intake <span class="code-tag">/auth/register</span></span>
+        </div>
+        <span class="stepper-arrow">➔</span>
+        <div class="stepper-node">
+          <div class="stepper-num">2</div>
+          <span>Salt & DB Commit <span class="code-tag">is_approved=False</span></span>
+        </div>
+        <span class="stepper-arrow">➔</span>
+        <div class="stepper-node">
+          <div class="stepper-num">3</div>
+          <span>Gatekeeper Lock <span class="code-tag">can_login()=False</span></span>
+        </div>
+        <span class="stepper-arrow">➔</span>
+        <div class="stepper-node">
+          <div class="stepper-num">4</div>
+          <span>Admin Vetting <span class="code-tag">/auth/admin/users</span></span>
+        </div>
+        <span class="stepper-arrow">➔</span>
+        <div class="stepper-node">
+          <div class="stepper-num">5</div>
+          <span>Approval & Stage 1 <span class="code-tag">mandala_1=Active</span></span>
+        </div>
+      </div>
+
+      <!-- Tab Buttons -->
+      <div class="flow-tab-btns">
+        <button type="button" class="flow-tab-btn active" data-tab="tab-swimlanes">✦ 3-Tier Swimlane Execution Flow</button>
+        <button type="button" class="flow-tab-btn" data-tab="tab-statemachine">✦ Database State Machine & Transitions</button>
+        <button type="button" class="flow-tab-btn" data-tab="tab-adminvetting">✦ Admin Vetting Desk & Decision Gates</button>
+      </div>
+
+      <!-- TAB 1: 3-TIER SWIMLANES -->
+      <div class="flow-tab-content active" id="tab-swimlanes">
+        <div class="swimlane-grid">
+          <!-- Swimlane A: Seeker (Aspirant) -->
+          <div class="swimlane-card">
+            <div class="swimlane-header">
+              <span style="color: var(--gold-primary);">1. Seeker Experience</span>
+              <span class="card-badge badge-blue">Frontend Intake</span>
+            </div>
+            <div class="card-body">
+              <ul>
+                <li><strong>Initiation Intake:</strong> Seeker completes registration form with credentials, phone, address, and practice tier.</li>
+                <li><strong>Mandatory Purpose Essay:</strong> Submits personal resolve (20-1000 characters) detailing reason for embarking on Bhairava Sādhana.</li>
+                <li><strong>Queue Confirmation:</strong> Redirected to login with confirmation: <em>"Application queued for Guruji / Admin verification"</em>.</li>
+                <li><strong>Pending Advisory:</strong> Login attempts while unapproved show review status without exposing internal paths.</li>
+                <li><strong>Post-Approval Session:</strong> Once verified, login succeeds immediately, beginning the 48-day Mandala 1 timer.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Swimlane B: System & Security Engine -->
+          <div class="swimlane-card">
+            <div class="swimlane-header">
+              <span style="color: var(--gold-bright);">2. Security & DB Gateway</span>
+              <span class="card-badge badge-amber">Middleware</span>
+            </div>
+            <div class="card-body">
+              <ul>
+                <li><strong>Validation Engine:</strong> WTForms validates email structure, password complexity, and username uniqueness.</li>
+                <li><strong>Cryptographic Salting:</strong> Password hashed via Werkzeug PBKDF2:SHA256 with secure unique salt.</li>
+                <li><strong>Gated Record Creation:</strong> User committed to DB with <span class="code-tag">is_approved = False</span>, <span class="code-tag">is_active = True</span>.</li>
+                <li><strong>Access Gatekeeper:</strong> <span class="code-tag">can_login()</span> returns False for unapproved accounts.</li>
+                <li><strong>Admin Notification Hook:</strong> <span class="code-tag">inject_admin_notifications</span> increments pending count badge on admin console.</li>
+                <li><strong>Approval Event Trigger:</strong> Stamps <span class="code-tag">approved_at</span>, records <span class="code-tag">approved_by</span>, and initializes <span class="code-tag">mandala_1_started_at</span>.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Swimlane C: Admin Desk -->
+          <div class="swimlane-card">
+            <div class="swimlane-header">
+              <span style="color: var(--gold-primary);">3. Admin Governance</span>
+              <span class="card-badge badge-green">Mentorship Desk</span>
+            </div>
+            <div class="card-body">
+              <ul>
+                <li><strong>Header Pending Alert:</strong> Gold badge in top bar notifies admin of waiting applications.</li>
+                <li><strong>Seeker Management Desk:</strong> Admin accesses <span class="code-tag">/auth/admin/users</span> with status filters.</li>
+                <li><strong>Sincerity Audit:</strong> Admin opens modal to read applicant's purpose essay and spiritual experience level.</li>
+                <li><strong>Tri-State Decision Gate:</strong>
+                  <ul>
+                    <li><span class="status-pill" style="background: rgba(34,197,94,0.2); color:#4ade80;">Approve</span>: Unlocks Mandala 1 & sets stage clock.</li>
+                    <li><span class="status-pill" style="background: rgba(239,68,68,0.2); color:#f87171;">Reject</span>: Sets <span class="code-tag">is_active=False</span>.</li>
+                    <li><span class="status-pill" style="background: rgba(245,158,11,0.2); color:#fbbf24;">Suspend</span>: Revokes session immediately.</li>
+                  </ul>
+                </li>
+                <li><strong>Direct Guidance:</strong> Admin can dispatch welcome guidance via built-in mentorship chat.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: STATE MACHINE TABLE -->
+      <div class="flow-tab-content" id="tab-statemachine">
+        <div class="card" style="padding: 10px; overflow-x: auto;">
+          <table class="flow-matrix-table">
+            <thead>
+              <tr>
+                <th>Lifecycle State</th>
+                <th>is_approved</th>
+                <th>is_active</th>
+                <th>can_login()</th>
+                <th>Mandala 1 Access</th>
+                <th>Stage 1 Timer</th>
+                <th>Seeker Experience</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Anonymous / Guest</strong></td>
+                <td><span class="status-pill" style="background: #333; color: #aaa;">N/A</span></td>
+                <td><span class="status-pill" style="background: #333; color: #aaa;">N/A</span></td>
+                <td><span class="status-pill" style="background: #333; color: #aaa;">False</span></td>
+                <td><span class="status-pill" style="background: #333; color: #aaa;">Locked</span></td>
+                <td><span class="code-tag">None</span></td>
+                <td>Public sanctuary, live Ashtami ribbon & open codices</td>
+              </tr>
+              <tr>
+                <td><strong>2. Pending Review</strong></td>
+                <td><span class="status-pill" style="background: rgba(245,158,11,0.2); color:#fbbf24;">False</span></td>
+                <td><span class="status-pill" style="background: rgba(34,197,94,0.2); color:#4ade80;">True</span></td>
+                <td><span class="status-pill" style="background: rgba(239,68,68,0.2); color:#f87171;">False</span></td>
+                <td><span class="status-pill" style="background: rgba(245,158,11,0.2); color:#fbbf24;">Dormant</span></td>
+                <td><span class="code-tag">None</span></td>
+                <td>Queue status notice; restricted from initiated portals</td>
+              </tr>
+              <tr>
+                <td><strong>3. Approved Sadhak</strong></td>
+                <td><span class="status-pill" style="background: rgba(34,197,94,0.2); color:#4ade80;">True</span></td>
+                <td><span class="status-pill" style="background: rgba(34,197,94,0.2); color:#4ade80;">True</span></td>
+                <td><span class="status-pill" style="background: rgba(34,197,94,0.2); color:#4ade80;">True</span></td>
+                <td><span class="status-pill" style="background: rgba(34,197,94,0.2); color:#4ade80;">UNLOCKED</span></td>
+                <td><span class="code-tag">Timestamped</span></td>
+                <td>Full login, Mandala 1 active, 48-day counter running</td>
+              </tr>
+              <tr>
+                <td><strong>4. Rejected Applicant</strong></td>
+                <td><span class="status-pill" style="background: rgba(239,68,68,0.2); color:#f87171;">False</span></td>
+                <td><span class="status-pill" style="background: rgba(239,68,68,0.2); color:#f87171;">False</span></td>
+                <td><span class="status-pill" style="background: rgba(239,68,68,0.2); color:#f87171;">False</span></td>
+                <td><span class="status-pill" style="background: #333; color: #aaa;">Locked</span></td>
+                <td><span class="code-tag">None</span></td>
+                <td>Login rejected; contact administration notice</td>
+              </tr>
+              <tr>
+                <td><strong>5. Suspended User</strong></td>
+                <td><span class="status-pill" style="background: rgba(34,197,94,0.2); color:#4ade80;">True</span></td>
+                <td><span class="status-pill" style="background: rgba(239,68,68,0.2); color:#f87171;">False</span></td>
+                <td><span class="status-pill" style="background: rgba(239,68,68,0.2); color:#f87171;">False</span></td>
+                <td><span class="status-pill" style="background: rgba(239,68,68,0.2); color:#f87171;">Revoked</span></td>
+                <td><span class="code-tag">Preserved</span></td>
+                <td>Account suspended message; immediate access termination</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 3: ADMIN VETTING & DECISION GATES -->
+      <div class="flow-tab-content" id="tab-adminvetting">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">✦ Spiritual Vetting Criteria & Philosophy</div>
+            <div class="card-body">
+              <p style="margin-bottom: 8px;">
+                Bhairava Sādhana involves powerful energetic transformations, seed mantras, and stringent dietary/behavioral tapasya.
+              </p>
+              <ul>
+                <li><strong>Purpose Assessment:</strong> Admin evaluates whether the applicant seeks genuine spiritual transcendence vs superficial curiosity.</li>
+                <li><strong>Practice Tier Mapping:</strong> Beginner seekers are assigned foundational lamp and nama japa; advanced seekers are queued for Rudraksha Dikshas.</li>
+                <li><strong>Identity & Location Integrity:</strong> Full legal/spiritual name and geographic location ensure proper ritual sankalpa inclusion.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">✦ Execution Engine: /auth/admin/approve_user</div>
+            <div class="card-body">
+              <ul>
+                <li><strong>CSRF-Protected POST Request:</strong> Dispatched asynchronously via fetch with admin session validation.</li>
+                <li><strong>Atomic State Transition:</strong> <span class="code-tag">user.is_approved = True</span>, <span class="code-tag">user.approved_at = Now</span>, <span class="code-tag">mandala_1_started_at = Now</span>.</li>
+                <li><strong>Real-Time UI Update:</strong> Admin table updates applicant status pill and counter badge without full page reload.</li>
+                <li><strong>Direct Route Redirection:</strong> <span class="code-tag">/admin/users</span> automatically redirects to <span class="code-tag">/auth/admin/users</span> for zero navigation friction.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-top: 10px;">
+        <span>🛡</span>
+        <span><strong>Zero-Friction Spiritual Gatekeeping:</strong> From initial seeker intake to cryptographic storage, human vetting, and stage clock initiation, this unified flow balances seamless onboarding with sacred lineage protection.</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: SĀDHANA PROGRESSION ENGINE -->
+    <div class="slide" data-title="Sādhana Stage Progression" data-notes="Slide 7 presents the 9-stage spiritual hierarchy and the StageAccessRequest verification cycle.">
+      <div class="slide-header">
+        <div class="slide-category">✦ Spiritual Progression Engine</div>
+        <h2 class="slide-title">Sādhana Stage Progression & Diksha Protocol</h2>
+      </div>
+
+      <div class="grid-3" style="margin-bottom: 14px;">
+        <div class="stage-item">
+          <div class="stage-item-title">
+            <span>Stage 1: Mandala 1</span>
+            <span class="card-badge badge-green">Auto-Unlocked</span>
+          </div>
+          <div class="stage-item-desc">
+            48-Day Foundation. Prathama Mandala. Basic lamp offerings, foundational Bhairava nama japa, and daily purification.
+          </div>
+        </div>
+
+        <div class="stage-item">
+          <div class="stage-item-title">
+            <span>Stage 2: Mandala 2</span>
+            <span class="card-badge badge-amber">Admin Gate</span>
+          </div>
+          <div class="stage-item-desc">
+            48-Day Deepening. Dvitiya Mandala. Japa count intensification, dietary tapasya, and nighttime meditation discipline.
+          </div>
+        </div>
+
+        <div class="stage-item">
+          <div class="stage-item-title">
+            <span>Stage 3: Mandala 3</span>
+            <span class="card-badge badge-amber">Admin Gate</span>
+          </div>
+          <div class="stage-item-desc">
+            48-Day Mastery. Tritiya Mandala. Culmination of 144 days of unbroken discipline; spiritual purification and grounding.
+          </div>
+        </div>
+
+        <div class="stage-item">
+          <div class="stage-item-title">
+            <span>Stage 4: 8-Mukhi Diksha</span>
+            <span class="card-badge">Rudraksha Tier</span>
+          </div>
+          <div class="stage-item-desc">
+            Ashta Murti Bhairava initiation. For overcoming planetary obstacles (Rahu), fearlessness, and emotional mastery.
+          </div>
+        </div>
+
+        <div class="stage-item">
+          <div class="stage-item-title">
+            <span>Stage 5: 11-Mukhi Diksha</span>
+            <span class="card-badge">Rudraksha Tier</span>
+          </div>
+          <div class="stage-item-desc">
+            Ekadasha Rudra Diksha. Higher spiritual protection, expanded breath retention, and intense mantra transmission.
+          </div>
+        </div>
+
+        <div class="stage-item">
+          <div class="stage-item-title">
+            <span>Stage 6: 14-Mukhi Diksha</span>
+            <span class="card-badge">Rudraksha Tier</span>
+          </div>
+          <div class="stage-item-desc">
+            Deva Mani Rudraksha. Awakening of Ajna Chakra, direct perception of Shiva Tattva, and advanced sadhana threshold.
+          </div>
+        </div>
+
+        <div class="stage-item">
+          <div class="stage-item-title">
+            <span>Stage 7: Pratham Charana</span>
+            <span class="card-badge badge-blue">Higher Diksha</span>
+          </div>
+          <div class="stage-item-desc">
+            Introduction to advanced Rudraksha Diksha with consecrated sankalpas and direct lineage empowerment.
+          </div>
+        </div>
+
+        <div class="stage-item">
+          <div class="stage-item-title">
+            <span>Stage 8: Dutiya Charana</span>
+            <span class="card-badge badge-blue">Higher Diksha</span>
+          </div>
+          <div class="stage-item-desc">
+            Second phase esoteric immersion for mature sadhaks undergoing inner transformation under Guruji's supervision.
+          </div>
+        </div>
+
+        <div class="stage-item">
+          <div class="stage-item-title">
+            <span>Stage 9: Tritiya Charana</span>
+            <span class="card-badge badge-blue">Supreme Phase</span>
+          </div>
+          <div class="stage-item-desc">
+            Supreme Realization stage. Culminating Siddha transmission into <em>Sarvam Bhairava Swaroopam</em>.
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="padding: 12px 18px;">
+        <div class="card-title" style="border: none; padding-bottom: 0;">
+          ✦ StageAccessRequest Unlock Lifecycle:
+        </div>
+        <div class="card-body" style="font-size: 11.5px; display: flex; gap: 20px; align-items: center;">
+          <div><strong>1. Request:</strong> Seeker completes stage ➔ Clicks "Request Access"</div>
+          <div>➔</div>
+          <div><strong>2. Audit:</strong> Admin audits duration (<span class="code-tag">get_stage_duration_days</span>) & chat log</div>
+          <div>➔</div>
+          <div><strong>3. Verification:</strong> Admin approves ➔ <span class="code-tag">complete_stage(n)</span> stamps date</div>
+          <div>➔</div>
+          <div><strong>4. Activation:</strong> <span class="code-tag">start_stage(n+1)</span> begins next timer</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: MANDALA SADHANA VOW FLOW -->
+    <div class="slide" data-title="Mandala Sādhana Commitment Flow" data-notes="Slide 8 covers the dedicated /mandala-sadhana vow submission and pledge management flow.">
+      <div class="slide-header">
+        <div class="slide-category">✦ Dedicated Spiritual Vows</div>
+        <h2 class="slide-title">Mandala Sādhana Commitment & Pledge Flow</h2>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">
+            Seeker Pledge Submission
+            <span class="code-tag">Route: /mandala-sadhana</span>
+          </div>
+          <div class="card-body">
+            <p style="margin-bottom: 12px;">
+              A formal digital sankalpa portal where practitioners register their unbroken 48-day or 144-day sadhana vows:
+            </p>
+            <ul>
+              <li><strong>Full Name & Geo-Location:</strong> Captures seeker name and city/state for ritual sankalpa inclusion.</li>
+              <li><strong>48-Day Commitment:</strong> Mandatory affirmation of unbroken daily discipline.</li>
+              <li><strong>144-Day Extended Vow:</strong> Multi-mandala commitment tier (Yes / No / Not Yet Ready).</li>
+              <li><strong>Declared Sādhana Type:</strong> Bhairava Japa, Batuk Bhairava, or Maa Kamakhya Sadhana.</li>
+              <li><strong>Start Date:</strong> Exact date when the seeker begins the daily discipline.</li>
+              <li><strong>Personal Commitment Essay:</strong> Seeker's written vow describing their inner intent.</li>
+              <li><strong>Receipt Delivery:</strong> Option to send an automated confirmation copy to seeker's email.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            Admin Pledge Governance
+            <span class="code-tag">Route: /admin/mandala-sadhana</span>
+          </div>
+          <div class="card-body">
+            <p style="margin-bottom: 12px;">
+              The administrative desk oversees the entire global collective of active mandalas:
+            </p>
+            <ul>
+              <li><strong>Central Registration Roster:</strong> Real-time dashboard of all active mandala participants globally.</li>
+              <li><strong>Pledge Detail View:</strong> Inspect seeker statements, initiation dates, and contact records.</li>
+              <li><strong>Multi-Dimensional Filtering:</strong> Filter by commitment length (48 vs 144 days) and sadhana type.</li>
+              <li><strong>One-Click Roster Export:</strong> Instant CSV / Excel export formatted for Guruji's ritual prayers and homas.</li>
+              <li><strong>Account Cross-Linking:</strong> Matches registered pledges with user accounts for automatic stage tracking.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <span>📜</span>
+        <span><strong>Digital Sankalpa:</strong> The pledge engine bridges traditional ritual intent with structured database recordkeeping, ensuring no seeker's commitment is lost.</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 9: REAL-TIME CHAT GUIDANCE FLOW -->
+    <div class="slide" data-title="Real-Time Guidance Chat Flow" data-notes="Slide 9 details the custom seeker-to-admin guidance chat system designed for personal spiritual instruction.">
+      <div class="slide-header">
+        <div class="slide-category">✦ Spiritual Support Architecture</div>
+        <h2 class="slide-title">Real-Time Seeker & Admin Guidance Chat Flow</h2>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-title">
+            1. Seeker Interface
+            <span class="card-badge badge-amber">Frontend</span>
+          </div>
+          <div class="card-body">
+            <ul>
+              <li><strong>Floating Gold Widget:</strong> Accessible on every authenticated seeker page.</li>
+              <li><strong>Submit Inquiry:</strong> <span class="code-tag">POST /api/chat/send</span> sends question text with user session.</li>
+              <li><strong>History Retrieval:</strong> <span class="code-tag">GET /api/chat/history</span> loads chronological discussion.</li>
+              <li><strong>Unread Notifications:</strong> Glowing badge alerts seeker when Guruji replies.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            2. Backend Dispatcher
+            <span class="card-badge badge-blue">REST Daemon</span>
+          </div>
+          <div class="card-body">
+            <ul>
+              <li><strong>ChatMessage Model:</strong> Records sender_id, recipient_id, message, timestamp, is_from_admin.</li>
+              <li><strong>Smart Addressing:</strong> User messages auto-target the admin pool; admin replies target specific seekers.</li>
+              <li><strong>Read-State Sync:</strong> <span class="code-tag">POST /api/chat/mark-read</span> clears unread indicators.</li>
+              <li><strong>Zero WebSockets:</strong> Lightweight REST polling avoids serverless timeout issues.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            3. Admin Operations Desk
+            <span class="card-badge badge-green">/admin/chat</span>
+          </div>
+          <div class="card-body">
+            <ul>
+              <li><strong>Multi-Seeker Console:</strong> Master-detail layout displaying all active conversations.</li>
+              <li><strong>Roster Listing:</strong> <span class="code-tag">GET /api/admin/chat/users</span> with unread badges.</li>
+              <li><strong>Thread Focus:</strong> <span class="code-tag">GET /api/admin/chat/&lt;user_id&gt;</span> displays history.</li>
+              <li><strong>Instant Dispatch:</strong> Admin responds directly to clarify mantras and spiritual hurdles.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <span>💬</span>
+        <span><strong>Why Built-In Chat?</strong> Spiritual sadhana requires confidential, personal instruction during intense experiences (visions, sleep disturbances). Built-in chat keeps communications sacred, private, and within the sanctum.</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 10: ADMIN GOVERNANCE & SHEETS SYNC -->
+    <div class="slide" data-title="Admin & Financial Operations" data-notes="Slide 10 details administrative user management, openpyxl Excel analytics with charts, and Google Sheets donation sync.">
+      <div class="slide-header">
+        <div class="slide-category">✦ Administrative & Financial Operations</div>
+        <h2 class="slide-title">Administrative Governance & Bhiksha (Donations) Sync Flow</h2>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">
+            Seeker Governance & Excel Analytics
+            <span class="code-tag">Route: /auth/users</span>
+          </div>
+          <div class="card-body">
+            <p style="margin-bottom: 10px;">
+              Central administrative control room for seeker management:
+            </p>
+            <ul>
+              <li><strong>Individual Permission Toggles:</strong> Checkbox controls for each Mandala, Rudraksha tier, and Charana Diksha.</li>
+              <li><strong>Lifecycle Auditing:</strong> Tracks account creation, approval date, last active timestamp, and current stage duration.</li>
+              <li><strong>User Search & Filters:</strong> Filter by approval state, practice level, stage number, or referral source.</li>
+              <li><strong>Automated Excel Analytics Engine (openpyxl):</strong>
+                <ul>
+                  <li>Exports complete seeker database into structured worksheets.</li>
+                  <li>Generates summary statistics and stage distribution metrics.</li>
+                  <li>Embeds native OpenPyXL bar charts for executive visualization.</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            Bhiksha (Donations) & Google Sheets Sync
+            <span class="code-tag">Route: /admin/donations</span>
+          </div>
+          <div class="card-body">
+            <p style="margin-bottom: 10px;">
+              Transparent governance of sacred offerings and donations:
+            </p>
+            <ul>
+              <li><strong>Purpose Categories (DonationPurpose):</strong> Annadanam, Temple Construction, Sādhana Kutir, Puja Samagri.</li>
+              <li><strong>Offline Entry & Verification:</strong> Logs cash, UPI, bank transfers, and reference IDs with verification status.</li>
+              <li><strong>Google Sheets Cloud Sync (google_sheets.py):</strong>
+                <ul>
+                  <li>Connects to Google Cloud Service Account via secure credentials.</li>
+                  <li>Pulls and matches donor records from live Google Spreadsheets.</li>
+                  <li>Tracks donor_id, worksheet source, amount, and payment dates.</li>
+                  <li>Manual trigger (<span class="code-tag">/admin/sync-now</span>) and background API sync.</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <span>📊</span>
+        <span><strong>Operational Excellence:</strong> Administrators can monitor both spiritual progression (stages, active mandalas) and financial offerings (donations, Google Sheets) within a unified dark-gold console.</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 11: DEVOPS & SECURITY -->
+    <div class="slide" data-title="DevOps, Security & Reliability" data-notes="Slide 11 highlights engineering quality: the Zero-Modification guarantee, 17-point test suite, and Vercel serverless deployment.">
+      <div class="slide-header">
+        <div class="slide-category">✦ Engineering & System Governance</div>
+        <h2 class="slide-title">DevOps, Deployment, Security & Reliability Architecture</h2>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">
+            Zero-Modification Architecture
+            <span class="card-badge badge-green">Pristine Upstream</span>
+          </div>
+          <div class="card-body">
+            <ul>
+              <li><strong>Untouched Repositories:</strong> Upstream directories (Bhairva & instagram_scrap) remain 100% clean with zero git diffs.</li>
+              <li><strong>Dynamic Read-Only Proxy:</strong> Flask routes stream data and assets without modifying original files.</li>
+              <li><strong>Frictionless Updates:</strong> Enables upstream git pulls without merge conflicts.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            Security & Access Control
+            <span class="card-badge badge-blue">PBKDF2 & RBAC</span>
+          </div>
+          <div class="card-body">
+            <ul>
+              <li><strong>Password Security:</strong> Werkzeug PBKDF2:SHA256 hashing with secure salt.</li>
+              <li><strong>Role-Based Access (RBAC):</strong> Admin vs Seeker decorators protecting privileged routes.</li>
+              <li><strong>Form Protection:</strong> CSRF tokens on all form submissions via Flask-WTF.</li>
+              <li><strong>SQL Injection Immune:</strong> 100% parameterized queries via SQLAlchemy ORM.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            Automated Verification Suite
+            <span class="card-badge badge-green">17/17 Checkpoints</span>
+          </div>
+          <div class="card-body">
+            <ul>
+              <li><strong>Automated Test Runner (test_superapp.py):</strong> Validates all routes and APIs.</li>
+              <li><strong>Coverage:</strong> Checks 6 HTML views, 4 REST endpoints, and proxied media assets.</li>
+              <li><strong>Continuous Health:</strong> Verifies 200 OK responses across all integration points.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            Vercel Serverless Ready
+            <span class="card-badge badge-amber">Cloud Deployment</span>
+          </div>
+          <div class="card-body">
+            <ul>
+              <li><strong>WSGI Serverless Wrapper:</strong> Optimized via vercel.json for cloud execution.</li>
+              <li><strong>Static Asset Edge Routing:</strong> Direct edge delivery of CSS, JS, and deity imagery.</li>
+              <li><strong>Graceful Degradation:</strong> Custom temple-styled 404 and 500 error pages.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <span>✓</span>
+        <span><strong>Reliability Verified:</strong> Automated verification suite confirms that all endpoints, proxied media, and database models operate smoothly with zero regression risk.</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 12: DATA MODEL / ER FLOW -->
+    <div class="slide" data-title="Entity-Relationship Data Model" data-notes="Slide 12 maps the core database schema: User, StageAccessRequest, ChatMessage, Donation models, and MandalaSadhanaRegistration.">
+      <div class="slide-header">
+        <div class="slide-category">✦ Data Architecture</div>
+        <h2 class="slide-title">Core Entities & Relational Data Model</h2>
+      </div>
+
+      <div class="grid-4">
+        <div class="card">
+          <div class="card-title">
+            User Model
+            <span class="card-badge badge-blue">Primary Seeker</span>
+          </div>
+          <div class="card-body">
+            <ul>
+              <li><span class="code-tag">id</span> (Primary Key)</li>
+              <li><span class="code-tag">username</span>, <span class="code-tag">email</span>, <span class="code-tag">password_hash</span></li>
+              <li><span class="code-tag">full_name</span>, phone, address</li>
+              <li><span class="code-tag">role</span> ('admin' / 'user')</li>
+              <li><span class="code-tag">is_approved</span>, <span class="code-tag">is_active</span></li>
+              <li><span class="code-tag">practice_level</span>, <span class="code-tag">purpose</span></li>
+              <li>Stage access flags (1-9)</li>
+              <li>Devi mandala access flags (1-3)</li>
+              <li>Start & completion timestamps</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            StageAccessRequest
+            <span class="card-badge badge-amber">Progression Queue</span>
+          </div>
+          <div class="card-body">
+            <ul>
+              <li><span class="code-tag">id</span> (Primary Key)</li>
+              <li><span class="code-tag">user_id</span> (FK ➔ User)</li>
+              <li><span class="code-tag">stage_number</span> (1-9 or 101-103)</li>
+              <li><span class="code-tag">status</span> ('pending' / 'approved' / 'rejected')</li>
+              <li><span class="code-tag">requested_at</span> (DateTime)</li>
+              <li><span class="code-tag">reviewed_at</span> (DateTime)</li>
+              <li><span class="code-tag">reviewed_by</span> (FK ➔ User)</li>
+              <li><span class="code-tag">notes</span> (Admin remarks)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            ChatMessage
+            <span class="card-badge badge-green">Guidance Stream</span>
+          </div>
+          <div class="card-body">
+            <ul>
+              <li><span class="code-tag">id</span> (Primary Key)</li>
+              <li><span class="code-tag">sender_id</span> (FK ➔ User)</li>
+              <li><span class="code-tag">recipient_id</span> (FK ➔ User, optional)</li>
+              <li><span class="code-tag">message</span> (Text body)</li>
+              <li><span class="code-tag">timestamp</span> (DateTime)</li>
+              <li><span class="code-tag">is_read</span> (Boolean flag)</li>
+              <li><span class="code-tag">is_from_admin</span> (Boolean flag)</li>
+              <li><span class="code-tag">to_dict()</span> JSON serializer</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            Donation & Mandala
+            <span class="card-badge">Offerings & Pledges</span>
+          </div>
+          <div class="card-body">
+            <ul>
+              <li><strong>DonationPurpose:</strong> name, desc, is_active</li>
+              <li><strong>OfflineDonation:</strong> donor_name, amount, currency, purpose_id, payment_method, is_verified, donor_id, worksheet</li>
+              <li><strong>MandalaSadhanaRegistration:</strong> email, full_name, 48/144 commitment, commitment_text, start_date</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <span>🔗</span>
+        <span><strong>Relational Integrity:</strong> Foreign key relationships ensure complete traceability between seekers, their stage approval history, and direct spiritual guidance threads.</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 13: STRATEGIC ROADMAP -->
+    <div class="slide" data-title="Summary & Strategic Roadmap" data-notes="Slide 13 synthesizes the application's achievements and outlines the roadmap forward: mobile app, Ashtami push notifications, and multilingual codices.">
+      <div class="slide-header">
+        <div class="slide-category">✦ Platform Synthesis</div>
+        <h2 class="slide-title">Executive Summary & Strategic Evolution Roadmap</h2>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">
+            Current Platform Accomplishments
+            <span class="card-badge badge-green">Delivered</span>
+          </div>
+          <div class="card-body">
+            <ul>
+              <li><strong>Unified Portal:</strong> Consolidated bhairavaanugraha.com, Jnāna Samvāda (257+ Q&As), and Sahasralinga 324 into a single portal.</li>
+              <li><strong>Spiritual Progression Gatekeeper:</strong> 9-stage hierarchical spiritual progression engine ensuring proper seeker vetting and discipline.</li>
+              <li><strong>Operational Command Desk:</strong> Real-time seeker chat, Excel analytics with charts, and Google Sheets donation synchronization.</li>
+              <li><strong>Zero Friction Integration:</strong> 100% untouched upstream archives verified across 17 automated integration checkpoints.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            Strategic Future Roadmap
+            <span class="card-badge badge-amber">Upcoming Horizons</span>
+          </div>
+          <div class="card-body">
+            <ul>
+              <li><strong>1. PWA & Native Mobile Apps:</strong> Offline stotra reader, mantra japa counters, and biometric login for iOS and Android.</li>
+              <li><strong>2. Automated Ashtami & Rahu Kalam Alerts:</strong> Web push notifications alerting seekers 2 hours prior to Krishna Paksha Ashtami night portals.</li>
+              <li><strong>3. Live High-Fidelity Audio Chanting Stream:</strong> Synchronized Devanagari lyrics with streaming temple bell chimes and stotras.</li>
+              <li><strong>4. Multilingual Codex Expansion:</strong> Full localization in Hindi, Kannada, Telugu, and Tamil for global seekers.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout" style="justify-content: space-between;">
+        <span>॥ सर्वं भैरव स्वरूपम् ॥ &nbsp;|&nbsp; <strong>Super App Bhairava Anugraha:</strong> Sacred Tradition Powered by Enterprise Engineering.</span>
+        <a href="Bhairava_Anugraha_Flow_Presentation.pptx" download class="btn btn-gold" style="font-size: 11px;">📥 Download Complete PPTX</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Speaker Notes Drawer -->
+  <div class="notes-drawer" id="notesDrawer">
+    <div style="font-family: 'Cinzel', serif; font-size: 14px; font-weight: 700; color: var(--gold-primary); margin-bottom: 6px;">
+      📝 SPEAKER NOTES:
+    </div>
+    <div id="notesText"></div>
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <div class="bottom-bar">
+    <div class="tagline">॥ सर्वं भैरव स्वरूपम् ॥</div>
+    <div style="display: flex; gap: 16px; align-items: center;">
+      <span id="slideIndicator">Slide 1 of 13</span>
+      <span>Use <strong>← / →</strong> or <strong>Space</strong> to navigate • Press <strong>F</strong> for Fullscreen • Press <strong>N</strong> for Notes</span>
+    </div>
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const select = document.getElementById('slideSelect');
+    const indicator = document.getElementById('slideIndicator');
+    const notesDrawer = document.getElementById('notesDrawer');
+    const notesText = document.getElementById('notesText');
+    const btnNotes = document.getElementById('btnNotes');
+    let currentIndex = 0;
+
+    // Populate dropdown
+    slides.forEach((slide, idx) => {
+      const opt = document.createElement('option');
+      opt.value = idx;
+      opt.textContent = `${idx + 1}. ${slide.getAttribute('data-title') || 'Slide ' + (idx + 1)}`;
+      select.appendChild(opt);
+    });
+
+    function showSlide(index) {
+      if (index < 0) index = 0;
+      if (index >= slides.length) index = slides.length - 1;
+      currentIndex = index;
+
+      slides.forEach((s, i) => {
+        s.classList.toggle('active', i === currentIndex);
+      });
+
+      select.value = currentIndex;
+      indicator.textContent = `Slide ${currentIndex + 1} of ${slides.length}`;
+      
+      const currentNotes = slides[currentIndex].getAttribute('data-notes') || 'No notes for this slide.';
+      notesText.textContent = currentNotes;
+    }
+
+    document.getElementById('btnPrev').addEventListener('click', () => showSlide(currentIndex - 1));
+    document.getElementById('btnNext').addEventListener('click', () => showSlide(currentIndex + 1));
+    select.addEventListener('change', (e) => showSlide(parseInt(e.target.value)));
+
+    btnNotes.addEventListener('click', () => {
+      notesDrawer.classList.toggle('open');
+      btnNotes.textContent = notesDrawer.classList.contains('open') ? '❌ Hide Notes' : '📝 Notes';
+    });
+
+    document.getElementById('btnFullscreen').addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        showSlide(currentIndex + 1);
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        showSlide(currentIndex - 1);
+      } else if (e.key.toLowerCase() === 'f') {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+          document.exitFullscreen().catch(() => {});
+        }
+      } else if (e.key.toLowerCase() === 'n') {
+        notesDrawer.classList.toggle('open');
+        btnNotes.textContent = notesDrawer.classList.contains('open') ? '❌ Hide Notes' : '📝 Notes';
+      } else if (e.key === 'Home') {
+        showSlide(0);
+      } else if (e.key === 'End') {
+        showSlide(slides.length - 1);
+      }
+    });
+
+    // Slide 6 Flow Tabs Event Handlers
+    document.querySelectorAll('.flow-tab-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const targetTab = this.dataset.tab;
+        document.querySelectorAll('.flow-tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.flow-tab-content').forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+        const tabEl = document.getElementById(targetTab);
+        if (tabEl) tabEl.classList.add('active');
+      });
+    });
+
+    // Initialize first slide notes
+    showSlide(0);
+  </script>
+</body>
+</html>

@@ -1595,7 +1595,7 @@
 
             <div class="flow-cards">
               <!-- Mandala 1 -->
-              <div class="stage-card {% if comp_1 %}is-completed{% elif acc_1 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="openStageModal(1)" role="button" tabindex="0">
+              <div class="stage-card {% if comp_1 %}is-completed{% elif acc_1 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="handleStageCardClick(1)" role="button" tabindex="0">
                 <div class="card-status-icon">
                   {% if comp_1 %}<i class="fas fa-check" style="color:var(--admin-success);"></i>{% elif acc_1 %}<i class="fas fa-unlock" style="color:var(--gold-bright);"></i>{% elif is_auth %}<i class="fas fa-lock" style="color:#9ca3af;"></i>{% else %}<i class="fas fa-om"></i>{% endif %}
                 </div>
@@ -1616,7 +1616,7 @@
               </div>
 
               <!-- Mandala 2 -->
-              <div class="stage-card {% if comp_2 %}is-completed{% elif acc_2 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="openStageModal(2)" role="button" tabindex="0">
+              <div class="stage-card {% if comp_2 %}is-completed{% elif acc_2 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="handleStageCardClick(2)" role="button" tabindex="0">
                 <div class="card-status-icon">
                   {% if comp_2 %}<i class="fas fa-check" style="color:var(--admin-success);"></i>{% elif acc_2 %}<i class="fas fa-unlock" style="color:var(--gold-bright);"></i>{% elif is_auth %}<i class="fas fa-lock" style="color:#9ca3af;"></i>{% else %}<i class="fas fa-om"></i>{% endif %}
                 </div>
@@ -1637,7 +1637,7 @@
               </div>
 
               <!-- Mandala 3 -->
-              <div class="stage-card {% if comp_3 %}is-completed{% elif acc_3 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="openStageModal(3)" role="button" tabindex="0">
+              <div class="stage-card {% if comp_3 %}is-completed{% elif acc_3 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="handleStageCardClick(3)" role="button" tabindex="0">
                 <div class="card-status-icon">
                   {% if comp_3 %}<i class="fas fa-check" style="color:var(--admin-success);"></i>{% elif acc_3 %}<i class="fas fa-unlock" style="color:var(--gold-bright);"></i>{% elif is_auth %}<i class="fas fa-lock" style="color:#9ca3af;"></i>{% else %}<i class="fas fa-om"></i>{% endif %}
                 </div>
@@ -1684,7 +1684,7 @@
 
             <div class="flow-cards">
               <!-- Pratham Charana -->
-              <div class="stage-card {% if comp_7 %}is-completed{% elif acc_7 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="openStageModal(7)" role="button" tabindex="0">
+              <div class="stage-card {% if comp_7 %}is-completed{% elif acc_7 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="handleStageCardClick(7)" role="button" tabindex="0">
                 <div class="card-status-icon">
                   {% if comp_7 %}<i class="fas fa-check" style="color:var(--admin-success);"></i>{% elif acc_7 %}<i class="fas fa-unlock" style="color:var(--gold-bright);"></i>{% elif is_auth %}<i class="fas fa-lock" style="color:#9ca3af;"></i>{% else %}<i class="fas fa-om"></i>{% endif %}
                 </div>
@@ -1705,7 +1705,7 @@
               </div>
 
               <!-- 8 Mukhi -->
-              <div class="stage-card {% if comp_4 %}is-completed{% elif acc_4 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="openStageModal(4)" role="button" tabindex="0">
+              <div class="stage-card {% if comp_4 %}is-completed{% elif acc_4 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="handleStageCardClick(4)" role="button" tabindex="0">
                 <div class="card-status-icon">
                   {% if comp_4 %}<i class="fas fa-check" style="color:var(--admin-success);"></i>{% elif acc_4 %}<i class="fas fa-unlock" style="color:var(--gold-bright);"></i>{% elif is_auth %}<i class="fas fa-lock" style="color:#9ca3af;"></i>{% else %}<i class="fas fa-om"></i>{% endif %}
                 </div>
@@ -1726,7 +1726,7 @@
               </div>
 
               <!-- 11 Mukhi -->
-              <div class="stage-card {% if comp_5 %}is-completed{% elif acc_5 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="openStageModal(5)" role="button" tabindex="0">
+              <div class="stage-card {% if comp_5 %}is-completed{% elif acc_5 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="handleStageCardClick(5)" role="button" tabindex="0">
                 <div class="card-status-icon">
                   {% if comp_5 %}<i class="fas fa-check" style="color:var(--admin-success);"></i>{% elif acc_5 %}<i class="fas fa-unlock" style="color:var(--gold-bright);"></i>{% elif is_auth %}<i class="fas fa-lock" style="color:#9ca3af;"></i>{% else %}<i class="fas fa-om"></i>{% endif %}
                 </div>
@@ -1773,7 +1773,7 @@
 
             <div class="flow-cards">
               <!-- Dutiya Charana -->
-              <div class="stage-card {% if comp_8 %}is-completed{% elif acc_8 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="openStageModal(8)" role="button" tabindex="0">
+              <div class="stage-card {% if comp_8 %}is-completed{% elif acc_8 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="handleStageCardClick(8)" role="button" tabindex="0">
                 <div class="card-status-icon">
                   {% if comp_8 %}<i class="fas fa-check" style="color:var(--admin-success);"></i>{% elif acc_8 %}<i class="fas fa-unlock" style="color:var(--gold-bright);"></i>{% elif is_auth %}<i class="fas fa-lock" style="color:#9ca3af;"></i>{% else %}<i class="fas fa-om"></i>{% endif %}
                 </div>
@@ -1794,7 +1794,7 @@
               </div>
 
               <!-- 14 Mukhi -->
-              <div class="stage-card {% if comp_6 %}is-completed{% elif acc_6 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="openStageModal(6)" role="button" tabindex="0">
+              <div class="stage-card {% if comp_6 %}is-completed{% elif acc_6 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="handleStageCardClick(6)" role="button" tabindex="0">
                 <div class="card-status-icon">
                   {% if comp_6 %}<i class="fas fa-check" style="color:var(--admin-success);"></i>{% elif acc_6 %}<i class="fas fa-unlock" style="color:var(--gold-bright);"></i>{% elif is_auth %}<i class="fas fa-lock" style="color:#9ca3af;"></i>{% else %}<i class="fas fa-om"></i>{% endif %}
                 </div>
@@ -1815,7 +1815,7 @@
               </div>
 
               <!-- Tritiya Charana -->
-              <div class="stage-card {% if comp_9 %}is-completed{% elif acc_9 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="openStageModal(9)" role="button" tabindex="0">
+              <div class="stage-card {% if comp_9 %}is-completed{% elif acc_9 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="handleStageCardClick(9)" role="button" tabindex="0">
                 <div class="card-status-icon">
                   {% if comp_9 %}<i class="fas fa-check" style="color:var(--admin-success);"></i>{% elif acc_9 %}<i class="fas fa-unlock" style="color:var(--gold-bright);"></i>{% elif is_auth %}<i class="fas fa-lock" style="color:#9ca3af;"></i>{% else %}<i class="fas fa-om"></i>{% endif %}
                 </div>
@@ -2020,7 +2020,7 @@
 
           <div class="flow-cards">
             <!-- Devi Mandala 1 -->
-            <div class="stage-card {% if acc_d1 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="openStageModal(101)" role="button" tabindex="0">
+            <div class="stage-card {% if acc_d1 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="handleStageCardClick(101)" role="button" tabindex="0">
               <div class="card-status-icon">
                 {% if acc_d1 %}<i class="fas fa-unlock" style="color:var(--gold-bright);"></i>{% elif is_auth %}<i class="fas fa-lock" style="color:#9ca3af;"></i>{% else %}<i class="fas fa-om"></i>{% endif %}
               </div>
@@ -2041,7 +2041,7 @@
             </div>
 
             <!-- Devi Mandala 2 -->
-            <div class="stage-card {% if acc_d2 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="openStageModal(102)" role="button" tabindex="0">
+            <div class="stage-card {% if acc_d2 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="handleStageCardClick(102)" role="button" tabindex="0">
               <div class="card-status-icon">
                 {% if acc_d2 %}<i class="fas fa-unlock" style="color:var(--gold-bright);"></i>{% elif is_auth %}<i class="fas fa-lock" style="color:#9ca3af;"></i>{% else %}<i class="fas fa-om"></i>{% endif %}
               </div>
@@ -2062,7 +2062,7 @@
             </div>
 
             <!-- Devi Mandala 3 -->
-            <div class="stage-card {% if acc_d3 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="openStageModal(103)" role="button" tabindex="0">
+            <div class="stage-card {% if acc_d3 %}is-accessible{% elif is_auth %}is-locked{% endif %}" onclick="handleStageCardClick(103)" role="button" tabindex="0">
               <div class="card-status-icon">
                 {% if acc_d3 %}<i class="fas fa-unlock" style="color:var(--gold-bright);"></i>{% elif is_auth %}<i class="fas fa-lock" style="color:#9ca3af;"></i>{% else %}<i class="fas fa-om"></i>{% endif %}
               </div>
@@ -2092,7 +2092,7 @@
             <i class="fas fa-lotus pathway-icon"></i>
             <h4 class="pathway-title">Devi Padathi</h4>
             <p class="pathway-text">A structured progression of 3 Mandalas designed to deepen your connection daily.</p>
-            <button type="button" class="pathway-btn" onclick="openStageModal(101)">Explore Padathi</button>
+            <button type="button" class="pathway-btn" onclick="handleStageCardClick(101)">Explore Padathi</button>
           </div>
 
           <div class="pathway-card">
@@ -2186,8 +2186,13 @@
   };
   const IS_AUTHENTICATED = {{ 'true' if is_auth else 'false' }};
 
+  function handleStageCardClick(stageId) {
+    const portalUrl = stageId >= 100 ? `/devi-stage/${stageId - 100}` : `/stage/${stageId}`;
+    window.location.href = portalUrl;
+  }
+
   function handleStageClick(stageId) {
-    openStageModal(stageId);
+    handleStageCardClick(stageId);
   }
 
   function requestStageAccess(stageId, btnElement) {

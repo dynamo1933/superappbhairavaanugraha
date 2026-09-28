@@ -82,6 +82,9 @@
             <span>{{ current_user.full_name.split()[0] if current_user.full_name else current_user.username }}</span>
             {% if current_user.is_admin() %}
               <span class="admin-badge-mini">ADMIN</span>
+              {% if pending_users_count and pending_users_count > 0 %}
+                <span title="{{ pending_users_count }} pending seeker approvals" style="width: 8px; height: 8px; border-radius: 50%; background: #eab308; display: inline-block; box-shadow: 0 0 6px #eab308;"></span>
+              {% endif %}
             {% endif %}
             <i class="fas fa-chevron-down" style="font-size: 0.65rem; opacity: 0.7;"></i>
           </a>
@@ -97,7 +100,12 @@
             {% if current_user.is_admin() %}
             <div class="divider"></div>
             <div style="padding: 0.4rem 1.25rem 0.2rem; font-size: 0.7rem; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">Admin Desk</div>
-            <a href="/auth/admin/users"><i class="fas fa-users-gear"></i> User Management</a>
+            <a href="/auth/admin/users" style="display: flex; justify-content: space-between; align-items: center;">
+              <span><i class="fas fa-users-gear"></i> User Management</span>
+              {% if pending_users_count and pending_users_count > 0 %}
+                <span style="background: #eab308; color: #0c0a08; font-size: 0.68rem; font-weight: 700; padding: 2px 7px; border-radius: 999px; box-shadow: 0 0 8px rgba(234, 179, 8, 0.6);">{{ pending_users_count }} pending</span>
+              {% endif %}
+            </a>
             <a href="/admin/mandala-sadhana"><i class="fas fa-feather"></i> Sādhana Registrations</a>
             <a href="/admin/donations"><i class="fas fa-hand-holding-heart"></i> Donations Ledger</a>
             <a href="/admin/chat"><i class="fas fa-comments"></i> Sadhak Mentorship Chat</a>

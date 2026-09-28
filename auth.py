@@ -28,12 +28,14 @@ def login():
         
         if not user.can_login():
             if not user.is_approved and not user.is_admin():
-                flash('Your account is pending approval. Please wait for admin approval.', 'warning')
+                flash('Your account is currently under review by Guruji / Administrator. Once approved, you will be able to sign in and begin Mandala 1.', 'warning')
             elif not user.is_active:
                 flash('Your account has been suspended. Please contact admin.', 'error')
             return redirect(url_for('auth.login'))
         
         login_user(user, remember=form.remember_me.data)
+        user.last_active = datetime.utcnow()
+        db.session.commit()
         next_page = request.args.get('next')
         if not next_page or urlparse(next_page).netloc != '':
             next_page = url_for('home')
@@ -109,7 +111,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         
-        flash('Registration successful! Please wait for admin approval before you can login.', 'success')
+        flash('Registration submitted successfully! Your application has been queued for Guruji / Admin verification. Once approved, you will be able to sign in and begin Mandala 1.', 'success')
         return redirect(url_for('auth.login'))
     
     return render_template('auth/register.html', title='Register', form=form, page_title='Register - Daiva Anughara')
@@ -195,7 +197,10 @@ def approve_user():
             user.approved_at = datetime.utcnow()
             user.approved_by = current_user.id
             user.is_active = True
-            message = f'User {user.username} has been approved successfully.'
+            user.mandala_1_access = True
+            if not user.mandala_1_started_at:
+                user.mandala_1_started_at = datetime.utcnow()
+            message = f'User {user.username} has been approved successfully. Mandala 1 access unlocked.'
         elif action == 'reject':
             user.is_approved = False
             user.is_active = False

@@ -2,29 +2,57 @@
 
 {% block extra_styles %}
 <style>
-    /* ===== STAGE PAGE COMPLETE STYLES ===== */
+    /* ===== STAGE PAGE SACRED DARK-GOLD TEMPLE CODEX THEME ===== */
+
+    :root {
+        --stage-bg: #07060a;
+        --stage-card-bg: linear-gradient(180deg, rgba(22, 18, 26, 0.96) 0%, rgba(14, 12, 18, 0.98) 100%);
+        --stage-border: rgba(212, 175, 55, 0.25);
+        --stage-border-glow: rgba(212, 175, 55, 0.55);
+        --stage-gold: #d4a64a;
+        --stage-gold-bright: #f0d48a;
+        --stage-gold-dark: #997328;
+        --stage-crimson: #7a1515;
+        --stage-paper: #fdfaf2;
+        --stage-paper-dim: #d8cfbe;
+    }
 
     /* Stage Header Bar */
     .stage-header-bar {
-        background: linear-gradient(135deg, #8b1538 0%, #b91c1c 30%, #c2410c 70%, #ea580c 100%);
-        padding: 12px 24px;
+        background: linear-gradient(135deg, rgba(28, 12, 18, 0.98) 0%, rgba(14, 11, 16, 0.99) 50%, rgba(22, 14, 12, 0.98) 100%);
+        padding: 18px 24px;
         text-align: center;
+        border-bottom: 1px solid var(--stage-border);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(212, 175, 55, 0.15);
+        position: relative;
+    }
+
+    .stage-header-bar::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 20%;
+        right: 20%;
+        height: 1px;
+        background: radial-gradient(circle, var(--stage-gold-bright) 0%, transparent 80%);
+        opacity: 0.6;
     }
 
     .stage-header-content {
         display: inline-flex;
         align-items: center;
-        gap: 16px;
+        gap: 20px;
     }
 
     .stage-header-image {
-        width: 55px;
-        height: 55px;
+        width: 68px;
+        height: 68px;
         border-radius: 50%;
         object-fit: cover;
-        border: 2px solid rgba(255, 215, 0, 0.8);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        border: 2px solid var(--stage-gold-bright);
+        box-shadow: 0 0 20px rgba(212, 175, 55, 0.4), 0 4px 12px rgba(0, 0, 0, 0.6);
         flex-shrink: 0;
+        background: #000;
     }
 
     .stage-header-info {
@@ -33,125 +61,140 @@
 
     .stage-header-badge {
         display: inline-block;
-        background: rgba(255, 255, 255, 0.2);
-        color: #fff;
-        padding: 4px 12px;
-        border-radius: 12px;
-        font-size: 12px;
-        margin-bottom: 4px;
+        background: rgba(212, 175, 55, 0.12);
+        color: var(--stage-gold-bright);
+        padding: 4px 14px;
+        border-radius: 20px;
+        font-size: 11px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+        border: 1px solid rgba(212, 175, 55, 0.35);
+        font-family: var(--font-primary, 'Cinzel', serif);
     }
 
     .stage-header-title {
         font-family: var(--font-mystical, 'Cinzel', serif);
-        font-size: 20px;
-        color: #ffd700;
+        font-size: 24px;
+        color: var(--stage-gold-bright);
         margin: 0;
-        letter-spacing: 1px;
+        letter-spacing: 1.5px;
         text-transform: uppercase;
+        text-shadow: 0 0 16px rgba(212, 175, 55, 0.3);
     }
 
     .stage-header-subtitle {
-        color: rgba(255, 255, 255, 0.9);
-        font-size: 13px;
+        color: var(--stage-paper-dim);
+        font-size: 13.5px;
         font-style: italic;
         margin: 4px 0 0 0;
+        font-family: var(--font-sacred, serif);
     }
 
     /* Stage Body */
     .stage-body {
-        padding: 24px 16px;
-        max-width: 1000px;
+        padding: 32px 20px 60px;
+        max-width: 1080px;
         margin: 0 auto;
-        min-height: 50vh;
+        min-height: 60vh;
+        color: var(--stage-paper);
     }
 
     @media (min-width: 768px) {
         .stage-body {
-            padding: 32px 24px;
+            padding: 40px 24px 80px;
         }
 
         .stage-header-image {
-            width: 65px;
-            height: 65px;
+            width: 75px;
+            height: 75px;
         }
 
         .stage-header-title {
-            font-size: 24px;
+            font-size: 26px;
         }
     }
 
     @media (max-width: 480px) {
         .stage-header-bar {
-            padding: 10px 16px;
+            padding: 14px 16px;
         }
 
         .stage-header-content {
-            gap: 12px;
+            gap: 14px;
         }
 
         .stage-header-image {
-            width: 45px;
-            height: 45px;
+            width: 52px;
+            height: 52px;
         }
 
         .stage-header-title {
-            font-size: 16px;
+            font-size: 18px;
         }
 
         .stage-header-subtitle {
-            font-size: 11px;
+            font-size: 11.5px;
         }
 
         .stage-header-badge {
-            font-size: 10px;
-            padding: 3px 8px;
+            font-size: 9.5px;
+            padding: 3px 10px;
         }
     }
 
-    /* Content Card */
+    /* Content Card (Mandalas 2 & 3, Placeholders) */
     .stage-card {
-        background: var(--card-bg, #fff);
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        border: 1px solid var(--border-color, #e5e7eb);
-        margin-bottom: 24px;
+        background: var(--stage-card-bg);
+        border-radius: 16px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(212, 175, 55, 0.12);
+        border: 1px solid var(--stage-border);
+        margin-bottom: 28px;
         overflow: hidden;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .stage-card:hover {
+        border-color: var(--stage-border-glow);
+        box-shadow: 0 16px 50px rgba(0, 0, 0, 0.75), 0 0 20px rgba(212, 175, 55, 0.15);
     }
 
     .stage-card-body {
-        padding: 24px;
+        padding: 28px;
     }
 
     /* Document Embed */
     .doc-header {
-        background: linear-gradient(135deg, var(--primary-red, #c41e3a) 0%, #991b1b 50%, var(--accent-orange, #ea580c) 100%);
-        padding: 20px 24px;
+        background: linear-gradient(135deg, rgba(32, 14, 20, 0.98) 0%, rgba(20, 12, 18, 0.98) 50%, rgba(35, 18, 14, 0.98) 100%);
+        padding: 24px;
         text-align: center;
-        color: white;
+        border-bottom: 1px solid var(--stage-border);
     }
 
     .doc-icon {
-        font-size: 2.5rem;
+        font-size: 2.6rem;
         margin-bottom: 8px;
+        filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.4));
     }
 
     .doc-title {
         font-family: var(--font-mystical, 'Cinzel', serif);
-        color: #fff;
+        color: var(--stage-gold-bright);
         margin: 0 0 8px 0;
-        font-size: 1.4rem;
-        letter-spacing: 1px;
+        font-size: 1.45rem;
+        letter-spacing: 1.2px;
+        text-shadow: 0 0 12px rgba(212, 175, 55, 0.25);
     }
 
     .doc-subtitle {
-        color: rgba(255, 255, 255, 0.9);
+        color: var(--stage-paper-dim);
         margin: 0;
         font-size: 0.95rem;
         font-style: italic;
     }
 
     .doc-embed {
-        background: #f5f5f5;
+        background: #08060a;
         min-height: 400px;
     }
 
@@ -159,58 +202,64 @@
         display: block;
         border: none;
         width: 100%;
-        height: 700px;
+        height: 720px;
+        background: #0a080c;
     }
 
     @media (max-width: 768px) {
         .doc-embed iframe {
-            height: 500px;
+            height: 520px;
         }
     }
 
     .doc-actions {
-        padding: 16px 24px;
-        background: #f8f9fa;
+        padding: 18px 24px;
+        background: rgba(16, 13, 20, 0.96);
         text-align: center;
-        border-top: 1px solid #e9ecef;
+        border-top: 1px solid var(--stage-border);
     }
 
     .btn-external {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        padding: 10px 20px;
-        background: linear-gradient(135deg, var(--primary-red, #c41e3a) 0%, #991b1b 100%);
-        color: #fff;
+        gap: 10px;
+        padding: 11px 26px;
+        background: linear-gradient(135deg, var(--stage-gold) 0%, var(--stage-gold-dark) 100%);
+        color: #07060a;
         text-decoration: none;
-        border-radius: 8px;
-        font-weight: 500;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 0.95rem;
+        letter-spacing: 0.5px;
         transition: all 0.3s ease;
+        box-shadow: 0 4px 18px rgba(212, 175, 55, 0.3);
     }
 
     .btn-external:hover {
-        background: white;
-        color: var(--primary-red, #c41e3a);
-        box-shadow: inset 0 0 0 2px var(--primary-red, #c41e3a);
+        background: linear-gradient(135deg, var(--stage-gold-bright) 0%, var(--stage-gold) 100%);
+        color: #000;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 25px rgba(212, 175, 55, 0.5);
     }
 
     /* Placeholder */
     .placeholder-box {
         text-align: center;
-        padding: 48px 24px;
-        color: var(--text-muted, #6b7280);
+        padding: 56px 24px;
+        color: var(--stage-paper-dim);
     }
 
     .placeholder-box .icon {
-        font-size: 3rem;
+        font-size: 3.2rem;
         margin-bottom: 16px;
     }
 
     .placeholder-box h3 {
         font-family: var(--font-primary, 'Cinzel', serif);
-        font-size: 1.3rem;
-        color: var(--text-dark, #1f2937);
-        margin-bottom: 8px;
+        font-size: 1.4rem;
+        color: var(--stage-gold-bright);
+        margin-bottom: 10px;
+        letter-spacing: 1px;
     }
 
     /* Back Button */
@@ -219,40 +268,47 @@
         justify-content: center;
         gap: 16px;
         flex-wrap: wrap;
+        margin-top: 36px;
+        margin-bottom: 24px;
     }
 
     .btn-back {
-        background: white;
-        color: var(--primary-red, #c41e3a);
-        padding: 12px 24px;
-        border: 2px solid var(--primary-red, #c41e3a);
-        border-radius: 8px;
-        font-weight: 500;
+        background: rgba(22, 18, 26, 0.88);
+        color: var(--stage-gold-bright);
+        padding: 12px 28px;
+        border: 1px solid var(--stage-border);
+        border-radius: 10px;
+        font-weight: 600;
         cursor: pointer;
         transition: all 0.3s ease;
         text-decoration: none;
         display: inline-flex;
         align-items: center;
-        gap: 8px;
+        gap: 10px;
+        font-size: 0.95rem;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
     }
 
     .btn-back:hover {
-        background: var(--primary-red, #c41e3a);
-        color: white;
+        background: linear-gradient(135deg, rgba(212, 175, 55, 0.22) 0%, rgba(122, 21, 21, 0.35) 100%);
+        border-color: var(--stage-gold-bright);
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 25px rgba(212, 175, 55, 0.35);
     }
 
     /* ===== GURU BHAIRAVA THEME STEPS FOR STAGE 1 ===== */
     .steps-grid {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 1.5rem;
-        margin-top: 24px;
+        gap: 1.75rem;
+        margin-top: 28px;
     }
 
     @media (min-width: 768px) {
         .steps-grid {
             grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
+            gap: 1.75rem;
         }
         
         .step-card.full-width {
@@ -261,27 +317,26 @@
     }
 
     .step-card {
-        background: var(--card-bg, #fff);
-        border-radius: 12px;
-        padding: 24px;
-        border: 1px solid var(--border-color, #e5e7eb);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-        transition: all 0.3s ease;
+        background: var(--stage-card-bg);
+        border-radius: 16px;
+        padding: 26px;
+        border: 1px solid var(--stage-border);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(212, 175, 55, 0.1);
+        transition: all 0.35s ease;
         position: relative;
         overflow: hidden;
+        color: var(--stage-paper-dim);
     }
 
     .step-card:hover {
-        background: #fefefe;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1), inset 4px 0 0 var(--primary-red, #c41e3a);
-        transform: translateY(-2px);
+        border-color: var(--stage-border-glow);
+        box-shadow: 0 14px 45px rgba(0, 0, 0, 0.7), inset 4px 0 0 var(--stage-gold);
+        transform: translateY(-3px);
     }
 
     /* Dhyanam Card with Background Image on Hover */
     .step-card.dhyanam-card {
         position: relative;
-        background: var(--card-bg, #fff);
-        border: 1px solid var(--border-color, #e5e7eb);
         overflow: hidden;
     }
 
@@ -302,7 +357,7 @@
         content: '';
         position: absolute;
         inset: 0;
-        background: linear-gradient(135deg, rgba(13, 8, 21, 0.9) 0%, rgba(30, 10, 40, 0.88) 50%, rgba(50, 20, 30, 0.85) 100%);
+        background: linear-gradient(135deg, rgba(10, 6, 16, 0.92) 0%, rgba(26, 8, 20, 0.9) 50%, rgba(18, 10, 14, 0.92) 100%);
         z-index: 1;
         opacity: 0;
         transition: opacity 0.5s ease;
@@ -314,31 +369,31 @@
         z-index: 2;
     }
 
-    /* Default state - normal colors */
+    /* Default state */
     .step-card.dhyanam-card .step-title {
-        color: var(--primary-red, #c41e3a);
+        color: var(--stage-gold-bright);
         transition: color 0.4s ease, text-shadow 0.4s ease;
     }
 
     .step-card.dhyanam-card .step-sanskrit {
-        color: var(--text-muted, #6b7280);
+        color: var(--stage-gold);
         transition: color 0.4s ease;
     }
 
     .step-card.dhyanam-card .step-content p {
-        color: var(--text-dark, #1f2937);
+        color: var(--stage-paper-dim);
         transition: color 0.4s ease, text-shadow 0.4s ease;
     }
 
     /* Hover state - show image and change colors */
     .step-card.dhyanam-card:hover {
         transform: translateY(-3px);
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-        border-color: transparent;
+        box-shadow: 0 14px 45px rgba(0, 0, 0, 0.75), 0 0 25px rgba(212, 175, 55, 0.2);
+        border-color: var(--stage-gold);
     }
 
     .step-card.dhyanam-card:hover::before {
-        opacity: 1;
+        opacity: 0.35;
         transform: scale(1);
     }
 
@@ -347,75 +402,78 @@
     }
 
     .step-card.dhyanam-card:hover .step-title {
-        color: #ffd700;
-        text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        color: #fff;
+        text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
     }
 
     .step-card.dhyanam-card:hover .step-sanskrit {
-        color: rgba(255, 215, 0, 0.8);
+        color: var(--stage-gold-bright);
     }
 
     .step-card.dhyanam-card:hover .step-content p {
-        color: rgba(255, 255, 255, 0.9);
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        color: #fff;
+        text-shadow: 0 1px 4px rgba(0,0,0,0.7);
     }
 
     .step-card.dhyanam-card .dhyanam-closing {
-        color: var(--primary-red, #c41e3a);
+        color: var(--stage-gold-bright);
         transition: color 0.4s ease;
     }
 
     .step-card.dhyanam-card:hover .dhyanam-closing {
-        color: rgba(255, 215, 0, 0.9);
+        color: #fff;
     }
 
     .step-header {
         display: flex;
         align-items: center;
         gap: 16px;
-        margin-bottom: 16px;
+        margin-bottom: 18px;
     }
 
     .step-number {
         flex-shrink: 0;
-        width: 40px;
-        height: 40px;
-        background: linear-gradient(135deg, var(--primary-red, #c41e3a), var(--accent-orange, #ea580c));
+        width: 44px;
+        height: 44px;
+        background: linear-gradient(135deg, var(--stage-crimson) 0%, #b8860b 100%);
+        border: 1.5px solid var(--stage-gold-bright);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         font-family: var(--font-mystical, 'Cinzel', serif);
-        font-size: 1.1rem;
+        font-size: 1.15rem;
         font-weight: 700;
         color: #fff;
+        box-shadow: 0 0 14px rgba(212, 175, 55, 0.35);
     }
 
     .step-title {
         font-family: var(--font-primary, 'Cinzel', serif);
         font-size: 1.35rem;
-        color: var(--primary-red, #c41e3a);
+        color: var(--stage-gold-bright);
         margin: 0;
+        letter-spacing: 0.8px;
     }
 
     .step-sanskrit {
         font-family: var(--font-sacred, serif);
         font-size: 0.95rem;
-        color: var(--text-muted, #6b7280);
+        color: var(--stage-gold);
         font-style: italic;
         display: block;
-        margin-top: 2px;
+        margin-top: 3px;
     }
 
     .step-content {
         font-family: var(--font-secondary, system-ui);
-        color: var(--text-dark, #1f2937);
-        font-size: 1rem;
+        color: var(--stage-paper-dim);
+        font-size: 1.02rem;
         line-height: 1.8;
     }
 
     .step-content p {
-        margin-bottom: 12px;
+        margin-bottom: 14px;
     }
 
     .step-content p:last-child {
@@ -424,57 +482,63 @@
 
     /* Mantra Box */
     .mantra-box {
-        background: linear-gradient(135deg, #fef7ed 0%, #fff7ed 100%);
-        border-radius: 8px;
-        padding: 16px;
-        margin: 16px 0;
-        border: 1px solid rgba(245, 158, 11, 0.3);
+        background: linear-gradient(135deg, rgba(28, 18, 16, 0.95) 0%, rgba(18, 12, 14, 0.98) 100%);
+        border-radius: 12px;
+        padding: 20px;
+        margin: 18px 0;
+        border: 1px solid rgba(212, 175, 55, 0.32);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(212, 175, 55, 0.05);
     }
 
     .mantra-title {
         font-family: var(--font-primary, 'Cinzel', serif);
         font-size: 0.95rem;
-        color: var(--accent-orange, #ea580c);
+        color: var(--stage-gold-bright);
         margin-bottom: 8px;
         font-weight: 600;
+        letter-spacing: 0.5px;
     }
 
     .mantra-sanskrit {
-        font-family: var(--font-sacred, serif);
-        font-size: 1.2rem;
-        color: var(--primary-red, #c41e3a);
-        line-height: 1.8;
+        font-family: var(--font-sacred, 'Noto Serif Devanagari', serif);
+        font-size: 1.25rem;
+        color: #ffffff;
+        line-height: 1.9;
         margin-bottom: 8px;
-        font-weight: bold;
+        font-weight: 600;
+        text-shadow: 0 0 12px rgba(212, 175, 55, 0.25);
     }
 
     .mantra-transliteration {
         font-family: var(--font-sacred, serif);
-        font-size: 0.95rem;
-        color: var(--text-muted, #6b7280);
+        font-size: 0.98rem;
+        color: var(--stage-gold);
         font-style: italic;
     }
 
     /* Visualization Box */
     .visualization-box {
-        background: rgba(196, 30, 58, 0.05);
-        border-radius: 8px;
-        padding: 16px;
-        margin: 16px 0;
-        border-left: 3px solid var(--primary-red, #c41e3a);
+        background: rgba(30, 18, 24, 0.6);
+        border-radius: 10px;
+        padding: 18px;
+        margin: 18px 0;
+        border-left: 3px solid var(--stage-gold);
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        border-left-width: 3px;
+        border-left-color: var(--stage-gold);
     }
 
     .visualization-title {
         font-family: var(--font-primary, 'Cinzel', serif);
         font-size: 0.95rem;
-        color: var(--primary-red, #c41e3a);
+        color: var(--stage-gold-bright);
         margin-bottom: 8px;
         font-weight: 600;
     }
 
     .visualization-text {
         font-family: var(--font-secondary, system-ui);
-        color: var(--text-dark, #1f2937);
+        color: var(--stage-paper);
         font-size: 0.95rem;
         line-height: 1.7;
         font-style: italic;
@@ -482,77 +546,79 @@
 
     /* Guarded Secret Ornate Box */
     .guarded-secret-box {
-        background: linear-gradient(135deg, #fff7ed 0%, #fef7ed 100%);
-        border: 2px double rgba(234, 88, 12, 0.4);
-        border-radius: 12px;
-        padding: 24px;
-        margin-top: 32px;
+        background: linear-gradient(135deg, rgba(32, 16, 22, 0.95) 0%, rgba(16, 10, 16, 0.98) 100%);
+        border: 2px double rgba(212, 175, 55, 0.5);
+        border-radius: 16px;
+        padding: 32px 26px;
+        margin-top: 36px;
         text-align: center;
         position: relative;
-        box-shadow: 0 4px 15px rgba(234, 88, 12, 0.05);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.65), inset 0 0 25px rgba(212, 175, 55, 0.08);
     }
 
     .guarded-secret-text {
         font-family: var(--font-secondary, system-ui);
-        font-size: 1rem;
+        font-size: 1.02rem;
         line-height: 1.8;
-        color: var(--text-dark, #1f2937);
+        color: var(--stage-paper-dim);
         margin-bottom: 16px;
     }
 
     .guarded-secret-blessing {
         font-family: var(--font-mystical, 'Cinzel', serif);
-        font-size: 1.1rem;
-        color: var(--primary-red, #c41e3a);
+        font-size: 1.2rem;
+        color: var(--stage-gold-bright);
         font-weight: bold;
         margin-bottom: 12px;
+        letter-spacing: 1px;
     }
 
     .guarded-secret-mantra {
         font-family: var(--font-sacred, serif);
-        font-size: 1.25rem;
-        color: var(--primary-red, #c41e3a);
-        letter-spacing: 1px;
+        font-size: 1.35rem;
+        color: var(--stage-gold);
+        letter-spacing: 1.5px;
+        text-shadow: 0 0 12px rgba(212, 175, 55, 0.35);
     }
 
     /* Sankalpa Language Block */
     .sankalpa-lang-block {
-        margin-top: 16px;
-        border-top: 1px dashed rgba(196, 30, 58, 0.2);
-        padding-top: 16px;
+        margin-top: 18px;
+        border-top: 1px dashed rgba(212, 175, 55, 0.25);
+        padding-top: 18px;
     }
 
     .sankalpa-lang-title {
         font-size: 0.95rem;
         font-weight: bold;
-        color: var(--primary-red, #c41e3a);
+        color: var(--stage-gold-bright);
         margin-bottom: 6px;
     }
 
     .sankalpa-lang-text {
         font-family: var(--font-sacred, serif);
         font-size: 1.05rem;
-        color: var(--text-dark, #1f2937);
-        line-height: 1.8;
-        margin-bottom: 12px;
+        color: var(--stage-paper);
+        line-height: 1.85;
+        margin-bottom: 14px;
     }
 
     /* Nyasa Grid & List styles */
     .nyasa-section {
-        margin-top: 16px;
-        background: rgba(234, 88, 12, 0.03);
-        border-radius: 8px;
-        padding: 16px;
-        border: 1px solid rgba(234, 88, 12, 0.1);
+        margin-top: 18px;
+        background: rgba(28, 20, 26, 0.65);
+        border-radius: 10px;
+        padding: 18px 20px;
+        border: 1px solid rgba(212, 175, 55, 0.2);
     }
 
     .nyasa-section-title {
         font-family: var(--font-primary, 'Cinzel', serif);
         font-size: 1.05rem;
-        color: var(--accent-orange, #ea580c);
+        color: var(--stage-gold-bright);
         margin-bottom: 12px;
         font-weight: 600;
-        border-bottom: 1px dashed rgba(234, 88, 12, 0.2);
+        border-bottom: 1px dashed rgba(212, 175, 55, 0.25);
         padding-bottom: 6px;
     }
 
@@ -564,46 +630,48 @@
 
     .nyasa-list li {
         position: relative;
-        padding-left: 20px;
-        margin-bottom: 8px;
-        font-size: 0.95rem;
-        line-height: 1.6;
+        padding-left: 22px;
+        margin-bottom: 10px;
+        font-size: 0.98rem;
+        line-height: 1.65;
+        color: #e5dfd5;
     }
 
     .nyasa-list li::before {
-        content: "•";
-        color: var(--accent-orange, #ea580c);
-        font-size: 1.2rem;
+        content: "✦";
+        color: var(--stage-gold-bright);
+        font-size: 0.85rem;
         position: absolute;
-        left: 5px;
-        top: -1px;
+        left: 4px;
+        top: 1px;
     }
 
     .nyasa-list li strong {
-        color: var(--primary-red, #c41e3a);
+        color: var(--stage-gold-bright);
     }
 
     .mantra-inline-highlight {
-        background: rgba(196, 30, 58, 0.08);
-        padding: 2px 8px;
-        border-radius: 4px;
+        background: rgba(212, 175, 55, 0.16);
+        border: 1px solid rgba(212, 175, 55, 0.35);
+        padding: 2px 9px;
+        border-radius: 6px;
         font-family: var(--font-sacred, serif);
         font-weight: bold;
-        color: var(--primary-red, #c41e3a);
-        font-size: 0.95rem;
+        color: var(--stage-gold-bright);
+        font-size: 0.98rem;
     }
 
     .ornamental-line {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 16px;
-        margin: 20px 0;
-        color: var(--primary-red, #c41e3a);
-        font-size: 0.9rem;
+        gap: 18px;
+        margin: 28px 0;
+        color: var(--stage-gold-bright);
+        font-size: 0.95rem;
         font-family: var(--font-mystical, 'Cinzel', serif);
         text-transform: uppercase;
-        letter-spacing: 2px;
+        letter-spacing: 3px;
     }
 
     .ornamental-line::before,
@@ -611,7 +679,7 @@
         content: "";
         flex: 1;
         height: 1px;
-        background: linear-gradient(to right, transparent, var(--primary-red, #c41e3a), transparent);
+        background: linear-gradient(to right, transparent, var(--stage-border-glow), transparent);
     }
 </style>
 {% endblock %}
@@ -793,7 +861,7 @@
                     <div class="mantra-transliteration">Om Batuk Bhairvaaye Namah</div>
                 </div>
 
-                <div class="mantra-box" style="background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%); border-color: rgba(196, 30, 58, 0.2);">
+                <div class="mantra-box" style="background: linear-gradient(135deg, rgba(38, 14, 22, 0.95) 0%, rgba(22, 10, 16, 0.98) 100%); border-color: rgba(212, 175, 55, 0.45);">
                     <div class="mantra-sanskrit" style="font-size: 1.1rem; line-height: 1.6;">|| ॐ ह्रीं बटुकाय आपदुद्धारणाय कुरु कुरु बटुकाय ह्रीं ॐ ||</div>
                     <div class="mantra-transliteration">Om Hreem Batukaya Apad-uddharanaya kuru kuru Batukaaya Hreem Om</div>
                 </div>
@@ -816,7 +884,7 @@
             <div class="step-content">
                 <p>Conclude your sadhana with heartfelt gratitude:</p>
                 
-                <div class="nyasa-section" style="background: rgba(196, 30, 58, 0.03); border-color: rgba(196, 30, 58, 0.1);">
+                <div class="nyasa-section">
                     <ul class="nyasa-list">
                         <li>Internally offer thanks to Ista, Bhairava.</li>
                         <li>Present a subtle offering of flowers, incense, or water as a final tribute.</li>
@@ -825,7 +893,7 @@
                     </ul>
                 </div>
 
-                <div class="mantra-box" style="text-align: center; background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);">
+                <div class="mantra-box" style="text-align: center; background: linear-gradient(135deg, rgba(32, 14, 22, 0.95) 0%, rgba(20, 10, 16, 0.98) 100%); border-color: rgba(212, 175, 55, 0.4);">
                     <p class="mantra-sanskrit" style="font-size: 1.15rem; font-style: italic; font-weight: normal; margin-bottom: 6px;">
                         Om Purnam-Adah Purnam-Idam Purnat Purnam-Udachyate |<br>
                         Purnasya Purnam-Adaya Purnameva-Avashishyate ||
@@ -883,9 +951,9 @@
 
     <!-- Actions -->
     <div class="stage-actions">
-        <a href="/padati" class="btn-back">
+        <a href="/sadhana-paddhati" class="btn-back">
             <i class="fas fa-arrow-left"></i>
-            Back to Progress
+            Return to Sādhana Paddhati
         </a>
     </div>
 
