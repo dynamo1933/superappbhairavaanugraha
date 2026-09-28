@@ -17,6 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 5. Active Link Highlight
   highlightCurrentNav();
+
+  // 6. Touch-Friendly Dropdown Support
+  initDropdownTouchSupport();
 });
 
 /* --- 1. Ambient Golden Embers --- */
@@ -163,7 +166,11 @@ function initCommandPalette() {
     { title: "Jnāna Samvāda · Bhairava Codex & Inquiry", url: "/jnana-samvada", tag: "Codex" },
     { title: "Sādhana Paddhati · Three Steps to Union", url: "/sadhana-paddhati", tag: "Discourse" },
     { title: "Mandala Sādhana · Sacred Vows & Sankalpa", url: "/mandala-sadhana", tag: "Vow" },
-    { title: "Ashtami · Krishna Paksha Inner Gateways", url: "/ashtami", tag: "Calendar" },
+    { title: "Krishna Paksha Ashtami · Sacred Gateways", url: "/ashtami", tag: "Calendar" },
+    { title: "Sacred Documents · Mandala Teachings", url: "/documents", tag: "Documents" },
+    { title: "Guru Bhairava · Paramaguru Lineage & Sadhana", url: "/guru-bhairava", tag: "Sādhana" },
+    { title: "Vishesh Sādhana · Kaal Ashtami & Eclipse Rites", url: "/vishesh-sadhana", tag: "Ritual" },
+    { title: "Prāṇa Pratiṣṭhāna · Consecration Codex", url: "/prana-pratisthana", tag: "Consecration" },
     { title: "Daiva Anugraha Videos · YouTube Discourses", url: "/#videos", tag: "Media" },
     { title: "Life Within or Without · Book & Teachings", url: "/#book", tag: "Book" },
     { title: "Join Sacred Telegram Group", url: "https://t.me/+tM8pVCZWG8cxYjc1", tag: "Community", external: true },
@@ -288,6 +295,38 @@ function highlightCurrentNav() {
       link.classList.add('is-active');
     } else {
       link.classList.remove('is-active');
+    }
+  });
+}
+
+/* --- 6. Touch-Friendly Dropdown Support (Mobile & Tablet) --- */
+function initDropdownTouchSupport() {
+  const dropdownWraps = document.querySelectorAll('.nav-dropdown-wrap');
+  dropdownWraps.forEach(wrap => {
+    const btn = wrap.querySelector('.nav-dropdown-btn');
+    if (!btn) return;
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = wrap.classList.contains('is-open');
+      dropdownWraps.forEach(w => w.classList.remove('is-open'));
+      if (!isOpen) {
+        wrap.classList.add('is-open');
+      }
+    });
+  });
+
+  // Tap outside to close
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.nav-dropdown-wrap')) {
+      dropdownWraps.forEach(w => w.classList.remove('is-open'));
+    }
+  });
+
+  // Escape key closes dropdown
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      dropdownWraps.forEach(w => w.classList.remove('is-open'));
     }
   });
 }

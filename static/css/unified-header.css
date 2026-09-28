@@ -452,7 +452,8 @@ header.chrome,
 }
 
 .nav-dropdown-wrap:hover .nav-dropdown-arrow,
-.nav-dropdown-wrap:focus-within .nav-dropdown-arrow {
+.nav-dropdown-wrap:focus-within .nav-dropdown-arrow,
+.nav-dropdown-wrap.is-open .nav-dropdown-arrow {
   transform: rotate(180deg) !important;
   color: #f0d48a !important;
 }
@@ -475,7 +476,8 @@ header.chrome,
 }
 
 .nav-dropdown-wrap:hover .nav-dropdown-menu,
-.nav-dropdown-wrap:focus-within .nav-dropdown-menu {
+.nav-dropdown-wrap:focus-within .nav-dropdown-menu,
+.nav-dropdown-wrap.is-open .nav-dropdown-menu {
   display: block !important;
   animation: navDropdownFade 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
@@ -689,7 +691,7 @@ header.chrome,
   visibility: hidden !important;
   pointer-events: none !important;
   transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.32s !important;
-  padding: 24px 20px !important;
+  padding: max(24px, env(safe-area-inset-top, 24px)) max(20px, env(safe-area-inset-right, 20px)) max(24px, env(safe-area-inset-bottom, 24px)) max(20px, env(safe-area-inset-left, 20px)) !important;
   display: flex !important;
   flex-direction: column !important;
   overflow-y: auto !important;
@@ -839,7 +841,7 @@ header.chrome,
    ========================================================================== */
 
 /* Enforce desktop hiding of drawer elements */
-@media (min-width: 769px) {
+@media (min-width: 1025px) {
   .mobile-drawer,
   .drawer-backdrop,
   .mobile-toggle,
@@ -855,11 +857,12 @@ header.chrome,
   }
 }
 
-/* Tablet & Mobile Screens */
-@media (max-width: 768px) {
+/* Tablet & Mobile Screens (<= 1024px) */
+@media (max-width: 1024px) {
   header.chrome,
   .chrome {
     height: 64px !important;
+    padding-top: env(safe-area-inset-top, 0px) !important;
   }
 
   .chrome-nav {

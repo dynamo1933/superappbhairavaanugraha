@@ -780,33 +780,72 @@ body {
     box-shadow: 0 6px 25px rgba(212, 175, 55, 0.35);
 }
 
-/* Responsive */
+/* Device-Agnostic Responsive Rules for Vishesh Sadhana */
+@media (max-width: 1024px) {
+    .vishesh-main {
+        padding: 2.5rem 1.5rem 4rem;
+    }
+}
+
 @media (max-width: 768px) {
     .section-title {
         font-size: 1.4rem;
     }
-    
     .intro-title {
         font-size: 1.25rem;
     }
-    
     .intro-text {
         font-size: 0.95rem;
+        text-align: left;
+    }
+    .nights-grid {
+        grid-template-columns: 1fr;
+    }
+    .btn-back {
+        width: 100%;
+        max-width: 340px;
+        justify-content: center;
     }
 }
 
 @media (max-width: 480px) {
+    .vishesh-hero {
+        padding: 2rem 0.85rem;
+    }
+    .hero-title {
+        font-size: clamp(1.4rem, 6.5vw, 1.85rem);
+    }
     .vishesh-main {
-        padding: 1.5rem 1rem;
+        padding: 1.25rem 0.75rem 3rem;
     }
-    
     .content-card {
-        padding: 1.5rem 1.25rem;
+        padding: 1.25rem 0.85rem;
         margin-bottom: 1.5rem;
+        border-radius: 10px;
     }
-    
     .step-card {
-        padding: 1.25rem;
+        padding: 1.15rem 0.85rem;
+    }
+    .sanskrit-text {
+        font-size: 1.05rem;
+        line-height: 1.6;
+        word-break: break-word;
+    }
+    .mantra-sanskrit {
+        font-size: 1.05rem;
+        word-break: break-word;
+    }
+    .elements-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 360px) {
+    .hero-title {
+        font-size: 1.35rem;
+    }
+    .elements-grid {
+        grid-template-columns: 1fr;
     }
 }
 </style>

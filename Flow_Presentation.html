@@ -1773,6 +1773,34 @@
       });
     });
 
+    // Touch swipe support for touchscreens & mobile devices
+    let touchStartX = 0;
+    let touchStartY = 0;
+    window.addEventListener('touchstart', (e) => {
+      if (e.touches && e.touches.length > 0) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+      }
+    }, { passive: true });
+
+    window.addEventListener('touchend', (e) => {
+      if (!touchStartX) return;
+      const touchEndX = e.changedTouches[0].clientX;
+      const touchEndY = e.changedTouches[0].clientY;
+      const diffX = touchStartX - touchEndX;
+      const diffY = touchStartY - touchEndY;
+      // Ensure horizontal swipe is dominant and exceeds 50px
+      if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+        if (diffX > 0) {
+          showSlide(currentIndex + 1); // Swipe left -> next
+        } else {
+          showSlide(currentIndex - 1); // Swipe right -> prev
+        }
+      }
+      touchStartX = 0;
+      touchStartY = 0;
+    }, { passive: true });
+
     // Initialize first slide notes
     showSlide(0);
   </script>

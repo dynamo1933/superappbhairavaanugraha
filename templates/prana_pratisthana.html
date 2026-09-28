@@ -426,6 +426,73 @@ body {
     color: #fff;
     transform: translateY(-2px);
 }
+
+/* Device-Agnostic Responsive Rules for Prana Pratisthana */
+@media (max-width: 1024px) {
+    .tab-content-wrapper {
+        padding: 0 1.5rem 4rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .content-card {
+        padding: 1.6rem 1.2rem;
+        margin-bottom: 1.75rem;
+        border-radius: 12px;
+    }
+    .glass-card {
+        padding: 1.6rem 1.2rem;
+        margin: 1.75rem 0;
+    }
+    .mantra-box {
+        padding: 1.25rem 1rem;
+    }
+    .mantra-sanskrit {
+        font-size: 1.15rem;
+    }
+    .btn-back {
+        width: 100%;
+        max-width: 340px;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .prana-hero {
+        padding: 2rem 0.85rem;
+    }
+    .hero-title {
+        font-size: clamp(1.4rem, 6.5vw, 1.85rem);
+        letter-spacing: 1px;
+    }
+    .tab-nav-container {
+        margin: -1.25rem auto 1.75rem;
+        padding: 0 0.5rem;
+    }
+    .tab-content-wrapper {
+        padding: 0 0.75rem 3rem;
+    }
+    .content-card {
+        padding: 1.25rem 0.85rem;
+        border-radius: 10px;
+    }
+    .section-title {
+        font-size: 1.3rem;
+        letter-spacing: 0.8px;
+    }
+    .step-card {
+        padding: 1.25rem 1rem;
+        border-radius: 10px;
+    }
+    .mantra-sanskrit {
+        font-size: 1.05rem;
+        word-break: break-word;
+    }
+    .glass-card {
+        padding: 1.25rem 0.85rem;
+        border-radius: 10px;
+    }
+}
 </style>
 {% endblock %}
 

@@ -1298,7 +1298,7 @@ img {
 }
 
 /* Enforce desktop hiding */
-@media (min-width: 769px) {
+@media (min-width: 1025px) {
   .mobile-drawer,
   .drawer-backdrop,
   .mobile-toggle {
@@ -1341,7 +1341,7 @@ img {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   :root {
     --chrome-h: 64px;
   }
@@ -1629,5 +1629,173 @@ img {
   }
   .section-head h2 {
     font-size: 24px;
+  }
+}
+
+/* ==========================================================================
+   DEVICE-AGNOSTIC GLOBAL ARCHITECTURE (MOBILE, TABLET, DESKTOP, ULTRA-WIDE)
+   Touch ergonomics, fluid typography, safe-area hardware insets, and overflow guards
+   ========================================================================== */
+
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+
+/* Universal Anti-Overflow & Hardware Viewport Guards */
+html {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  overflow-x: hidden !important;
+  width: 100% !important;
+  max-width: 100vw !important;
+  padding-left: var(--safe-left);
+  padding-right: var(--safe-right);
+  -webkit-tap-highlight-color: rgba(212, 166, 74, 0.2);
+}
+
+/* Fluid Media & Responsive Containers */
+img, video, canvas, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+iframe {
+  max-width: 100%;
+}
+
+/* Touch Input & Accessibility Ergonomics (Touchscreens, Tablets & Phones) */
+@media (pointer: coarse) {
+  a, button, input, select, textarea, .nav-item, .tab-btn {
+    touch-action: manipulation;
+  }
+  
+  .btn-gold-primary,
+  .btn-gold-outline,
+  .btn-crimson-outline,
+  .btn-back,
+  .btn-external,
+  .nav-item,
+  .tab-btn,
+  .drawer-links a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
+/* Inputs on Touchscreens: Prevent iOS Safari Auto-Zoom */
+@media (max-width: 768px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="number"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Tablet Ergonomics (769px to 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .hero-inner {
+    padding: 40px 24px 60px;
+    gap: 32px;
+  }
+  
+  .hero-left h1 {
+    font-size: clamp(32px, 5vw, 44px);
+  }
+  
+  .portals-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .portals-grid .portal-card:last-child {
+    grid-column: 1 / -1;
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .pillars-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Smartphone & Compact Screen Ergonomics (<= 480px) */
+@media (max-width: 480px) {
+  .hero {
+    padding: 24px 12px 36px;
+  }
+  
+  .hero-left h1 {
+    font-size: clamp(24px, 7vw, 30px);
+  }
+  
+  .hero-left .tagline {
+    font-size: 16px;
+  }
+  
+  .portal-card {
+    padding: 20px 14px;
+  }
+  
+  .essence-box {
+    padding: 22px 14px;
+  }
+  
+  .book-card {
+    padding: 20px 14px;
+  }
+  
+  .contact-card {
+    padding: 20px 14px;
+  }
+  
+  .site-footer {
+    padding: 32px 14px 20px;
+    padding-bottom: max(24px, var(--safe-bottom));
+  }
+  
+  .footer-inner {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+/* Micro-Screens (<= 360px - e.g. iPhone SE 1st gen, Galaxy Fold Cover) */
+@media (max-width: 360px) {
+  .hero-left h1 {
+    font-size: 22px;
+  }
+  
+  .chrome-inner {
+    padding: 0 8px;
+    gap: 4px;
+  }
+  
+  .chrome .b {
+    font-size: 15px;
+  }
+  
+  .chrome .om {
+    font-size: 19px;
+  }
+  
+  .btn-gold-primary,
+  .btn-gold-outline,
+  .btn-crimson-outline {
+    padding: 10px 14px;
+    font-size: 14px;
   }
 }

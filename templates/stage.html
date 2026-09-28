@@ -206,9 +206,25 @@
         background: #0a080c;
     }
 
+    @media (max-width: 1024px) {
+        .doc-embed iframe {
+            height: 600px;
+        }
+    }
+
     @media (max-width: 768px) {
         .doc-embed iframe {
-            height: 520px;
+            height: 500px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .doc-embed iframe {
+            height: 400px;
+        }
+        .btn-external {
+            width: 100%;
+            justify-content: center;
         }
     }
 
@@ -733,6 +749,79 @@
         flex: 1;
         height: 1px;
         background: linear-gradient(to right, transparent, var(--stage-border-glow), transparent);
+    }
+
+    /* Device-Agnostic Responsive Rules for Stage Pages */
+    @media (max-width: 768px) {
+        .stage-body {
+            padding: 24px 16px 60px;
+        }
+        .step-card {
+            padding: 20px 16px;
+        }
+        .guarded-secret-box {
+            padding: 24px 16px;
+        }
+        .btn-back {
+            width: 100%;
+            max-width: 360px;
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .stage-header-bar {
+            padding: 12px 14px;
+        }
+        .stage-header-content {
+            flex-direction: column;
+            text-align: center;
+            gap: 10px;
+        }
+        .stage-header-info {
+            text-align: center;
+        }
+        .stage-header-title {
+            font-size: clamp(17px, 5.5vw, 22px);
+        }
+        .stage-body {
+            padding: 16px 10px 48px;
+        }
+        .step-card {
+            padding: 16px 12px;
+            border-radius: 12px;
+        }
+        .step-header {
+            gap: 10px;
+        }
+        .step-number {
+            width: 36px;
+            height: 36px;
+            font-size: 1.1rem;
+        }
+        .step-title {
+            font-size: 1.1rem;
+        }
+        .mantra-box {
+            padding: 12px 8px;
+            margin: 10px 0;
+        }
+        .mantra-sanskrit {
+            font-size: 1.02rem !important;
+            line-height: 1.6;
+            word-break: break-word;
+        }
+        .guarded-secret-box {
+            padding: 18px 12px;
+            border-radius: 12px;
+        }
+        .guarded-secret-mantra {
+            font-size: 1.1rem;
+            word-break: break-word;
+        }
+        .stage-actions {
+            margin-top: 24px;
+        }
     }
 </style>
 {% endblock %}

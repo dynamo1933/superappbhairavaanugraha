@@ -831,6 +831,94 @@ body {
     color: #fff;
     transform: translateY(-2px);
 }
+
+/* Device-Agnostic Responsive Rules for Guru Bhairava */
+@media (max-width: 1024px) {
+    .guru-main {
+        padding: 2rem 1.25rem 4rem;
+    }
+    .duration-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .content-card {
+        padding: 1.6rem 1.2rem;
+        margin-bottom: 1.75rem;
+        border-radius: 12px;
+    }
+    .duration-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+    .sanskrit-verse {
+        padding: 1.2rem 1rem;
+    }
+    .sanskrit-text {
+        font-size: 1.15rem;
+    }
+    .sacred-quote {
+        padding: 1.75rem 1.25rem;
+    }
+    .btn-back {
+        width: 100%;
+        max-width: 340px;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .guru-hero {
+        padding: 2rem 0.85rem;
+    }
+    .hero-title {
+        font-size: clamp(1.4rem, 6.5vw, 1.85rem);
+        letter-spacing: 1px;
+    }
+    .guru-main {
+        padding: 1.25rem 0.75rem 3rem;
+    }
+    .content-card {
+        padding: 1.25rem 0.85rem;
+        border-radius: 10px;
+    }
+    .section-title {
+        font-size: 1.3rem;
+        letter-spacing: 0.8px;
+    }
+    .duration-grid {
+        grid-template-columns: 1fr;
+    }
+    .step-card {
+        padding: 1.25rem 1rem;
+        border-radius: 10px;
+    }
+    .step-header {
+        gap: 10px;
+    }
+    .step-number {
+        width: 36px;
+        height: 36px;
+        font-size: 1.1rem;
+    }
+    .step-title {
+        font-size: 1.05rem;
+    }
+    .mantra-sanskrit {
+        font-size: 1.08rem;
+        word-break: break-word;
+    }
+    .quote-text {
+        font-size: 1.05rem;
+        line-height: 1.6;
+    }
+    .naivedyam-item {
+        padding: 0.4rem 0.85rem;
+        font-size: 0.85rem;
+    }
+}
 </style>
 {% endblock %}
 
