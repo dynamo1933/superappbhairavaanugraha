@@ -6,7 +6,7 @@ import sys
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
 
-BASE_URL = "http://127.0.0.1:5080"
+BASE_URL = os.environ.get("BASE_URL", "http://127.0.0.1:5080")
 session = requests.Session()
 
 print("==================================================")
