@@ -233,29 +233,29 @@
   flex-wrap: wrap;
 }
 
-/* Forms & Inputs */
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="number"],
-input[type="date"],
-input[type="tel"],
-select,
-textarea {
+/* Forms & Inputs (scoped to admin forms, excluding auth forms) */
+input[type="text"]:not(.auth-input),
+input[type="email"]:not(.auth-input),
+input[type="password"]:not(.auth-input),
+input[type="number"]:not(.auth-input),
+input[type="date"]:not(.auth-input),
+input[type="tel"]:not(.auth-input),
+select:not(.auth-input):not(.auth-select),
+textarea:not(.auth-input):not(.auth-textarea) {
   width: 100%;
   background: var(--admin-input-bg) !important;
   border: 1px solid var(--admin-input-border) !important;
   border-radius: 8px !important;
-  padding: 0.75rem 1rem !important;
+  padding: 0.75rem 1rem;
   color: var(--admin-paper-bright) !important;
   font-family: var(--serif, 'EB Garamond', serif) !important;
   font-size: 1rem !important;
   transition: all 0.2s ease !important;
 }
 
-input:focus,
-select:focus,
-textarea:focus {
+input:not(.auth-input):focus,
+select:not(.auth-input):not(.auth-select):focus,
+textarea:not(.auth-input):not(.auth-textarea):focus {
   outline: none !important;
   border-color: var(--admin-gold-bright) !important;
   box-shadow: 0 0 12px var(--admin-gold-glow) !important;
