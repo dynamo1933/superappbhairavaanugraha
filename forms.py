@@ -4,19 +4,21 @@ from wtforms import StringField, PasswordField, BooleanField, SelectField, TextA
 from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError, Optional
 from datetime import datetime
 
+strip_filter = lambda x: x.strip() if isinstance(x, str) else x
+
 class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired(), Length(min=3, max=80)])
+    username = StringField('Username', validators=[DataRequired(), Length(min=3, max=80)], filters=[strip_filter])
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
 
 class RegistrationForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired(), Length(min=3, max=80)])
-    email = StringField('Email', validators=[DataRequired(), Email()])
+    username = StringField('Username', validators=[DataRequired(), Length(min=3, max=80)], filters=[strip_filter])
+    email = StringField('Email', validators=[DataRequired(), Email()], filters=[strip_filter, lambda x: x.lower() if isinstance(x, str) else x])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
     password2 = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
-    full_name = StringField('Full Name', validators=[DataRequired(), Length(max=100)])
-    phone = StringField('Phone Number', validators=[Length(max=20)])
-    address = TextAreaField('Address (Optional)', validators=[Length(max=500)])
+    full_name = StringField('Full Name', validators=[DataRequired(), Length(max=100)], filters=[strip_filter])
+    phone = StringField('Phone Number', validators=[Length(max=20)], filters=[strip_filter])
+    address = TextAreaField('Address (Optional)', validators=[Length(max=500)], filters=[strip_filter])
     gender = SelectField('Gender', choices=[
         ('', 'Select Gender'),
         ('Male', 'Male'),

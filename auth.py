@@ -21,7 +21,13 @@ def login():
     
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
+        login_identifier = (form.username.data or '').strip()
+        user = User.query.filter(
+            db.or_(
+                db.func.lower(User.username) == login_identifier.lower(),
+                db.func.lower(User.email) == login_identifier.lower()
+            )
+        ).first()
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password', 'error')
             return redirect(url_for('auth.login'))
@@ -52,14 +58,17 @@ def register():
     
     form = RegistrationForm()
     if form.validate_on_submit():
-        # Check for existing username
-        existing_user = User.query.filter_by(username=form.username.data).first()
+        clean_username = (form.username.data or '').strip()
+        clean_email = (form.email.data or '').strip().lower()
+
+        # Check for existing username (case-insensitive)
+        existing_user = User.query.filter(db.func.lower(User.username) == clean_username.lower()).first()
         if existing_user:
             flash('Username already taken. Please choose a different one.', 'error')
             return render_template('auth/register.html', title='Register', form=form)
         
-        # Check for existing email
-        existing_email = User.query.filter_by(email=form.email.data).first()
+        # Check for existing email (case-insensitive)
+        existing_email = User.query.filter(db.func.lower(User.email) == clean_email).first()
         if existing_email:
             flash('Email already registered. Please use a different one.', 'error')
             return render_template('auth/register.html', title='Register', form=form)
@@ -92,19 +101,19 @@ def register():
                 profile_picture_path = f"uploads/profiles/{filename}"
         
         user = User(
-            username=form.username.data,
-            email=form.email.data,
-            full_name=form.full_name.data,
-            phone=form.phone.data,
-            address=form.address.data,
+            username=clean_username,
+            email=clean_email,
+            full_name=(form.full_name.data or '').strip(),
+            phone=(form.phone.data or '').strip() or None,
+            address=(form.address.data or '').strip() or None,
             practice_level=form.practice_level.data,
             purpose=form.purpose.data,
             profile_picture=profile_picture_path,
             date_of_birth=form.date_of_birth.data,
             gender=form.gender.data,
-            location=form.location.data,
+            location=(form.location.data or '').strip(),
             preferred_language=form.preferred_language.data,
-            referral_source=form.referral_source.data
+            referral_source=(form.referral_source.data or '').strip() or None
         )
         user.set_password(form.password.data)
         
