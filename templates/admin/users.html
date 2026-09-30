@@ -1,698 +1,1307 @@
 {% extends "base.html" %}
 
+{% block title %}Sādhak Administration & Seeker Management Desk · Bhairava Anugraha{% endblock %}
+
 {% block extra_styles %}
 <style>
 /* ==========================================================================
-   ADMIN USER MANAGEMENT · SACRED DARK-GOLD LUXURY THEME
+   SACRED DARK-GOLD SĀDHAK VETTING & ADMIN DESK (SUPER APP MASTER THEME)
    ========================================================================== */
-.admin-dashboard {
-  background: var(--ink, #0e0a06);
-  color: var(--paper, #e9dfc8);
-  min-height: calc(100vh - 72px);
-  padding: 2.5rem 1.25rem 4rem;
-  background-image: 
-    radial-gradient(circle at 50% 10%, rgba(212, 166, 74, 0.08) 0%, transparent 60%),
-    radial-gradient(circle at 90% 80%, rgba(106, 16, 16, 0.07) 0%, transparent 50%);
+
+:root {
+  --desk-bg: #070509;
+  --desk-panel: rgba(18, 14, 22, 0.88);
+  --desk-panel-card: rgba(24, 19, 30, 0.94);
+  --desk-panel-elevated: rgba(30, 24, 38, 0.96);
+  --desk-gold: #d4a64a;
+  --desk-gold-bright: #f5dfa2;
+  --desk-gold-deep: #9a7218;
+  --desk-gold-border: rgba(212, 166, 74, 0.28);
+  --desk-gold-glow: rgba(212, 166, 74, 0.16);
+  --desk-crimson: #801414;
+  --desk-crimson-border: rgba(180, 40, 40, 0.35);
+  --desk-crimson-glow: rgba(128, 20, 20, 0.25);
+  --desk-emerald: #10b981;
+  --desk-amber: #f59e0b;
+  --desk-azure: #3b82f6;
+  --desk-paper: #fbf7ee;
+  --desk-paper-dim: #c7beab;
+  --desk-muted: #8e8574;
 }
 
-.admin-dashboard .container {
-  max-width: 1440px;
+.admin-desk-page {
+  background: var(--desk-bg);
+  min-height: calc(100vh - 72px);
+  padding: 2rem 1.25rem 4rem;
+  color: var(--desk-paper);
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(212, 166, 74, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 85% 20%, rgba(128, 20, 20, 0.06) 0%, transparent 45%),
+    radial-gradient(circle at 10% 70%, rgba(212, 166, 74, 0.05) 0%, transparent 50%);
+  background-attachment: fixed;
+  font-family: var(--serif, 'EB Garamond', Georgia, serif);
+}
+
+.admin-desk-page .container {
+  max-width: 1480px;
   margin: 0 auto;
 }
 
-/* Header */
-.dashboard-header {
+/* ==========================================================================
+   1. HERO HEADER BANNER
+   ========================================================================== */
+.desk-header {
+  background: linear-gradient(135deg, rgba(26, 20, 32, 0.95) 0%, rgba(16, 12, 20, 0.98) 100%);
+  border: 1px solid var(--desk-gold-border);
+  border-radius: 20px;
+  padding: 1.6rem 2rem;
+  margin-bottom: 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 2rem;
-  padding: 1.5rem 2rem;
-  background: rgba(20, 15, 12, 0.9);
-  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(212, 166, 74, 0.22);
   flex-wrap: wrap;
-  gap: 1.25rem;
+  gap: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
 }
 
-.dashboard-title-section {
+.desk-header::after {
+  content: "॥";
+  position: absolute;
+  right: 20px;
+  bottom: -20px;
+  font-size: 8rem;
+  color: rgba(212, 166, 74, 0.03);
+  font-family: var(--display, serif);
+  pointer-events: none;
+}
+
+.desk-header-brand {
   display: flex;
   align-items: center;
   gap: 1.25rem;
 }
 
-.dashboard-icon {
-  width: 54px;
-  height: 54px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, rgba(212, 166, 74, 0.25) 0%, rgba(106, 16, 16, 0.35) 100%);
-  border: 1px solid var(--gold, #d4a64a);
+.desk-icon-emblem {
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(212, 166, 74, 0.22) 0%, rgba(128, 20, 20, 0.35) 100%);
+  border: 1.5px solid var(--desk-gold);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.6rem;
-  color: var(--gold-3, #f0d48a);
-  box-shadow: 0 0 20px rgba(212, 166, 74, 0.25);
+  font-size: 1.65rem;
+  color: var(--desk-gold-bright);
+  box-shadow: 0 0 25px var(--desk-gold-glow), inset 0 0 15px rgba(212, 166, 74, 0.2);
+  flex-shrink: 0;
 }
 
-.dashboard-title h1 {
-  font-family: var(--display, serif);
-  font-size: 2rem;
+.desk-title-group h1 {
+  font-family: var(--display, 'Cormorant Garamond', Georgia, serif);
+  font-size: clamp(1.7rem, 2.8vw, 2.3rem);
   font-weight: 700;
-  color: var(--paper-bright, #fdfaf2);
+  color: #fff;
   margin: 0 0 0.2rem;
   letter-spacing: 0.02em;
+  line-height: 1.15;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
 }
 
-.dashboard-title p {
-  font-size: 0.92rem;
-  color: var(--paper-2, #d6c9a3);
-  margin: 0;
-}
-
-.btn-primary {
+.desk-shloka-badge {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 0.65rem 1.4rem;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #f0d48a 0%, #d4a64a 50%, #b8842a 100%);
-  color: #0e0a06 !important;
-  border: 1px solid #f0d48a;
-  font-family: var(--serif, serif);
-  font-size: 0.95rem;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--desk-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
   font-weight: 700;
-  text-decoration: none;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  box-shadow: 0 4px 15px rgba(212, 166, 74, 0.35);
+  margin-bottom: 0.25rem;
 }
 
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(212, 166, 74, 0.55);
+.desk-title-group p {
+  margin: 0;
+  color: var(--desk-paper-dim);
+  font-size: 0.92rem;
 }
 
-.btn-secondary {
+.desk-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* Sacred Buttons */
+.btn-sacred-gold {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 0.65rem 1.4rem;
+  gap: 0.5rem;
+  padding: 0.65rem 1.35rem;
   border-radius: 999px;
-  background: rgba(14, 10, 6, 0.8);
-  color: var(--paper-bright, #fdfaf2);
-  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
+  background: linear-gradient(135deg, #f5dfa2 0%, #d4a64a 50%, #9a7218 100%);
+  color: #0c0804 !important;
+  font-weight: 700;
+  font-size: 0.88rem;
   font-family: var(--serif, serif);
-  font-size: 0.95rem;
-  text-decoration: none;
+  border: 1px solid #f5dfa2;
+  box-shadow: 0 6px 20px rgba(212, 166, 74, 0.35);
   cursor: pointer;
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-sacred-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(212, 166, 74, 0.55);
+}
+
+.btn-sacred-dark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  border-radius: 999px;
+  background: rgba(14, 10, 18, 0.85);
+  color: var(--desk-gold-bright) !important;
+  font-size: 0.88rem;
+  font-weight: 600;
+  font-family: var(--serif, serif);
+  border: 1px solid var(--desk-gold-border);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  text-decoration: none;
   transition: all 0.25s ease;
 }
 
-.btn-secondary:hover {
-  border-color: var(--gold, #d4a64a);
-  color: var(--gold-3, #f0d48a);
-  background: rgba(28, 20, 16, 0.9);
+.btn-sacred-dark:hover {
+  background: rgba(30, 22, 38, 0.95);
+  border-color: var(--desk-gold);
+  color: #fff !important;
+  transform: translateY(-2px);
 }
 
-/* KPI Quick Stats */
-.quick-stats {
+/* ==========================================================================
+   2. KPI LIVE METRIC RIBBON
+   ========================================================================== */
+.desk-kpi-ribbon {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.25rem;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
   margin-bottom: 2rem;
 }
 
-.stat-card {
-  background: rgba(20, 15, 12, 0.88);
-  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
-  border-radius: 14px;
-  padding: 1.25rem 1.5rem;
+.kpi-stat-card {
+  background: var(--desk-panel);
+  border: 1px solid var(--desk-gold-border);
+  border-radius: 16px;
+  padding: 1.25rem 1.35rem;
   display: flex;
   align-items: center;
-  gap: 1.25rem;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  gap: 1rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(15px);
 }
 
-.stat-icon {
-  width: 50px;
-  height: 50px;
+.kpi-stat-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--desk-gold);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7), 0 0 20px var(--desk-gold-glow);
+}
+
+.kpi-stat-icon {
+  width: 48px;
+  height: 48px;
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.4rem;
+  font-size: 1.35rem;
   flex-shrink: 0;
 }
 
-.stat-icon.total { background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(59, 130, 246, 0.4); color: #93c5fd; }
-.stat-icon.approved { background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); color: #6ee7b7; }
-.stat-icon.pending { background: rgba(245, 158, 11, 0.2); border: 1px solid rgba(245, 158, 11, 0.4); color: #fcd34d; }
-.stat-icon.suspended { background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); color: #fca5a5; }
+.kpi-stat-icon.total {
+  background: rgba(59, 130, 246, 0.16);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  color: #93c5fd;
+}
 
-.stat-info h3 {
-  font-family: var(--display, serif);
-  font-size: 1.8rem;
+.kpi-stat-icon.approved {
+  background: rgba(16, 185, 129, 0.16);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #6ee7b7;
+}
+
+.kpi-stat-icon.pending {
+  background: rgba(245, 158, 11, 0.18);
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  color: #fcd34d;
+}
+
+.kpi-stat-icon.requests {
+  background: rgba(180, 40, 40, 0.2);
+  border: 1px solid var(--desk-crimson-border);
+  color: #fca5a5;
+}
+
+.kpi-stat-icon.suspended {
+  background: rgba(107, 114, 128, 0.18);
+  border: 1px solid rgba(156, 163, 175, 0.35);
+  color: #d1d5db;
+}
+
+.kpi-stat-info h3 {
+  font-family: var(--display, 'Cormorant Garamond', Georgia, serif);
+  font-size: 1.85rem;
   font-weight: 700;
-  color: var(--paper-bright, #fdfaf2);
+  color: #fff;
   margin: 0;
   line-height: 1;
 }
 
-.stat-info p {
+.kpi-stat-info p {
   margin: 4px 0 0;
-  color: var(--ink-mute, rgba(233, 223, 200, 0.68));
-  font-size: 0.82rem;
+  color: var(--desk-muted);
+  font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  font-weight: 600;
 }
 
-/* Search Section */
-.search-section {
-  background: rgba(20, 15, 12, 0.88);
-  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
-  border-radius: 16px;
-  padding: 1.5rem 2rem;
+.pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+  background: #f59e0b;
+  box-shadow: 0 0 8px #f59e0b;
+  margin-left: 4px;
+  animation: pulseAmber 1.8s infinite;
+}
+
+@keyframes pulseAmber {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 12px #f59e0b; }
+  100% { transform: scale(0.9); opacity: 0.7; }
+}
+
+/* ==========================================================================
+   3. UNIVERSAL COMMAND BAR (SEARCH, FILTERS, VIEW TOGGLE)
+   ========================================================================== */
+.desk-command-panel {
+  background: var(--desk-panel);
+  border: 1px solid var(--desk-gold-border);
+  border-radius: 18px;
+  padding: 1.35rem 1.6rem;
   margin-bottom: 2rem;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(20px);
 }
 
-.search-header h3 {
-  font-family: var(--display, serif);
-  font-size: 1.15rem;
-  color: var(--gold-3, #f0d48a);
-  margin: 0 0 1rem;
+.command-top-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
-.search-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr auto;
-  gap: 1.25rem;
-  align-items: end;
-}
-
-.search-input-group label {
-  display: block;
-  font-size: 0.82rem;
-  color: var(--ink-mute, rgba(233, 223, 200, 0.68));
-  margin-bottom: 0.4rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.search-input-wrapper {
+.command-search-wrap {
+  flex: 1;
+  min-width: 280px;
   position: relative;
 }
 
-.search-input-wrapper i {
+.command-search-wrap i.search-icon {
   position: absolute;
-  left: 0.9rem;
+  left: 14px;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--gold, #d4a64a);
-  font-size: 0.85rem;
+  color: var(--desk-gold);
+  font-size: 0.95rem;
+  pointer-events: none;
 }
 
-.search-input,
-.filter-select {
+.command-search-input {
   width: 100%;
-  background: rgba(14, 10, 6, 0.85) !important;
-  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35)) !important;
-  border-radius: 8px !important;
-  color: var(--paper-bright, #fdfaf2) !important;
-  font-family: var(--serif, Georgia, serif) !important;
+  background: rgba(12, 9, 16, 0.9) !important;
+  border: 1px solid var(--desk-gold-border) !important;
+  border-radius: 12px !important;
+  padding: 0.7rem 1rem 0.7rem 2.5rem !important;
+  color: #fff !important;
+  font-family: var(--serif, serif) !important;
   font-size: 0.95rem !important;
-  padding: 0.65rem 1rem !important;
   outline: none !important;
+  transition: all 0.25s ease !important;
+  box-sizing: border-box;
+}
+
+.command-search-input:focus {
+  border-color: var(--desk-gold-bright) !important;
+  box-shadow: 0 0 18px var(--desk-gold-glow) !important;
+  background: rgba(18, 14, 24, 0.95) !important;
+}
+
+.command-select-wrap {
+  min-width: 160px;
+}
+
+.command-select {
+  width: 100%;
+  background: rgba(12, 9, 16, 0.9) !important;
+  border: 1px solid var(--desk-gold-border) !important;
+  border-radius: 12px !important;
+  padding: 0.7rem 1rem !important;
+  color: var(--desk-paper) !important;
+  font-family: var(--serif, serif) !important;
+  font-size: 0.92rem !important;
+  outline: none !important;
+  cursor: pointer;
   transition: all 0.25s ease !important;
 }
 
-.search-input {
-  padding-left: 2.4rem !important;
+.command-select:focus {
+  border-color: var(--desk-gold);
+  box-shadow: 0 0 15px var(--desk-gold-glow);
 }
 
-.search-input:focus,
-.filter-select:focus {
-  border-color: var(--gold-3, #f0d48a) !important;
-  box-shadow: 0 0 15px rgba(212, 166, 74, 0.3) !important;
+.command-select option {
+  background: #120e18;
+  color: #fdfaf2;
+  padding: 8px;
 }
 
-.search-actions {
+/* View Mode Switcher */
+.view-mode-toggle {
   display: flex;
-  gap: 8px;
+  background: rgba(12, 9, 16, 0.85);
+  border: 1px solid var(--desk-gold-border);
+  border-radius: 10px;
+  padding: 3px;
+  gap: 2px;
 }
 
-/* Content Grid */
-.content-grid {
+.view-btn {
+  background: transparent;
+  border: none;
+  color: var(--desk-paper-dim);
+  padding: 0.5rem 0.9rem;
+  border-radius: 7px;
+  font-size: 0.85rem;
+  font-family: var(--serif, serif);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.view-btn.active {
+  background: rgba(212, 166, 74, 0.2);
+  color: var(--desk-gold-bright);
+  font-weight: 700;
+  box-shadow: 0 0 12px rgba(212, 166, 74, 0.25);
+}
+
+.view-btn:hover:not(.active) {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Quick Filter Chips */
+.command-chips-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid rgba(212, 166, 74, 0.12);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.command-chips-row::-webkit-scrollbar {
+  display: none;
+}
+
+.filter-chip-btn {
+  background: rgba(20, 15, 26, 0.8);
+  border: 1px solid rgba(212, 166, 74, 0.2);
+  color: var(--desk-paper-dim);
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.82rem;
+  font-family: var(--serif, serif);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-chip-btn:hover {
+  border-color: var(--desk-gold);
+  color: var(--desk-gold-bright);
+}
+
+.filter-chip-btn.active {
+  background: rgba(212, 166, 74, 0.18);
+  border-color: var(--desk-gold);
+  color: var(--desk-gold-bright);
+  font-weight: 700;
+}
+
+.chip-count {
+  background: rgba(212, 166, 74, 0.15);
+  font-size: 0.72rem;
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-family: var(--mono, monospace);
+}
+
+/* ==========================================================================
+   4. TWO-COLUMN WORKSPACE GRID
+   ========================================================================== */
+.desk-main-grid {
   display: grid;
-  grid-template-columns: 1fr 400px;
-  gap: 2rem;
+  grid-template-columns: 1fr 380px;
+  gap: 1.75rem;
+  align-items: start;
 }
 
-@media (max-width: 1100px) {
-  .content-grid {
+@media (max-width: 1180px) {
+  .desk-main-grid {
     grid-template-columns: 1fr;
   }
 }
 
-/* Users List Section */
-.users-section {
-  background: rgba(20, 15, 12, 0.9);
-  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
-  border-radius: 16px;
+/* Seeker Roster Container */
+.seeker-roster-panel {
+  background: var(--desk-panel);
+  border: 1px solid var(--desk-gold-border);
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(20px);
 }
 
-.section-header-bar {
-  background: linear-gradient(135deg, rgba(212, 166, 74, 0.25) 0%, rgba(106, 16, 16, 0.3) 100%);
-  border-bottom: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
-  padding: 1rem 1.5rem;
+.panel-header-strip {
+  background: linear-gradient(135deg, rgba(212, 166, 74, 0.18) 0%, rgba(18, 14, 24, 0.98) 100%);
+  border-bottom: 1px solid var(--desk-gold-border);
+  padding: 1.1rem 1.6rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.section-header-bar h2 {
+.panel-header-strip h2 {
   font-family: var(--display, serif);
-  font-size: 1.3rem;
-  color: var(--paper-bright, #fdfaf2);
+  font-size: 1.35rem;
+  color: #fff;
   margin: 0;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 0.6rem;
 }
 
-.user-count-badge {
-  background: rgba(212, 166, 74, 0.15);
-  color: var(--gold-3, #f0d48a);
-  border: 1px solid rgba(212, 166, 74, 0.35);
-  padding: 3px 10px;
+.panel-header-strip h2 i {
+  color: var(--desk-gold);
+}
+
+.roster-count-pill {
+  background: rgba(212, 166, 74, 0.12);
+  color: var(--desk-gold-bright);
+  border: 1px solid rgba(212, 166, 74, 0.3);
+  padding: 3px 12px;
   border-radius: 999px;
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-family: var(--mono, monospace);
+  font-weight: 700;
 }
 
-.users-list {
+.seeker-cards-container {
   padding: 1.25rem;
-  max-height: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  max-height: 850px;
   overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(212, 166, 74, 0.3) transparent;
 }
 
-/* User Card */
-.user-card-new {
-  background: rgba(22, 17, 26, 0.95);
-  border: 1px solid rgba(212, 166, 74, 0.28);
-  border-radius: 14px;
-  margin-bottom: 1.25rem;
-  transition: all 0.25s ease;
+/* ==========================================================================
+   5. SACRED SEEKER DOSSIER CARD
+   ========================================================================== */
+.seeker-dossier-card {
+  background: var(--desk-panel-card);
+  border: 1px solid rgba(212, 166, 74, 0.22);
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
 }
 
-.user-card-new:hover {
+.seeker-dossier-card:hover {
   transform: translateY(-2px);
-  border-color: var(--gold, #d4a64a);
-  box-shadow: 0 8px 24px rgba(212, 166, 74, 0.18);
+  border-color: var(--desk-gold);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.7), 0 0 20px var(--desk-gold-glow);
 }
 
-.user-card-new.approved { border-left: 4px solid #10b981; }
-.user-card-new.pending { border-left: 4px solid #f59e0b; }
-.user-card-new.suspended { border-left: 4px solid #ef4444; }
-.user-card-new.admin { border-left: 4px solid #3b82f6; }
+.seeker-dossier-card.status-approved { border-left: 4px solid var(--desk-emerald); }
+.seeker-dossier-card.status-pending { border-left: 4px solid var(--desk-amber); }
+.seeker-dossier-card.status-suspended { border-left: 4px solid var(--desk-crimson); }
+.seeker-dossier-card.status-admin { border-left: 4px solid var(--desk-azure); }
 
-.user-card-header {
+.card-upper-row {
+  padding: 1.25rem 1.4rem;
   display: flex;
   align-items: center;
-  padding: 1.25rem;
-  gap: 1.25rem;
+  gap: 1.15rem;
 }
 
-.user-avatar-new {
-  width: 54px;
-  height: 54px;
-  border-radius: 12px;
-  overflow: hidden;
+.seeker-avatar-box {
+  position: relative;
+  width: 56px;
+  height: 56px;
   flex-shrink: 0;
-  border: 1.5px solid var(--gold, #d4a64a);
 }
 
-.user-avatar-new img {
-  width: 100%;
-  height: 100%;
+.seeker-avatar-monogram {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  border: 1.5px solid var(--desk-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display, serif);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--desk-gold-bright);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(135deg, #2b1f3d 0%, #160f22 100%);
+}
+
+.seeker-avatar-img {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  border: 1.5px solid var(--desk-gold);
   object-fit: cover;
 }
 
-.user-info-new {
+.active-dot-indicator {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #0e0a12;
+  background: #6b7280;
+}
+
+.active-dot-indicator.online { background: #10b981; box-shadow: 0 0 8px #10b981; }
+.active-dot-indicator.recent { background: #f59e0b; box-shadow: 0 0 8px #f59e0b; }
+
+.seeker-identity-info {
   flex: 1;
   min-width: 0;
 }
 
-.user-fullname {
-  font-family: var(--display, serif);
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--gold-3, #f0d48a);
-  margin: 0;
+.seeker-name-headline {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.25rem;
 }
 
-.user-spiritual {
-  font-size: 0.9rem;
-  color: var(--gold, #d4a64a);
+.seeker-fullname-txt {
+  font-family: var(--display, serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.seeker-spiritual-alias {
+  font-size: 0.95rem;
+  color: var(--desk-gold-bright);
   font-style: italic;
 }
 
-.user-meta {
+.seeker-meta-tags {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-top: 4px;
+  flex-wrap: wrap;
+  font-size: 0.82rem;
+  color: var(--desk-paper-dim);
+}
+
+.seeker-username-pill {
+  color: var(--desk-gold);
+  font-family: var(--mono, monospace);
+  font-size: 0.8rem;
+}
+
+.seeker-badges-cluster {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
   flex-wrap: wrap;
 }
 
-.user-username-new,
-.user-email-new {
-  color: var(--paper-2, #d6c9a3);
-  font-size: 0.85rem;
-}
-
-.user-badges {
-  display: flex;
-  gap: 6px;
-  flex-shrink: 0;
-}
-
-.badge-new {
-  padding: 4px 10px;
+.sacred-badge {
+  padding: 3px 10px;
   border-radius: 6px;
   font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
-.badge-admin { background: rgba(59, 130, 246, 0.2); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.4); }
-.badge-approved { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); }
-.badge-pending { background: rgba(245, 158, 11, 0.2); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.4); }
-.badge-suspended { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); }
-.badge-role { background: rgba(157, 78, 221, 0.2); color: #d8b4fe; border: 1px solid rgba(157, 78, 221, 0.4); }
+.badge-approved { background: rgba(16, 185, 129, 0.15); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); }
+.badge-pending { background: rgba(245, 158, 11, 0.15); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.45); }
+.badge-suspended { background: rgba(239, 68, 68, 0.15); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); }
+.badge-admin { background: rgba(59, 130, 246, 0.15); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.4); }
+.badge-role { background: rgba(212, 166, 74, 0.12); color: var(--desk-gold-bright); border: 1px solid rgba(212, 166, 74, 0.28); }
 
-.user-card-actions {
+/* Card Actions */
+.seeker-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.card-action-icon-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(14, 10, 18, 0.85);
+  border: 1px solid var(--desk-gold-border);
+  color: var(--desk-paper-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.card-action-icon-btn:hover {
+  transform: translateY(-2px);
+}
+
+.card-action-icon-btn.view:hover { background: rgba(59, 130, 246, 0.25); color: #93c5fd; border-color: #3b82f6; }
+.card-action-icon-btn.chat:hover { background: rgba(212, 166, 74, 0.25); color: var(--desk-gold-bright); border-color: var(--desk-gold); }
+.card-action-icon-btn.approve:hover { background: rgba(16, 185, 129, 0.25); color: #6ee7b7; border-color: #10b981; }
+.card-action-icon-btn.reject:hover, .card-action-icon-btn.suspend:hover { background: rgba(239, 68, 68, 0.25); color: #fca5a5; border-color: #ef4444; }
+
+/* Lower Card Info Grid */
+.card-details-strip {
+  padding: 0.85rem 1.4rem 1.15rem;
+  border-top: 1px solid rgba(212, 166, 74, 0.12);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.detail-pill-box {
+  background: rgba(14, 10, 18, 0.7);
+  border: 1px solid rgba(212, 166, 74, 0.15);
+  border-radius: 10px;
+  padding: 0.65rem 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.detail-pill-box i {
+  color: var(--desk-gold);
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+.detail-pill-texts {
+  min-width: 0;
+}
+
+.detail-pill-label {
+  display: block;
+  font-size: 0.68rem;
+  color: var(--desk-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+}
+
+.detail-pill-val {
+  display: block;
+  font-size: 0.85rem;
+  color: #fff;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Sādhana Purpose Box */
+.card-purpose-banner {
+  margin: 0 1.4rem 1.15rem;
+  background: rgba(14, 10, 18, 0.65);
+  border: 1px solid rgba(212, 166, 74, 0.15);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.card-purpose-banner i {
+  color: var(--desk-gold);
+  font-size: 0.85rem;
+  margin-top: 3px;
+  opacity: 0.8;
+}
+
+.card-purpose-content {
+  font-size: 0.85rem;
+  color: var(--desk-paper-dim);
+  line-height: 1.45;
+  flex: 1;
+}
+
+.card-purpose-more-btn {
+  background: transparent;
+  border: none;
+  color: var(--desk-gold-bright);
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0 4px;
+}
+
+/* ==========================================================================
+   6. COMPACT SACRED TABLE VIEW
+   ========================================================================== */
+.seeker-table-wrapper {
+  padding: 0;
+  max-height: 850px;
+  overflow: auto;
+}
+
+.sacred-roster-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.sacred-roster-table thead th {
+  position: sticky;
+  top: 0;
+  background: #140f1a;
+  border-bottom: 1.5px solid var(--desk-gold-border);
+  color: var(--desk-gold-bright);
+  font-family: var(--display, serif);
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.9rem 1.1rem;
+  text-align: left;
+  z-index: 10;
+}
+
+.sacred-roster-table tbody tr {
+  border-bottom: 1px solid rgba(212, 166, 74, 0.12);
+  transition: background 0.15s ease;
+}
+
+.sacred-roster-table tbody tr:hover {
+  background: rgba(212, 166, 74, 0.06);
+}
+
+.sacred-roster-table td {
+  padding: 0.85rem 1.1rem;
+  vertical-align: middle;
+}
+
+.table-user-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.table-user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--desk-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--desk-gold-bright);
+  background: #20172e;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.table-user-name {
+  font-weight: 700;
+  color: #fff;
+  font-family: var(--display, serif);
+  font-size: 1.05rem;
+}
+
+.table-user-handle {
+  font-size: 0.76rem;
+  color: var(--desk-muted);
+  font-family: var(--mono, monospace);
+}
+
+/* ==========================================================================
+   7. SIDEBAR CARDS (REQUESTS QUEUE & ANALYTICS)
+   ========================================================================== */
+.desk-sidebar-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.desk-sidebar-card {
+  background: var(--desk-panel);
+  border: 1px solid var(--desk-gold-border);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(20px);
+}
+
+.sidebar-card-header {
+  padding: 1.1rem 1.4rem;
+  border-bottom: 1px solid var(--desk-gold-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar-card-header.requests-theme {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(20, 15, 26, 0.98) 100%);
+}
+
+.sidebar-card-header.charts-theme {
+  background: linear-gradient(135deg, rgba(212, 166, 74, 0.15) 0%, rgba(20, 15, 26, 0.98) 100%);
+}
+
+.sidebar-card-header h3 {
+  font-family: var(--display, serif);
+  font-size: 1.2rem;
+  color: #fff;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sidebar-badge {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fcd34d;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.requests-queue-list {
+  padding: 1rem;
+  max-height: 420px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.request-queue-item {
+  background: var(--desk-panel-card);
+  border: 1px solid rgba(212, 166, 74, 0.2);
+  border-radius: 12px;
+  padding: 0.95rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  transition: all 0.2s ease;
+}
+
+.request-queue-item:hover {
+  border-color: var(--desk-gold);
+}
+
+.req-user-headline {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 0.45rem;
+}
+
+.req-avatar-mini {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--desk-gold);
+  background: #241a36;
+  color: var(--desk-gold-bright);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.req-user-name {
+  font-weight: 700;
+  color: #fff;
+  font-size: 0.92rem;
+}
+
+.req-stage-callout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(14, 10, 18, 0.7);
+  padding: 0.45rem 0.75rem;
+  border-radius: 8px;
+  margin-bottom: 0.65rem;
+}
+
+.req-stage-name {
+  color: var(--desk-gold-bright);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.req-stage-time {
+  font-size: 0.72rem;
+  color: var(--desk-muted);
+}
+
+.req-btn-row {
   display: flex;
   gap: 6px;
 }
 
-.action-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
-  background: rgba(14, 10, 6, 0.8);
-  color: var(--paper-bright, #fdfaf2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 0.88rem;
-  text-decoration: none;
-}
-
-.action-btn.view:hover { background: rgba(59, 130, 246, 0.3); color: #93c5fd; border-color: #3b82f6; }
-.action-btn.approve:hover { background: rgba(16, 185, 129, 0.3); color: #6ee7b7; border-color: #10b981; }
-.action-btn.reject:hover, .action-btn.suspend:hover { background: rgba(239, 68, 68, 0.3); color: #fca5a5; border-color: #ef4444; }
-
-.user-card-body {
-  padding: 0 1.25rem 1.25rem;
-  border-top: 1px solid rgba(212, 166, 74, 0.12);
-}
-
-.user-details-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.75rem;
-  padding-top: 1rem;
-}
-
-.detail-item {
-  background: rgba(14, 10, 6, 0.7);
-  border: 1px solid rgba(212, 166, 74, 0.15);
-  border-radius: 8px;
-  padding: 0.6rem;
-  text-align: center;
-}
-
-.detail-item i {
-  color: var(--gold, #d4a64a);
-  margin-bottom: 2px;
-}
-
-.detail-label {
-  display: block;
-  font-size: 0.7rem;
-  color: var(--ink-mute, rgba(233, 223, 200, 0.68));
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.detail-value {
-  display: block;
-  font-weight: 600;
-  color: var(--paper-bright, #fdfaf2);
-  font-size: 0.85rem;
-}
-
-.purpose-section {
-  margin-top: 0.85rem;
-  padding: 0.85rem;
-  background: rgba(14, 10, 6, 0.7);
-  border: 1px solid rgba(212, 166, 74, 0.15);
-  border-radius: 8px;
-}
-
-.purpose-section h4 {
-  font-size: 0.75rem;
-  color: var(--gold, #d4a64a);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin: 0 0 4px 0;
-}
-
-.purpose-text-new {
-  font-size: 0.88rem;
-  color: var(--paper-2, #d6c9a3);
-  line-height: 1.5;
-  margin: 0;
-}
-
-/* Sidebar Section */
-.sidebar-section {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.requests-card,
-.chart-card {
-  background: rgba(20, 15, 12, 0.9);
-  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-}
-
-.requests-header {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.3) 0%, rgba(106, 16, 16, 0.3) 100%);
-  border-bottom: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
-  padding: 1rem 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.requests-header h3,
-.chart-header h3 {
-  font-family: var(--display, serif);
-  font-size: 1.15rem;
-  color: var(--paper-bright, #fdfaf2);
-  margin: 0;
-}
-
-.requests-count-badge {
-  background: rgba(245, 158, 11, 0.2);
-  color: #fcd34d;
-  border: 1px solid rgba(245, 158, 11, 0.4);
-  padding: 2px 8px;
-  border-radius: 999px;
-  font-size: 0.75rem;
-}
-
-.requests-list {
-  padding: 1rem;
-  max-height: 380px;
-  overflow-y: auto;
-}
-
-.request-card {
-  background: rgba(14, 10, 6, 0.7);
-  border: 1px solid rgba(212, 166, 74, 0.2);
-  border-radius: 10px;
-  padding: 0.85rem;
-  margin-bottom: 0.75rem;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.request-info {
+.btn-req-action {
   flex: 1;
-}
-
-.request-name {
-  font-weight: 600;
-  color: var(--gold-3, #f0d48a);
-  font-size: 0.9rem;
-}
-
-.request-stage {
+  padding: 0.4rem 0.65rem;
+  border-radius: 8px;
   font-size: 0.8rem;
-  color: var(--paper-2, #d6c9a3);
-}
-
-.request-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
+  font-family: var(--serif, serif);
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 5px;
   cursor: pointer;
   border: none;
-  font-size: 0.85rem;
   transition: all 0.2s ease;
 }
 
-.request-btn.approve { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); }
-.request-btn.approve:hover { background: rgba(16, 185, 129, 0.4); }
-.request-btn.reject { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); }
-.request-btn.reject:hover { background: rgba(239, 68, 68, 0.4); }
+.btn-req-action.approve {
+  background: rgba(16, 185, 129, 0.2);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.45);
+}
 
-.empty-requests {
-  padding: 2rem;
+.btn-req-action.approve:hover {
+  background: rgba(16, 185, 129, 0.4);
+}
+
+.btn-req-action.reject {
+  background: rgba(239, 68, 68, 0.18);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.btn-req-action.reject:hover {
+  background: rgba(239, 68, 68, 0.35);
+}
+
+.empty-req-state {
+  padding: 2.5rem 1rem;
   text-align: center;
 }
 
-.empty-icon {
-  width: 50px;
-  height: 50px;
+.empty-req-icon {
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   background: rgba(16, 185, 129, 0.15);
   border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #6ee7b7;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 1.5rem;
   margin: 0 auto 0.75rem;
-  color: #6ee7b7;
-  font-size: 1.4rem;
 }
 
-.empty-requests p {
-  font-size: 0.9rem;
-  color: var(--ink-mute, rgba(233, 223, 200, 0.68));
+.empty-req-state p {
+  color: var(--desk-muted);
+  font-size: 0.88rem;
   margin: 0;
 }
 
-.chart-card {
-  padding: 1.5rem;
-}
-
-.chart-header {
-  border-bottom: 1px solid rgba(212, 166, 74, 0.15);
-  padding-bottom: 0.75rem;
-  margin-bottom: 1rem;
-}
-
-.stat-bar-item {
-  margin-bottom: 0.85rem;
-}
-
-.stat-bar-header {
+/* Charts Card */
+.charts-card-body {
+  padding: 1.25rem 1.4rem;
   display: flex;
-  justify-content: space-between;
-  font-size: 0.82rem;
-  color: var(--paper-2, #d6c9a3);
-  margin-bottom: 4px;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-.stat-bar-track {
-  height: 8px;
-  border-radius: 999px;
-  background: rgba(14, 10, 6, 0.8);
-  border: 1px solid rgba(212, 166, 74, 0.15);
+.chart-block h4 {
+  font-family: var(--display, serif);
+  font-size: 1rem;
+  color: var(--desk-gold-bright);
+  margin: 0 0 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ==========================================================================
+   8. SACRED MODALS & TOAST FEEDBACK
+   ========================================================================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 3, 6, 0.88);
+  backdrop-filter: blur(12px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s ease;
+  padding: 1.25rem;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-box {
+  background: linear-gradient(145deg, rgba(26, 20, 32, 0.98) 0%, rgba(14, 10, 18, 0.98) 100%);
+  border: 1px solid var(--desk-gold);
+  border-radius: 18px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85), 0 0 30px var(--desk-gold-glow);
+  width: 100%;
+  max-width: 540px;
   overflow: hidden;
+  animation: modalScale 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.stat-bar-fill {
-  height: 100%;
-  border-radius: 999px;
-  background: linear-gradient(90deg, var(--gold, #d4a64a), var(--gold-3, #f0d48a));
+@keyframes modalScale {
+  from { transform: scale(0.95) translateY(10px); }
+  to { transform: scale(1) translateY(0); }
 }
 
-/* Device-Agnostic Responsive Rules for Admin Dashboard */
+.modal-box-header {
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid var(--desk-gold-border);
+  background: linear-gradient(135deg, rgba(212, 166, 74, 0.15) 0%, rgba(14, 10, 18, 0.98) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-box-header h3 {
+  font-family: var(--display, serif);
+  font-size: 1.3rem;
+  color: #fff;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.modal-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--desk-paper-dim);
+  font-size: 1.4rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.modal-close-btn:hover {
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.12);
+}
+
+.modal-box-body {
+  padding: 1.5rem;
+  font-size: 0.95rem;
+  color: var(--desk-paper);
+  line-height: 1.6;
+}
+
+.modal-box-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid rgba(212, 166, 74, 0.15);
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  background: rgba(14, 10, 18, 0.6);
+}
+
+/* Toast Notifications */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 10010;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  min-width: 320px;
+  max-width: 440px;
+  background: rgba(20, 16, 26, 0.98);
+  border: 1px solid var(--desk-gold-border);
+  border-radius: 12px;
+  padding: 0.85rem 1.15rem;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8), 0 0 15px var(--desk-gold-glow);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #fff;
+  font-size: 0.88rem;
+  animation: toastIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(15px);
+}
+
+@keyframes toastIn {
+  from { transform: translateX(40px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.toast.success { border-left: 4px solid var(--desk-emerald); }
+.toast.error { border-left: 4px solid var(--desk-crimson); }
+
+.toast-icon {
+  font-size: 1.15rem;
+}
+
+.toast.success .toast-icon { color: #6ee7b7; }
+.toast.error .toast-icon { color: #fca5a5; }
+
+.toast-content {
+  flex: 1;
+}
+
+.toast-close {
+  background: transparent;
+  border: none;
+  color: var(--desk-muted);
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+/* Empty State */
+.desk-empty-state {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.empty-state-symbol {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(212, 166, 74, 0.1);
+  border: 1px solid rgba(212, 166, 74, 0.3);
+  color: var(--desk-gold-bright);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin: 0 auto 1.2rem;
+}
+
+.desk-empty-state h3 {
+  font-family: var(--display, serif);
+  font-size: 1.5rem;
+  color: #fff;
+  margin: 0 0 0.5rem;
+}
+
+.desk-empty-state p {
+  color: var(--desk-muted);
+  margin: 0 0 1.25rem;
+  font-size: 0.95rem;
+}
+
+/* Responsive */
 @media (max-width: 1024px) {
-  .quick-stats {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-  }
-  .search-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .desk-kpi-ribbon {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (max-width: 768px) {
-  .admin-dashboard {
-    padding: 1.5rem 0.75rem 3rem;
+  .admin-desk-page {
+    padding: 1.25rem 0.75rem 3rem;
   }
-  .dashboard-header {
+  .desk-header {
     flex-direction: column;
-    align-items: flex-start;
-    padding: 1.25rem 1rem;
-    gap: 1rem;
+    align-items: stretch;
+    padding: 1.25rem 1.2rem;
   }
-  .dashboard-actions {
+  .desk-kpi-ribbon {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .command-top-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .command-select-wrap {
     width: 100%;
   }
-  .dashboard-actions .btn {
-    width: 100%;
-    justify-content: center;
-  }
-  .search-grid {
-    grid-template-columns: 1fr;
-  }
-  .user-card-header {
+  .card-upper-row {
     flex-wrap: wrap;
-    gap: 0.75rem;
     padding: 1rem;
   }
-  .user-card-actions {
-    width: 100%;
-    justify-content: flex-end;
-    margin-top: 6px;
-  }
-  .user-details-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.5rem;
+  .card-details-strip {
+    grid-template-columns: 1fr;
+    padding: 0.75rem 1rem 1rem;
   }
 }
 
 @media (max-width: 480px) {
-  .quick-stats {
-    grid-template-columns: 1fr;
-  }
-  .dashboard-title h1 {
-    font-size: 1.5rem;
-  }
-  .user-details-grid {
+  .desk-kpi-ribbon {
     grid-template-columns: 1fr;
   }
 }
@@ -700,174 +1309,260 @@
 {% endblock %}
 
 {% block content %}
-<section class="admin-dashboard">
+<section class="admin-desk-page">
     <div class="container">
-        <!-- Dashboard Header -->
-        <div class="dashboard-header">
-            <div class="dashboard-title-section">
-                <div class="dashboard-icon">👥</div>
-                <div class="dashboard-title">
-                    <h1>User Management</h1>
-                    <p>Manage users, approvals, and access requests</p>
+        <!-- 1. HERO HEADER BANNER -->
+        <div class="desk-header">
+            <div class="desk-header-brand">
+                <div class="desk-icon-emblem">
+                    <i class="fas fa-users-gear"></i>
+                </div>
+                <div class="desk-title-group">
+                    <div class="desk-shloka-badge">
+                        <i class="fas fa-om"></i>
+                        <span>॥ साधक प्रशासन एवं दीक्षा व्यवस्था ॥</span>
+                    </div>
+                    <h1>Seeker Administration Desk</h1>
+                    <p>Sanctuary user vetting, stage authorizations, vows tracking, and sadhak governance.</p>
                 </div>
             </div>
-            <div class="dashboard-actions">
-                <a href="{{ url_for('auth.user_report') }}" class="btn btn-primary" id="downloadBtn">
-                    <i class="fas fa-download"></i>
+            <div class="desk-header-actions">
+                <a href="/admin/chat" class="btn-sacred-dark" title="Open Real-Time Mentorship Desk">
+                    <i class="fas fa-comments"></i>
+                    <span>Mentorship Chat</span>
+                    {% if unread_chat_count and unread_chat_count > 0 %}
+                        <span style="background: #eab308; color: #0c0a08; font-size: 0.68rem; font-weight: 800; padding: 2px 7px; border-radius: 999px;">{{ unread_chat_count }} new</span>
+                    {% endif %}
+                </a>
+                <a href="/admin/mandala-sadhana" class="btn-sacred-dark" title="Inspect Mandala Sādhana Registrations">
+                    <i class="fas fa-scroll"></i>
+                    <span>Sādhana Vows</span>
+                </a>
+                <a href="{{ url_for('auth.user_report') }}" class="btn-sacred-gold" id="downloadBtn" title="Export Excel Dossier Report">
+                    <i class="fas fa-file-excel"></i>
                     <span>Export Report</span>
                 </a>
             </div>
         </div>
 
-        <!-- Quick Stats -->
-        <div class="quick-stats">
-            <div class="stat-card">
-                <div class="stat-icon total">👤</div>
-                <div class="stat-info">
+        <!-- 2. KPI LIVE METRIC RIBBON -->
+        <div class="desk-kpi-ribbon">
+            <div class="kpi-stat-card">
+                <div class="kpi-stat-icon total">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="kpi-stat-info">
                     <h3 id="stat-total">--</h3>
-                    <p>Total Users</p>
+                    <p>Total Seekers</p>
                 </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-icon approved">✓</div>
-                <div class="stat-info">
+            <div class="kpi-stat-card">
+                <div class="kpi-stat-icon approved">
+                    <i class="fas fa-certificate"></i>
+                </div>
+                <div class="kpi-stat-info">
                     <h3 id="stat-approved">--</h3>
-                    <p>Approved</p>
+                    <p>Approved Sādhaks</p>
                 </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-icon pending">⏳</div>
-                <div class="stat-info">
+            <div class="kpi-stat-card">
+                <div class="kpi-stat-icon pending">
+                    <i class="fas fa-user-clock"></i>
+                </div>
+                <div class="kpi-stat-info">
                     <h3 id="stat-pending">--</h3>
-                    <p>Pending</p>
+                    <p>Pending Vetting {% if pending_users_count and pending_users_count > 0 %}<span class="pulse-dot"></span>{% endif %}</p>
                 </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-icon suspended">⛔</div>
-                <div class="stat-info">
+            <div class="kpi-stat-card">
+                <div class="kpi-stat-icon requests">
+                    <i class="fas fa-scroll"></i>
+                </div>
+                <div class="kpi-stat-info">
+                    <h3 id="stat-requests">{{ pending_requests|length if pending_requests else 0 }}</h3>
+                    <p>Stage Requests {% if pending_requests and pending_requests|length > 0 %}<span class="pulse-dot" style="background:#ef4444; box-shadow:0 0 8px #ef4444;"></span>{% endif %}</p>
+                </div>
+            </div>
+            <div class="kpi-stat-card">
+                <div class="kpi-stat-icon suspended">
+                    <i class="fas fa-user-slash"></i>
+                </div>
+                <div class="kpi-stat-info">
                     <h3 id="stat-suspended">--</h3>
                     <p>Suspended</p>
                 </div>
             </div>
         </div>
 
-        <!-- CSRF Token for AJAX requests -->
+        <!-- CSRF Token for Secure AJAX Requests -->
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-        <!-- Search & Filter -->
-        <div class="search-section">
-            <div class="search-header">
-                <h3><i class="fas fa-filter"></i> Search & Filter</h3>
-            </div>
-            <form method="GET" action="{{ url_for('auth.admin_users') }}" id="searchForm">
-                <div class="search-grid">
-                    <div class="search-input-group">
-                        <label>Search Users</label>
-                        <div class="search-input-wrapper">
-                            <i class="fas fa-search"></i>
-                            {{ search_form.search_term(class="search-input", placeholder="Search by name, username, or email...", id="searchInput") }}
-                        </div>
+        <!-- 3. UNIVERSAL COMMAND BAR -->
+        <div class="desk-command-panel">
+            <form method="GET" action="{{ url_for('auth.admin_users') }}" id="searchForm" onsubmit="return false;">
+                <div class="command-top-row">
+                    <div class="command-search-wrap">
+                        <i class="fas fa-search search-icon"></i>
+                        {{ search_form.search_term(class="command-search-input", placeholder="Search by name, spiritual alias, @username, or email...", id="searchInput", autocomplete="off") }}
                     </div>
-                    <div class="search-input-group">
-                        <label>Status</label>
-                        {{ search_form.status_filter(class="filter-select", id="statusFilter") }}
+                    <div class="command-select-wrap">
+                        {{ search_form.status_filter(class="command-select", id="statusFilter") }}
                     </div>
-                    <div class="search-input-group">
-                        <label>Role</label>
-                        {{ search_form.role_filter(class="filter-select", id="roleFilter") }}
+                    <div class="command-select-wrap">
+                        {{ search_form.role_filter(class="command-select", id="roleFilter") }}
                     </div>
-                    <div class="search-actions">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-search"></i> Search
+                    <div class="view-mode-toggle" role="group" aria-label="View Mode">
+                        <button type="button" class="view-btn active" id="btnViewCards" title="Dossier Cards View">
+                            <i class="fas fa-grip"></i>
+                            <span>Cards</span>
                         </button>
-                        <a href="{{ url_for('auth.admin_users') }}" class="btn btn-secondary">
-                            <i class="fas fa-times"></i> Clear
-                        </a>
+                        <button type="button" class="view-btn" id="btnViewTable" title="Compact Table View">
+                            <i class="fas fa-list-ul"></i>
+                            <span>Table</span>
+                        </button>
                     </div>
+                </div>
+
+                <div class="command-chips-row">
+                    <span style="font-size: 0.78rem; color: var(--desk-muted); text-transform: uppercase; font-weight: 700; margin-right: 4px;">Quick Filters:</span>
+                    <button type="button" class="filter-chip-btn active" data-filter-status="all">
+                        <span>All Seekers</span>
+                        <span class="chip-count">{{ users|length }}</span>
+                    </button>
+                    <button type="button" class="filter-chip-btn" data-filter-status="pending">
+                        <i class="fas fa-hourglass-half" style="color: #f59e0b;"></i>
+                        <span>Pending Vetting</span>
+                        <span class="chip-count" id="chip-count-pending">0</span>
+                    </button>
+                    <button type="button" class="filter-chip-btn" data-filter-status="approved">
+                        <i class="fas fa-check" style="color: #10b981;"></i>
+                        <span>Approved</span>
+                        <span class="chip-count" id="chip-count-approved">0</span>
+                    </button>
+                    <button type="button" class="filter-chip-btn" data-filter-role="admin">
+                        <i class="fas fa-shield-halved" style="color: #3b82f6;"></i>
+                        <span>Admins & Mentors</span>
+                    </button>
+                    <button type="button" class="filter-chip-btn" data-filter-status="suspended">
+                        <i class="fas fa-ban" style="color: #ef4444;"></i>
+                        <span>Suspended</span>
+                    </button>
                 </div>
             </form>
         </div>
 
-        <!-- Main Content Grid -->
-        <div class="content-grid">
-            <!-- Users Section -->
-            <div class="users-section">
-                <div class="section-header-bar">
-                    <h2><i class="fas fa-users"></i> Users</h2>
-                    <span class="user-count-badge">{{ users|length }} user{{ 's' if users|length != 1 else '' }}</span>
+        <!-- 4. TWO-COLUMN WORKSPACE GRID -->
+        <div class="desk-main-grid">
+            <!-- Left Column: Seeker Dossiers Roster -->
+            <div class="seeker-roster-panel">
+                <div class="panel-header-strip">
+                    <h2>
+                        <i class="fas fa-users-viewfinder"></i>
+                        <span>Initiated Sadhak Roster</span>
+                    </h2>
+                    <span class="roster-count-pill" id="rosterCountPill">{{ users|length }} devotee{{ 's' if users|length != 1 else '' }}</span>
                 </div>
-                
-                <div class="users-list" id="usersGrid">
+
+                <!-- CARDS VIEW (Default) -->
+                <div class="seeker-cards-container" id="usersCardsContainer">
                     {% if users %}
                         {% for user in users %}
-                        <div class="user-card-new {% if user.is_admin() %}admin{% elif not user.is_active %}suspended{% elif not user.is_approved %}pending{% else %}approved{% endif %}" data-user-id="{{ user.id }}">
-                            <div class="user-card-header">
-                                <div class="user-avatar-new">
+                        {% set bg_gradients = [
+                            'linear-gradient(135deg, #78350f 0%, #451a03 100%)',
+                            'linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%)',
+                            'linear-gradient(135deg, #831843 0%, #4c0519 100%)',
+                            'linear-gradient(135deg, #14532d 0%, #052e16 100%)',
+                            'linear-gradient(135deg, #581c87 0%, #2e1065 100%)',
+                            'linear-gradient(135deg, #7c2d12 0%, #360f04 100%)'
+                        ] %}
+                        {% set avatar_bg = bg_gradients[user.id % 6] %}
+                        <div class="seeker-dossier-card {% if user.is_admin() %}status-admin{% elif not user.is_active %}status-suspended{% elif not user.is_approved %}status-pending{% else %}status-approved{% endif %}" 
+                             data-user-id="{{ user.id }}"
+                             data-status="{% if user.is_admin() %}admin{% elif not user.is_active %}suspended{% elif not user.is_approved %}pending{% else %}approved{% endif %}"
+                             data-role="{{ user.role|lower }}">
+                            
+                            <div class="card-upper-row">
+                                <div class="seeker-avatar-box">
                                     {% if user.profile_picture %}
-                                        <img src="{{ url_for('static', filename=user.profile_picture) }}" alt="{{ user.full_name }}" loading="lazy">
+                                        <img src="{{ url_for('static', filename=user.profile_picture) }}" alt="{{ user.full_name }}" class="seeker-avatar-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                        <div class="seeker-avatar-monogram" style="display: none; background: {{ avatar_bg }};">
+                                            {{ (user.full_name or user.username)[:1].upper() }}
+                                        </div>
                                     {% else %}
-                                        <img src="https://i.pravatar.cc/112?u={{ user.id }}" alt="{{ user.full_name }}" loading="lazy">
+                                        <div class="seeker-avatar-monogram" style="background: {{ avatar_bg }};">
+                                            {{ (user.full_name or user.username)[:1].upper() }}
+                                        </div>
                                     {% endif %}
+                                    <span class="active-dot-indicator" id="dot-{{ user.id }}"></span>
                                 </div>
-                                <div class="user-info-new">
-                                    <div class="user-name-row">
-                                        <h4 class="user-fullname">{{ user.full_name }}</h4>
+
+                                <div class="seeker-identity-info">
+                                    <div class="seeker-name-headline">
+                                        <h3 class="seeker-fullname-txt">{{ user.full_name or user.username }}</h3>
                                         {% if user.spiritual_name %}
-                                            <span class="user-spiritual">({{ user.spiritual_name }})</span>
+                                            <span class="seeker-spiritual-alias">({{ user.spiritual_name }})</span>
                                         {% endif %}
                                     </div>
-                                    <div class="user-meta">
-                                        <span class="user-username-new">@{{ user.username }}</span>
-                                        <span class="user-email-new"><i class="fas fa-envelope"></i> {{ user.email }}</span>
+                                    <div class="seeker-meta-tags">
+                                        <span class="seeker-username-pill">@{{ user.username }}</span>
+                                        <span><i class="fas fa-envelope" style="opacity: 0.7;"></i> {{ user.email }}</span>
                                     </div>
                                 </div>
-                                <div class="user-badges">
+
+                                <div class="seeker-badges-cluster">
                                     {% if user.is_admin() %}
-                                        <span class="badge-new badge-admin">Admin</span>
+                                        <span class="sacred-badge badge-admin"><i class="fas fa-shield-halved"></i> Admin</span>
                                     {% elif user.is_approved %}
-                                        <span class="badge-new badge-approved">Approved</span>
+                                        <span class="sacred-badge badge-approved"><i class="fas fa-check"></i> Approved</span>
                                     {% elif not user.is_active %}
-                                        <span class="badge-new badge-suspended">Suspended</span>
+                                        <span class="sacred-badge badge-suspended"><i class="fas fa-ban"></i> Suspended</span>
                                     {% else %}
-                                        <span class="badge-new badge-pending">Pending</span>
+                                        <span class="sacred-badge badge-pending"><i class="fas fa-hourglass-half"></i> Pending Vetting</span>
                                     {% endif %}
-                                    <span class="badge-new badge-role">{{ user.role|title }}</span>
+                                    <span class="sacred-badge badge-role">{{ user.role|title }}</span>
                                 </div>
-                                <div class="user-card-actions">
-                                    <a href="{{ url_for('auth.admin_user_detail', user_id=user.id) }}" class="action-btn view" title="View Details">
+
+                                <div class="seeker-actions-group">
+                                    <a href="{{ url_for('auth.admin_user_detail', user_id=user.id) }}" class="card-action-icon-btn view" title="Inspect Full Seeker Dossier">
                                         <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="/admin/chat?user={{ user.id }}" class="card-action-icon-btn chat" title="Open Spiritual Mentorship Channel">
+                                        <i class="fas fa-comments"></i>
                                     </a>
                                     {% if not user.is_admin() %}
                                         {% if user.is_approved and user.is_active %}
-                                            <button class="action-btn suspend suspend-user" data-user-id="{{ user.id }}" title="Suspend User">
-                                                <i class="fas fa-ban"></i>
+                                            <button type="button" class="card-action-icon-btn suspend suspend-user" data-user-id="{{ user.id }}" title="Suspend Sadhak Account">
+                                                <i class="fas fa-user-slash"></i>
                                             </button>
                                         {% elif not user.is_approved and user.is_active %}
-                                            <button class="action-btn approve approve-user" data-user-id="{{ user.id }}" title="Approve User">
+                                            <button type="button" class="card-action-icon-btn approve approve-user" data-user-id="{{ user.id }}" title="Grant Sanctuary Approval">
                                                 <i class="fas fa-check"></i>
                                             </button>
-                                            <button class="action-btn reject reject-user" data-user-id="{{ user.id }}" title="Reject User">
+                                            <button type="button" class="card-action-icon-btn reject reject-user" data-user-id="{{ user.id }}" title="Reject Registration">
                                                 <i class="fas fa-times"></i>
                                             </button>
                                         {% elif not user.is_active %}
-                                            <button class="action-btn reactivate reactivate-user" data-user-id="{{ user.id }}" title="Reactivate User">
+                                            <button type="button" class="card-action-icon-btn approve reactivate-user" data-user-id="{{ user.id }}" title="Reactivate Sadhak Account">
                                                 <i class="fas fa-undo"></i>
                                             </button>
                                         {% endif %}
                                     {% endif %}
                                 </div>
                             </div>
-                            <div class="user-card-body">
-                                <div class="user-details-grid">
-                                    <div class="detail-item">
-                                        <i class="fas fa-calendar-alt"></i>
-                                        <span class="detail-label">Joined</span>
-                                        <span class="detail-value">{{ user.created_at.strftime('%b %d, %Y') }}</span>
+
+                            <div class="card-details-strip">
+                                <div class="detail-pill-box">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <div class="detail-pill-texts">
+                                        <span class="detail-pill-label">Initiated / Joined</span>
+                                        <span class="detail-pill-val">{{ user.created_at.strftime('%b %d, %Y') if user.created_at else 'Ancient' }}</span>
                                     </div>
-                                    <div class="detail-item">
-                                        <i class="fas fa-clock"></i>
-                                        <span class="detail-label">Last Active</span>
-                                        <span class="detail-value last-active-time" data-timestamp="{{ user.last_active.isoformat() if user.last_active else '' }}">
+                                </div>
+                                <div class="detail-pill-box">
+                                    <i class="fas fa-clock"></i>
+                                    <div class="detail-pill-texts">
+                                        <span class="detail-pill-label">Last Sādhana Activity</span>
+                                        <span class="detail-pill-val last-active-time" data-user-id="{{ user.id }}" data-timestamp="{{ user.last_active.isoformat() if user.last_active else '' }}">
                                             {% if user.last_active %}
                                                 {{ user.last_active.strftime('%b %d, %I:%M %p') }}
                                             {% else %}
@@ -875,100 +1570,228 @@
                                             {% endif %}
                                         </span>
                                     </div>
-                                    <div class="detail-item">
-                                        <i class="fas fa-layer-group"></i>
-                                        <span class="detail-label">Stage Access</span>
-                                        <span class="detail-value">
-                                            {% if user.mandala_3_access %}Stage 3
-                                            {% elif user.mandala_2_access %}Stage 2
-                                            {% elif user.mandala_1_access %}Stage 1
-                                            {% else %}None{% endif %}
+                                </div>
+                                <div class="detail-pill-box">
+                                    <i class="fas fa-layer-group"></i>
+                                    <div class="detail-pill-texts">
+                                        <span class="detail-pill-label">Highest Stage Authorization</span>
+                                        <span class="detail-pill-val" style="color: var(--desk-gold-bright);">
+                                            {% if user.tritiya_charana_access %}Tritiya Charana
+                                            {% elif user.dutiya_charana_access %}Dutiya Charana
+                                            {% elif user.pratham_charana_diksha_access %}Pratham Charana
+                                            {% elif user.rudraksha_14_mukhi_access %}Rudraksha 14 Mukhi
+                                            {% elif user.rudraksha_11_mukhi_access %}Rudraksha 11 Mukhi
+                                            {% elif user.rudraksha_8_mukhi_access %}Rudraksha 8 Mukhi
+                                            {% elif user.mandala_3_access %}Stage 3 (Mandala 3)
+                                            {% elif user.mandala_2_access %}Stage 2 (Mandala 2)
+                                            {% elif user.mandala_1_access %}Stage 1 (Mandala 1)
+                                            {% else %}None (Awaiting Approval){% endif %}
                                         </span>
                                     </div>
                                 </div>
-                                {% if user.purpose %}
-                                <div class="purpose-section">
-                                    <h4><i class="fas fa-heart"></i> Purpose for Sadhana</h4>
-                                    <p class="purpose-text-new">{{ user.purpose[:150] }}{% if user.purpose|length > 150 %}...{% endif %}</p>
-                                    {% if user.purpose|length > 150 %}
-                                        <button class="read-more-btn show-full-purpose" data-purpose="{{ user.purpose }}">Read more</button>
+                            </div>
+
+                            {% if user.purpose %}
+                            <div class="card-purpose-banner">
+                                <i class="fas fa-quote-left"></i>
+                                <div class="card-purpose-content">
+                                    {{ user.purpose[:140] }}{% if user.purpose|length > 140 %}...{% endif %}
+                                    {% if user.purpose|length > 140 %}
+                                        <button type="button" class="card-purpose-more-btn show-full-purpose" data-purpose="{{ user.purpose }}" data-name="{{ user.full_name or user.username }}">Read full vow</button>
                                     {% endif %}
                                 </div>
-                                {% endif %}
                             </div>
+                            {% endif %}
                         </div>
                         {% endfor %}
                     {% else %}
-                        <div class="empty-state">
-                            <div class="empty-icon">🔍</div>
-                            <h3>No Users Found</h3>
-                            <p>No users match your search criteria. Try adjusting your filters.</p>
+                        <div class="desk-empty-state">
+                            <div class="empty-state-symbol">
+                                <i class="fas fa-users-slash"></i>
+                            </div>
+                            <h3>No Seekers Found</h3>
+                            <p>No devotee records matched your current query.</p>
+                            <a href="{{ url_for('auth.admin_users') }}" class="btn-sacred-gold">Reset All Filters</a>
                         </div>
                     {% endif %}
                 </div>
-            </div>
 
-            <!-- Sidebar -->
-            <div class="sidebar-section">
-                <!-- Pending Requests -->
-                <div class="requests-card">
-                    <div class="requests-header">
-                        <h3><i class="fas fa-clock"></i> Stage Access Requests</h3>
-                        <span class="requests-count">{{ pending_requests|length if pending_requests else 0 }}</span>
-                    </div>
-                    <div class="requests-list-new">
-                        {% if pending_requests %}
-                            {% for request in pending_requests %}
-                            <div class="request-item-new" data-request-id="{{ request.id }}">
-                                <div class="request-user-row">
-                                    <div class="request-avatar">
-                                        {% if request.user.profile_picture %}
-                                            <img src="{{ url_for('static', filename=request.user.profile_picture) }}" alt="{{ request.user.full_name }}">
+                <!-- TABLE VIEW (Toggleable) -->
+                <div class="seeker-table-wrapper" id="usersTableContainer" style="display: none;">
+                    <table class="sacred-roster-table">
+                        <thead>
+                            <tr>
+                                <th>Seeker Identity</th>
+                                <th>Spiritual Alias</th>
+                                <th>Stage Access</th>
+                                <th>Joined</th>
+                                <th>Last Active</th>
+                                <th>Status</th>
+                                <th style="text-align: right;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            {% for user in users %}
+                            {% set bg_gradients = [
+                                'linear-gradient(135deg, #78350f 0%, #451a03 100%)',
+                                'linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%)',
+                                'linear-gradient(135deg, #831843 0%, #4c0519 100%)',
+                                'linear-gradient(135deg, #14532d 0%, #052e16 100%)',
+                                'linear-gradient(135deg, #581c87 0%, #2e1065 100%)',
+                                'linear-gradient(135deg, #7c2d12 0%, #360f04 100%)'
+                            ] %}
+                            {% set avatar_bg = bg_gradients[user.id % 6] %}
+                            <tr data-user-id="{{ user.id }}" 
+                                data-status="{% if user.is_admin() %}admin{% elif not user.is_active %}suspended{% elif not user.is_approved %}pending{% else %}approved{% endif %}"
+                                data-role="{{ user.role|lower }}">
+                                <td>
+                                    <div class="table-user-cell">
+                                        {% if user.profile_picture %}
+                                            <img src="{{ url_for('static', filename=user.profile_picture) }}" alt="{{ user.full_name }}" style="width: 38px; height: 38px; border-radius: 9px; object-fit: cover; border: 1px solid var(--desk-gold);">
                                         {% else %}
-                                            <img src="https://i.pravatar.cc/80?u={{ request.user_id }}" alt="User">
+                                            <div class="table-user-avatar" style="background: {{ avatar_bg }};">
+                                                {{ (user.full_name or user.username)[:1].upper() }}
+                                            </div>
+                                        {% endif %}
+                                        <div>
+                                            <div class="table-user-name">{{ user.full_name or user.username }}</div>
+                                            <div class="table-user-handle">@{{ user.username }} · {{ user.email }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span style="color: var(--desk-gold-bright); font-style: italic;">
+                                        {{ user.spiritual_name or '—' }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span style="color: var(--desk-gold); font-weight: 600;">
+                                        {% if user.mandala_3_access %}Stage 3
+                                        {% elif user.mandala_2_access %}Stage 2
+                                        {% elif user.mandala_1_access %}Stage 1
+                                        {% else %}None{% endif %}
+                                    </span>
+                                </td>
+                                <td style="color: var(--desk-paper-dim); font-size: 0.82rem;">
+                                    {{ user.created_at.strftime('%b %d, %Y') if user.created_at else '—' }}
+                                </td>
+                                <td class="last-active-time" data-timestamp="{{ user.last_active.isoformat() if user.last_active else '' }}">
+                                    {% if user.last_active %}
+                                        {{ user.last_active.strftime('%b %d, %I:%M %p') }}
+                                    {% else %}
+                                        Never
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if user.is_admin() %}
+                                        <span class="sacred-badge badge-admin">Admin</span>
+                                    {% elif user.is_approved %}
+                                        <span class="sacred-badge badge-approved">Approved</span>
+                                    {% elif not user.is_active %}
+                                        <span class="sacred-badge badge-suspended">Suspended</span>
+                                    {% else %}
+                                        <span class="sacred-badge badge-pending">Pending</span>
+                                    {% endif %}
+                                </td>
+                                <td style="text-align: right;">
+                                    <div style="display: inline-flex; gap: 4px;">
+                                        <a href="{{ url_for('auth.admin_user_detail', user_id=user.id) }}" class="card-action-icon-btn view" title="View Dossier" style="width: 32px; height: 32px; font-size: 0.8rem;">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="/admin/chat?user={{ user.id }}" class="card-action-icon-btn chat" title="Chat" style="width: 32px; height: 32px; font-size: 0.8rem;">
+                                            <i class="fas fa-comments"></i>
+                                        </a>
+                                        {% if not user.is_admin() %}
+                                            {% if not user.is_approved and user.is_active %}
+                                                <button type="button" class="card-action-icon-btn approve approve-user" data-user-id="{{ user.id }}" title="Approve" style="width: 32px; height: 32px; font-size: 0.8rem;">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                            {% elif user.is_approved and user.is_active %}
+                                                <button type="button" class="card-action-icon-btn suspend suspend-user" data-user-id="{{ user.id }}" title="Suspend" style="width: 32px; height: 32px; font-size: 0.8rem;">
+                                                    <i class="fas fa-user-slash"></i>
+                                                </button>
+                                            {% endif %}
                                         {% endif %}
                                     </div>
-                                    <div class="request-user-info">
-                                        <div class="request-user-name">{{ request.user.full_name }}</div>
-                                        <div class="request-user-handle">@{{ request.user.username }}</div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Right Column: Sidebar Requests Queue & Demographics -->
+            <div class="desk-sidebar-stack">
+                <!-- 1. STAGE ACCESS REQUEST QUEUE -->
+                <div class="desk-sidebar-card">
+                    <div class="sidebar-card-header requests-theme">
+                        <h3>
+                            <i class="fas fa-scroll"></i>
+                            <span>Stage Access Queue</span>
+                        </h3>
+                        <span class="sidebar-badge" id="requestsCountBadge">{{ pending_requests|length if pending_requests else 0 }} Pending</span>
+                    </div>
+
+                    <div class="requests-queue-list" id="requestsQueueList">
+                        {% if pending_requests %}
+                            {% for req in pending_requests %}
+                            <div class="request-queue-item" data-request-id="{{ req.id }}">
+                                <div class="req-user-headline">
+                                    <div class="req-avatar-mini">
+                                        {{ (req.user.full_name or req.user.username)[:1].upper() }}
+                                    </div>
+                                    <div>
+                                        <div class="req-user-name">{{ req.user.full_name or req.user.username }}</div>
+                                        <div style="font-size: 0.75rem; color: var(--desk-muted);">@{{ req.user.username }}</div>
                                     </div>
                                 </div>
-                                <div class="request-stage">
-                                    <div class="request-stage-name">{{ request.get_stage_name() }}</div>
-                                    <div class="request-date">Requested {{ request.requested_at.strftime('%b %d at %I:%M %p') }}</div>
+                                <div class="req-stage-callout">
+                                    <span class="req-stage-name"><i class="fas fa-feather"></i> {{ req.get_stage_name() }}</span>
+                                    <span class="req-stage-time">{{ req.requested_at.strftime('%b %d, %I:%M %p') if req.requested_at else 'Recently' }}</span>
                                 </div>
-                                <div class="request-actions-row">
-                                    <button class="request-btn approve btn-approve-request" data-request-id="{{ request.id }}">
-                                        <i class="fas fa-check"></i> Approve
+                                <div class="req-btn-row">
+                                    <button type="button" class="btn-req-action approve btn-approve-request" data-request-id="{{ req.id }}" title="Grant Stage Access">
+                                        <i class="fas fa-check"></i> Authorize
                                     </button>
-                                    <button class="request-btn reject btn-reject-request" data-request-id="{{ request.id }}">
-                                        <i class="fas fa-times"></i> Reject
+                                    <button type="button" class="btn-req-action reject btn-reject-request" data-request-id="{{ req.id }}" title="Decline Request">
+                                        <i class="fas fa-times"></i> Decline
                                     </button>
                                 </div>
                             </div>
                             {% endfor %}
                         {% else %}
-                            <div class="no-requests-state">
-                                <div class="no-requests-icon">✅</div>
-                                <p>No pending access requests</p>
+                            <div class="empty-req-state">
+                                <div class="empty-req-icon">
+                                    <i class="fas fa-check-double"></i>
+                                </div>
+                                <p>All stage authorizations cleared.</p>
                             </div>
                         {% endif %}
                     </div>
                 </div>
 
-                <!-- Analytics Charts -->
-                <div class="charts-card">
-                    <div class="charts-header">
-                        <h3><i class="fas fa-chart-pie"></i> Analytics</h3>
+                <!-- 2. SANCTUARY DEMOGRAPHICS & STAGE ANALYTICS -->
+                <div class="desk-sidebar-card">
+                    <div class="sidebar-card-header charts-theme">
+                        <h3>
+                            <i class="fas fa-chart-pie"></i>
+                            <span>Sanctuary Analytics</span>
+                        </h3>
                     </div>
-                    <div class="charts-body">
-                        <div class="chart-container">
-                            <h4>User Status Distribution</h4>
-                            <canvas id="userStatusChart"></canvas>
+
+                    <div class="charts-card-body">
+                        <div class="chart-block">
+                            <h4><i class="fas fa-users-rays"></i> Seeker Status Distribution</h4>
+                            <div style="position: relative; height: 180px;">
+                                <canvas id="userStatusChart"></canvas>
+                            </div>
                         </div>
-                        <div class="chart-container">
-                            <h4>Stage Access Distribution</h4>
-                            <canvas id="mandalaAccessChart"></canvas>
+                        <div class="chart-block" style="border-top: 1px solid rgba(212, 166, 74, 0.12); padding-top: 1.25rem;">
+                            <h4><i class="fas fa-layer-group"></i> Mandala Stage Progression</h4>
+                            <div style="position: relative; height: 170px;">
+                                <canvas id="mandalaAccessChart"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -977,38 +1800,41 @@
     </div>
 </section>
 
-<!-- Purpose Modal -->
-<div class="modal-overlay" id="purposeModal">
+<!-- PURPOSE MODAL -->
+<div class="modal-overlay" id="purposeModal" role="dialog" aria-modal="true" aria-labelledby="purposeModalTitle">
     <div class="modal-box">
         <div class="modal-box-header">
-            <h3><i class="fas fa-heart"></i> Purpose for Sadhana</h3>
-            <button class="modal-close-btn" onclick="closePurposeModal()">×</button>
+            <h3 id="purposeModalTitle"><i class="fas fa-heart"></i> Sacred Sādhana Purpose</h3>
+            <button type="button" class="modal-close-btn" onclick="closePurposeModal()" aria-label="Close">×</button>
         </div>
         <div class="modal-box-body" id="purposeModalBody">
-            <!-- Content inserted here -->
-        </div>
-    </div>
-</div>
-
-<!-- Confirmation Modal -->
-<div class="modal-overlay" id="confirmModal">
-    <div class="modal-box">
-        <div class="modal-box-header">
-            <h3><i class="fas fa-exclamation-triangle"></i> Confirm Action</h3>
-            <button class="modal-close-btn" onclick="closeConfirmModal()">×</button>
-        </div>
-        <div class="modal-box-body">
-            <p id="confirmMessage"></p>
+            <!-- Inserted dynamically -->
         </div>
         <div class="modal-box-footer">
-            <button class="btn btn-secondary" onclick="closeConfirmModal()">Cancel</button>
-            <button class="btn btn-danger" id="confirmActionBtn">Confirm</button>
+            <button type="button" class="btn-sacred-gold" onclick="closePurposeModal()">Close Dossier</button>
         </div>
     </div>
 </div>
 
-<!-- Toast Container -->
-<div class="toast-container" id="toastContainer"></div>
+<!-- CONFIRMATION MODAL -->
+<div class="modal-overlay" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmModalTitle">
+    <div class="modal-box">
+        <div class="modal-box-header">
+            <h3 id="confirmModalTitle"><i class="fas fa-shield-halved"></i> Confirm Action</h3>
+            <button type="button" class="modal-close-btn" onclick="closeConfirmModal()" aria-label="Close">×</button>
+        </div>
+        <div class="modal-box-body">
+            <p id="confirmMessage" style="font-size: 1rem; color: #fff; margin: 0;"></p>
+        </div>
+        <div class="modal-box-footer">
+            <button type="button" class="btn-sacred-dark" onclick="closeConfirmModal()">Cancel</button>
+            <button type="button" class="btn-sacred-gold" id="confirmActionBtn" style="background: linear-gradient(135deg, #ef4444, #991b1b); color: #fff; border-color: #f87171;">Confirm</button>
+        </div>
+    </div>
+</div>
+
+<!-- TOAST NOTIFICATION CONTAINER -->
+<div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
 {% endblock %}
 
@@ -1016,110 +1842,173 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Fetch and display stats
+    // 1. Fetch & Animate KPI Stats
     fetchStats();
-    
-    // Setup event listeners
+
+    // 2. Setup Filters & Live Search
     setupSearchFilters();
+
+    // 3. Setup Quick Actions (Approve, Reject, Suspend, Reactivate)
     setupUserActions();
+
+    // 4. Setup Stage Request Handlers
     setupRequestActions();
+
+    // 5. Setup Purpose Modals
     setupPurposeModals();
-    
-    // Format last active times as relative time
+
+    // 6. Format Relative Active Timestamps
     formatLastActiveTimes();
+
+    // 7. Setup View Toggle (Cards vs Table)
+    setupViewSwitcher();
 });
 
+// ==========================================================================
+// VIEW SWITCHER (CARDS VS TABLE)
+// ==========================================================================
+function setupViewSwitcher() {
+    const btnCards = document.getElementById('btnViewCards');
+    const btnTable = document.getElementById('btnViewTable');
+    const cardsContainer = document.getElementById('usersCardsContainer');
+    const tableContainer = document.getElementById('usersTableContainer');
+
+    const savedView = localStorage.getItem('sadhak_admin_view') || 'cards';
+    if (savedView === 'table') {
+        activateTable();
+    } else {
+        activateCards();
+    }
+
+    btnCards.addEventListener('click', activateCards);
+    btnTable.addEventListener('click', activateTable);
+
+    function activateCards() {
+        btnCards.classList.add('active');
+        btnTable.classList.remove('active');
+        cardsContainer.style.display = 'flex';
+        tableContainer.style.display = 'none';
+        localStorage.setItem('sadhak_admin_view', 'cards');
+    }
+
+    function activateTable() {
+        btnTable.classList.add('active');
+        btnCards.classList.remove('active');
+        cardsContainer.style.display = 'none';
+        tableContainer.style.display = 'block';
+        localStorage.setItem('sadhak_admin_view', 'table');
+    }
+}
+
+// ==========================================================================
+// RELATIVE TIME FORMATTER WITH LIVE STATUS DOTS
+// ==========================================================================
 function formatLastActiveTimes() {
     const elements = document.querySelectorAll('.last-active-time');
     elements.forEach(el => {
         const timestamp = el.dataset.timestamp;
+        const userId = el.dataset.userId;
+        const dot = userId ? document.getElementById(`dot-${userId}`) : null;
+
         if (timestamp) {
-            const date = new Date(timestamp + 'Z'); // Add Z to treat as UTC
+            const date = new Date(timestamp.endsWith('Z') ? timestamp : timestamp + 'Z');
             const now = new Date();
             const diffMs = now - date;
             const diffSecs = Math.floor(diffMs / 1000);
             const diffMins = Math.floor(diffSecs / 60);
             const diffHours = Math.floor(diffMins / 60);
             const diffDays = Math.floor(diffHours / 24);
-            
+
             let relativeTime;
             if (diffSecs < 60) {
                 relativeTime = 'Just now';
             } else if (diffMins < 60) {
-                relativeTime = `${diffMins} min${diffMins > 1 ? 's' : ''} ago`;
+                relativeTime = `${diffMins}m ago`;
             } else if (diffHours < 24) {
-                relativeTime = `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+                relativeTime = `${diffHours}h ago`;
             } else if (diffDays < 7) {
-                relativeTime = `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+                relativeTime = `${diffDays}d ago`;
             } else {
-                // Show date for older entries
                 relativeTime = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
             }
-            
-            // Add indicator for recently active users
+
             if (diffMins < 5) {
-                el.innerHTML = `<span style="color: #22c55e;">● ${relativeTime}</span>`;
-            } else if (diffMins < 30) {
-                el.innerHTML = `<span style="color: #f59e0b;">● ${relativeTime}</span>`;
+                el.innerHTML = `<span style="color: #34d399; font-weight: 700;">● ${relativeTime}</span>`;
+                if (dot) {
+                    dot.className = 'active-dot-indicator online';
+                    dot.title = 'Active Just Now';
+                }
+            } else if (diffMins < 45) {
+                el.innerHTML = `<span style="color: #fbbf24; font-weight: 600;">● ${relativeTime}</span>`;
+                if (dot) {
+                    dot.className = 'active-dot-indicator recent';
+                    dot.title = `Active ${relativeTime}`;
+                }
             } else {
                 el.textContent = relativeTime;
+                if (dot) {
+                    dot.className = 'active-dot-indicator';
+                    dot.title = `Last active ${date.toLocaleDateString()}`;
+                }
             }
-            
-            // Add tooltip with exact time
+
             el.title = date.toLocaleString();
         }
     });
-    
-    // Update every minute
+
     setTimeout(formatLastActiveTimes, 60000);
 }
 
+// ==========================================================================
+// STATS & CHARTS INTEGRATION
+// ==========================================================================
 function fetchStats() {
     fetch('{{ url_for("auth.user_kpi_data") }}')
         .then(response => response.json())
         .then(data => {
-            // Animate stats
-            animateValue('stat-total', 0, data.kpis.total_users, 1000);
-            animateValue('stat-approved', 0, data.kpis.approved_users, 1000);
-            animateValue('stat-pending', 0, data.kpis.pending_users, 1000);
-            animateValue('stat-suspended', 0, data.kpis.suspended_users, 1000);
-            
-            // Render charts
+            animateValue('stat-total', 0, data.kpis.total_users, 800);
+            animateValue('stat-approved', 0, data.kpis.approved_users, 800);
+            animateValue('stat-pending', 0, data.kpis.pending_users, 800);
+            animateValue('stat-suspended', 0, data.kpis.suspended_users, 800);
+
+            // Update Quick Filter chip counts
+            const chipPending = document.getElementById('chip-count-pending');
+            if (chipPending) chipPending.textContent = data.kpis.pending_users;
+            const chipApproved = document.getElementById('chip-count-approved');
+            if (chipApproved) chipApproved.textContent = data.kpis.approved_users;
+
             renderCharts(data.charts);
         })
         .catch(error => {
-            console.error('Error fetching stats:', error);
-            document.getElementById('stat-total').textContent = '?';
-            document.getElementById('stat-approved').textContent = '?';
-            document.getElementById('stat-pending').textContent = '?';
-            document.getElementById('stat-suspended').textContent = '?';
+            console.error('Error fetching admin KPI stats:', error);
         });
 }
 
 function animateValue(id, start, end, duration) {
     const obj = document.getElementById(id);
+    if (!obj) return;
     const range = end - start;
     const startTime = performance.now();
-    
+
     function update(currentTime) {
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
         const easeProgress = 1 - Math.pow(1 - progress, 3);
         obj.textContent = Math.floor(start + range * easeProgress);
-        
+
         if (progress < 1) {
             requestAnimationFrame(update);
+        } else {
+            obj.textContent = end;
         }
     }
     requestAnimationFrame(update);
 }
 
 function renderCharts(chartData) {
-    if (typeof Chart === 'undefined') {
-        console.warn('Chart.js library is not loaded yet');
-        return;
-    }
-    // User Status Chart
+    if (typeof Chart === 'undefined') return;
+
+    // 1. Status Doughnut Chart (Sacred Palette)
     const statusCtx = document.getElementById('userStatusChart');
     if (statusCtx) {
         new Chart(statusCtx, {
@@ -1129,31 +2018,34 @@ function renderCharts(chartData) {
                 datasets: [{
                     data: chartData.user_status_distribution.data,
                     backgroundColor: [
-                        'rgba(34, 197, 94, 0.8)',
-                        'rgba(245, 158, 11, 0.8)',
-                        'rgba(239, 68, 68, 0.8)'
+                        'rgba(16, 185, 129, 0.85)',
+                        'rgba(245, 158, 11, 0.85)',
+                        'rgba(239, 68, 68, 0.85)'
                     ],
-                    borderColor: [
-                        'rgba(34, 197, 94, 1)',
-                        'rgba(245, 158, 11, 1)',
-                        'rgba(239, 68, 68, 1)'
-                    ],
-                    borderWidth: 2
+                    borderColor: '#120e18',
+                    borderWidth: 3
                 }]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        position: 'bottom'
+                        position: 'bottom',
+                        labels: {
+                            color: '#d6c9a3',
+                            font: { family: "'EB Garamond', serif", size: 12 },
+                            boxWidth: 12,
+                            padding: 10
+                        }
                     }
                 },
-                cutout: '60%'
+                cutout: '65%'
             }
         });
     }
-    
-    // Mandala Access Chart
+
+    // 2. Stage Progression Bar Chart (Gold & Crimson)
     const mandalaCtx = document.getElementById('mandalaAccessChart');
     if (mandalaCtx) {
         new Chart(mandalaCtx, {
@@ -1161,31 +2053,35 @@ function renderCharts(chartData) {
             data: {
                 labels: chartData.mandala_access_distribution.labels,
                 datasets: [{
-                    label: 'Users',
+                    label: 'Seekers',
                     data: chartData.mandala_access_distribution.data,
                     backgroundColor: [
-                        'rgba(196, 30, 58, 0.8)',
-                        'rgba(234, 88, 12, 0.8)'
+                        'rgba(212, 166, 74, 0.85)',
+                        'rgba(180, 40, 40, 0.85)'
                     ],
                     borderColor: [
-                        'rgba(196, 30, 58, 1)',
-                        'rgba(234, 88, 12, 1)'
+                        'rgba(245, 223, 162, 1)',
+                        'rgba(248, 113, 113, 1)'
                     ],
-                    borderWidth: 2,
-                    borderRadius: 8
+                    borderWidth: 1.5,
+                    borderRadius: 6
                 }]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
-                    legend: {
-                        display: false
-                    }
+                    legend: { display: false }
                 },
                 scales: {
+                    x: {
+                        ticks: { color: '#c7beab', font: { family: "'EB Garamond', serif", size: 11 } },
+                        grid: { display: false }
+                    },
                     y: {
                         beginAtZero: true,
-                        ticks: { precision: 0 }
+                        ticks: { color: '#8e8574', precision: 0 },
+                        grid: { color: 'rgba(212, 166, 74, 0.1)' }
                     }
                 }
             }
@@ -1193,159 +2089,127 @@ function renderCharts(chartData) {
     }
 }
 
+// ==========================================================================
+// REAL-TIME SEARCH & FILTER SUITE
+// ==========================================================================
 function setupSearchFilters() {
     const searchInput = document.getElementById('searchInput');
     const statusFilter = document.getElementById('statusFilter');
     const roleFilter = document.getElementById('roleFilter');
-    const userCards = document.querySelectorAll('.user-card-new');
-    
+    const cards = document.querySelectorAll('.seeker-dossier-card');
+    const tableRows = document.querySelectorAll('#usersTableBody tr');
+    const filterChips = document.querySelectorAll('.filter-chip-btn');
+    const countPill = document.getElementById('rosterCountPill');
+
     let searchTimeout;
-    
-    function filterUsers() {
-        const searchTerm = searchInput.value.toLowerCase();
-        const statusValue = statusFilter.value.toLowerCase();
-        const roleValue = roleFilter.value.toLowerCase();
+
+    function runFilter() {
+        const query = searchInput.value.toLowerCase().trim();
+        const selectedStatus = statusFilter.value.toLowerCase();
+        const selectedRole = roleFilter.value.toLowerCase();
         let visibleCount = 0;
-        
-        userCards.forEach(card => {
-            const fullname = card.querySelector('.user-fullname').textContent.toLowerCase();
-            const username = card.querySelector('.user-username-new').textContent.toLowerCase();
-            const email = card.querySelector('.user-email-new').textContent.toLowerCase();
-            const badges = card.querySelectorAll('.badge-new');
-            
-            let status = '';
-            let role = '';
-            badges.forEach(badge => {
-                const text = badge.textContent.toLowerCase().trim();
-                if (['admin', 'approved', 'pending', 'suspended'].includes(text)) {
-                    status = text;
-                } else {
-                    role = text;
-                }
-            });
-            
-            const searchMatch = fullname.includes(searchTerm) || 
-                               username.includes(searchTerm) || 
-                               email.includes(searchTerm);
-            const statusMatch = statusValue === 'all' || status === statusValue;
-            const roleMatch = roleValue === 'all' || role === roleValue;
-            
-            if (searchMatch && statusMatch && roleMatch) {
-                card.style.display = '';
-                card.style.animation = 'fadeInUp 0.3s ease-out';
+
+        // Filter Cards
+        cards.forEach(card => {
+            const textContent = card.textContent.toLowerCase();
+            const cardStatus = card.dataset.status || '';
+            const cardRole = card.dataset.role || '';
+
+            const matchQuery = !query || textContent.includes(query);
+            const matchStatus = selectedStatus === 'all' || cardStatus === selectedStatus;
+            const matchRole = selectedRole === 'all' || cardRole === selectedRole;
+
+            if (matchQuery && matchStatus && matchRole) {
+                card.style.display = 'block';
                 visibleCount++;
             } else {
                 card.style.display = 'none';
             }
         });
-        
-        // Update count badge
-        const countBadge = document.querySelector('.user-count-badge');
-        if (countBadge) {
-            countBadge.textContent = `${visibleCount} user${visibleCount !== 1 ? 's' : ''}`;
+
+        // Filter Table Rows in sync
+        tableRows.forEach(row => {
+            const textContent = row.textContent.toLowerCase();
+            const rowStatus = row.dataset.status || '';
+            const rowRole = row.dataset.role || '';
+
+            const matchQuery = !query || textContent.includes(query);
+            const matchStatus = selectedStatus === 'all' || rowStatus === selectedStatus;
+            const matchRole = selectedRole === 'all' || rowRole === selectedRole;
+
+            row.style.display = (matchQuery && matchStatus && matchRole) ? '' : 'none';
+        });
+
+        if (countPill) {
+            countPill.textContent = `${visibleCount} devotee${visibleCount !== 1 ? 's' : ''}`;
         }
     }
-    
+
     searchInput.addEventListener('input', function() {
         clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(filterUsers, 300);
+        searchTimeout = setTimeout(runFilter, 200);
     });
-    
-    statusFilter.addEventListener('change', filterUsers);
-    roleFilter.addEventListener('change', filterUsers);
+
+    statusFilter.addEventListener('change', runFilter);
+    roleFilter.addEventListener('change', runFilter);
+
+    // Quick Filter Chips interaction
+    filterChips.forEach(chip => {
+        chip.addEventListener('click', function() {
+            filterChips.forEach(c => c.classList.remove('active'));
+            this.classList.add('active');
+
+            if (this.dataset.filterStatus) {
+                statusFilter.value = this.dataset.filterStatus;
+                roleFilter.value = 'all';
+            } else if (this.dataset.filterRole) {
+                roleFilter.value = this.dataset.filterRole;
+                statusFilter.value = 'all';
+            }
+            runFilter();
+        });
+    });
 }
 
+// ==========================================================================
+// USER ACTIONS (APPROVE, REJECT, SUSPEND, REACTIVATE)
+// ==========================================================================
 function setupUserActions() {
-    // Approve User
     document.querySelectorAll('.approve-user').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
             const userId = this.dataset.userId;
-            executeUserAction(userId, 'approve', 'Approved via quick action');
+            executeUserAction(userId, 'approve', 'Sanctuary initiation approved');
         });
     });
-    
-    // Reject User
+
     document.querySelectorAll('.reject-user').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
             const userId = this.dataset.userId;
-            openConfirmModal('Are you sure you want to reject this user?', function() {
-                executeUserAction(userId, 'reject', 'Rejected via quick action');
+            openConfirmModal('Decline and reject this seeker registration?', function() {
+                executeUserAction(userId, 'reject', 'Registration declined by administrator');
             });
         });
     });
-    
-    // Suspend User
+
     document.querySelectorAll('.suspend-user').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
             const userId = this.dataset.userId;
-            openConfirmModal('Are you sure you want to suspend this user?', function() {
-                executeUserAction(userId, 'suspend', 'Suspended via quick action');
+            openConfirmModal('Are you sure you want to suspend this sadhak account?', function() {
+                executeUserAction(userId, 'suspend', 'Account suspended by administrator');
             });
         });
     });
-    
-    // Reactivate User
+
     document.querySelectorAll('.reactivate-user').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
             const userId = this.dataset.userId;
-            executeUserAction(userId, 'approve', 'Reactivated via quick action');
+            executeUserAction(userId, 'approve', 'Account restored and reactivated');
         });
     });
-}
-
-function setupRequestActions() {
-    document.querySelectorAll('.btn-approve-request').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const requestId = this.dataset.requestId;
-            handleStageRequest(requestId, 'approve');
-        });
-    });
-    
-    document.querySelectorAll('.btn-reject-request').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const requestId = this.dataset.requestId;
-            openConfirmModal('Are you sure you want to reject this access request?', function() {
-                handleStageRequest(requestId, 'reject');
-            });
-        });
-    });
-}
-
-function setupPurposeModals() {
-    document.querySelectorAll('.show-full-purpose').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const purpose = this.dataset.purpose;
-            document.getElementById('purposeModalBody').innerHTML = `<p style="line-height: 1.8;">${purpose}</p>`;
-            document.getElementById('purposeModal').classList.add('active');
-        });
-    });
-}
-
-function closePurposeModal() {
-    document.getElementById('purposeModal').classList.remove('active');
-}
-
-function openConfirmModal(message, onConfirm) {
-    document.getElementById('confirmMessage').textContent = message;
-    document.getElementById('confirmModal').classList.add('active');
-    
-    const confirmBtn = document.getElementById('confirmActionBtn');
-    confirmBtn.onclick = function() {
-        onConfirm();
-        closeConfirmModal();
-    };
-}
-
-function closeConfirmModal() {
-    document.getElementById('confirmModal').classList.remove('active');
 }
 
 function executeUserAction(userId, action, notes) {
@@ -1354,7 +2218,7 @@ function executeUserAction(userId, action, notes) {
         showToast('Security token not found. Please refresh the page.', 'error');
         return;
     }
-    
+
     fetch('{{ url_for("auth.approve_user") }}', {
         method: 'POST',
         headers: {
@@ -1367,34 +2231,55 @@ function executeUserAction(userId, action, notes) {
             'csrf_token': csrfToken.value
         })
     })
-    .then(response => response.json())
+    .then(res => res.json())
     .then(data => {
         if (data.success) {
             showToast(data.message, 'success');
-            setTimeout(() => location.reload(), 1500);
+            setTimeout(() => location.reload(), 1200);
         } else {
             showToast('Error: ' + data.message, 'error');
         }
     })
-    .catch(error => {
-        showToast('An error occurred. Please try again.', 'error');
-        console.error('Error:', error);
+    .catch(err => {
+        console.error('User action error:', err);
+        showToast('A network error occurred. Please try again.', 'error');
+    });
+}
+
+// ==========================================================================
+// STAGE REQUESTS QUEUE HANDLER
+// ==========================================================================
+function setupRequestActions() {
+    document.querySelectorAll('.btn-approve-request').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const reqId = this.dataset.requestId;
+            handleStageRequest(reqId, 'approve');
+        });
+    });
+
+    document.querySelectorAll('.btn-reject-request').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const reqId = this.dataset.requestId;
+            openConfirmModal('Decline this stage progression request?', function() {
+                handleStageRequest(reqId, 'reject');
+            });
+        });
     });
 }
 
 function handleStageRequest(requestId, action) {
     const csrfToken = document.querySelector('input[name="csrf_token"]');
     if (!csrfToken) {
-        showToast('Security token not found. Please refresh the page.', 'error');
+        showToast('Security token missing. Please refresh.', 'error');
         return;
     }
-    
-    const btn = document.querySelector(`.btn-approve-request[data-request-id="${requestId}"], .btn-reject-request[data-request-id="${requestId}"]`);
-    if (btn) {
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-    }
-    
+
+    const item = document.querySelector(`.request-queue-item[data-request-id="${requestId}"]`);
+    const actionBtns = item ? item.querySelectorAll('button') : [];
+    actionBtns.forEach(b => { b.disabled = true; b.style.opacity = '0.5'; });
+
     fetch(`{{ url_for('auth.approve_stage_request', request_id=0) }}`.replace('0', requestId), {
         method: 'POST',
         headers: {
@@ -1405,87 +2290,116 @@ function handleStageRequest(requestId, action) {
             'csrf_token': csrfToken.value
         })
     })
-    .then(response => response.json())
+    .then(res => res.json())
     .then(data => {
         if (data.success) {
             showToast(data.message, 'success');
-            
-            const requestItem = document.querySelector(`.request-item-new[data-request-id="${requestId}"]`);
-            if (requestItem) {
-                requestItem.style.animation = 'fadeOut 0.3s ease-out forwards';
+            if (item) {
+                item.style.transition = 'all 0.35s ease';
+                item.style.transform = 'translateX(30px)';
+                item.style.opacity = '0';
                 setTimeout(() => {
-                    requestItem.remove();
-                    
-                    const requestsList = document.querySelector('.requests-list-new');
-                    const remainingItems = requestsList.querySelectorAll('.request-item-new');
-                    
-                    const countBadge = document.querySelector('.requests-count');
-                    if (countBadge) {
-                        countBadge.textContent = remainingItems.length;
-                    }
-                    
-                    if (remainingItems.length === 0) {
-                        requestsList.innerHTML = `
-                            <div class="no-requests-state">
-                                <div class="no-requests-icon">✅</div>
-                                <p>No pending access requests</p>
+                    item.remove();
+                    const queue = document.getElementById('requestsQueueList');
+                    const remaining = queue.querySelectorAll('.request-queue-item');
+                    const badge = document.getElementById('requestsCountBadge');
+                    if (badge) badge.textContent = `${remaining.length} Pending`;
+
+                    const statReq = document.getElementById('stat-requests');
+                    if (statReq) statReq.textContent = remaining.length;
+
+                    if (remaining.length === 0) {
+                        queue.innerHTML = `
+                            <div class="empty-req-state">
+                                <div class="empty-req-icon"><i class="fas fa-check-double"></i></div>
+                                <p>All stage authorizations cleared.</p>
                             </div>
                         `;
                     }
-                }, 300);
+                }, 350);
             }
         } else {
-            showToast('Error: ' + data.message, 'error');
-            if (btn) {
-                btn.disabled = false;
-                btn.innerHTML = action === 'approve' ? '<i class="fas fa-check"></i> Approve' : '<i class="fas fa-times"></i> Reject';
-            }
+            showToast(data.message || 'Authorization failed.', 'error');
+            actionBtns.forEach(b => { b.disabled = false; b.style.opacity = '1'; });
         }
     })
-    .catch(error => {
-        showToast('An error occurred. Please try again.', 'error');
-        console.error('Error:', error);
-        if (btn) {
-            btn.disabled = false;
-            btn.innerHTML = action === 'approve' ? '<i class="fas fa-check"></i> Approve' : '<i class="fas fa-times"></i> Reject';
-        }
+    .catch(err => {
+        console.error('Stage request error:', err);
+        showToast('Server communication failure.', 'error');
+        actionBtns.forEach(b => { b.disabled = false; b.style.opacity = '1'; });
     });
 }
 
-function showToast(message, type) {
+// ==========================================================================
+// PURPOSE MODAL & CONFIRMATION MODALS
+// ==========================================================================
+function setupPurposeModals() {
+    document.querySelectorAll('.show-full-purpose').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const purpose = this.dataset.purpose;
+            const name = this.dataset.name || 'Sādhak';
+            document.getElementById('purposeModalTitle').innerHTML = `<i class="fas fa-heart"></i> ${name}'s Sādhana Vow`;
+            document.getElementById('purposeModalBody').innerHTML = `
+                <div style="background: rgba(14, 10, 18, 0.7); border: 1px solid rgba(212, 166, 74, 0.25); border-radius: 12px; padding: 1.25rem; font-style: italic; line-height: 1.8; color: var(--desk-paper);">
+                    "${purpose}"
+                </div>
+            `;
+            document.getElementById('purposeModal').classList.add('active');
+        });
+    });
+}
+
+function closePurposeModal() {
+    document.getElementById('purposeModal').classList.remove('active');
+}
+
+function openConfirmModal(message, onConfirm) {
+    document.getElementById('confirmMessage').textContent = message;
+    document.getElementById('confirmModal').classList.add('active');
+    const confirmBtn = document.getElementById('confirmActionBtn');
+    confirmBtn.onclick = function() {
+        onConfirm();
+        closeConfirmModal();
+    };
+}
+
+function closeConfirmModal() {
+    document.getElementById('confirmModal').classList.remove('active');
+}
+
+// ==========================================================================
+// TOAST NOTIFICATION UTILITY
+// ==========================================================================
+function showToast(message, type = 'success') {
     const container = document.getElementById('toastContainer');
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
+    const iconClass = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
     toast.innerHTML = `
-        <span class="toast-icon">
-            <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
-        </span>
+        <span class="toast-icon"><i class="fas ${iconClass}"></i></span>
         <span class="toast-content">${message}</span>
-        <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+        <button type="button" class="toast-close" onclick="this.parentElement.remove()" aria-label="Dismiss">×</button>
     `;
     container.appendChild(toast);
-    
+
     setTimeout(() => {
-        toast.style.animation = 'toastSlide 0.3s ease-out reverse forwards';
-        setTimeout(() => toast.remove(), 300);
-    }, 5000);
+        toast.style.animation = 'toastIn 0.25s ease reverse forwards';
+        setTimeout(() => toast.remove(), 250);
+    }, 4500);
 }
 
-// Close modals on outside click
-document.querySelectorAll('.modal-overlay').forEach(modal => {
-    modal.addEventListener('click', function(e) {
+// Close modals on backdrop click or ESC key
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', function(e) {
         if (e.target === this) {
             this.classList.remove('active');
         }
     });
 });
 
-// Keyboard accessibility
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
-        document.querySelectorAll('.modal-overlay.active').forEach(modal => {
-            modal.classList.remove('active');
-        });
+        document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
     }
 });
 </script>
