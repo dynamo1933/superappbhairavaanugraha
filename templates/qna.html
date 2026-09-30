@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
   <link rel="stylesheet" href="/index.css?v=2" />
-  <link rel="stylesheet" href="/static/css/unified-header.css?v=2" />
+  <link rel="stylesheet" href="/static/css/unified-header.css?v=3" />
 </head>
 
 <body>
@@ -64,11 +64,9 @@
         <a href="/bhiksha" class="nav-item">Bhiksha</a>
 
         {% if current_user.is_authenticated and current_user.is_admin() %}
-        <div class="user-menu-wrap">
-          <a href="/auth/admin/users" class="nav-item nav-pill-super is-admin-pill" style="color: var(--gold-bright); border-color: var(--gold);">
-            <i class="fas fa-shield-halved"></i> Admin Portal
-          </a>
-        </div>
+        <a href="/auth/admin/users" class="nav-item nav-pill-super is-admin-pill" style="color: var(--gold-bright); border-color: var(--gold);">
+          <i class="fas fa-shield-halved"></i> Admin Portal
+        </a>
         {% endif %}
       </nav>
 
@@ -85,13 +83,13 @@
         <!-- User Authentication & Profile Controls -->
         {% if current_user.is_authenticated %}
         <div class="user-menu-wrap">
-          <a href="/auth/profile" class="user-btn-trigger" aria-label="User Account Menu" title="Spiritual Profile & Settings">
+          <button type="button" class="user-btn-trigger" id="user-menu-btn" aria-label="User Account Menu" aria-haspopup="true" aria-expanded="false" title="Spiritual Profile & Admin Settings">
             {% if current_user.profile_picture %}
               <img src="/auth/profile-picture/{{ current_user.id }}" alt="{{ current_user.full_name }}" class="user-avatar-mini" />
             {% else %}
               <i class="fas fa-user-circle" style="color: var(--gold-3); font-size: 1.1rem;"></i>
             {% endif %}
-            <span>{{ current_user.full_name.split()[0] if current_user.full_name else current_user.username }}</span>
+            <span class="user-btn-name">{{ current_user.full_name.split()[0] if current_user.full_name else current_user.username }}</span>
             {% if current_user.is_admin() %}
               <span class="admin-badge-mini">ADMIN</span>
               {% if pending_users_count and pending_users_count > 0 %}
@@ -99,7 +97,7 @@
               {% endif %}
             {% endif %}
             <i class="fas fa-chevron-down" style="font-size: 0.65rem; opacity: 0.7;"></i>
-          </a>
+          </button>
           <div class="user-dropdown-menu">
             <div class="user-dropdown-header">
               <strong>{{ current_user.full_name or current_user.username }}</strong>
@@ -538,7 +536,7 @@
 
   <script src="analytics.js"></script>
   <script src="index.js"></script>
-  <script src="/static/js/superapp.js?v=2"></script>
+  <script src="/static/js/superapp.js?v=4"></script>
 </body>
 
 </html>

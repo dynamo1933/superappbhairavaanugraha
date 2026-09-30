@@ -555,11 +555,36 @@ table tbody tr:hover,
   font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.25s ease;
+  line-height: normal;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  user-select: none;
 }
 
-.user-btn-trigger:hover {
+button.user-btn-trigger {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.user-btn-trigger:hover,
+.user-btn-trigger:focus-visible,
+.user-menu-wrap.is-open .user-btn-trigger {
   border-color: var(--admin-gold-bright);
-  background: rgba(212, 175, 55, 0.2);
+  background: rgba(212, 175, 55, 0.22);
+  color: var(--admin-gold-bright);
+  box-shadow: 0 0 14px rgba(212, 166, 74, 0.25);
+}
+
+.user-btn-trigger i.fa-chevron-down {
+  transition: transform 0.25s ease;
+}
+
+.user-menu-wrap:hover .user-btn-trigger i.fa-chevron-down,
+.user-menu-wrap:focus-within .user-btn-trigger i.fa-chevron-down,
+.user-menu-wrap.is-open .user-btn-trigger i.fa-chevron-down {
+  transform: rotate(180deg);
+  color: var(--admin-gold-bright);
 }
 
 .user-avatar-mini {
@@ -585,18 +610,30 @@ table tbody tr:hover,
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  min-width: 220px;
+  min-width: 230px;
   background: linear-gradient(180deg, rgba(24, 19, 32, 0.98) 0%, rgba(14, 11, 20, 0.98) 100%);
   border: 1px solid var(--admin-gold-border);
   border-radius: 12px;
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8);
   padding: 0.5rem 0;
-  z-index: 1100;
+  z-index: 1200;
   backdrop-filter: blur(16px);
 }
 
+/* Hover bridge across the 8px top gap */
+.user-dropdown-menu::before {
+  content: '';
+  position: absolute;
+  top: -14px;
+  left: 0;
+  right: 0;
+  height: 14px;
+  background: transparent;
+}
+
 .user-menu-wrap:hover .user-dropdown-menu,
-.user-menu-wrap:focus-within .user-dropdown-menu {
+.user-menu-wrap:focus-within .user-dropdown-menu,
+.user-menu-wrap.is-open .user-dropdown-menu {
   display: block;
 }
 
