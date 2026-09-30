@@ -16,9 +16,14 @@
                     <div style="font-size: 0.72rem; color: rgba(233, 223, 200, 0.7);">Guru Bhairava Guidance Desk</div>
                 </div>
             </div>
-            <button type="button" id="chat-close" class="chat-close" aria-label="Close Chat">
-                <i class="fas fa-times"></i>
-            </button>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <a href="/chat" title="Open Full Guidance Chamber" style="color: var(--gold-3, #f0d48a); font-size: 0.88rem; padding: 4px; display: inline-flex; align-items: center; text-decoration: none; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">
+                    <i class="fas fa-up-right-from-square"></i>
+                </a>
+                <button type="button" id="chat-close" class="chat-close" aria-label="Close Chat">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
         </div>
         
         <div id="chat-messages" class="chat-messages">

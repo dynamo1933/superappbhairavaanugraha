@@ -1,0 +1,516 @@
+{% extends "base.html" %}
+
+{% block title %}Spiritual Guidance Chat · Bhairava Anugraha{% endblock %}
+
+{% block extra_styles %}
+<style>
+/* ==========================================================================
+   SACRED DEVOTEE SPIRITUAL COUNSEL CHAMBER
+   ========================================================================== */
+.seeker-chat-page {
+    max-width: 900px;
+    margin: 1.5rem auto 3.5rem;
+}
+
+.seeker-chat-card {
+    background: linear-gradient(180deg, rgba(22, 17, 28, 0.98) 0%, rgba(14, 10, 18, 0.98) 100%);
+    border: 1px solid rgba(212, 166, 74, 0.35);
+    border-radius: 20px;
+    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.8), 0 0 25px rgba(212, 166, 74, 0.12);
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+    height: 720px;
+}
+
+.seeker-chat-header {
+    padding: 1.25rem 1.75rem;
+    border-bottom: 1px solid rgba(212, 166, 74, 0.2);
+    background: linear-gradient(135deg, rgba(212, 166, 74, 0.15) 0%, rgba(20, 16, 26, 0.98) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.seeker-header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.seeker-header-om {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(212, 166, 74, 0.25), rgba(14, 10, 6, 0.85));
+    border: 1px solid rgba(212, 166, 74, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #f0d48a;
+    box-shadow: 0 0 14px rgba(212, 166, 74, 0.25);
+}
+
+.seeker-chat-title {
+    font-family: var(--display, 'Cormorant Garamond', Georgia, serif);
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #fdfaf2;
+    line-height: 1.15;
+}
+
+.seeker-chat-subtitle {
+    font-size: 0.8rem;
+    color: rgba(233, 223, 200, 0.65);
+    margin-top: 0.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.seeker-status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #10b981;
+    display: inline-block;
+    box-shadow: 0 0 6px #10b981;
+}
+
+.seeker-chat-banner {
+    padding: 0.75rem 1.75rem;
+    background: rgba(212, 166, 74, 0.08);
+    border-bottom: 1px solid rgba(212, 166, 74, 0.15);
+    font-size: 0.82rem;
+    color: rgba(233, 223, 200, 0.8);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.seeker-chat-banner i {
+    color: #f0d48a;
+}
+
+.seeker-chat-messages {
+    flex: 1;
+    padding: 1.5rem 1.75rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(212, 166, 74, 0.3) transparent;
+}
+
+.chat-placeholder {
+    margin: auto;
+    text-align: center;
+    max-width: 440px;
+    color: rgba(233, 223, 200, 0.65);
+    padding: 2rem 1rem;
+}
+
+.chat-placeholder .om-icon {
+    font-size: 2.8rem;
+    color: #d4a64a;
+    margin-bottom: 0.75rem;
+}
+
+.chat-message {
+    max-width: 72%;
+    padding: 0.9rem 1.25rem;
+    border-radius: 14px;
+    word-break: break-word;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+    line-height: 1.5;
+}
+
+/* User's own message (right) */
+.chat-message.user {
+    align-self: flex-end;
+    background: linear-gradient(135deg, rgba(212, 166, 74, 0.22) 0%, rgba(138, 98, 25, 0.45) 100%);
+    border: 1px solid rgba(212, 166, 74, 0.45);
+    color: #fdfaf2;
+    border-bottom-right-radius: 3px;
+    box-shadow: 0 4px 20px rgba(212, 166, 74, 0.12);
+}
+
+/* Guru Bhairava Guidance (left) */
+.chat-message.admin {
+    align-self: flex-start;
+    background: rgba(14, 11, 18, 0.95);
+    border: 1px solid rgba(212, 166, 74, 0.35);
+    color: #fdfaf2;
+    border-bottom-left-radius: 3px;
+    box-shadow: 0 4px 22px rgba(0, 0, 0, 0.5);
+}
+
+.msg-author-tag {
+    font-size: 0.74rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.chat-message.admin .msg-author-tag {
+    color: #f0d48a;
+}
+
+.chat-message.user .msg-author-tag {
+    color: #d6c9a3;
+    justify-content: flex-end;
+}
+
+.msg-content {
+    font-size: 0.95rem;
+    white-space: pre-wrap;
+}
+
+.msg-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.4rem;
+    margin-top: 0.4rem;
+    font-size: 0.7rem;
+    color: rgba(233, 223, 200, 0.55);
+}
+
+/* Suggested chips */
+.seeker-suggested-bar {
+    padding: 0.6rem 1.75rem 0.3rem;
+    background: rgba(14, 10, 6, 0.85);
+    border-top: 1px solid rgba(212, 166, 74, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+}
+
+.seeker-suggested-bar::-webkit-scrollbar {
+    display: none;
+}
+
+.suggest-chip {
+    background: rgba(212, 166, 74, 0.1);
+    border: 1px solid rgba(212, 166, 74, 0.25);
+    border-radius: 999px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    color: rgba(233, 223, 200, 0.85);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.suggest-chip:hover {
+    background: rgba(212, 166, 74, 0.22);
+    border-color: #f0d48a;
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+/* Input area */
+.seeker-input-area {
+    padding: 1rem 1.75rem 1.25rem;
+    background: rgba(14, 10, 6, 0.98);
+    border-top: 1px solid rgba(212, 166, 74, 0.2);
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.seeker-input-area input {
+    flex: 1;
+    background: rgba(20, 16, 26, 0.95);
+    border: 1px solid rgba(212, 166, 74, 0.35);
+    border-radius: 12px;
+    padding: 0.75rem 1.2rem;
+    color: #fdfaf2;
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    line-height: 1.4;
+}
+
+.seeker-input-area input:focus {
+    border-color: #f0d48a;
+    box-shadow: 0 0 14px rgba(212, 166, 74, 0.25);
+}
+
+.seeker-send-btn {
+    background: linear-gradient(135deg, #f0d48a 0%, #d4a64a 100%);
+    color: #0e0a06;
+    border: none;
+    border-radius: 12px;
+    padding: 0.75rem 1.6rem;
+    font-weight: 700;
+    font-size: 0.92rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(212, 166, 74, 0.35);
+    transition: all 0.22s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+}
+
+.seeker-send-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212, 166, 74, 0.5);
+}
+
+.seeker-send-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container seeker-chat-page">
+    <div class="dashboard-header" style="margin-bottom: 1.5rem;">
+        <div class="dashboard-title-section">
+            <div class="dashboard-icon">
+                <i class="fas fa-comments"></i>
+            </div>
+            <div class="dashboard-title">
+                <h1>Spiritual Guidance Desk</h1>
+                <p>Seek direct lineage guidance, japa discipline counsel, and clarity from Guru Bhairava Guidance Desk.</p>
+            </div>
+        </div>
+        <div class="dashboard-actions">
+            <a href="{{ url_for('sadhana_paddhati_page') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> My Sādhana Path
+            </a>
+        </div>
+    </div>
+
+    <div class="seeker-chat-card">
+        <!-- Header -->
+        <div class="seeker-chat-header">
+            <div class="seeker-header-left">
+                <div class="seeker-header-om">ॐ</div>
+                <div>
+                    <div class="seeker-chat-title">Guru Bhairava Guidance Desk</div>
+                    <div class="seeker-chat-subtitle">
+                        <span class="seeker-status-dot"></span>
+                        <span>Lineage Mentorship Channel · Active</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Banner -->
+        <div class="seeker-chat-banner">
+            <i class="fas fa-shield-halved"></i>
+            <span>॥ सर्वं भैरव स्वरूपम् ॥ Inquiries are answered in sacred privacy by the mentorship desk.</span>
+        </div>
+
+        <!-- Message Feed -->
+        <div id="seeker-messages" class="seeker-chat-messages">
+            <div class="chat-placeholder">
+                <div class="om-icon">☸</div>
+                <h3 style="color: #f0d48a; margin-bottom: 0.4rem; font-family: var(--display, serif);">Initiate Spiritual Consultation</h3>
+                <p>Namaste {{ current_user.full_name or current_user.username }}!<br>Ask any question regarding your daily japa, mantra pronunciations, meditation rites, or Mandala vows.</p>
+            </div>
+        </div>
+
+        <!-- Suggested Inquiry Chips -->
+        <div class="seeker-suggested-bar">
+            <span style="font-size: 0.7rem; color: #d4a64a; text-transform: uppercase; font-weight: 700; margin-right: 4px;">Frequent Topics:</span>
+            <button type="button" class="suggest-chip" data-text="Namaskaram Guruji, could you guide me on the proper timing for evening japa?">Evening Japa Timing</button>
+            <button type="button" class="suggest-chip" data-text="Pranam! I would like guidance on Sankalpa posture and procedure.">Sankalpa Protocol</button>
+            <button type="button" class="suggest-chip" data-text="Seeking clarification on Rudraksha care and energization rules.">Rudraksha Care</button>
+            <button type="button" class="suggest-chip" data-text="Experiencing deep heat and vibrating sensation during dhyāna. Is this normal?">Meditation Experiences</button>
+        </div>
+
+        <!-- Input Area -->
+        <div class="seeker-input-area">
+            <input type="text" id="seeker-chat-input" placeholder="Type sacred question or message to Guruji..." autocomplete="off">
+            <button type="button" id="seeker-chat-send" class="seeker-send-btn">
+                <i class="fas fa-paper-plane"></i> Send Question
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const messagesContainer = document.getElementById('seeker-messages');
+    const inputField = document.getElementById('seeker-chat-input');
+    const sendButton = document.getElementById('seeker-chat-send');
+    const suggestedChips = document.querySelectorAll('.suggest-chip');
+
+    let lastRenderedCount = -1;
+    let pollInterval = null;
+    const POLL_RATE = 3500;
+    const CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+
+    // Quick chip handlers
+    suggestedChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+            if (inputField) {
+                inputField.value = chip.dataset.text;
+                inputField.focus();
+            }
+        });
+    });
+
+    // Send button & enter key
+    if (sendButton) sendButton.addEventListener('click', sendMessage);
+    if (inputField) {
+        inputField.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+    }
+
+    // Load messages initially
+    loadMessages(true);
+    startPolling();
+
+    // 1. Fetch History
+    function loadMessages(scrollDown = false) {
+        fetch('/api/chat/history')
+            .then(res => res.json())
+            .then(data => {
+                const messages = Array.isArray(data) ? data : (data.messages || []);
+                if (messages.length !== lastRenderedCount) {
+                    renderMessages(messages);
+                    lastRenderedCount = messages.length;
+                    if (scrollDown) {
+                        scrollToBottom();
+                    }
+                }
+            })
+            .catch(err => console.error('Error loading chat history:', err));
+    }
+
+    // 2. Render Feed
+    function renderMessages(messages) {
+        if (!messagesContainer) return;
+        messagesContainer.innerHTML = '';
+
+        if (!messages || messages.length === 0) {
+            messagesContainer.innerHTML = `
+                <div class="chat-placeholder">
+                    <div class="om-icon">☸</div>
+                    <h3 style="color: #f0d48a; margin-bottom: 0.4rem; font-family: var(--display, serif);">Initiate Spiritual Consultation</h3>
+                    <p>Namaste {{ current_user.full_name or current_user.username }}!<br>Ask any question regarding your daily japa, mantra pronunciations, meditation rites, or Mandala vows.</p>
+                </div>
+            `;
+            return;
+        }
+
+        messages.forEach(msg => {
+            const isFromAdmin = Boolean(msg.is_admin || msg.is_from_admin);
+            const div = document.createElement('div');
+            div.className = `chat-message ${isFromAdmin ? 'admin' : 'user'}`;
+
+            const senderLabel = isFromAdmin ? 
+                `<i class="fas fa-shield-halved"></i> Guru Bhairava Guidance Desk` : 
+                `<i class="fas fa-user"></i> My Inquiry`;
+
+            const timeStr = msg.created_at || (msg.timestamp ? new Date(msg.timestamp).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : '');
+
+            div.innerHTML = `
+                <div class="msg-author-tag">${senderLabel}</div>
+                <div class="msg-content">${escapeHtml(msg.message || msg.content || '')}</div>
+                <div class="msg-footer">
+                    <span>${escapeHtml(timeStr)}</span>
+                </div>
+            `;
+            messagesContainer.appendChild(div);
+        });
+
+        scrollToBottom();
+    }
+
+    // 3. Send Message
+    function sendMessage() {
+        const text = inputField.value.trim();
+        if (!text) return;
+
+        sendButton.disabled = true;
+        sendButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Sending...`;
+
+        // Clear placeholder
+        const placeholder = messagesContainer.querySelector('.chat-placeholder');
+        if (placeholder) placeholder.remove();
+
+        // Optimistic UI Append
+        const div = document.createElement('div');
+        div.className = 'chat-message user';
+        div.innerHTML = `
+            <div class="msg-author-tag" style="justify-content: flex-end;"><i class="fas fa-user"></i> My Inquiry</div>
+            <div class="msg-content">${escapeHtml(text)}</div>
+            <div class="msg-footer">
+                <span>Just now</span>
+            </div>
+        `;
+        messagesContainer.appendChild(div);
+        scrollToBottom();
+        inputField.value = '';
+
+        fetch('/api/chat/send', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': CSRF_TOKEN
+            },
+            body: JSON.stringify({ message: text })
+        })
+        .then(res => res.json())
+        .then(data => {
+            sendButton.disabled = false;
+            sendButton.innerHTML = `<i class="fas fa-paper-plane"></i> Send Question`;
+            if (data.success) {
+                loadMessages(true);
+            } else {
+                alert('Error sending inquiry: ' + (data.error || 'Failed to deliver'));
+            }
+        })
+        .catch(err => {
+            console.error('Send error:', err);
+            sendButton.disabled = false;
+            sendButton.innerHTML = `<i class="fas fa-paper-plane"></i> Send Question`;
+            alert('Network error while delivering inquiry.');
+        });
+    }
+
+    function scrollToBottom() {
+        if (messagesContainer) {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+    }
+
+    function startPolling() {
+        if (pollInterval) clearInterval(pollInterval);
+        pollInterval = setInterval(() => loadMessages(false), POLL_RATE);
+    }
+
+    function escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+});
+</script>
+{% endblock %}

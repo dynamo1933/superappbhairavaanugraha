@@ -263,19 +263,26 @@ def inject_csrf_token():
 
 @app.context_processor
 def inject_admin_notifications():
-    if current_user.is_authenticated and current_user.is_admin():
+    unread_chat = 0
+    pending_users = 0
+    pending_requests = 0
+    unread_user_chat = 0
+    if current_user.is_authenticated:
         try:
-            unread_chat = ChatMessage.query.filter_by(is_admin_message=False, is_read=False).count()
-            pending_users = User.query.filter_by(is_approved=False, is_active=True, role='user').count()
-            pending_requests = StageAccessRequest.query.filter_by(status='pending').count()
-            return dict(
-                unread_chat_count=unread_chat,
-                pending_users_count=pending_users,
-                pending_stage_requests=pending_requests
-            )
+            if current_user.is_admin():
+                unread_chat = ChatMessage.query.filter_by(is_admin_message=False, is_read=False).count()
+                pending_users = User.query.filter_by(is_approved=False, is_active=True, role='user').count()
+                pending_requests = StageAccessRequest.query.filter_by(status='pending').count()
+            else:
+                unread_user_chat = ChatMessage.query.filter_by(recipient_id=current_user.id, is_admin_message=True, is_read=False).count()
         except Exception:
             pass
-    return dict(unread_chat_count=0, pending_users_count=0, pending_stage_requests=0)
+    return dict(
+        unread_chat_count=unread_chat,
+        unread_user_chat_count=unread_user_chat,
+        pending_users_count=pending_users,
+        pending_stage_requests=pending_requests
+    )
 
 # ==============================================================================
 # INSTAGRAM_SCRAP LOGIC & CACHING (BHAIRAV LOKA CODEX)
@@ -1109,6 +1116,19 @@ def mark_messages_read():
     except Exception as e:
         db.session.rollback()
         return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/chat')
+@login_required
+def user_chat():
+    """Seeker Spiritual Guidance Chat Chamber"""
+    if current_user.is_admin():
+        return redirect(url_for('admin_chat'))
+    try:
+        ChatMessage.query.filter_by(recipient_id=current_user.id, is_read=False).update({'is_read': True})
+        db.session.commit()
+    except Exception:
+        db.session.rollback()
+    return render_template('chat.html', active_page='chat', page_title='Spiritual Guidance Chat · Bhairava Anugraha')
 
 @app.route('/admin/chat')
 @login_required
