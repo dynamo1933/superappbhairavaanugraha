@@ -1,182 +1,489 @@
 {% extends "base.html" %}
 
+{% block title %}Sadhak Mentorship Desk · Bhairava Anugraha Admin{% endblock %}
+
 {% block extra_styles %}
 <style>
 /* ==========================================================================
-   SACRED DARK-GOLD ADMIN MENTORSHIP DESK & CHAT
+   SACRED DARK-GOLD ADMIN MENTORSHIP DESK & CHAT CONSOLE
    ========================================================================== */
-.admin-chat-container {
-    display: flex;
-    height: 700px;
-    background: rgba(20, 16, 24, 0.94);
-    border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
-    border-radius: 18px;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.65);
-    overflow: hidden;
-    margin-bottom: 2.5rem;
-}
-
-.chat-sidebar {
-    width: 320px;
-    background: rgba(14, 10, 6, 0.95);
-    border-right: 1px solid rgba(212, 166, 74, 0.2);
+.admin-chat-layout {
     display: flex;
     flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.admin-chat-container {
+    display: flex;
+    height: 750px;
+    background: linear-gradient(180deg, rgba(22, 17, 28, 0.98) 0%, rgba(14, 10, 18, 0.98) 100%);
+    border: 1px solid rgba(212, 166, 74, 0.35);
+    border-radius: 20px;
+    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.8), 0 0 25px rgba(212, 166, 74, 0.1);
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+}
+
+/* --- SIDEBAR: SEEKER ROSTER --- */
+.chat-sidebar {
+    width: 360px;
+    background: rgba(14, 10, 6, 0.97);
+    border-right: 1px solid rgba(212, 166, 74, 0.22);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
 }
 
 .chat-sidebar-header {
-    padding: 1.25rem 1.5rem;
-    border-bottom: 1px solid rgba(212, 166, 74, 0.2);
-    font-family: var(--display, serif);
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: var(--gold-3, #f0d48a);
+    padding: 1.25rem 1.4rem 1rem;
+    border-bottom: 1px solid rgba(212, 166, 74, 0.18);
     background: linear-gradient(135deg, rgba(212, 166, 74, 0.12) 0%, rgba(14, 10, 6, 0.95) 100%);
+}
+
+.chat-sidebar-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.85rem;
+}
+
+.chat-sidebar-title {
+    font-family: var(--display, 'Cormorant Garamond', Georgia, serif);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #f0d48a;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.chat-roster-count {
+    font-size: 0.75rem;
+    color: rgba(233, 223, 200, 0.65);
+    background: rgba(212, 166, 74, 0.12);
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    border: 1px solid rgba(212, 166, 74, 0.25);
+}
+
+.chat-search-wrap {
+    position: relative;
+    margin-bottom: 0.75rem;
+}
+
+.chat-search-wrap i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(212, 166, 74, 0.6);
+    font-size: 0.85rem;
+}
+
+.chat-search-input {
+    width: 100%;
+    background: rgba(22, 17, 28, 0.9);
+    border: 1px solid rgba(212, 166, 74, 0.25);
+    border-radius: 8px;
+    padding: 0.55rem 0.8rem 0.55rem 2.2rem;
+    color: #fdfaf2;
+    font-size: 0.88rem;
+    outline: none;
+    transition: all 0.25s ease;
+    box-sizing: border-box;
+}
+
+.chat-search-input:focus {
+    border-color: #f0d48a;
+    box-shadow: 0 0 10px rgba(212, 166, 74, 0.25);
+}
+
+.chat-filter-tabs {
+    display: flex;
+    gap: 0.4rem;
+}
+
+.chat-tab-btn {
+    flex: 1;
+    background: transparent;
+    border: 1px solid rgba(212, 166, 74, 0.2);
+    border-radius: 6px;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.75rem;
+    color: rgba(233, 223, 200, 0.7);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.chat-tab-btn:hover {
+    color: #f0d48a;
+    border-color: rgba(212, 166, 74, 0.4);
+}
+
+.chat-tab-btn.is-active {
+    background: rgba(212, 166, 74, 0.2);
+    border-color: #d4a64a;
+    color: #f0d48a;
+    font-weight: 700;
 }
 
 .chat-user-list {
     flex: 1;
     overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(212, 166, 74, 0.3) transparent;
 }
 
 .chat-user-item {
     display: flex;
     align-items: center;
     gap: 0.85rem;
-    padding: 1rem 1.25rem;
+    padding: 0.9rem 1.25rem;
     cursor: pointer;
-    border-bottom: 1px solid rgba(212, 166, 74, 0.1);
-    transition: all 0.2s ease;
-    color: var(--paper-bright, #fdfaf2);
+    border-bottom: 1px solid rgba(212, 166, 74, 0.08);
+    transition: all 0.22s ease;
+    color: #fdfaf2;
+    position: relative;
 }
 
 .chat-user-item:hover {
-    background: rgba(212, 166, 74, 0.1);
+    background: rgba(212, 166, 74, 0.08);
 }
 
 .chat-user-item.active {
-    background: rgba(212, 166, 74, 0.18);
-    border-left: 3px solid var(--gold, #d4a64a);
+    background: rgba(212, 166, 74, 0.16);
+    border-left: 3px solid #f0d48a;
+}
+
+.chat-avatar-wrap {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 1px solid rgba(212, 166, 74, 0.4);
+    background: linear-gradient(135deg, rgba(212, 166, 74, 0.25), rgba(14, 10, 6, 0.8));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #f0d48a;
+    font-size: 1.05rem;
+}
+
+.chat-avatar-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.chat-user-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.chat-user-name-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.2rem;
+}
+
+.chat-user-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #fdfaf2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.chat-user-time {
+    font-size: 0.7rem;
+    color: rgba(233, 223, 200, 0.5);
+    flex-shrink: 0;
+    margin-left: 0.4rem;
+}
+
+.chat-user-sub-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-user-snippet {
+    font-size: 0.8rem;
+    color: rgba(233, 223, 200, 0.6);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 190px;
 }
 
 .unread-badge {
-    margin-left: auto;
-    background: linear-gradient(135deg, #f0d48a, #d4a64a);
-    color: #0e0a06;
-    font-size: 0.75rem;
-    font-weight: 700;
-    padding: 0.2rem 0.55rem;
+    background: linear-gradient(135deg, #eab308, #ca8a04);
+    color: #0c0a08;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 0.15rem 0.5rem;
     border-radius: 999px;
+    box-shadow: 0 0 8px rgba(234, 179, 8, 0.6);
+    flex-shrink: 0;
 }
 
+/* --- MAIN CHAT PANEL --- */
 .admin-chat-main {
     flex: 1;
     display: flex;
     flex-direction: column;
-    background: rgba(20, 16, 24, 0.94);
+    background: rgba(20, 16, 26, 0.96);
+    position: relative;
+    min-width: 0;
 }
 
 .admin-chat-header {
-    padding: 1.25rem 1.75rem;
+    padding: 1.1rem 1.75rem;
     border-bottom: 1px solid rgba(212, 166, 74, 0.2);
-    font-family: var(--display, serif);
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--paper-bright, #fdfaf2);
-    background: linear-gradient(135deg, rgba(212, 166, 74, 0.1) 0%, rgba(20, 16, 24, 0.95) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, rgba(212, 166, 74, 0.12) 0%, rgba(20, 16, 26, 0.98) 100%);
 }
 
+.chat-active-user-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+}
+
+.chat-active-name {
+    font-family: var(--display, 'Cormorant Garamond', Georgia, serif);
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #fdfaf2;
+    line-height: 1.1;
+}
+
+.chat-active-sub {
+    font-size: 0.78rem;
+    color: rgba(233, 223, 200, 0.65);
+    margin-top: 0.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.chat-active-status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #10b981;
+    display: inline-block;
+    box-shadow: 0 0 6px #10b981;
+}
+
+.chat-active-actions {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+}
+
+.btn-dossier {
+    background: rgba(212, 166, 74, 0.12);
+    border: 1px solid rgba(212, 166, 74, 0.35);
+    color: #f0d48a;
+    font-size: 0.82rem;
+    padding: 0.4rem 0.85rem;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s ease;
+}
+
+.btn-dossier:hover {
+    background: rgba(212, 166, 74, 0.22);
+    border-color: #f0d48a;
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+/* --- MESSAGE FEED --- */
 .admin-chat-messages {
     flex: 1;
     padding: 1.5rem 2rem;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.1rem;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(212, 166, 74, 0.3) transparent;
 }
 
 .chat-placeholder {
     margin: auto;
     text-align: center;
-    color: var(--paper-2, #d6c9a3);
-    font-style: italic;
+    max-width: 420px;
+    color: rgba(233, 223, 200, 0.65);
+}
+
+.chat-placeholder .om-icon {
+    font-size: 3rem;
+    color: #d4a64a;
+    margin-bottom: 0.75rem;
+    opacity: 0.85;
 }
 
 .chat-message {
-    max-width: 65%;
-    padding: 0.85rem 1.25rem;
+    max-width: 68%;
+    padding: 0.9rem 1.25rem;
     border-radius: 14px;
     word-break: break-word;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
     position: relative;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-}
-
-.chat-message.user {
-    align-self: flex-end;
-    background: linear-gradient(135deg, rgba(212, 166, 74, 0.3) 0%, rgba(184, 132, 42, 0.55) 100%);
-    border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
-    color: #fdfaf2;
-    border-bottom-right-radius: 2px;
-}
-
-.chat-message.admin {
-    align-self: flex-start;
-    background: rgba(14, 10, 6, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    color: #e9dfc8;
-    border-bottom-left-radius: 2px;
-}
-
-.message-content {
-    font-size: 0.95rem;
     line-height: 1.5;
 }
 
-.message-time {
-    font-size: 0.72rem;
-    color: var(--paper-2, #d6c9a3);
-    margin-top: 0.35rem;
-    text-align: right;
-    opacity: 0.8;
+/* Seeker message (received on left) */
+.chat-message.msg-them {
+    align-self: flex-start;
+    background: rgba(14, 11, 18, 0.95);
+    border: 1px solid rgba(212, 166, 74, 0.22);
+    color: #e9dfc8;
+    border-bottom-left-radius: 3px;
 }
 
+/* Admin guidance message (sent on right) */
+.chat-message.msg-me {
+    align-self: flex-end;
+    background: linear-gradient(135deg, rgba(212, 166, 74, 0.22) 0%, rgba(138, 98, 25, 0.45) 100%);
+    border: 1px solid rgba(212, 166, 74, 0.45);
+    color: #fdfaf2;
+    border-bottom-right-radius: 3px;
+    box-shadow: 0 4px 20px rgba(212, 166, 74, 0.12);
+}
+
+.msg-sender-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.msg-them .msg-sender-label {
+    color: #d6c9a3;
+}
+
+.msg-me .msg-sender-label {
+    color: #f0d48a;
+}
+
+.msg-content {
+    font-size: 0.95rem;
+    white-space: pre-wrap;
+}
+
+.msg-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.4rem;
+    margin-top: 0.4rem;
+    font-size: 0.7rem;
+    color: rgba(233, 223, 200, 0.55);
+}
+
+.msg-read-check {
+    color: #10b981;
+}
+
+/* --- QUICK GUIDANCE BLESSING CHIPS --- */
+.quick-guidance-bar {
+    padding: 0.5rem 1.75rem 0.25rem;
+    background: rgba(14, 10, 6, 0.85);
+    border-top: 1px solid rgba(212, 166, 74, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+}
+
+.quick-guidance-bar::-webkit-scrollbar {
+    display: none;
+}
+
+.quick-chip {
+    background: rgba(212, 166, 74, 0.1);
+    border: 1px solid rgba(212, 166, 74, 0.25);
+    border-radius: 999px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    color: rgba(233, 223, 200, 0.85);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.quick-chip:hover {
+    background: rgba(212, 166, 74, 0.22);
+    border-color: #f0d48a;
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+/* --- INPUT COMPOSER AREA --- */
 .admin-chat-input-area {
-    padding: 1.25rem 1.75rem;
+    padding: 1rem 1.75rem 1.25rem;
+    background: rgba(14, 10, 6, 0.97);
     border-top: 1px solid rgba(212, 166, 74, 0.2);
     display: flex;
-    gap: 0.85rem;
-    background: rgba(14, 10, 6, 0.95);
+    gap: 0.75rem;
+    align-items: center;
 }
 
 .admin-chat-input {
     flex: 1;
-    background: rgba(20, 16, 24, 0.9);
-    border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35));
-    border-radius: 999px;
-    padding: 0.7rem 1.4rem;
+    background: rgba(20, 16, 26, 0.95);
+    border: 1px solid rgba(212, 166, 74, 0.35);
+    border-radius: 12px;
+    padding: 0.75rem 1.2rem;
     color: #fdfaf2;
-    font-size: 0.92rem;
+    font-size: 0.95rem;
     outline: none;
     transition: all 0.2s ease;
+    font-family: inherit;
+    line-height: 1.4;
 }
 
 .admin-chat-input:focus {
-    border-color: var(--gold-3, #f0d48a);
-    box-shadow: 0 0 12px rgba(212, 166, 74, 0.25);
+    border-color: #f0d48a;
+    box-shadow: 0 0 14px rgba(212, 166, 74, 0.25);
 }
 
 .admin-chat-send {
-    background: linear-gradient(135deg, #f0d48a, #d4a64a);
+    background: linear-gradient(135deg, #f0d48a 0%, #d4a64a 100%);
     color: #0e0a06;
     border: none;
-    border-radius: 999px;
-    padding: 0.7rem 1.8rem;
+    border-radius: 12px;
+    padding: 0.75rem 1.6rem;
     font-weight: 700;
-    font-family: var(--serif, serif);
     font-size: 0.92rem;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(212, 166, 74, 0.3);
-    transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(212, 166, 74, 0.35);
+    transition: all 0.22s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
 }
 
 .admin-chat-send:hover {
@@ -184,17 +491,23 @@
     box-shadow: 0 6px 20px rgba(212, 166, 74, 0.5);
 }
 
-@media (max-width: 768px) {
+.admin-chat-send:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+@media (max-width: 900px) {
     .admin-chat-container {
         flex-direction: column;
         height: auto;
     }
     .chat-sidebar {
         width: 100%;
-        height: 250px;
+        height: 320px;
     }
     .admin-chat-messages {
-        height: 350px;
+        height: 400px;
     }
 }
 </style>
@@ -202,50 +515,98 @@
 
 {% block content %}
 <div class="container admin-dashboard">
-    <div class="dashboard-header">
+    <div class="dashboard-header" style="margin-bottom: 1.5rem;">
         <div class="dashboard-title-section">
             <div class="dashboard-icon">
                 <i class="fas fa-comments"></i>
             </div>
             <div class="dashboard-title">
-                <h1>User Messages</h1>
-                <p>Respond to user queries regarding sadhana</p>
+                <h1>Sadhak Mentorship Desk</h1>
+                <p>Provide direct spiritual counsel, mantra discipline guidance, and real-time query resolution to initiated seekers.</p>
             </div>
         </div>
         <div class="dashboard-actions">
             <a href="{{ url_for('auth.admin_users') }}" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Back to Dashboard
+                <i class="fas fa-arrow-left"></i> User Management
             </a>
         </div>
     </div>
 
-    <div class="admin-chat-container">
-        <!-- Sidebar -->
-        <div class="chat-sidebar">
-            <div class="chat-sidebar-header">
-                Active Conversations
-            </div>
-            <div id="user-list" class="chat-user-list">
-                <!-- User list will be loaded here -->
-                <div style="padding: 1rem; color: #666; font-style: italic;">Loading users...</div>
-            </div>
-        </div>
+    <div class="admin-chat-layout">
+        <div class="admin-chat-container">
+            <!-- Sidebar: Seeker Roster -->
+            <aside class="chat-sidebar">
+                <div class="chat-sidebar-header">
+                    <div class="chat-sidebar-title-row">
+                        <span class="chat-sidebar-title"><i class="fas fa-users"></i> Sadhak Roster</span>
+                        <span class="chat-roster-count" id="roster-count">0 Sadhaks</span>
+                    </div>
 
-        <!-- Main Chat Area -->
-        <div class="admin-chat-main">
-            <div id="chat-header" class="admin-chat-header">
-                Select a user to start chatting
-            </div>
-            <div id="admin-chat-messages" class="admin-chat-messages">
-                <!-- Messages will appear here -->
-                <div class="chat-placeholder">
-                    <p>Select a conversation from the left.</p>
+                    <!-- Search Input -->
+                    <div class="chat-search-wrap">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="seeker-search-input" class="chat-search-input" placeholder="Search sadhaks by name/email..." autocomplete="off">
+                    </div>
+
+                    <!-- Filter Tabs -->
+                    <div class="chat-filter-tabs">
+                        <button type="button" class="chat-tab-btn is-active" data-filter="all">All</button>
+                        <button type="button" class="chat-tab-btn" data-filter="unread">Unread <span id="unread-filter-count" style="display:none;"></span></button>
+                        <button type="button" class="chat-tab-btn" data-filter="active">Active</button>
+                    </div>
                 </div>
-            </div>
-            <div class="admin-chat-input-area" id="input-area" style="display: none;">
-                <input type="text" id="admin-chat-input" class="admin-chat-input" placeholder="Type your reply...">
-                <button id="admin-chat-send" class="admin-chat-send">Send</button>
-            </div>
+
+                <div id="user-list" class="chat-user-list">
+                    <div style="padding: 1.5rem; text-align: center; color: rgba(233, 223, 200, 0.6); font-style: italic;">
+                        <i class="fas fa-spinner fa-spin" style="margin-right: 8px;"></i> Loading sadhak roster...
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Panel: Focused Chat Thread -->
+            <main class="admin-chat-main">
+                <!-- Active Header -->
+                <div id="chat-header" class="admin-chat-header">
+                    <div class="chat-active-user-meta">
+                        <div class="chat-avatar-wrap" id="header-avatar">ॐ</div>
+                        <div>
+                            <div class="chat-active-name" id="header-name">Select a Sadhak</div>
+                            <div class="chat-active-sub" id="header-sub">Choose a seeker from the left roster to view their conversation history</div>
+                        </div>
+                    </div>
+                    <div class="chat-active-actions" id="header-actions" style="display: none;">
+                        <a href="#" id="view-dossier-btn" class="btn-dossier" target="_blank" title="View Full Administrative Profile">
+                            <i class="fas fa-id-card"></i> Seeker Dossier
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Messages Feed -->
+                <div id="admin-chat-messages" class="admin-chat-messages">
+                    <div class="chat-placeholder">
+                        <div class="om-icon">ॐ</div>
+                        <h3 style="color: #f0d48a; margin-bottom: 0.5rem; font-family: var(--display, serif);">Sacred Sadhak Guidance</h3>
+                        <p>Select any devotee from the roster to begin or continue spiritual mentorship, mantra instructions, or review their questions.</p>
+                    </div>
+                </div>
+
+                <!-- Quick Blessing Chips -->
+                <div class="quick-guidance-bar" id="quick-bar" style="display: none;">
+                    <span style="font-size: 0.7rem; color: #d4a64a; text-transform: uppercase; font-weight: 700; margin-right: 4px;">Quick Blessings:</span>
+                    <button type="button" class="quick-chip" data-text="॥ ॐ भैरवाय नमः ॥">॥ ॐ भैरवाय नमः ॥</button>
+                    <button type="button" class="quick-chip" data-text="Continue your daily japa with steady devotion and sacred focus.">Daily Japa Guidance</button>
+                    <button type="button" class="quick-chip" data-text="Your spiritual sankalpa has been witnessed with grace. May Bhairava illuminate your path.">Sankalpa Blessing</button>
+                    <button type="button" class="quick-chip" data-text="Maintain your morning dhyāna discipline. The lineage is with you.">Dhyāna Discipline</button>
+                </div>
+
+                <!-- Composer Input Area -->
+                <div class="admin-chat-input-area" id="input-area" style="display: none;">
+                    <input type="text" id="admin-chat-input" class="admin-chat-input" placeholder="Type sacred guidance or counsel to sadhak..." autocomplete="off">
+                    <button type="button" id="admin-chat-send" class="admin-chat-send">
+                        <i class="fas fa-paper-plane"></i> Send Guidance
+                    </button>
+                </div>
+            </main>
         </div>
     </div>
 </div>
@@ -253,191 +614,369 @@
 
 {% block extra_scripts %}
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const userListContainer = document.getElementById('user-list');
-        const chatHeader = document.getElementById('chat-header');
-        const messagesContainer = document.getElementById('admin-chat-messages');
-        const inputArea = document.getElementById('input-area');
-        const inputField = document.getElementById('admin-chat-input');
-        const sendButton = document.getElementById('admin-chat-send');
+document.addEventListener('DOMContentLoaded', function () {
+    const userListContainer = document.getElementById('user-list');
+    const rosterCount = document.getElementById('roster-count');
+    const searchInput = document.getElementById('seeker-search-input');
+    const filterTabs = document.querySelectorAll('.chat-tab-btn');
+    
+    const headerAvatar = document.getElementById('header-avatar');
+    const headerName = document.getElementById('header-name');
+    const headerSub = document.getElementById('header-sub');
+    const headerActions = document.getElementById('header-actions');
+    const viewDossierBtn = document.getElementById('view-dossier-btn');
+    
+    const messagesContainer = document.getElementById('admin-chat-messages');
+    const quickBar = document.getElementById('quick-bar');
+    const inputArea = document.getElementById('input-area');
+    const inputField = document.getElementById('admin-chat-input');
+    const sendButton = document.getElementById('admin-chat-send');
 
-        let currentUserId = null;
-        let pollInterval = null;
-        const POLL_RATE = 10000;
+    let allUsers = [];
+    let currentFilter = 'all';
+    let currentUserId = null;
+    let currentUserData = null;
+    let lastRenderedMessageCount = -1;
+    let pollInterval = null;
+    let rosterInterval = null;
 
-        // Load users initially
-        loadUsers();
+    const CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 
-        // Refresh users every 30s
-        setInterval(loadUsers, 30000);
+    // Initialize
+    loadUsers(true);
+    rosterInterval = setInterval(() => loadUsers(false), 10000);
 
-        function loadUsers() {
-            fetch('/api/admin/chat/users')
-                .then(res => res.json())
-                .then(users => {
-                    if (users.error) return;
-                    renderUserList(users);
-                })
-                .catch(err => console.error('Error loading users:', err));
-        }
+    // Filter tab buttons
+    filterTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            filterTabs.forEach(t => t.classList.remove('is-active'));
+            tab.classList.add('is-active');
+            currentFilter = tab.dataset.filter;
+            applyFilterAndSearch();
+        });
+    });
 
-        function renderUserList(users) {
-            if (users.length === 0) {
-                userListContainer.innerHTML = '<div style="padding: 1rem; color: #666;">No active conversations</div>';
-                return;
+    // Search input
+    searchInput.addEventListener('input', applyFilterAndSearch);
+
+    // Quick blessing chips
+    document.querySelectorAll('.quick-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+            const text = chip.dataset.text;
+            if (inputField) {
+                inputField.value = text;
+                inputField.focus();
             }
+        });
+    });
 
-            userListContainer.innerHTML = '';
-            users.forEach(user => {
-                const div = document.createElement('div');
-                div.className = `chat-user-item ${currentUserId === user.id ? 'active' : ''}`;
-                div.onclick = () => selectUser(user);
-
-                div.innerHTML = `
-                <div style="width: 40px; height: 40px; background: #ddd; border-radius: 50%; overflow: hidden;">
-                    ${user.profile_picture ?
-                        `<img src="${user.profile_picture}" style="width: 100%; height: 100%; object-fit: cover;">` :
-                        '<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #666;">' + user.full_name.charAt(0) + '</div>'}
-                </div>
-                <div>
-                    <div style="font-weight: 600; font-size: 0.9rem;">${user.full_name}</div>
-                    <div style="font-size: 0.75rem; color: #888;">@${user.username}</div>
-                </div>
-                ${user.unread_count > 0 ? `<div class="unread-badge">${user.unread_count}</div>` : ''}
-            `;
-
-                userListContainer.appendChild(div);
-            });
-        }
-
-        function selectUser(user) {
-            currentUserId = user.id;
-            chatHeader.innerHTML = `Chatting with ${user.full_name}`;
-            inputArea.style.display = 'flex';
-
-            // Refresh UI to show active state
-            const items = document.querySelectorAll('.chat-user-item');
-            items.forEach(item => item.classList.remove('active'));
-            // (Re-rendering would be cleaner but this works for now)
-            loadUsers(); // Refresh to update active class in full render or just trust user selected
-
-            loadMessages(user.id);
-            startPolling();
-
-            // Mark as read
-            markAsRead(user.id);
-        }
-
-        function loadMessages(userId) {
-            if (!userId) return;
-
-            fetch(`/api/admin/chat/${userId}`)
-                .then(res => res.json())
-                .then(messages => {
-                    renderMessages(messages);
-                });
-        }
-
-        function renderMessages(messages) {
-            messagesContainer.innerHTML = '';
-            if (messages.length === 0) {
-                messagesContainer.innerHTML = '<div class="chat-placeholder"><p>No messages yet.</p></div>';
-                return;
-            }
-
-            messages.forEach(msg => {
-                const div = document.createElement('div');
-                // Admin checks: is_from_admin means "me" (Admin)
-                div.className = `chat-message ${msg.is_from_admin ? 'user' : 'admin'}`;
-                // If from admin (me), style as 'user' (right side)
-                // If from user (them), style as 'admin' (left side)
-                // Reusing the existing classes: .user is right/red, .admin is left/white
-
-                const time = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                div.innerHTML = `
-                <div class="message-content">${escapeHtml(msg.message)}</div>
-                <div class="message-time">${time}</div>
-            `;
-                messagesContainer.appendChild(div);
-            });
-
-            scrollToBottom();
-        }
-
-        function markAsRead(userId) {
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-            fetch('/api/chat/mark-read', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrfToken
-                },
-                body: JSON.stringify({ user_id: userId })
-            });
-        }
-
-        function startPolling() {
-            if (pollInterval) clearInterval(pollInterval);
-            pollInterval = setInterval(() => {
-                if (currentUserId) loadMessages(currentUserId);
-            }, POLL_RATE);
-        }
-
-        sendButton.onclick = sendMessage;
-        inputField.onkeypress = (e) => {
-            if (e.key === 'Enter') sendMessage();
-        };
-
-        function sendMessage() {
-            if (!currentUserId) return;
-            const text = inputField.value.trim();
-            if (!text) return;
-
-            // Optimistic append
-            renderMessages([...getCurrentMessages(), {
-                message: text,
-                is_from_admin: true,
-                timestamp: new Date().toISOString()
-            }]); // This is tricky without state, better to just loadMessages after send
-
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-
-            fetch('/api/chat/send', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrfToken
-                },
-                body: JSON.stringify({
-                    message: text,
-                    recipient_id: currentUserId
-                })
-            })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        inputField.value = '';
-                        loadMessages(currentUserId);
-                    }
-                });
-        }
-
-        function scrollToBottom() {
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        // Helper to get current messages if needed
-        function getCurrentMessages() {
-            // Implementation omitted, better to just reload
-            return [];
+    // Send button & enter key
+    sendButton.addEventListener('click', sendMessage);
+    inputField.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            sendMessage();
         }
     });
-</script>
 
+    // 1. Fetch Users Roster
+    function loadUsers(autoSelectFirst = false) {
+        fetch('/api/admin/chat/users')
+            .then(res => res.json())
+            .then(data => {
+                const users = Array.isArray(data) ? data : (data.users || []);
+                allUsers = users;
+                
+                // Update total count
+                if (rosterCount) {
+                    rosterCount.textContent = `${users.length} Sadhaks`;
+                }
+
+                // Update unread filter tab badge
+                const totalUnread = users.reduce((acc, u) => acc + (u.unread || 0), 0);
+                const unreadFilterCount = document.getElementById('unread-filter-count');
+                if (unreadFilterCount) {
+                    if (totalUnread > 0) {
+                        unreadFilterCount.textContent = `(${totalUnread})`;
+                        unreadFilterCount.style.display = 'inline';
+                    } else {
+                        unreadFilterCount.style.display = 'none';
+                    }
+                }
+
+                applyFilterAndSearch();
+
+                // If no user selected yet and users exist, select first user
+                if (autoSelectFirst && !currentUserId && users.length > 0) {
+                    selectUser(users[0]);
+                }
+            })
+            .catch(err => console.error('Error loading sadhak roster:', err));
+    }
+
+    // 2. Filter & Search Roster
+    function applyFilterAndSearch() {
+        const query = searchInput.value.toLowerCase().trim();
+        let filtered = allUsers.filter(u => {
+            const nameMatch = (u.full_name || '').toLowerCase().includes(query) ||
+                              (u.username || '').toLowerCase().includes(query) ||
+                              (u.email || '').toLowerCase().includes(query);
+            if (!nameMatch) return false;
+
+            if (currentFilter === 'unread') {
+                return (u.unread || 0) > 0;
+            } else if (currentFilter === 'active') {
+                return u.has_messages;
+            }
+            return true;
+        });
+
+        renderUserList(filtered);
+    }
+
+    // 3. Render Seeker List
+    function renderUserList(users) {
+        if (!userListContainer) return;
+
+        if (users.length === 0) {
+            userListContainer.innerHTML = `
+                <div style="padding: 2rem 1.5rem; text-align: center; color: rgba(233, 223, 200, 0.55); font-style: italic;">
+                    <i class="fas fa-user-slash" style="font-size: 1.5rem; margin-bottom: 0.5rem; display: block; color: rgba(212, 166, 74, 0.4);"></i>
+                    No seekers match your search.
+                </div>
+            `;
+            return;
+        }
+
+        userListContainer.innerHTML = '';
+        users.forEach(u => {
+            const div = document.createElement('div');
+            const isActive = currentUserId === u.id;
+            div.className = `chat-user-item ${isActive ? 'active' : ''}`;
+            div.onclick = () => selectUser(u);
+
+            const initial = (u.full_name || u.username || 'S').charAt(0).toUpperCase();
+            const avatarHtml = u.profile_picture ? 
+                `<img src="${u.profile_picture}" alt="${escapeHtml(u.full_name || u.username)}">` :
+                `<span>${initial}</span>`;
+
+            const snippet = u.last_message ? escapeHtml(u.last_message) : '<em>No conversation yet</em>';
+            const unreadBadgeHtml = (u.unread && u.unread > 0) ? 
+                `<span class="unread-badge">${u.unread} new</span>` : '';
+
+            div.innerHTML = `
+                <div class="chat-avatar-wrap">${avatarHtml}</div>
+                <div class="chat-user-info">
+                    <div class="chat-user-name-row">
+                        <span class="chat-user-name">${escapeHtml(u.full_name || u.username)}</span>
+                        <span class="chat-user-time">${escapeHtml(u.last_message_time || '')}</span>
+                    </div>
+                    <div class="chat-user-sub-row">
+                        <span class="chat-user-snippet">${snippet}</span>
+                        ${unreadBadgeHtml}
+                    </div>
+                </div>
+            `;
+            userListContainer.appendChild(div);
+        });
+    }
+
+    // 4. Select Seeker to Focus Conversation
+    function selectUser(user) {
+        if (!user) return;
+        currentUserId = user.id;
+        currentUserData = user;
+        lastRenderedMessageCount = -1;
+
+        // Clear local unread count
+        user.unread = 0;
+        user.unread_count = 0;
+
+        // Update Header
+        const initial = (user.full_name || user.username || 'S').charAt(0).toUpperCase();
+        headerAvatar.innerHTML = user.profile_picture ? 
+            `<img src="${user.profile_picture}" alt="${escapeHtml(user.full_name || user.username)}" style="width:100%; height:100%; object-fit:cover;">` :
+            `<span>${initial}</span>`;
+
+        headerName.textContent = user.full_name || user.username;
+        headerSub.innerHTML = `
+            <span class="chat-active-status-dot"></span>
+            <span>@${escapeHtml(user.username)} · ${escapeHtml(user.email)}</span>
+        `;
+
+        if (viewDossierBtn) {
+            viewDossierBtn.href = `/auth/admin/users/${user.id}`;
+        }
+        headerActions.style.display = 'flex';
+        quickBar.style.display = 'flex';
+        inputArea.style.display = 'flex';
+        inputField.placeholder = `Type sacred guidance or counsel to ${user.full_name ? user.full_name.split(' ')[0] : user.username}...`;
+        inputField.focus();
+
+        // Highlight in sidebar
+        const allItems = userListContainer.querySelectorAll('.chat-user-item');
+        allItems.forEach(item => item.classList.remove('active'));
+        applyFilterAndSearch();
+
+        // Load conversation
+        loadMessages(user.id, true);
+        startPolling(user.id);
+    }
+
+    // 5. Load Messages for Seeker
+    function loadMessages(userId, scrollDown = false) {
+        if (!userId) return;
+
+        fetch(`/api/admin/chat/${userId}`)
+            .then(res => res.json())
+            .then(data => {
+                const messages = Array.isArray(data) ? data : (data.messages || []);
+                
+                // Only re-render if message count changed (prevents DOM thrashing and scroll jumps)
+                if (messages.length !== lastRenderedMessageCount) {
+                    renderMessages(messages, currentUserData);
+                    lastRenderedMessageCount = messages.length;
+                    if (scrollDown) {
+                        scrollToBottom();
+                    }
+                }
+            })
+            .catch(err => console.error('Error loading chat messages:', err));
+    }
+
+    // 6. Render Messages Feed
+    function renderMessages(messages, user) {
+        if (!messagesContainer) return;
+        messagesContainer.innerHTML = '';
+
+        if (!messages || messages.length === 0) {
+            const firstName = user && user.full_name ? user.full_name.split(' ')[0] : (user ? user.username : 'Seeker');
+            messagesContainer.innerHTML = `
+                <div class="chat-placeholder">
+                    <div class="om-icon">☸</div>
+                    <h3 style="color: #f0d48a; margin-bottom: 0.5rem; font-family: var(--display, serif);">Initiate Sadhak Guidance</h3>
+                    <p>No messages exchanged with <strong>${escapeHtml(firstName)}</strong> yet.<br>Send a sacred blessing or advice to begin their mentorship guidance.</p>
+                </div>
+            `;
+            return;
+        }
+
+        messages.forEach(msg => {
+            const isMe = Boolean(msg.is_from_admin || msg.is_admin);
+            const div = document.createElement('div');
+            div.className = `chat-message ${isMe ? 'msg-me' : 'msg-them'}`;
+
+            const senderLabel = isMe ? 
+                `<i class="fas fa-shield-halved"></i> Guru Bhairava Guidance Desk` : 
+                `<i class="fas fa-user"></i> ${escapeHtml(user ? (user.full_name || user.username) : 'Devotee')}`;
+
+            const timeStr = msg.created_at || (msg.timestamp ? new Date(msg.timestamp).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : '');
+            const readIcon = isMe ? `<span class="msg-read-check" title="Delivered"><i class="fas fa-check-double"></i></span>` : '';
+
+            div.innerHTML = `
+                <div class="msg-sender-label">${senderLabel}</div>
+                <div class="msg-content">${escapeHtml(msg.message || msg.content || '')}</div>
+                <div class="msg-footer">
+                    <span>${escapeHtml(timeStr)}</span>
+                    ${readIcon}
+                </div>
+            `;
+            messagesContainer.appendChild(div);
+        });
+
+        scrollToBottom();
+    }
+
+    // 7. Send Message
+    function sendMessage() {
+        if (!currentUserId) return;
+        const text = inputField.value.trim();
+        if (!text) return;
+
+        // Disable button during transit
+        sendButton.disabled = true;
+        sendButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Sending...`;
+
+        // Optimistic UI Append
+        const tempMsg = {
+            id: 'temp-' + Date.now(),
+            message: text,
+            is_from_admin: true,
+            is_admin: true,
+            created_at: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        };
+        
+        // Clear placeholder if first message
+        const placeholder = messagesContainer.querySelector('.chat-placeholder');
+        if (placeholder) placeholder.remove();
+
+        const div = document.createElement('div');
+        div.className = 'chat-message msg-me';
+        div.innerHTML = `
+            <div class="msg-sender-label"><i class="fas fa-shield-halved"></i> Guru Bhairava Guidance Desk</div>
+            <div class="msg-content">${escapeHtml(text)}</div>
+            <div class="msg-footer">
+                <span>Just now</span>
+                <span style="opacity: 0.6;"><i class="fas fa-clock"></i></span>
+            </div>
+        `;
+        messagesContainer.appendChild(div);
+        scrollToBottom();
+        inputField.value = '';
+
+        fetch('/api/chat/send', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': CSRF_TOKEN
+            },
+            body: JSON.stringify({
+                message: text,
+                recipient_id: currentUserId
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            sendButton.disabled = false;
+            sendButton.innerHTML = `<i class="fas fa-paper-plane"></i> Send Guidance`;
+            if (data.success) {
+                loadMessages(currentUserId, true);
+                loadUsers(false);
+            } else {
+                alert('Error sending message: ' + (data.error || 'Failed to deliver'));
+            }
+        })
+        .catch(err => {
+            console.error('Send error:', err);
+            sendButton.disabled = false;
+            sendButton.innerHTML = `<i class="fas fa-paper-plane"></i> Send Guidance`;
+            alert('Network error while delivering guidance.');
+        });
+    }
+
+    // 8. Auto-Scroll Helper
+    function scrollToBottom() {
+        if (messagesContainer) {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+    }
+
+    // 9. Real-time Poller
+    function startPolling(userId) {
+        if (pollInterval) clearInterval(pollInterval);
+        pollInterval = setInterval(() => {
+            if (currentUserId === userId) {
+                loadMessages(userId, false);
+            }
+        }, 3500);
+    }
+
+    function escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+});
+</script>
 {% endblock %}

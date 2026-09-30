@@ -1018,11 +1018,14 @@ def admin_mandala_sadhana_export():
 # ==============================================================================
 # SPIRITUAL GUIDANCE CHAT SYSTEM
 # ==============================================================================
+# SPIRITUAL GUIDANCE CHAT & MENTORSHIP ENDPOINTS
+# ==============================================================================
 @app.route('/api/chat/send', methods=['POST'])
+@app.route('/api/admin/chat/send', methods=['POST'])
 @login_required
 def send_chat_message():
     try:
-        data = request.get_json()
+        data = request.get_json(silent=True) or {}
         content = data.get('message', '').strip()
         recipient_id = data.get('recipient_id')
         if not content:
@@ -1032,11 +1035,14 @@ def send_chat_message():
         if is_admin and not recipient_id:
             return jsonify({'success': False, 'error': 'Recipient ID required for admin responses.'}), 400
 
+        target_recipient_id = int(recipient_id) if (is_admin and recipient_id) else None
+
         msg = ChatMessage(
             sender_id=current_user.id,
-            recipient_id=recipient_id if is_admin else None,
+            recipient_id=target_recipient_id,
             message=content,
-            is_admin_message=is_admin
+            is_admin_message=is_admin,
+            is_from_admin=is_admin
         )
         db.session.add(msg)
         db.session.commit()
@@ -1045,8 +1051,13 @@ def send_chat_message():
             'message': {
                 'id': msg.id,
                 'content': msg.message,
+                'message': msg.message,
                 'created_at': msg.created_at.strftime('%Y-%m-%d %H:%M'),
-                'is_admin': msg.is_admin_message
+                'timestamp': msg.timestamp.isoformat(),
+                'is_admin': msg.is_admin_message,
+                'is_from_admin': msg.is_admin_message,
+                'sender_id': msg.sender_id,
+                'recipient_id': msg.recipient_id
             }
         })
     except Exception as e:
@@ -1064,24 +1075,35 @@ def get_chat_history():
             )
         ).order_by(ChatMessage.created_at.asc()).all()
 
+        serialized = [{
+            'id': m.id,
+            'message': m.message,
+            'content': m.message,
+            'is_admin': m.is_admin_message,
+            'is_from_admin': m.is_admin_message,
+            'created_at': m.created_at.strftime('%Y-%m-%d %H:%M'),
+            'timestamp': m.timestamp.isoformat(),
+            'is_read': m.is_read
+        } for m in messages]
+
         return jsonify({
             'success': True,
-            'messages': [{
-                'id': m.id,
-                'message': m.message,
-                'is_admin': m.is_admin_message,
-                'created_at': m.created_at.strftime('%Y-%m-%d %H:%M'),
-                'is_read': m.is_read
-            } for m in messages]
+            'messages': serialized
         })
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/api/chat/mark-read', methods=['POST'])
+@app.route('/api/admin/chat/mark-read', methods=['POST'])
 @login_required
 def mark_messages_read():
     try:
-        ChatMessage.query.filter_by(recipient_id=current_user.id, is_read=False).update({'is_read': True})
+        data = request.get_json(silent=True) or {}
+        user_id = data.get('user_id')
+        if current_user.is_admin() and user_id:
+            ChatMessage.query.filter_by(sender_id=int(user_id), is_read=False).update({'is_read': True})
+        else:
+            ChatMessage.query.filter_by(recipient_id=current_user.id, is_read=False).update({'is_read': True})
         db.session.commit()
         return jsonify({'success': True})
     except Exception as e:
@@ -1101,24 +1123,47 @@ def admin_chat():
 def get_chat_users():
     if not current_user.is_admin():
         return jsonify({'error': 'Access denied'}), 403
-    users_with_messages = User.query.join(
-        ChatMessage, db.or_(ChatMessage.sender_id == User.id, ChatMessage.recipient_id == User.id)
-    ).filter(User.role != 'admin').distinct().all()
+
+    seekers = User.query.filter(User.role != 'admin').all()
 
     user_list = []
-    for u in users_with_messages:
+    for u in seekers:
         unread = ChatMessage.query.filter_by(sender_id=u.id, is_read=False).count()
         last_msg = ChatMessage.query.filter(
             db.or_(ChatMessage.sender_id == u.id, ChatMessage.recipient_id == u.id)
         ).order_by(ChatMessage.created_at.desc()).first()
+
         user_list.append({
             'id': u.id,
             'name': u.full_name or u.username,
+            'full_name': u.full_name or u.username,
+            'username': u.username,
             'email': u.email,
             'unread': unread,
-            'last_message': last_msg.message[:40] if last_msg else '',
-            'last_active': u.last_active.strftime('%Y-%m-%d %H:%M') if u.last_active else ''
+            'unread_count': unread,
+            'last_message': last_msg.message[:50] if last_msg else '',
+            'last_message_time': last_msg.created_at.strftime('%Y-%m-%d %H:%M') if last_msg else '',
+            'last_active': u.last_active.strftime('%Y-%m-%d %H:%M') if u.last_active else '',
+            'profile_picture': f'/auth/profile-picture/{u.id}' if u.profile_picture else None,
+            'has_messages': bool(last_msg),
+            '_last_epoch': last_msg.created_at.timestamp() if (last_msg and last_msg.created_at) else 0.0
         })
+
+    # Sort priorities:
+    # 1. Unread messages first (most unread first)
+    # 2. Existing message conversations (newest timestamp first)
+    # 3. Registered sadhaks without messages (by ID desc)
+    user_list.sort(key=lambda x: (
+        0 if x['unread'] > 0 else (1 if x['has_messages'] else 2),
+        -x['unread'],
+        -x['_last_epoch'],
+        -x['id']
+    ))
+
+    # Remove temporary sorting key before output
+    for item in user_list:
+        item.pop('_last_epoch', None)
+
     return jsonify({'success': True, 'users': user_list})
 
 @app.route('/api/admin/chat/<int:user_id>')
@@ -1130,22 +1175,39 @@ def get_admin_user_chat(user_id):
     messages = ChatMessage.query.filter(
         db.or_(
             db.and_(ChatMessage.sender_id == user_id, ChatMessage.is_admin_message == False),
-            db.and_(ChatMessage.recipient_id == user_id, ChatMessage.is_admin_message == True)
+            db.and_(ChatMessage.recipient_id == user_id, ChatMessage.is_admin_message == True),
+            db.and_(ChatMessage.sender_id == current_user.id, ChatMessage.recipient_id == user_id)
         )
     ).order_by(ChatMessage.created_at.asc()).all()
 
+    # Mark seeker messages as read
     ChatMessage.query.filter_by(sender_id=user_id, is_read=False).update({'is_read': True})
     db.session.commit()
 
+    serialized = [{
+        'id': m.id,
+        'message': m.message,
+        'content': m.message,
+        'is_admin': m.is_admin_message,
+        'is_from_admin': m.is_admin_message,
+        'created_at': m.created_at.strftime('%Y-%m-%d %H:%M'),
+        'timestamp': m.timestamp.isoformat(),
+        'is_read': m.is_read
+    } for m in messages]
+
     return jsonify({
         'success': True,
-        'user': {'id': target_user.id, 'name': target_user.full_name, 'email': target_user.email},
-        'messages': [{
-            'id': m.id,
-            'message': m.message,
-            'is_admin': m.is_admin_message,
-            'created_at': m.created_at.strftime('%Y-%m-%d %H:%M')
-        } for m in messages]
+        'user': {
+            'id': target_user.id,
+            'name': target_user.full_name or target_user.username,
+            'full_name': target_user.full_name or target_user.username,
+            'username': target_user.username,
+            'email': target_user.email,
+            'profile_picture': f'/auth/profile-picture/{target_user.id}' if target_user.profile_picture else None,
+            'last_active': target_user.last_active.strftime('%Y-%m-%d %H:%M') if target_user.last_active else '',
+            'is_approved': target_user.is_approved
+        },
+        'messages': serialized
     })
 
 # ==============================================================================

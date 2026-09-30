@@ -1,35 +1,276 @@
-<!-- Chat Widget Component -->
+<!-- Spiritual Guidance Chat Widget Component -->
 <div id="da-chat-widget" class="da-chat-widget">
-    <!-- Chat Button (FAB) -->
-    <button id="chat-fab" class="chat-fab" aria-label="Open Chat">
-        <i class="fas fa-comment-alt"></i>
+    <!-- Floating Action Button (FAB) -->
+    <button type="button" id="chat-fab" class="chat-fab" aria-label="Ask Spiritual Guidance" title="Ask Guru Bhairava Spiritual Guidance">
+        <i class="fas fa-comments"></i>
         <span class="chat-notification-badge" id="chat-badge" style="display: none;">0</span>
     </button>
 
-    <!-- Chat Window -->
-    <div id="chat-window" class="chat-window" style="display: none;">
+    <!-- Floating Chat Window -->
+    <div id="chat-window" class="chat-window" style="display: none;" role="dialog" aria-label="Spiritual Guidance Chat Window">
         <div class="chat-header">
             <div class="chat-header-info">
-                <i class="fas fa-om"></i>
-                <span>Ask Guru Bhairava</span>
+                <span class="chat-header-om">ॐ</span>
+                <div>
+                    <strong>Sādhana Mentorship</strong>
+                    <div style="font-size: 0.72rem; color: rgba(233, 223, 200, 0.7);">Guru Bhairava Guidance Desk</div>
+                </div>
             </div>
-            <button id="chat-close" class="chat-close" aria-label="Close Chat">
+            <button type="button" id="chat-close" class="chat-close" aria-label="Close Chat">
                 <i class="fas fa-times"></i>
             </button>
         </div>
         
         <div id="chat-messages" class="chat-messages">
-            <!-- Messages will be loaded here -->
             <div class="chat-placeholder">
-                <p>Namaste! How can we guide you on your journey today?</p>
+                <p>॥ ॐ भैरवाय नमः ॥</p>
+                <p>Namaste! Ask any guidance regarding your Sādhana, mantras, or daily discipline.</p>
             </div>
         </div>
         
         <div class="chat-input-area">
-            <input type="text" id="chat-input" placeholder="Type your message..." autocomplete="off">
-            <button id="chat-send" class="chat-send" aria-label="Send Message">
+            <input type="text" id="chat-input" placeholder="Type sacred question or message..." autocomplete="off">
+            <button type="button" id="chat-send" class="chat-send" aria-label="Send Message" title="Send Message">
                 <i class="fas fa-paper-plane"></i>
             </button>
         </div>
     </div>
 </div>
+
+<style>
+/* ==========================================================================
+   SACRED FLOATING DEVOTEE CHAT WIDGET STYLES
+   ========================================================================== */
+.da-chat-widget {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9990;
+    font-family: var(--serif, 'EB Garamond', Georgia, serif);
+}
+
+.chat-fab {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f0d48a 0%, #d4a64a 50%, #9a7218 100%);
+    color: #0e0a06;
+    border: 2px solid rgba(253, 250, 242, 0.6);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.65), 0 0 16px rgba(212, 166, 74, 0.45);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    outline: none;
+}
+
+.chat-fab:hover {
+    transform: scale(1.08) translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8), 0 0 24px rgba(212, 166, 74, 0.65);
+}
+
+.chat-notification-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: #ef4444;
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 0.15rem 0.45rem;
+    border-radius: 999px;
+    border: 2px solid #0e0a06;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.chat-window {
+    width: 360px;
+    height: 520px;
+    max-height: 80vh;
+    max-width: calc(100vw - 36px);
+    position: fixed;
+    bottom: 88px;
+    right: 24px;
+    background: linear-gradient(180deg, rgba(22, 17, 28, 0.98) 0%, rgba(14, 10, 18, 0.98) 100%);
+    border: 1px solid rgba(212, 166, 74, 0.4);
+    border-radius: 18px;
+    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.85), 0 0 25px rgba(212, 166, 74, 0.15);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+    z-index: 9991;
+    animation: chatWindowPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes chatWindowPop {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.chat-header {
+    padding: 0.85rem 1.1rem;
+    background: linear-gradient(135deg, rgba(212, 166, 74, 0.16) 0%, rgba(14, 10, 6, 0.98) 100%);
+    border-bottom: 1px solid rgba(212, 166, 74, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #fdfaf2;
+}
+
+.chat-header-info {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.chat-header-om {
+    font-size: 1.4rem;
+    color: #f0d48a;
+    line-height: 1;
+}
+
+.chat-close {
+    background: transparent;
+    border: none;
+    color: rgba(233, 223, 200, 0.7);
+    font-size: 1.05rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.chat-close:hover {
+    color: #f87171;
+    background: rgba(239, 68, 68, 0.12);
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 1rem 1.1rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(212, 166, 74, 0.3) transparent;
+}
+
+.chat-placeholder {
+    margin: auto;
+    text-align: center;
+    color: rgba(233, 223, 200, 0.65);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    padding: 1.5rem 0.5rem;
+}
+
+.chat-placeholder p:first-child {
+    font-size: 1.2rem;
+    color: #f0d48a;
+    margin-bottom: 0.4rem;
+    font-family: var(--display, serif);
+}
+
+.chat-message {
+    max-width: 78%;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    word-break: break-word;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.chat-message.user {
+    align-self: flex-end;
+    background: linear-gradient(135deg, rgba(212, 166, 74, 0.22) 0%, rgba(160, 110, 30, 0.45) 100%);
+    border: 1px solid rgba(212, 166, 74, 0.4);
+    color: #fdfaf2;
+    border-bottom-right-radius: 2px;
+}
+
+.chat-message.admin {
+    align-self: flex-start;
+    background: rgba(14, 10, 6, 0.92);
+    border: 1px solid rgba(212, 166, 74, 0.25);
+    color: #e9dfc8;
+    border-bottom-left-radius: 2px;
+}
+
+.msg-author-tag {
+    font-size: 0.7rem;
+    color: #f0d48a;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.message-time {
+    font-size: 0.68rem;
+    color: rgba(233, 223, 200, 0.55);
+    margin-top: 0.3rem;
+    text-align: right;
+}
+
+.chat-input-area {
+    padding: 0.75rem 1rem;
+    background: rgba(14, 10, 6, 0.98);
+    border-top: 1px solid rgba(212, 166, 74, 0.2);
+    display: flex;
+    gap: 0.55rem;
+    align-items: center;
+}
+
+.chat-input-area input {
+    flex: 1;
+    background: rgba(22, 17, 28, 0.95);
+    border: 1px solid rgba(212, 166, 74, 0.3);
+    border-radius: 999px;
+    padding: 0.6rem 1rem;
+    color: #fdfaf2;
+    font-size: 0.88rem;
+    outline: none;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.chat-input-area input:focus {
+    border-color: #f0d48a;
+    box-shadow: 0 0 10px rgba(212, 166, 74, 0.25);
+}
+
+.chat-send {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f0d48a 0%, #d4a64a 100%);
+    border: none;
+    color: #0e0a06;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(212, 166, 74, 0.3);
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.chat-send:hover {
+    transform: scale(1.06);
+    box-shadow: 0 6px 16px rgba(212, 166, 74, 0.5);
+}
+</style>

@@ -1,11 +1,9 @@
 /**
- * Daiva Anughara Chat Widget
+ * Bhairava Anugraha - Seeker Spiritual Guidance Chat Widget
  */
-
 document.addEventListener('DOMContentLoaded', function () {
-    // DOM Elements
     const chatWidget = document.getElementById('da-chat-widget');
-    if (!chatWidget) return; // Exit if widget not present
+    if (!chatWidget) return;
 
     const chatFab = document.getElementById('chat-fab');
     const chatWindow = document.getElementById('chat-window');
@@ -15,20 +13,24 @@ document.addEventListener('DOMContentLoaded', function () {
     const chatSend = document.getElementById('chat-send');
     const chatBadge = document.getElementById('chat-badge');
 
-    // State
     let isOpen = false;
-    let lastMessageId = 0;
+    let lastRenderedCount = -1;
     let pollInterval = null;
-    const POLL_RATE = 10000; // 10 seconds
+    const POLL_RATE = 4000;
     const CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 
     // Events
-    chatFab.addEventListener('click', toggleChat);
-    chatClose.addEventListener('click', toggleChat);
-    chatSend.addEventListener('click', sendMessage);
-    chatInput.addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') sendMessage();
-    });
+    if (chatFab) chatFab.addEventListener('click', toggleChat);
+    if (chatClose) chatClose.addEventListener('click', toggleChat);
+    if (chatSend) chatSend.addEventListener('click', sendMessage);
+    if (chatInput) {
+        chatInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+    }
 
     // Toggle Chat Window
     function toggleChat() {
@@ -36,10 +38,10 @@ document.addEventListener('DOMContentLoaded', function () {
         if (isOpen) {
             chatWindow.style.display = 'flex';
             chatFab.style.display = 'none';
-            chatInput.focus();
-            loadMessages();
+            if (chatInput) chatInput.focus();
+            loadMessages(true);
             startPolling();
-            scrollToBottom();
+            markAsRead();
         } else {
             chatWindow.style.display = 'none';
             chatFab.style.display = 'flex';
@@ -52,14 +54,19 @@ document.addEventListener('DOMContentLoaded', function () {
         const message = chatInput.value.trim();
         if (!message) return;
 
-        // Optimistic UI - add message immediately
-        appendMessage({
-            message: message,
-            is_from_admin: false,
-            timestamp: new Date().toISOString(),
-            sender_id: 'me', // temporary
-            id: 'temp-' + Date.now()
-        });
+        // Clear placeholder
+        const placeholder = chatMessages.querySelector('.chat-placeholder');
+        if (placeholder) placeholder.remove();
+
+        // Optimistic UI
+        const tempDiv = document.createElement('div');
+        tempDiv.className = 'chat-message user';
+        tempDiv.innerHTML = `
+            <div class="message-content">${escapeHtml(message)}</div>
+            <div class="message-time">Just now</div>
+        `;
+        chatMessages.appendChild(tempDiv);
+        scrollToBottom();
 
         const originalInput = chatInput.value;
         chatInput.value = '';
@@ -75,103 +82,116 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             const data = await response.json();
-
             if (data.success) {
-                // Determine if we need to replace temp message or just reload
-                // For simplicity, we just reload or let polling handle it next time
-                // But better to just remove temp and show real if needed
-                // Actually, let's just refresh list to sync IDs
-                // Or just ignore since we already showed it.
+                loadMessages(true);
             } else {
-                alert('Error sending message: ' + (data.error || 'Unknown error'));
-                chatInput.value = originalInput; // Restore
+                alert('Error sending message: ' + (data.error || 'Failed to deliver'));
+                chatInput.value = originalInput;
             }
         } catch (error) {
-            console.error('Error:', error);
-            chatInput.value = originalInput; // Restore
+            console.error('Error sending chat message:', error);
+            chatInput.value = originalInput;
         }
     }
 
     // Load Messages
-    async function loadMessages() {
+    async function loadMessages(scrollDown = false) {
         try {
             const response = await fetch('/api/chat/history');
-            const messages = await response.json();
+            const data = await response.json();
+            const messages = Array.isArray(data) ? data : (data.messages || []);
 
-            if (messages.error) {
-                console.error('Error loading chat:', messages.error);
-                return;
+            if (messages.length !== lastRenderedCount) {
+                renderMessages(messages);
+                lastRenderedCount = messages.length;
+                if (scrollDown) {
+                    scrollToBottom();
+                }
             }
 
-            renderMessages(messages);
+            // Check unread count for badge if closed
+            if (!isOpen && chatBadge) {
+                const unreadAdminMsgs = messages.filter(m => (m.is_admin || m.is_from_admin) && !m.is_read).length;
+                if (unreadAdminMsgs > 0) {
+                    chatBadge.textContent = unreadAdminMsgs;
+                    chatBadge.style.display = 'inline-flex';
+                } else {
+                    chatBadge.style.display = 'none';
+                }
+            }
         } catch (error) {
-            console.error('Error loading chat:', error);
+            console.error('Error loading chat history:', error);
         }
     }
 
     // Render Messages
     function renderMessages(messages) {
-        // Clear if it's the first load or if we want to be clean
-        // Ideally we merge, but simpler to clear and rebuild for this scale
         chatMessages.innerHTML = '';
 
-        if (messages.length === 0) {
+        if (!messages || messages.length === 0) {
             chatMessages.innerHTML = `
                 <div class="chat-placeholder">
-                    <p>Namaste! How can we guide you on your journey today?</p>
+                    <p>॥ ॐ भैरवाय नमः ॥</p>
+                    <p>Namaste! Ask any guidance regarding your Sādhana, japa, or daily discipline.</p>
                 </div>
             `;
             return;
         }
 
         messages.forEach(msg => {
-            appendMessage(msg);
-            if (msg.id > lastMessageId) {
-                lastMessageId = msg.id;
-            }
+            const div = document.createElement('div');
+            const isFromAdmin = Boolean(msg.is_from_admin || msg.is_admin);
+            div.className = `chat-message ${isFromAdmin ? 'admin' : 'user'}`;
+
+            const timeStr = msg.created_at || (msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '');
+
+            div.innerHTML = `
+                ${isFromAdmin ? '<div class="msg-author-tag"><i class="fas fa-shield-halved"></i> Guru Bhairava Guidance</div>' : ''}
+                <div class="message-content">${escapeHtml(msg.message || msg.content || '')}</div>
+                <div class="message-time">${escapeHtml(timeStr)}</div>
+            `;
+
+            chatMessages.appendChild(div);
         });
 
         scrollToBottom();
     }
 
-    // Append Single Message
-    function appendMessage(msg) {
-        // Check if already exists (deduplication)
-        // This is a naive check; better to use ID data attributes
-
-        const div = document.createElement('div');
-        div.className = `chat-message ${msg.is_from_admin ? 'admin' : 'user'}`;
-
-        const time = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-        div.innerHTML = `
-            <div class="message-content">
-                ${escapeHtml(msg.message)}
-            </div>
-            <div class="message-time">${time}</div>
-        `;
-
-        chatMessages.appendChild(div);
+    // Mark as read
+    function markAsRead() {
+        if (chatBadge) chatBadge.style.display = 'none';
+        fetch('/api/chat/mark-read', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': CSRF_TOKEN
+            }
+        }).catch(err => console.error('Error marking read:', err));
     }
 
-    // Poll for new messages
+    // Polling
     function startPolling() {
         if (pollInterval) clearInterval(pollInterval);
-        pollInterval = setInterval(loadMessages, POLL_RATE);
+        pollInterval = setInterval(() => loadMessages(false), POLL_RATE);
     }
 
     function stopPolling() {
         if (pollInterval) clearInterval(pollInterval);
     }
 
-    // Utilities
     function scrollToBottom() {
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+        if (chatMessages) {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
     }
 
     function escapeHtml(text) {
+        if (!text) return '';
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
     }
+
+    // Check for unread on load
+    loadMessages(false);
 });

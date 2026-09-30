@@ -132,7 +132,12 @@
             </a>
             <a href="/admin/mandala-sadhana"><i class="fas fa-feather"></i> Sādhana Registrations</a>
             <a href="/admin/donations"><i class="fas fa-hand-holding-heart"></i> Donations Ledger</a>
-            <a href="/admin/chat"><i class="fas fa-comments"></i> Sadhak Mentorship Chat</a>
+            <a href="/admin/chat" style="display: flex; justify-content: space-between; align-items: center;">
+              <span><i class="fas fa-comments"></i> Sadhak Mentorship Chat</span>
+              {% if unread_chat_count and unread_chat_count > 0 %}
+                <span style="background: #eab308; color: #0c0a08; font-size: 0.68rem; font-weight: 700; padding: 2px 7px; border-radius: 999px; box-shadow: 0 0 8px rgba(234, 179, 8, 0.6);">{{ unread_chat_count }} new</span>
+              {% endif %}
+            </a>
             {% endif %}
             
             <div class="divider"></div>
@@ -288,8 +293,9 @@
   </div>
 
   <!-- Spiritual Chat Drawer Widget for Logged In Sadhaks -->
-  {% if current_user.is_authenticated %}
+  {% if current_user.is_authenticated and not request.path.startswith('/admin/chat') %}
     {% include "components/chat_widget.html" ignore missing %}
+    <script src="/static/js/chat.js?v=3"></script>
   {% endif %}
 
   <!-- Master Script -->
