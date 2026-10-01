@@ -41,7 +41,7 @@ A unified sacred portal combining the recreation of [bhairavaanugraha.com](https
 - **One in His Essence**: Discourse on Maa Kamakhya, Guru Bhairava, and the lineage of Avadhutas and Siddhars.
 - **Daiva Anugraha Videos**: Responsive YouTube player embed (`https://youtube.com/embed/a8q-IcvZ2Gw`) with direct channel link to `@BhairavaAnugraha`.
 - **Life Within or Without**: Book presentation featuring 3D perspective cover art, Srinidhi Publications ordering information (`9972778646`), direct Amazon India order link, and Instagram Reel preview link.
-- **Reach Out to Us**: Dedicated community cards for the Sacred Telegram Channel and WhatsApp direct inquiry (`+91 62622 12153`).
+- **Reach Out to Us**: Dedicated community links for the Sacred Telegram Channel and Instagram (`@bhairavayuga`).
 
 ### 2. Jnāna Samvāda Codex (`/jnana-samvada`)
 - Direct access in the header (`☸ Jnāna Samvāda`).
