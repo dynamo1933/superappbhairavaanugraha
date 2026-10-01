@@ -1,14 +1,15 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify, send_file, send_from_directory, abort
 from flask_login import login_user, logout_user, login_required, current_user
 from urllib.parse import urlparse
-from models import db, User, StageAccessRequest
+from models import db, User, StageAccessRequest, MandalaSadhanaRegistration, OfflineDonation, ChatMessage
 from forms import LoginForm, RegistrationForm, AdminApprovalForm, UserSearchForm, EditProfileForm
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 from io import BytesIO
 from openpyxl import Workbook
-from openpyxl.styles import Font, Alignment
-from openpyxl.chart import BarChart, Reference
+from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
+from openpyxl.chart import BarChart, PieChart, Reference
+from openpyxl.utils import get_column_letter
 from werkzeug.utils import secure_filename
 
 
@@ -522,100 +523,603 @@ def update_profile_picture(user_id):
     
     return redirect(url_for('auth.admin_user_detail', user_id=user_id))
 
-def generate_user_report():
-    users = User.query.all()
+def generate_user_report(report_type='full'):
+    users = User.query.order_by(User.created_at.desc()).all()
+    stage_requests = StageAccessRequest.query.all()
+    vows = MandalaSadhanaRegistration.query.all()
+    chat_msgs = ChatMessage.query.all()
+    donations = OfflineDonation.query.all()
 
-    workbook = Workbook()
-    sheet = workbook.active
-    sheet.title = "User Report"
+    now = datetime.utcnow()
 
-    # Headers
-    headers = [
-        "User ID", "Username", "Full Name", "Email", "Role", "Status",
-        "Join Date", "Approval Date", "Approved for Mandala 2", "Approved for Mandala 3",
-        "Days on Mandala 1", "Days on Mandala 2", "Days on Mandala 3"
-    ]
-    sheet.append(headers)
+    # Precompute fast lookups
+    vows_by_email = {}
+    for v in vows:
+        email_key = (v.email or '').strip().lower()
+        if email_key:
+            vows_by_email.setdefault(email_key, []).append(v)
 
-    # Style for headers
-    header_font = Font(bold=True)
-    for cell in sheet[1]:
-        cell.font = header_font
-        cell.alignment = Alignment(horizontal="center")
+    chat_counts_by_user = {}
+    for m in chat_msgs:
+        if not m.is_admin_message and m.sender_id:
+            chat_counts_by_user[m.sender_id] = chat_counts_by_user.get(m.sender_id, 0) + 1
 
-    # Data
-    for user in users:
-        status = "Admin" if user.is_admin() else ("Approved" if user.is_approved else ("Suspended" if not user.is_active else "Pending"))
-        
-        days_on_mandala_1 = (datetime.utcnow() - user.created_at).days if user.created_at else 0
-        days_on_mandala_2 = 0
-        days_on_mandala_3 = 0
+    donations_by_email = {}
+    for d in donations:
+        d_email = (d.donor_email or '').strip().lower()
+        if d_email:
+            donations_by_email[d_email] = donations_by_email.get(d_email, 0.0) + (d.amount or 0.0)
 
-        if user.mandala_2_access and user.approved_at:
-            days_on_mandala_2 = (datetime.utcnow() - user.approved_at).days
-        
-        if user.mandala_3_access and user.approved_at: # Assuming mandala 3 access is granted at the same time or after mandala 2
-            days_on_mandala_3 = (datetime.utcnow() - user.approved_at).days
+    admin_names = {u.id: (u.full_name or u.username) for u in users if u.is_admin()}
 
-
-        sheet.append([
-            user.id,
-            user.username,
-            user.full_name,
-            user.email,
-            user.role,
-            status,
-            user.created_at.strftime("%Y-%m-%d") if user.created_at else "",
-            user.approved_at.strftime("%Y-%m-%d") if user.approved_at else "",
-            "Yes" if user.mandala_2_access else "No",
-            "Yes" if user.mandala_3_access else "No",
-            days_on_mandala_1,
-            days_on_mandala_2,
-            days_on_mandala_3
-        ])
-
-    # KPIs
-    sheet.cell(row=1, column=15, value="KPIs").font = header_font
-    
+    # Core Metrics Calculations
     total_users = len(users)
-    approved_users = len([u for u in users if u.is_approved])
-    pending_users = len([u for u in users if not u.is_approved and u.is_active])
-    
-    sheet.cell(row=2, column=15, value="Total Users")
-    sheet.cell(row=2, column=16, value=total_users)
-    sheet.cell(row=3, column=15, value="Approved Users")
-    sheet.cell(row=3, column=16, value=approved_users)
-    sheet.cell(row=4, column=15, value="Pending Users")
-    sheet.cell(row=4, column=16, value=pending_users)
+    admin_users = len([u for u in users if u.is_admin()])
+    seeker_users = total_users - admin_users
+    approved_users = len([u for u in users if u.is_approved and u.is_active and not u.is_admin()])
+    pending_users = len([u for u in users if not u.is_approved and u.is_active and not u.is_admin()])
+    suspended_users = len([u for u in users if not u.is_active and not u.is_admin()])
+    approval_denom = approved_users + pending_users + suspended_users
+    approval_rate = (approved_users / approval_denom * 100.0) if approval_denom > 0 else 0.0
 
-    # Chart
-    chart_sheet = workbook.create_sheet(title="User Status Chart")
-    chart_data = [
-        ['Status', 'Count'],
-        ['Approved', approved_users],
-        ['Pending', pending_users],
-        ['Suspended', total_users - approved_users - pending_users]
+    # Engagement & Retention
+    active_24h = len([u for u in users if u.last_active and (now - u.last_active).total_seconds() <= 86400])
+    active_7d = len([u for u in users if u.last_active and (now - u.last_active).days <= 7])
+    active_30d = len([u for u in users if u.last_active and (now - u.last_active).days <= 30])
+    dormant_30d = len([u for u in users if u.is_approved and u.last_active and (now - u.last_active).days > 30])
+    never_active = len([u for u in users if u.is_approved and not u.last_active])
+    stickiness = (active_24h / active_30d * 100.0) if active_30d > 0 else 0.0
+
+    new_7d = len([u for u in users if u.created_at and (now - u.created_at).days <= 7])
+    new_30d = len([u for u in users if u.created_at and (now - u.created_at).days <= 30])
+    new_90d = len([u for u in users if u.created_at and (now - u.created_at).days <= 90])
+
+    vetting_latencies = [(u.approved_at - u.created_at).total_seconds() / 86400.0 for u in users if u.approved_at and u.created_at and u.is_approved]
+    avg_vetting_days = (sum(vetting_latencies) / len(vetting_latencies)) if vetting_latencies else 0.0
+
+    # Stage Progression Matrix
+    stage_defs = [
+        (1, 'Mandala 1 (40 Days)', 'Mandala Sadhana', lambda u: u.mandala_1_access, lambda u: u.mandala_1_completed_at, lambda u: u.mandala_1_started_at),
+        (2, 'Mandala 2 (40 Days)', 'Mandala Sadhana', lambda u: u.mandala_2_access, lambda u: u.mandala_2_completed_at, lambda u: u.mandala_2_started_at),
+        (3, 'Mandala 3 (40 Days)', 'Mandala Sadhana', lambda u: u.mandala_3_access, lambda u: u.mandala_3_completed_at, lambda u: u.mandala_3_started_at),
+        (4, 'Rudraksha 8 Mukhi', 'Sacred Mukhi', lambda u: u.rudraksha_8_mukhi_access, lambda u: u.rudraksha_8_mukhi_completed_at, lambda u: u.rudraksha_8_mukhi_started_at),
+        (5, 'Rudraksha 11 Mukhi', 'Sacred Mukhi', lambda u: u.rudraksha_11_mukhi_access, lambda u: u.rudraksha_11_mukhi_completed_at, lambda u: u.rudraksha_11_mukhi_started_at),
+        (6, 'Rudraksha 14 Mukhi', 'Sacred Mukhi', lambda u: u.rudraksha_14_mukhi_access, lambda u: u.rudraksha_14_mukhi_completed_at, lambda u: u.rudraksha_14_mukhi_started_at),
+        (7, 'Pratham Charana Diksha', 'Diksha Phase', lambda u: u.pratham_charana_diksha_access, lambda u: u.pratham_charana_diksha_completed_at, lambda u: u.pratham_charana_diksha_started_at),
+        (8, 'Dutiya Charana', 'Diksha Phase', lambda u: u.dutiya_charana_access, lambda u: u.dutiya_charana_completed_at, lambda u: u.dutiya_charana_started_at),
+        (9, 'Tritiya Charana', 'Diksha Phase', lambda u: u.tritiya_charana_access, lambda u: u.tritiya_charana_completed_at, lambda u: u.tritiya_charana_started_at),
+        (101, 'Devi Mandala 1 (33d)', 'Devi Sadhana', lambda u: u.devi_mandala_1_access, lambda u: None, lambda u: None),
+        (102, 'Devi Mandala 2 (66d)', 'Devi Sadhana', lambda u: u.devi_mandala_2_access, lambda u: None, lambda u: None),
+        (103, 'Devi Mandala 3 (99d)', 'Devi Sadhana', lambda u: u.devi_mandala_3_access, lambda u: None, lambda u: None),
     ]
-    for row in chart_data:
-        chart_sheet.append(row)
-    
-    chart = BarChart()
-    chart.title = "User Status Distribution"
-    chart.y_axis.title = "Number of Users"
-    chart.x_axis.title = "Status"
-    
-    data = Reference(chart_sheet, min_col=2, min_row=1, max_row=4, max_col=2)
-    cats = Reference(chart_sheet, min_col=1, min_row=2, max_row=4)
-    chart.add_data(data, titles_from_data=True)
-    chart.set_categories(cats)
-    chart_sheet.add_chart(chart, "E5")
 
+    stage_metrics = []
+    prev_authorized = None
+    for s_num, s_name, s_cat, acc_fn, comp_fn, start_fn in stage_defs:
+        auth_count = len([u for u in users if acc_fn(u)])
+        comp_count = len([u for u in users if comp_fn(u) is not None])
+        conv_rate = (auth_count / prev_authorized * 100.0) if (prev_authorized and prev_authorized > 0) else (100.0 if auth_count > 0 else 0.0)
+        prev_authorized = auth_count
 
-    # Save to a BytesIO object
+        durations = []
+        for u in users:
+            c_date = comp_fn(u)
+            s_date = start_fn(u)
+            if c_date and s_date:
+                durations.append((c_date - s_date).days)
+        avg_dur = (sum(durations) / len(durations)) if durations else 0
+
+        stage_metrics.append({
+            'num': s_num,
+            'name': s_name,
+            'category': s_cat,
+            'authorized': auth_count,
+            'completed': comp_count,
+            'conversion_rate': conv_rate,
+            'avg_duration': avg_dur
+        })
+
+    # Styling Tokens
+    gold_fill = PatternFill(start_color="2B1F3D", end_color="2B1F3D", fill_type="solid")
+    gold_header_font = Font(name="Arial", size=10, bold=True, color="F5DFA2")
+    title_font = Font(name="Arial", size=13, bold=True, color="FFFFFF")
+    sub_font = Font(name="Arial", size=9, italic=True, color="C7BEAB")
+    banner_fill = PatternFill(start_color="181222", end_color="181222", fill_type="solid")
+    section_fill = PatternFill(start_color="3B2D54", end_color="3B2D54", fill_type="solid")
+    section_font = Font(name="Arial", size=11, bold=True, color="F5DFA2")
+    zebra_fill = PatternFill(start_color="FBF9F4", end_color="FBF9F4", fill_type="solid")
+    white_fill = PatternFill(start_color="FFFFFF", end_color="FFFFFF", fill_type="solid")
+    border_thin = Border(
+        left=Side(style='thin', color='D4AF37'),
+        right=Side(style='thin', color='D4AF37'),
+        top=Side(style='thin', color='D4AF37'),
+        bottom=Side(style='thin', color='D4AF37')
+    )
+    cell_border = Border(
+        left=Side(style='thin', color='E5E0D8'),
+        right=Side(style='thin', color='E5E0D8'),
+        top=Side(style='thin', color='E5E0D8'),
+        bottom=Side(style='thin', color='E5E0D8')
+    )
+
+    wb = Workbook()
+
+    # =========================================================================
+    # SHEET 1: EXECUTIVE KPI SCORECARD
+    # =========================================================================
+    ws1 = wb.active
+    ws1.title = "Executive Scorecard"
+    ws1.views.sheetView[0].showGridLines = True
+
+    # Header Banner
+    ws1.merge_cells("A1:K1")
+    ws1.merge_cells("A2:K2")
+    ws1["A1"] = "BHAIRAVA ANUGRAHA · SANCTUARY EXECUTIVE INTELLIGENCE REPORT"
+    ws1["A1"].font = title_font
+    ws1["A1"].fill = banner_fill
+    ws1["A1"].alignment = Alignment(horizontal="center", vertical="center")
+    ws1.row_dimensions[1].height = 28
+
+    ws1["A2"] = f"Generated: {now.strftime('%Y-%m-%d %H:%M:%S')} UTC · Total Devotees: {total_users} · Active Initiated Sadhaks: {approved_users} · Pending Vetting: {pending_users}"
+    ws1["A2"].font = sub_font
+    ws1["A2"].fill = banner_fill
+    ws1["A2"].alignment = Alignment(horizontal="center", vertical="center")
+    ws1.row_dimensions[2].height = 20
+
+    # Section 1: Executive Sanctuary Scorecard
+    ws1["A4"] = "1. EXECUTIVE SANCTUARY SCORECARD"
+    ws1["A4"].font = section_font
+    ws1["A4"].fill = section_fill
+    ws1.merge_cells("A4:K4")
+
+    scorecard_rows = [
+        ("Seeker Growth & Scale", [
+            ("Total Registered Devotees", total_users),
+            ("Active Initiated Sadhaks", approved_users),
+            ("Pending Vetting Backlog", pending_users),
+            ("Suspended / Inactive", suspended_users),
+            ("Vetting Approval Rate", f"{approval_rate:.1f}%"),
+            ("New Registrations (7 Days)", new_7d),
+            ("New Registrations (30 Days)", new_30d),
+        ]),
+        ("Engagement & Retention", [
+            ("Daily Active Users (DAU 24h)", active_24h),
+            ("Weekly Active Users (WAU 7d)", active_7d),
+            ("Monthly Active Users (MAU 30d)", active_30d),
+            ("Platform Stickiness (DAU/MAU)", f"{stickiness:.1f}%"),
+            ("Dormant Seekers (>30d Inactive)", dormant_30d),
+            ("Never Logged In (Approved)", never_active),
+            ("Avg Vetting Latency", f"{avg_vetting_days:.1f} days"),
+        ]),
+        ("Stage Funnel & Milestones", [
+            ("Mandala 1 Authorized", stage_metrics[0]['authorized']),
+            ("Mandala 2 Advanced", stage_metrics[1]['authorized']),
+            ("Mandala 3 Completed", stage_metrics[2]['authorized']),
+            ("Rudraksha Mukhi Diksha", sum(m['authorized'] for m in stage_metrics[3:6])),
+            ("Charana Diksha Initiations", sum(m['authorized'] for m in stage_metrics[6:9])),
+            ("Devi Mandala Initiations", sum(m['authorized'] for m in stage_metrics[9:])),
+            ("Pending Stage Advance Requests", len([r for r in stage_requests if r.status == 'pending'])),
+        ]),
+        ("Discipline, Vows & Community", [
+            ("48-Day Mandala Vows", len([v for v in vows if v.mandala_48_commitment])),
+            ("144-Day Mandala Vows", len([v for v in vows if v.mandala_144_commitment == 'Yes'])),
+            ("Mentorship Messages Sent", len([m for m in chat_msgs if not m.is_admin_message])),
+            ("Devotees Mentored via Chat", len(chat_counts_by_user)),
+            ("Total Sacred Bhiksha Recorded", f"INR {sum(d.amount or 0 for d in donations):,.2f}"),
+            ("Bhiksha Contributions Count", len(donations)),
+            ("Platform Role Count (Admins)", admin_users),
+        ]),
+    ]
+
+    curr_row = 6
+    for cat_title, items in scorecard_rows:
+        ws1.cell(row=curr_row, column=1, value=cat_title).font = Font(name="Arial", size=10, bold=True, color="2B1F3D")
+        ws1.cell(row=curr_row, column=1).fill = PatternFill(start_color="F5EFCF", end_color="F5EFCF", fill_type="solid")
+        ws1.cell(row=curr_row, column=2, value="Value").font = Font(name="Arial", size=10, bold=True, color="2B1F3D")
+        ws1.cell(row=curr_row, column=2).fill = PatternFill(start_color="F5EFCF", end_color="F5EFCF", fill_type="solid")
+        curr_row += 1
+        for k, val in items:
+            c1 = ws1.cell(row=curr_row, column=1, value=k)
+            c2 = ws1.cell(row=curr_row, column=2, value=val)
+            c1.border = cell_border
+            c2.border = cell_border
+            c1.font = Font(name="Arial", size=9)
+            c2.font = Font(name="Arial", size=9, bold=True)
+            c2.alignment = Alignment(horizontal="right")
+            curr_row += 1
+        curr_row += 1
+
+    # Stage Progression Table
+    ws1.cell(row=curr_row, column=1, value="2. SPIRITUAL STAGE PROGRESSION & FUNNEL ANALYSIS").font = section_font
+    ws1.cell(row=curr_row, column=1).fill = section_fill
+    ws1.merge_cells(start_row=curr_row, start_column=1, end_row=curr_row, end_column=7)
+    curr_row += 1
+
+    stage_headers = ["Stage ID", "Stage Discipline Name", "Category", "Authorized Seekers", "Completed Seekers", "Stage Conversion %", "Avg Duration (Days)"]
+    for col_idx, h in enumerate(stage_headers, 1):
+        cell = ws1.cell(row=curr_row, column=col_idx, value=h)
+        cell.font = gold_header_font
+        cell.fill = gold_fill
+        cell.alignment = Alignment(horizontal="center")
+        cell.border = border_thin
+    curr_row += 1
+
+    stage_table_start = curr_row
+    for sm in stage_metrics:
+        ws1.cell(row=curr_row, column=1, value=sm['num']).alignment = Alignment(horizontal="center")
+        ws1.cell(row=curr_row, column=2, value=sm['name'])
+        ws1.cell(row=curr_row, column=3, value=sm['category'])
+        ws1.cell(row=curr_row, column=4, value=sm['authorized']).alignment = Alignment(horizontal="right")
+        ws1.cell(row=curr_row, column=5, value=sm['completed']).alignment = Alignment(horizontal="right")
+        ws1.cell(row=curr_row, column=6, value=f"{sm['conversion_rate']:.1f}%").alignment = Alignment(horizontal="right")
+        ws1.cell(row=curr_row, column=7, value=sm['avg_duration']).alignment = Alignment(horizontal="right")
+        for col_idx in range(1, 8):
+            ws1.cell(row=curr_row, column=col_idx).border = cell_border
+            ws1.cell(row=curr_row, column=col_idx).font = Font(name="Arial", size=9)
+        curr_row += 1
+    stage_table_end = curr_row - 1
+
+    # Chart Data Setup
+    chart_data_start = curr_row + 2
+    ws1.cell(row=chart_data_start, column=4, value="Status").font = gold_header_font
+    ws1.cell(row=chart_data_start, column=4).fill = gold_fill
+    ws1.cell(row=chart_data_start, column=5, value="Count").font = gold_header_font
+    ws1.cell(row=chart_data_start, column=5).fill = gold_fill
+
+    status_rows = [
+        ("Approved Sādhaks", approved_users),
+        ("Pending Vetting", pending_users),
+        ("Suspended / Inactive", suspended_users),
+        ("Administrators", admin_users)
+    ]
+    for idx, (st_name, st_val) in enumerate(status_rows, 1):
+        ws1.cell(row=chart_data_start + idx, column=4, value=st_name)
+        ws1.cell(row=chart_data_start + idx, column=5, value=st_val)
+
+    # Native Charts on Sheet 1
+    try:
+        bc = BarChart()
+        bc.title = "Stage Progression Distribution"
+        bc.style = 10
+        bc.height = 12
+        bc.width = 18
+        bc_data = Reference(ws1, min_col=4, min_row=stage_table_start-1, max_row=stage_table_end)
+        bc_cats = Reference(ws1, min_col=2, min_row=stage_table_start, max_row=stage_table_end)
+        bc.add_data(bc_data, titles_from_data=True)
+        bc.set_categories(bc_cats)
+        ws1.add_chart(bc, "D6")
+
+        pie = PieChart()
+        pie.title = "Seeker Status Breakdown"
+        pie.height = 10
+        pie.width = 14
+        pie_data = Reference(ws1, min_col=5, min_row=chart_data_start, max_row=chart_data_start + len(status_rows))
+        pie_cats = Reference(ws1, min_col=4, min_row=chart_data_start + 1, max_row=chart_data_start + len(status_rows))
+        pie.add_data(pie_data, titles_from_data=True)
+        pie.set_categories(pie_cats)
+        ws1.add_chart(pie, "D24")
+    except Exception as e:
+        print(f"Warning: Chart rendering skipped: {e}")
+
+    ws1.column_dimensions["A"].width = 34
+    ws1.column_dimensions["B"].width = 28
+    for col in range(3, 8):
+        ws1.column_dimensions[get_column_letter(col)].width = 20
+
+    # =========================================================================
+    # SHEET 2: MASTER SEEKER DOSSIER (35 granular attributes)
+    # =========================================================================
+    ws2 = wb.create_sheet(title="Seeker Master Dossier")
+    ws2.views.sheetView[0].showGridLines = True
+
+    dossier_headers = [
+        "User ID", "Username", "Full Name", "Email", "Phone",
+        "Location", "Language", "Gender", "Date of Birth", "Age",
+        "Referral Source", "Role", "Account Status", "Registration Date (UTC)",
+        "Approval Date", "Approved By", "Vetting Latency (Days)",
+        "Last Active (UTC)", "Days Inactive", "Activity State",
+        "Current Highest Stage", "Mandala 1 Authorized", "Mandala 2 Authorized", "Mandala 3 Authorized",
+        "Rudraksha 8M", "Rudraksha 11M", "Rudraksha 14M",
+        "Diksha Pratham", "Diksha Dutiya", "Diksha Tritiya", "Devi Mandala Access",
+        "Mandala 1 Days", "Mandala 2 Days", "Mandala 3 Days",
+        "Practice Level", "Mandala Vow Registered", "Mentorship Chats Sent",
+        "Sacred Bhiksha Donated (INR)", "Sadhana Purpose / Spiritual Vow"
+    ]
+
+    ws2.append(dossier_headers)
+    ws2.row_dimensions[1].height = 26
+
+    for col_idx in range(1, len(dossier_headers) + 1):
+        cell = ws2.cell(row=1, column=col_idx)
+        cell.font = gold_header_font
+        cell.fill = gold_fill
+        cell.alignment = Alignment(horizontal="center", vertical="center")
+        cell.border = border_thin
+
+    fill_approved = PatternFill(start_color="D1FAE5", end_color="D1FAE5", fill_type="solid")
+    font_approved = Font(color="065F46", bold=True, size=9)
+    fill_pending = PatternFill(start_color="FEF3C7", end_color="FEF3C7", fill_type="solid")
+    font_pending = Font(color="92400E", bold=True, size=9)
+    fill_suspended = PatternFill(start_color="FEE2E2", end_color="FEE2E2", fill_type="solid")
+    font_suspended = Font(color="991B1B", bold=True, size=9)
+    fill_admin = PatternFill(start_color="DBEAFE", end_color="DBEAFE", fill_type="solid")
+    font_admin = Font(color="1E40AF", bold=True, size=9)
+
+    for row_idx, u in enumerate(users, 2):
+        status = "Admin" if u.is_admin() else ("Approved" if u.is_approved else ("Suspended" if not u.is_active else "Pending"))
+
+        age_val = ""
+        if u.date_of_birth:
+            age_val = (now.date() - u.date_of_birth).days // 365
+
+        v_lat = round((u.approved_at - u.created_at).total_seconds() / 86400.0, 1) if (u.approved_at and u.created_at) else ""
+
+        days_inactive = (now - u.last_active).days if u.last_active else None
+        if not u.last_active:
+            act_state = "Never Logged In"
+        elif days_inactive <= 7:
+            act_state = "Active (<=7d)"
+        elif days_inactive <= 30:
+            act_state = "Recent (8-30d)"
+        else:
+            act_state = "Dormant (>30d)"
+
+        highest_st = u.get_current_stage()
+        highest_st_name = {
+            1: 'Stage 1 (Mandala 1)',
+            2: 'Stage 2 (Mandala 2)',
+            3: 'Stage 3 (Mandala 3)',
+            4: 'Stage 4 (Rudraksha 8M)',
+            5: 'Stage 5 (Rudraksha 11M)',
+            6: 'Stage 6 (Rudraksha 14M)'
+        }.get(highest_st, f"Stage {highest_st}")
+
+        u_email_key = (u.email or '').strip().lower()
+        vow_list = vows_by_email.get(u_email_key, [])
+        vow_status = "No"
+        if vow_list:
+            vow_types = [v.sadhana_type for v in vow_list if v.sadhana_type]
+            vow_status = f"Yes ({', '.join(vow_types[:2])})" if vow_types else "Yes"
+
+        chats_sent = chat_counts_by_user.get(u.id, 0)
+        bhiksha_amt = donations_by_email.get(u_email_key, 0.0)
+
+        m1_days = u.get_stage_duration_days(1)
+        m2_days = u.get_stage_duration_days(2)
+        m3_days = u.get_stage_duration_days(3)
+
+        row_data = [
+            u.id,
+            u.username,
+            u.full_name or u.username,
+            u.email,
+            u.phone or "",
+            u.location or "",
+            u.preferred_language or "",
+            u.gender or "",
+            u.date_of_birth.strftime("%Y-%m-%d") if u.date_of_birth else "",
+            age_val,
+            u.referral_source or "",
+            u.role,
+            status,
+            u.created_at.strftime("%Y-%m-%d %H:%M") if u.created_at else "",
+            u.approved_at.strftime("%Y-%m-%d %H:%M") if u.approved_at else "",
+            admin_names.get(u.approved_by, str(u.approved_by or "")),
+            v_lat,
+            u.last_active.strftime("%Y-%m-%d %H:%M") if u.last_active else "Never",
+            days_inactive if days_inactive is not None else "—",
+            act_state,
+            highest_st_name,
+            "Yes" if u.mandala_1_access else "No",
+            "Yes" if u.mandala_2_access else "No",
+            "Yes" if u.mandala_3_access else "No",
+            f"8M:{'Y' if u.rudraksha_8_mukhi_access else 'N'} 11M:{'Y' if u.rudraksha_11_mukhi_access else 'N'} 14M:{'Y' if u.rudraksha_14_mukhi_access else 'N'}",
+            f"1:{'Y' if u.pratham_charana_diksha_access else 'N'} 2:{'Y' if u.dutiya_charana_access else 'N'} 3:{'Y' if u.tritiya_charana_access else 'N'}",
+            f"1:{'Y' if u.devi_mandala_1_access else 'N'} 2:{'Y' if u.devi_mandala_2_access else 'N'} 3:{'Y' if u.devi_mandala_3_access else 'N'}",
+            m1_days,
+            m2_days,
+            m3_days,
+            u.practice_level or "Beginner",
+            vow_status,
+            chats_sent,
+            bhiksha_amt,
+            u.purpose or ""
+        ]
+        ws2.append(row_data)
+
+        row_fill = zebra_fill if (row_idx % 2 == 0) else white_fill
+        for col_idx in range(1, len(dossier_headers) + 1):
+            c = ws2.cell(row=row_idx, column=col_idx)
+            c.fill = row_fill
+            c.border = cell_border
+            c.font = Font(name="Arial", size=9)
+
+        status_cell = ws2.cell(row=row_idx, column=13)
+        if status == "Approved":
+            status_cell.fill = fill_approved
+            status_cell.font = font_approved
+        elif status == "Pending":
+            status_cell.fill = fill_pending
+            status_cell.font = font_pending
+        elif status == "Suspended":
+            status_cell.fill = fill_suspended
+            status_cell.font = font_suspended
+        elif status == "Admin":
+            status_cell.fill = fill_admin
+            status_cell.font = font_admin
+
+        ws2.cell(row=row_idx, column=38).number_format = '"₹"#,##0.00'
+
+    ws2.auto_filter.ref = f"A1:{get_column_letter(len(dossier_headers))}{len(users) + 1}"
+    for col in ws2.columns:
+        col_letter = get_column_letter(col[0].column)
+        col_len = max(len(str(cell.value or '')) for cell in col[:40])
+        ws2.column_dimensions[col_letter].width = min(max(col_len + 3, 11), 38)
+    ws2.column_dimensions["A"].width = 9
+    ws2.column_dimensions["D"].width = 24
+    ws2.column_dimensions["AM"].width = 38  # Purpose column
+
+    # =========================================================================
+    # SHEET 3: STAGE PROGRESSION ANALYTICS
+    # =========================================================================
+    ws3 = wb.create_sheet(title="Stage Progression Roster")
+    ws3.views.sheetView[0].showGridLines = True
+
+    ws3.merge_cells("A1:G1")
+    ws3["A1"] = "SANCTUARY SPIRITUAL STAGES & ACTIVE SĀDHAK ROSTER"
+    ws3["A1"].font = title_font
+    ws3["A1"].fill = banner_fill
+    ws3["A1"].alignment = Alignment(horizontal="center", vertical="center")
+    ws3.row_dimensions[1].height = 26
+
+    curr_s3_row = 3
+    for s_num, s_name, s_cat, acc_fn, comp_fn, start_fn in stage_defs:
+        stage_seekers = [u for u in users if acc_fn(u)]
+        ws3.cell(row=curr_s3_row, column=1, value=f"{s_name} ({s_cat}) — {len(stage_seekers)} Authorized Devotees").font = section_font
+        ws3.cell(row=curr_s3_row, column=1).fill = section_fill
+        ws3.merge_cells(start_row=curr_s3_row, start_column=1, end_row=curr_s3_row, end_column=6)
+        curr_s3_row += 1
+
+        headers_sub = ["User ID", "Seeker Name", "Username", "Email", "Completed?", "Days on Stage"]
+        for c_i, h in enumerate(headers_sub, 1):
+            cell = ws3.cell(row=curr_s3_row, column=c_i, value=h)
+            cell.font = gold_header_font
+            cell.fill = gold_fill
+            cell.alignment = Alignment(horizontal="center")
+            cell.border = border_thin
+        curr_s3_row += 1
+
+        if stage_seekers:
+            for u in stage_seekers:
+                is_comp = comp_fn(u) is not None if comp_fn(u) is not None else False
+                dur = u.get_stage_duration_days(s_num if s_num < 10 else 1)
+                ws3.cell(row=curr_s3_row, column=1, value=u.id).alignment = Alignment(horizontal="center")
+                ws3.cell(row=curr_s3_row, column=2, value=u.full_name or u.username)
+                ws3.cell(row=curr_s3_row, column=3, value=f"@{u.username}")
+                ws3.cell(row=curr_s3_row, column=4, value=u.email)
+                ws3.cell(row=curr_s3_row, column=5, value="Completed" if is_comp else "In Progress").alignment = Alignment(horizontal="center")
+                ws3.cell(row=curr_s3_row, column=6, value=f"{dur} days").alignment = Alignment(horizontal="right")
+                for col_idx in range(1, 7):
+                    ws3.cell(row=curr_s3_row, column=col_idx).border = cell_border
+                    ws3.cell(row=curr_s3_row, column=col_idx).font = Font(name="Arial", size=9)
+                curr_s3_row += 1
+        else:
+            ws3.cell(row=curr_s3_row, column=1, value="No seekers currently authorized for this sacred milestone.").font = Font(name="Arial", size=9, italic=True)
+            ws3.merge_cells(start_row=curr_s3_row, start_column=1, end_row=curr_s3_row, end_column=6)
+            curr_s3_row += 1
+        curr_s3_row += 1
+
+    for col in range(1, 7):
+        ws3.column_dimensions[get_column_letter(col)].width = 22
+
+    # =========================================================================
+    # SHEET 4: ACTION ITEMS & VETTING QUEUE
+    # =========================================================================
+    ws4 = wb.create_sheet(title="Action Items & Vetting Queue")
+    ws4.views.sheetView[0].showGridLines = True
+
+    ws4.merge_cells("A1:H1")
+    ws4["A1"] = "SANCTUARY GOVERNANCE: PENDING VETTING & AUTHORIZATION BACKLOG"
+    ws4["A1"].font = title_font
+    ws4["A1"].fill = banner_fill
+    ws4["A1"].alignment = Alignment(horizontal="center", vertical="center")
+    ws4.row_dimensions[1].height = 26
+
+    curr_s4_row = 3
+    # Section A: Pending Devotee Vetting
+    pending_devotees = [u for u in users if not u.is_approved and u.is_active and not u.is_admin()]
+    pending_devotees.sort(key=lambda u: u.created_at or now)
+
+    ws4.cell(row=curr_s4_row, column=1, value=f"A. PENDING SEEKER INITIATION APPROVALS ({len(pending_devotees)} Awaiting Vetting)").font = section_font
+    ws4.cell(row=curr_s4_row, column=1).fill = section_fill
+    ws4.merge_cells(start_row=curr_s4_row, start_column=1, end_row=curr_s4_row, end_column=8)
+    curr_s4_row += 1
+
+    queue_headers = ["User ID", "Seeker Name", "Username", "Email", "Phone", "Registration Date", "Days Waiting", "Sadhana Vow Statement"]
+    for c_i, h in enumerate(queue_headers, 1):
+        cell = ws4.cell(row=curr_s4_row, column=c_i, value=h)
+        cell.font = gold_header_font
+        cell.fill = gold_fill
+        cell.alignment = Alignment(horizontal="center")
+        cell.border = border_thin
+    curr_s4_row += 1
+
+    if pending_devotees:
+        for u in pending_devotees:
+            wait_days = (now - u.created_at).days if u.created_at else 0
+            ws4.cell(row=curr_s4_row, column=1, value=u.id).alignment = Alignment(horizontal="center")
+            ws4.cell(row=curr_s4_row, column=2, value=u.full_name or u.username)
+            ws4.cell(row=curr_s4_row, column=3, value=f"@{u.username}")
+            ws4.cell(row=curr_s4_row, column=4, value=u.email)
+            ws4.cell(row=curr_s4_row, column=5, value=u.phone or "—")
+            ws4.cell(row=curr_s4_row, column=6, value=u.created_at.strftime("%Y-%m-%d %H:%M") if u.created_at else "—")
+            c_wait = ws4.cell(row=curr_s4_row, column=7, value=f"{wait_days} days")
+            c_wait.alignment = Alignment(horizontal="right")
+            if wait_days >= 3:
+                c_wait.font = Font(name="Arial", size=9, bold=True, color="991B1B")
+            ws4.cell(row=curr_s4_row, column=8, value=u.purpose or "—")
+            for col_idx in range(1, 9):
+                ws4.cell(row=curr_s4_row, column=col_idx).border = cell_border
+                if col_idx != 7 or wait_days < 3:
+                    ws4.cell(row=curr_s4_row, column=col_idx).font = Font(name="Arial", size=9)
+            curr_s4_row += 1
+    else:
+        ws4.cell(row=curr_s4_row, column=1, value="All registration vetting requests are completely cleared.").font = Font(name="Arial", size=9, italic=True)
+        ws4.merge_cells(start_row=curr_s4_row, start_column=1, end_row=curr_s4_row, end_column=8)
+        curr_s4_row += 1
+
+    curr_s4_row += 2
+
+    # Section B: Pending Stage Advance Requests
+    pending_st_reqs = [r for r in stage_requests if r.status == 'pending']
+    pending_st_reqs.sort(key=lambda r: r.requested_at or now)
+
+    ws4.cell(row=curr_s4_row, column=1, value=f"B. PENDING STAGE PROGRESSION REQUESTS ({len(pending_st_reqs)} Awaiting Authorization)").font = section_font
+    ws4.cell(row=curr_s4_row, column=1).fill = section_fill
+    ws4.merge_cells(start_row=curr_s4_row, start_column=1, end_row=curr_s4_row, end_column=8)
+    curr_s4_row += 1
+
+    req_headers = ["Request ID", "User ID", "Seeker Name", "Username", "Email", "Requested Stage", "Requested Timestamp", "Days Pending"]
+    for c_i, h in enumerate(req_headers, 1):
+        cell = ws4.cell(row=curr_s4_row, column=c_i, value=h)
+        cell.font = gold_header_font
+        cell.fill = gold_fill
+        cell.alignment = Alignment(horizontal="center")
+        cell.border = border_thin
+    curr_s4_row += 1
+
+    if pending_st_reqs:
+        for r in pending_st_reqs:
+            wait_days = (now - r.requested_at).days if r.requested_at else 0
+            ws4.cell(row=curr_s4_row, column=1, value=r.id).alignment = Alignment(horizontal="center")
+            ws4.cell(row=curr_s4_row, column=2, value=r.user_id).alignment = Alignment(horizontal="center")
+            ws4.cell(row=curr_s4_row, column=3, value=r.user.full_name or r.user.username if r.user else "Unknown")
+            ws4.cell(row=curr_s4_row, column=4, value=f"@{r.user.username}" if r.user else "—")
+            ws4.cell(row=curr_s4_row, column=5, value=r.user.email if r.user else "—")
+            ws4.cell(row=curr_s4_row, column=6, value=r.get_stage_name())
+            ws4.cell(row=curr_s4_row, column=7, value=r.requested_at.strftime("%Y-%m-%d %H:%M") if r.requested_at else "—")
+            c_wait = ws4.cell(row=curr_s4_row, column=8, value=f"{wait_days} days")
+            c_wait.alignment = Alignment(horizontal="right")
+            if wait_days >= 2:
+                c_wait.font = Font(name="Arial", size=9, bold=True, color="991B1B")
+            for col_idx in range(1, 9):
+                ws4.cell(row=curr_s4_row, column=col_idx).border = cell_border
+                if col_idx != 8 or wait_days < 2:
+                    ws4.cell(row=curr_s4_row, column=col_idx).font = Font(name="Arial", size=9)
+            curr_s4_row += 1
+    else:
+        ws4.cell(row=curr_s4_row, column=1, value="All stage progression requests are completely authorized.").font = Font(name="Arial", size=9, italic=True)
+        ws4.merge_cells(start_row=curr_s4_row, start_column=1, end_row=curr_s4_row, end_column=8)
+        curr_s4_row += 1
+
+    for col in range(1, 9):
+        ws4.column_dimensions[get_column_letter(col)].width = 22
+    ws4.column_dimensions["H"].width = 36
+
+    # Save to BytesIO object
     excel_file = BytesIO()
-    workbook.save(excel_file)
+    wb.save(excel_file)
     excel_file.seek(0)
-
     return excel_file
 
 @auth.route('/admin/users/report')
@@ -625,12 +1129,14 @@ def user_report():
         flash('Access denied. Admin privileges required.', 'error')
         return redirect(url_for('home'))
 
-    excel_file = generate_user_report()
+    report_type = request.args.get('type', 'full')
+    excel_file = generate_user_report(report_type=report_type)
+    date_tag = datetime.utcnow().strftime("%Y%m%d")
 
     return send_file(
         excel_file,
         as_attachment=True,
-        download_name='user_report.xlsx',
+        download_name=f'Bhairava_Sanctuary_Intelligence_Report_{date_tag}.xlsx',
         mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     )
 
