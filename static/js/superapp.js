@@ -174,7 +174,7 @@ function initCommandPalette() {
     { title: "Daiva Anugraha Videos · YouTube Discourses", url: "/#videos", tag: "Media" },
     { title: "Life Within or Without · Book & Teachings", url: "/#book", tag: "Book" },
     { title: "Join Sacred Telegram Group", url: "https://t.me/+tM8pVCZWG8cxYjc1", tag: "Community", external: true },
-    { title: "Instagram (@bhairavayuga)", url: "https://www.instagram.com/bhairavayuga?igsh=YTJoY25lcmU2Z2xx&utm_source=qr", tag: "Community", external: true }
+    { title: "Instagram (@bhairava_anugraha)", url: "https://www.instagram.com/bhairava_anugraha/", tag: "Community", external: true }
   ];
 
   function openPalette() {
