@@ -1,0 +1,132 @@
+<!-- ==========================================================================
+     SACRED TIMEZONE & GMT ALIGNMENT MODAL (MINIMAL & SLEEK)
+     ========================================================================== -->
+<div class="ashtami-tz-modal-backdrop" id="ashtami-tz-modal" role="dialog" aria-modal="true" aria-labelledby="tz-modal-title" style="display: none;">
+  <div class="ashtami-tz-modal-dialog">
+    <!-- Clean Minimal Header -->
+    <div class="tz-modal-header">
+      <div class="tz-modal-header-left">
+        <span class="tz-modal-om">ॐ</span>
+        <h3 id="tz-modal-title" class="tz-modal-title">Select Timezone</h3>
+      </div>
+      <button type="button" class="tz-modal-close" id="ashtami-tz-close" aria-label="Close Dialog">&times;</button>
+    </div>
+
+    <div class="tz-modal-body">
+      <!-- Device Detection Row -->
+      <div class="tz-detected-card" id="tz-detected-card">
+        <div class="tz-detected-info">
+          <span class="tz-live-dot" title="Active"></span>
+          <span class="tz-detected-val" id="tz-modal-detected-desc">Detecting location...</span>
+        </div>
+        <button type="button" class="tz-btn-auto" id="tz-btn-use-auto" title="Reset to auto-detected local device/country time">
+          ⚡ Use Device Time
+        </button>
+      </div>
+
+      <!-- Quick Country & Region Chips -->
+      <div class="tz-chips-label">Quick Select:</div>
+      <div class="tz-presets-grid" id="tz-presets-grid">
+        <button type="button" class="tz-preset-btn tz-chip-btn" data-tz="Asia/Kolkata" data-offset="GMT+05:30" data-country="India" data-name="India (IST)">
+          🇮🇳 India
+        </button>
+        <button type="button" class="tz-preset-btn tz-chip-btn" data-tz="America/New_York" data-offset="GMT-04:00" data-country="United States" data-name="USA · Eastern">
+          🇺🇸 US (EST)
+        </button>
+        <button type="button" class="tz-preset-btn tz-chip-btn" data-tz="America/Los_Angeles" data-offset="GMT-07:00" data-country="United States" data-name="USA · Pacific">
+          🇺🇸 US (PST)
+        </button>
+        <button type="button" class="tz-preset-btn tz-chip-btn" data-tz="Europe/London" data-offset="GMT+01:00" data-country="United Kingdom" data-name="United Kingdom (London)">
+          🇬🇧 UK
+        </button>
+        <button type="button" class="tz-preset-btn tz-chip-btn" data-tz="Asia/Dubai" data-offset="GMT+04:00" data-country="United Arab Emirates" data-name="UAE · Dubai (GST)">
+          🇦🇪 UAE
+        </button>
+        <button type="button" class="tz-preset-btn tz-chip-btn" data-tz="Asia/Singapore" data-offset="GMT+08:00" data-country="Singapore" data-name="Singapore (SGT)">
+          🇸🇬 Singapore
+        </button>
+        <button type="button" class="tz-preset-btn tz-chip-btn" data-tz="Australia/Sydney" data-offset="GMT+10:00" data-country="Australia" data-name="Australia (Sydney)">
+          🇦🇺 Australia
+        </button>
+        <button type="button" class="tz-preset-btn tz-chip-btn" data-tz="UTC" data-offset="GMT+00:00" data-country="Universal" data-name="Universal Time (UTC)">
+          🌐 UTC
+        </button>
+      </div>
+
+      <!-- Specific GMT Offset Select -->
+      <div class="tz-offset-select-wrap">
+        <label for="ashtami-gmt-select" class="tz-select-label">Or Select GMT / Country:</label>
+        <div class="tz-custom-select-box">
+          <select id="ashtami-gmt-select" class="tz-select">
+            <optgroup label="Spiritual & Regional Hubs">
+              <option value="GMT+05:30" selected>🇮🇳 India (IST · GMT+05:30)</option>
+              <option value="GMT+05:45">🇳🇵 Nepal · Kathmandu (NPT · GMT+05:45)</option>
+              <option value="GMT-04:00">🇺🇸 USA Eastern / New York (EDT · GMT-04:00)</option>
+              <option value="GMT-05:00">🇺🇸 USA Central / Chicago (CDT · GMT-05:00)</option>
+              <option value="GMT-07:00">🇺🇸 USA Pacific / LA / SF (PDT · GMT-07:00)</option>
+              <option value="GMT+01:00">🇬🇧 United Kingdom · London (BST · GMT+01:00)</option>
+              <option value="GMT+04:00">🇦🇪 UAE · Dubai (GST · GMT+04:00)</option>
+              <option value="GMT+08:00">🇸🇬 Singapore / Malaysia (SGT · GMT+08:00)</option>
+              <option value="GMT+10:00">🇦🇺 Australia · Sydney / Melbourne (AEST · GMT+10:00)</option>
+              <option value="GMT+02:00">🇩🇪 Europe · Berlin / Paris (CEST · GMT+02:00)</option>
+              <option value="GMT+09:00">🇯🇵 Japan · Tokyo (JST · GMT+09:00)</option>
+              <option value="GMT-04:00">🇨🇦 Canada · Toronto / Montreal (EDT · GMT-04:00)</option>
+            </optgroup>
+            <optgroup label="Standard GMT / UTC Offsets">
+              <option value="GMT-12:00">GMT-12:00 · Baker Island</option>
+              <option value="GMT-11:00">GMT-11:00 · Samoa, Niue</option>
+              <option value="GMT-10:00">GMT-10:00 · Hawaii (HST)</option>
+              <option value="GMT-09:00">GMT-09:00 · Alaska (AKDT)</option>
+              <option value="GMT-08:00">GMT-08:00 · Pacific Time (US - PST)</option>
+              <option value="GMT-07:00">GMT-07:00 · Mountain Time (US - MST)</option>
+              <option value="GMT-06:00">GMT-06:00 · Central Time (US - CST)</option>
+              <option value="GMT-05:00">GMT-05:00 · Eastern Time (US - EST)</option>
+              <option value="GMT-04:00">GMT-04:00 · Atlantic Time / US EDT</option>
+              <option value="GMT-03:30">GMT-03:30 · Newfoundland</option>
+              <option value="GMT-03:00">GMT-03:00 · Buenos Aires, Sao Paulo</option>
+              <option value="GMT-02:00">GMT-02:00 · South Georgia</option>
+              <option value="GMT-01:00">GMT-01:00 · Azores, Cape Verde</option>
+              <option value="GMT+00:00">GMT+00:00 · UTC, London (GMT), Dublin</option>
+              <option value="GMT+01:00">GMT+01:00 · London (BST), Paris, Rome</option>
+              <option value="GMT+02:00">GMT+02:00 · Cairo, Berlin (CEST), Athens</option>
+              <option value="GMT+03:00">GMT+03:00 · Moscow, Riyadh, Istanbul</option>
+              <option value="GMT+03:30">GMT+03:30 · Tehran</option>
+              <option value="GMT+04:00">GMT+04:00 · Dubai, Muscat (GST)</option>
+              <option value="GMT+04:30">GMT+04:30 · Kabul</option>
+              <option value="GMT+05:00">GMT+05:00 · Karachi, Tashkent (PKT)</option>
+              <option value="GMT+05:30">GMT+05:30 · India Standard Time (IST), Colombo</option>
+              <option value="GMT+05:45">GMT+05:45 · Kathmandu (NPT)</option>
+              <option value="GMT+06:00">GMT+06:00 · Dhaka, Almaty</option>
+              <option value="GMT+06:30">GMT+06:30 · Yangon</option>
+              <option value="GMT+07:00">GMT+07:00 · Bangkok, Jakarta</option>
+              <option value="GMT+08:00">GMT+08:00 · Singapore, Hong Kong, Beijing</option>
+              <option value="GMT+09:00">GMT+09:00 · Tokyo, Seoul (JST)</option>
+              <option value="GMT+09:30">GMT+09:30 · Adelaide, Darwin</option>
+              <option value="GMT+10:00">GMT+10:00 · Sydney, Melbourne (AEST)</option>
+              <option value="GMT+11:00">GMT+11:00 · Sydney (AEDT), Solomon Islands</option>
+              <option value="GMT+12:00">GMT+12:00 · Auckland, Fiji</option>
+              <option value="GMT+13:00">GMT+13:00 · Tonga, Samoa</option>
+            </optgroup>
+          </select>
+        </div>
+      </div>
+
+      <!-- Sleek Dynamic Preview Box -->
+      <div class="tz-preview-card">
+        <div class="tz-preview-header-line">
+          <span class="tz-preview-badge">Muhurta Preview</span>
+          <span class="tz-preview-zone" id="tz-preview-zone">GMT+05:30 (India)</span>
+        </div>
+        <div class="tz-preview-timing" id="tz-preview-timing">
+          Nov 02, 6:15 AM – Nov 03, 4:30 AM IST
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="tz-modal-footer">
+      <button type="button" class="tz-modal-btn btn-secondary" id="ashtami-tz-cancel">Cancel</button>
+      <button type="button" class="tz-modal-btn btn-primary" id="ashtami-tz-apply">Apply Timezone</button>
+    </div>
+  </div>
+</div>

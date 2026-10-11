@@ -11,13 +11,102 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
 
+COUNTRY_CODE_CHOICES = [
+    ('+91', '🇮🇳 +91 (India)'),
+    ('+1', '🇺🇸 +1 (USA / Canada)'),
+    ('+44', '🇬🇧 +44 (UK)'),
+    ('+61', '🇦🇺 +61 (Australia)'),
+    ('+971', '🇦🇪 +971 (UAE)'),
+    ('+65', '🇸🇬 +65 (Singapore)'),
+    ('+60', '🇲🇾 +60 (Malaysia)'),
+    ('+977', '🇳🇵 +977 (Nepal)'),
+    ('+94', '🇱🇰 +94 (Sri Lanka)'),
+    ('+49', '🇩🇪 +49 (Germany)'),
+    ('+33', '🇫🇷 +33 (France)'),
+    ('+27', '🇿🇦 +27 (South Africa)'),
+    ('+64', '🇳🇿 +64 (New Zealand)'),
+    ('+230', '🇲🇺 +230 (Mauritius)'),
+    ('+353', '🇮🇪 +353 (Ireland)'),
+    ('+41', '🇨🇭 +41 (Switzerland)'),
+    ('+31', '🇳🇱 +31 (Netherlands)'),
+    ('+81', '🇯🇵 +81 (Japan)'),
+    ('+1868', '🇹🇹 +1868 (Trinidad & Tobago)'),
+    ('+592', '🇬🇾 +592 (Guyana)'),
+    ('+679', '🇫🇯 +679 (Fiji)'),
+    ('+880', '🇧🇩 +880 (Bangladesh)'),
+    ('+966', '🇸🇦 +966 (Saudi Arabia)'),
+    ('+968', '🇴🇲 +968 (Oman)'),
+    ('+965', '🇰🇼 +965 (Kuwait)'),
+    ('+974', '🇶🇦 +974 (Qatar)'),
+    ('+62', '🇮🇩 +62 (Indonesia)'),
+    ('+66', '🇹🇭 +66 (Thailand)'),
+    ('+39', '🇮🇹 +39 (Italy)'),
+    ('+34', '🇪🇸 +34 (Spain)'),
+    ('+46', '🇸🇪 +46 (Sweden)'),
+    ('+47', '🇳🇴 +47 (Norway)'),
+    ('+45', '🇩🇰 +45 (Denmark)'),
+    ('+55', '🇧🇷 +55 (Brazil)'),
+    ('+7', '🇷🇺 +7 (Russia)'),
+    ('+234', '🇳🇬 +234 (Nigeria)'),
+    ('+254', '🇰🇪 +254 (Kenya)'),
+    ('+852', '🇭🇰 +852 (Hong Kong)'),
+    ('+886', '🇹🇼 +886 (Taiwan)'),
+    ('+82', '🇰🇷 +82 (South Korea)'),
+    ('+43', '🇦🇹 +43 (Austria)'),
+    ('+32', '🇧🇪 +32 (Belgium)'),
+    ('+48', '🇵🇱 +48 (Poland)'),
+    ('+351', '🇵🇹 +351 (Portugal)'),
+    ('Other', '🌐 Other')
+]
+
+COUNTRY_CHOICES = [
+    ('India', 'India'),
+    ('United States', 'United States'),
+    ('United Kingdom', 'United Kingdom'),
+    ('Canada', 'Canada'),
+    ('Australia', 'Australia'),
+    ('United Arab Emirates', 'United Arab Emirates'),
+    ('Nepal', 'Nepal'),
+    ('Singapore', 'Singapore'),
+    ('Malaysia', 'Malaysia'),
+    ('Germany', 'Germany'),
+    ('France', 'France'),
+    ('South Africa', 'South Africa'),
+    ('New Zealand', 'New Zealand'),
+    ('Mauritius', 'Mauritius'),
+    ('Sri Lanka', 'Sri Lanka'),
+    ('Switzerland', 'Switzerland'),
+    ('Netherlands', 'Netherlands'),
+    ('Ireland', 'Ireland'),
+    ('Japan', 'Japan'),
+    ('Fiji', 'Fiji'),
+    ('Trinidad and Tobago', 'Trinidad and Tobago'),
+    ('Guyana', 'Guyana'),
+    ('Indonesia', 'Indonesia'),
+    ('Thailand', 'Thailand'),
+    ('Saudi Arabia', 'Saudi Arabia'),
+    ('Oman', 'Oman'),
+    ('Kuwait', 'Kuwait'),
+    ('Qatar', 'Qatar'),
+    ('Bangladesh', 'Bangladesh'),
+    ('Italy', 'Italy'),
+    ('Spain', 'Spain'),
+    ('Sweden', 'Sweden'),
+    ('Norway', 'Norway'),
+    ('Denmark', 'Denmark'),
+    ('Brazil', 'Brazil'),
+    ('Russia', 'Russia'),
+    ('Other', 'Other (Worldwide)')
+]
+
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=3, max=80)], filters=[strip_filter])
     email = StringField('Email', validators=[DataRequired(), Email()], filters=[strip_filter, lambda x: x.lower() if isinstance(x, str) else x])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
     password2 = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     full_name = StringField('Full Name', validators=[DataRequired(), Length(max=100)], filters=[strip_filter])
-    phone = StringField('Phone Number', validators=[Length(max=20)], filters=[strip_filter])
+    country_code = SelectField('Country Code', choices=COUNTRY_CODE_CHOICES, default='+91', validators=[Optional()], validate_choice=False)
+    phone = StringField('Mobile Number', validators=[Length(max=20)], filters=[strip_filter])
     address = TextAreaField('Address (Optional)', validators=[Length(max=500)], filters=[strip_filter])
     gender = SelectField('Gender', choices=[
         ('', 'Select Gender'),
@@ -26,7 +115,10 @@ class RegistrationForm(FlaskForm):
         ('Other', 'Other')
     ], validators=[DataRequired()])
     date_of_birth = DateField('Date of Birth (Optional)', format='%Y-%m-%d', validators=[Optional()])
-    location = StringField('Current City / State / Country', validators=[DataRequired(), Length(max=100)])
+    city = StringField('City / Town', validators=[DataRequired(message='Please enter your city / town')], filters=[strip_filter])
+    state = StringField('State / Province', validators=[DataRequired(message='Please enter your state / province')], filters=[strip_filter])
+    country = SelectField('Country', choices=COUNTRY_CHOICES, default='India', validators=[DataRequired(message='Please select your country')], validate_choice=False)
+    location = StringField('Current City / State / Country', validators=[Optional(), Length(max=255)], filters=[strip_filter])
     preferred_language = SelectField('Preferred Language', choices=[
         ('', 'Select Preferred Language'),
         ('English', 'English'),
@@ -59,6 +151,36 @@ class RegistrationForm(FlaskForm):
         Optional(),
         FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Only image files (JPG, PNG, GIF) are allowed!')
     ])
+
+    def validate(self, extra_validators=None):
+        # Auto-populate city, state, country if legacy location field was provided
+        if self.location.data and (not self.city.data or not self.state.data):
+            parts = [p.strip() for p in self.location.data.split(',') if p.strip()]
+            if len(parts) >= 3:
+                self.city.data = parts[0]
+                self.state.data = parts[1]
+                self.country.data = parts[2]
+            elif len(parts) == 2:
+                self.city.data = parts[0]
+                self.state.data = parts[1]
+                if not self.country.data:
+                    self.country.data = 'India'
+            elif len(parts) == 1:
+                self.city.data = parts[0]
+                if not self.state.data:
+                    self.state.data = parts[0]
+                if not self.country.data:
+                    self.country.data = 'India'
+
+        # If phone contains country code e.g. "+91 9876543210", extract country code
+        if self.phone.data and self.phone.data.startswith('+'):
+            for code, _ in COUNTRY_CODE_CHOICES:
+                if code != 'Other' and self.phone.data.startswith(code):
+                    self.country_code.data = code
+                    self.phone.data = self.phone.data[len(code):].strip()
+                    break
+
+        return super().validate(extra_validators=extra_validators)
 
     def validate_username(self, username):
         # We'll handle this validation in the route to avoid circular imports

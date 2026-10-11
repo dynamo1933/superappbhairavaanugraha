@@ -32,7 +32,11 @@ class User(UserMixin, db.Model):
     # New registration fields
     date_of_birth = db.Column(db.Date, nullable=True)
     gender = db.Column(db.String(20), nullable=False, default='Other')
-    location = db.Column(db.String(100), nullable=True)
+    country_code = db.Column(db.String(10), nullable=True, default='+91')
+    city = db.Column(db.String(100), nullable=True)
+    state = db.Column(db.String(100), nullable=True)
+    country = db.Column(db.String(100), nullable=True, default='India')
+    location = db.Column(db.String(255), nullable=True)  # Combined location: City, State, Country
     preferred_language = db.Column(db.String(50), nullable=True)
     referral_source = db.Column(db.String(100), nullable=True)
     

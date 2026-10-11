@@ -20,7 +20,7 @@
 
   <!-- Master Stylesheet -->
   <link rel="stylesheet" href="/static/css/style.css?v=20260908_150" />
-  <link rel="stylesheet" href="/static/css/unified-header.css?v=3" />
+  <link rel="stylesheet" href="/static/css/unified-header.css?v=4" />
 </head>
 
 <body>
@@ -178,13 +178,24 @@
   </header>
 
   <!-- ==================== ASHTAMI ALERT RIBBON ==================== -->
-  <div class="ashtami-banner">
+  <div class="ashtami-banner" data-start-iso="2026-10-03T08:00:00+05:30" data-end-iso="2026-10-04T05:52:00+05:30" data-title="Krishna Paksha Ashtami">
     <div class="ashtami-inner">
-      <span class="pulse-dot"></span>
-      <span class="ashtami-text">Next Krishna Paksha Ashtami: <strong>Oct 03, 8:00 AM – Oct 04, 5:52 AM IST</strong></span>
+      <span class="pulse-dot" title="Live Sacred Tithi Gateway"></span>
+      <span class="ashtami-text">Next Krishna Paksha Ashtami: <strong class="ashtami-timing-val" id="ashtami-timing-val">Oct 03, 8:00 AM – Oct 04, 5:52 AM IST</strong></span>
+      
+      <!-- GMT Badge & Change Button -->
+      <button type="button" class="ashtami-gmt-btn" id="ashtami-gmt-btn" aria-haspopup="dialog" aria-expanded="false" title="Change GMT / Timezone (Auto-detected from country)">
+        <span class="gmt-globe">🌐</span>
+        <span class="gmt-val" id="ashtami-gmt-val">GMT+5:30 (India)</span>
+        <span class="gmt-change-pill">Change GMT ▾</span>
+      </button>
+
       <a href="/ashtami" class="ashtami-link">Explore Sacred Gateways →</a>
     </div>
   </div>
+
+  <!-- Sacred Timezone & GMT Modal -->
+  {% include "components/gmt_modal.html" ignore missing %}
 
   <!-- ==================== MOBILE MENU DRAWER ==================== -->
   <div class="drawer-backdrop" id="drawer-backdrop"></div>

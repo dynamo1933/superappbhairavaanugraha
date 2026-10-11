@@ -19,7 +19,7 @@ load_dotenv()
 
 from flask import (
     Flask, render_template, jsonify, request, send_from_directory,
-    abort, Response, redirect, url_for, flash, send_file
+    abort, Response, redirect, url_for, flash, send_file, session
 )
 from flask_login import (
     LoginManager, current_user, login_required, login_user, logout_user
@@ -81,11 +81,21 @@ app.config['UPLOAD_FOLDER'] = uploads_dir
 app.config['MAX_CONTENT_LENGTH'] = int(os.getenv('MAX_CONTENT_LENGTH', 16 * 1024 * 1024))
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Production Security & Session Cookie settings
+# Production Security, Session, and Remember Cookie settings
+from datetime import timedelta
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=90)
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 # Enforce HTTPS-only cookies when configured in environment (recommended in production HTTPS)
 app.config['SESSION_COOKIE_SECURE'] = os.getenv('SESSION_COOKIE_SECURE', 'false').lower() in ('true', '1')
+
+# Flask-Login Remember Me Cookie settings (90-day persistence)
+app.config['REMEMBER_COOKIE_DURATION'] = timedelta(days=90)
+app.config['REMEMBER_COOKIE_HTTPONLY'] = True
+app.config['REMEMBER_COOKIE_SAMESITE'] = 'Lax'
+app.config['REMEMBER_COOKIE_SECURE'] = os.getenv('SESSION_COOKIE_SECURE', 'false').lower() in ('true', '1')
+app.config['REMEMBER_COOKIE_PATH'] = '/'
+app.config['REMEMBER_COOKIE_NAME'] = 'remember_token'
 
 # Support standard reverse proxies (Nginx, Cloudflare, Render, Railway, Vercel)
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -192,6 +202,25 @@ def initialize_database():
     try:
         with app.app_context():
             db.create_all()
+
+            # Ensure newly added registration columns exist in user table
+            try:
+                inspector = db.inspect(db.engine)
+                if 'user' in inspector.get_table_names():
+                    existing_cols = [c['name'] for c in inspector.get_columns('user')]
+                    with db.engine.connect() as conn:
+                        if 'country_code' not in existing_cols:
+                            conn.execute(db.text("ALTER TABLE user ADD COLUMN country_code VARCHAR(10) DEFAULT '+91'"))
+                        if 'city' not in existing_cols:
+                            conn.execute(db.text("ALTER TABLE user ADD COLUMN city VARCHAR(100)"))
+                        if 'state' not in existing_cols:
+                            conn.execute(db.text("ALTER TABLE user ADD COLUMN state VARCHAR(100)"))
+                        if 'country' not in existing_cols:
+                            conn.execute(db.text("ALTER TABLE user ADD COLUMN country VARCHAR(100) DEFAULT 'India'"))
+                        conn.commit()
+            except Exception as schema_err:
+                print(f"[-] Schema column migration notice: {schema_err}", file=sys.stderr)
+
             admin = User.query.filter_by(role='admin').first()
             if not admin:
                 admin = User(
@@ -245,12 +274,17 @@ def load_user(user_id):
 
 @app.before_request
 def update_last_active():
-    if current_user.is_authenticated:
-        try:
+    try:
+        if current_user.is_authenticated:
+            if request.cookies.get('remember_token'):
+                session.permanent = True
             current_user.last_active = datetime.utcnow()
             db.session.commit()
-        except Exception:
+    except Exception:
+        try:
             db.session.rollback()
+        except Exception:
+            pass
 
 @app.context_processor
 def inject_user():
@@ -380,13 +414,37 @@ ASHTAMI_DATES = [
         'date': '2026-10-03',
         'start_time': '08:00',
         'end_time': '2026-10-04 05:52',
+        'start_iso': '2026-10-03T08:00:00+05:30',
+        'end_iso': '2026-10-04T05:52:00+05:30',
+        'title': 'Krishna Paksha Ashtami',
         'description': 'Krishna Paksha Ashtami — Sacred Gateway of Kaal Bhairava'
     },
     {
         'date': '2026-11-02',
         'start_time': '06:15',
         'end_time': '2026-11-03 04:30',
+        'start_iso': '2026-11-02T06:15:00+05:30',
+        'end_iso': '2026-11-03T04:30:00+05:30',
+        'title': 'Kaal Bhairav Jayanti Ashtami Mahotsav',
         'description': 'Kaal Bhairav Jayanti Ashtami Mahotsav'
+    },
+    {
+        'date': '2026-12-01',
+        'start_time': '21:40',
+        'end_time': '2026-12-02 19:25',
+        'start_iso': '2026-12-01T21:40:00+05:30',
+        'end_iso': '2026-12-02T19:25:00+05:30',
+        'title': 'Margashirsha Krishna Paksha Ashtami',
+        'description': 'Margashirsha Kaalashtami Pradurbhava'
+    },
+    {
+        'date': '2026-12-31',
+        'start_time': '11:20',
+        'end_time': '2027-01-01 09:10',
+        'start_iso': '2026-12-31T11:20:00+05:30',
+        'end_iso': '2027-01-01T09:10:00+05:30',
+        'title': 'Pausha Krishna Paksha Ashtami',
+        'description': 'Sheetala Bhairava Gateway'
     }
 ]
 
@@ -1117,6 +1175,18 @@ def mark_messages_read():
         db.session.rollback()
         return jsonify({'success': False, 'error': str(e)}), 500
 
+@app.route('/api/chat/unread-count', methods=['GET'])
+@login_required
+def get_chat_unread_count():
+    try:
+        if current_user.is_admin():
+            count = ChatMessage.query.filter_by(is_admin_message=False, is_read=False).count()
+        else:
+            count = ChatMessage.query.filter_by(recipient_id=current_user.id, is_admin_message=True, is_read=False).count()
+        return jsonify({'success': True, 'unread_count': count})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
 @app.route('/chat')
 @login_required
 def user_chat():
@@ -1271,14 +1341,47 @@ def api_stats():
 @app.route('/api/next-ashtami')
 def next_ashtami():
     today = datetime.now().date()
+    if request.args.get('all') == 'true':
+        return jsonify({
+            'status': 'success',
+            'ashtamis': ASHTAMI_DATES,
+            'source_timezone': 'Asia/Kolkata',
+            'source_offset': '+05:30'
+        })
     for ashtami in ASHTAMI_DATES:
         try:
             ashtami_date = datetime.strptime(ashtami['date'], '%Y-%m-%d').date()
             if ashtami_date >= today:
-                return jsonify(ashtami)
+                res = dict(ashtami)
+                res['source_timezone'] = 'Asia/Kolkata'
+                res['source_offset'] = '+05:30'
+                return jsonify(res)
         except Exception:
             pass
-    return jsonify(ASHTAMI_DATES[0] if ASHTAMI_DATES else None)
+    fallback = dict(ASHTAMI_DATES[0] if ASHTAMI_DATES else {})
+    fallback['source_timezone'] = 'Asia/Kolkata'
+    fallback['source_offset'] = '+05:30'
+    return jsonify(fallback)
+
+@app.route('/api/geo-timezone')
+def geo_timezone():
+    """Client IP & country header detection endpoint for timezone alignment"""
+    client_ip = (
+        request.headers.get('CF-Connecting-IP') or
+        request.headers.get('X-Forwarded-For') or
+        request.remote_addr or ''
+    )
+    if ',' in client_ip:
+        client_ip = client_ip.split(',')[0].strip()
+    country_code = request.headers.get('CF-IPCountry') or request.headers.get('X-Country-Code') or ''
+    return jsonify({
+        'status': 'success',
+        'ip': client_ip,
+        'country_code': country_code,
+        'server_timezone': 'Asia/Kolkata',
+        'server_utc_offset': '+05:30',
+        'server_time': datetime.now().isoformat()
+    })
 
 @app.route('/api/countdown')
 def countdown():

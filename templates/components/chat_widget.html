@@ -1,4 +1,5 @@
-<!-- Spiritual Guidance Chat Widget Component -->
+{% if current_user.is_authenticated and current_user.is_admin() %}
+<!-- Spiritual Guidance Chat Widget Component (Admin Only) -->
 <div id="da-chat-widget" class="da-chat-widget">
     <!-- Floating Action Button (FAB) -->
     <button type="button" id="chat-fab" class="chat-fab" aria-label="Ask Spiritual Guidance" title="Ask Guru Bhairava Spiritual Guidance">
@@ -279,3 +280,4 @@
     box-shadow: 0 6px 16px rgba(212, 166, 74, 0.5);
 }
 </style>
+{% endif %}

@@ -1799,3 +1799,102 @@ iframe {
     font-size: 14px;
   }
 }
+
+/* ==========================================================================
+   ASHTAMI GMT & TIMEZONE ALIGNMENT STYLES
+   ========================================================================== */
+.ashtami-gmt-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(212, 166, 74, 0.12);
+  border: 1px solid rgba(212, 166, 74, 0.4);
+  color: #f0d48a;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-family: var(--mono, "JetBrains Mono", monospace);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+.ashtami-gmt-btn:hover {
+  background: rgba(212, 166, 74, 0.26);
+  border-color: #d4a64a;
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(212, 166, 74, 0.4);
+  transform: translateY(-1px);
+}
+
+.ashtami-gmt-btn:active {
+  transform: translateY(0);
+}
+
+.ashtami-gmt-btn .gmt-globe {
+  font-size: 12px;
+}
+
+.ashtami-gmt-btn .gmt-val {
+  font-weight: 600;
+  color: #f0d48a;
+}
+
+.ashtami-gmt-btn .gmt-change-pill {
+  background: rgba(212, 166, 74, 0.22);
+  padding: 1px 7px;
+  border-radius: 10px;
+  font-size: 10px;
+  color: #e6c575;
+  margin-left: 2px;
+  transition: all 0.2s ease;
+}
+
+.ashtami-gmt-btn:hover .gmt-change-pill {
+  background: #d4a64a;
+  color: #120b06;
+}
+
+.ashtami-tz-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 5, 3, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.ashtami-tz-modal-backdrop.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ashtami-tz-modal-dialog {
+  background: radial-gradient(ellipse at 50% 0%, #22140a 0%, #120a05 75%, #080402 100%);
+  border: 1px solid rgba(212, 166, 74, 0.35);
+  border-radius: 14px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), 0 0 30px rgba(212, 166, 74, 0.15);
+  width: 100%;
+  max-width: 440px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: scale(0.95);
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.ashtami-tz-modal-backdrop.is-open .ashtami-tz-modal-dialog {
+  transform: scale(1);
+}
+

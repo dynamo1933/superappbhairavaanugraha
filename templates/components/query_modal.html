@@ -1,0 +1,597 @@
+<!-- ==========================================================================
+     DEVOTEE QUERY & GUIDANCE CHAMBER MODAL (FOR SEEKERS / USERS)
+     ========================================================================== -->
+<div class="devotee-query-modal-backdrop" id="devotee-query-modal" role="dialog" aria-modal="true" aria-labelledby="query-modal-title" style="display: none;">
+  <div class="devotee-query-modal-dialog">
+    <!-- Header -->
+    <div class="query-modal-header">
+      <div class="query-modal-header-left">
+        <span class="query-modal-om">ॐ</span>
+        <div>
+          <h3 id="query-modal-title" class="query-modal-title">Submit Queries to Guruji / Admin</h3>
+          <p class="query-modal-subtitle">Direct spiritual guidance, sadhana queries, and administrative inquiries.</p>
+        </div>
+      </div>
+      <button type="button" class="query-modal-close" id="query-modal-close" aria-label="Close Dialog">&times;</button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="query-modal-body">
+      <!-- Section: Previous Interactions Thread -->
+      <div class="query-section-heading">
+        <span>Previous Queries &amp; Guidance Thread</span>
+        <button type="button" class="query-refresh-btn" id="query-refresh-btn" title="Refresh messages">
+          <i class="fas fa-rotate"></i>
+        </button>
+      </div>
+
+      <div class="query-history-box" id="query-history-box">
+        <div class="query-placeholder" id="query-placeholder">
+          <span class="query-om-icon">॥ ॐ भैरवाय नमः ॥</span>
+          <p>No previous inquiries recorded. Type your sacred question below to consult Guruji / Administrator.</p>
+        </div>
+        <div class="query-stream" id="query-stream"></div>
+      </div>
+
+      <!-- Section: New Query Text Box -->
+      <div class="query-compose-box">
+        <label for="query-input-text" class="query-input-label">Type New Query / Question:</label>
+        <div class="query-textarea-wrap">
+          <textarea id="query-input-text" class="query-textarea" rows="3" placeholder="Enter your question regarding sadhana, mantras, diksha, or vow requirements..." maxlength="2000"></textarea>
+        </div>
+        <div class="query-compose-footer">
+          <span class="query-compose-hint">Admin will reply directly. You will be notified in the header badge.</span>
+          <button type="button" class="query-submit-btn" id="query-submit-btn">
+            <i class="fas fa-paper-plane"></i>
+            <span>Submit Query</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* ==============================================================================
+   DEVOTEE QUERY MODAL & INTERACTION THREAD STYLES
+   ============================================================================== */
+.devotee-query-modal-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(8, 5, 3, 0.85) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  z-index: 99998 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 16px !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  box-sizing: border-box !important;
+}
+
+.devotee-query-modal-backdrop.is-open {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+.devotee-query-modal-dialog {
+  background: radial-gradient(ellipse at 50% 0%, #24150b 0%, #130a05 75%, #080402 100%) !important;
+  border: 1px solid rgba(212, 166, 74, 0.35) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.9), 0 0 35px rgba(212, 166, 74, 0.15) !important;
+  width: 100% !important;
+  max-width: 580px !important;
+  max-height: 90vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  transform: scale(0.95) !important;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  box-sizing: border-box !important;
+}
+
+.devotee-query-modal-backdrop.is-open .devotee-query-modal-dialog {
+  transform: scale(1) !important;
+}
+
+.query-modal-header {
+  padding: 14px 20px !important;
+  border-bottom: 1px solid rgba(212, 166, 74, 0.2) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  flex-shrink: 0 !important;
+}
+
+.query-modal-header-left {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+.query-modal-om {
+  font-size: 24px !important;
+  color: #d4a64a !important;
+  text-shadow: 0 0 12px rgba(212, 166, 74, 0.5) !important;
+  font-family: var(--chrome-serif, serif) !important;
+  line-height: 1 !important;
+}
+
+.query-modal-title {
+  margin: 0 !important;
+  font-family: var(--chrome-display, "Cormorant Garamond", Georgia, serif) !important;
+  font-size: 19px !important;
+  font-weight: 600 !important;
+  color: #f0d48a !important;
+  letter-spacing: 0.02em !important;
+  line-height: 1.2 !important;
+}
+
+.query-modal-subtitle {
+  margin: 3px 0 0 !important;
+  font-size: 12px !important;
+  color: #cbbba5 !important;
+  line-height: 1.3 !important;
+}
+
+.query-modal-close {
+  background: transparent !important;
+  border: 1px solid rgba(212, 166, 74, 0.2) !important;
+  color: #d4a64a !important;
+  font-size: 18px !important;
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 50% !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  transition: all 0.2s ease !important;
+  flex-shrink: 0 !important;
+  padding: 0 !important;
+}
+
+.query-modal-close:hover {
+  background: rgba(212, 166, 74, 0.18) !important;
+  color: #ffffff !important;
+  border-color: #d4a64a !important;
+  transform: rotate(90deg) !important;
+}
+
+.query-modal-body {
+  padding: 16px 20px !important;
+  overflow-y: auto !important;
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+  box-sizing: border-box !important;
+}
+
+.query-section-heading {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  color: #d4a64a !important;
+  font-family: var(--chrome-mono, monospace) !important;
+  margin-bottom: -6px !important;
+}
+
+.query-refresh-btn {
+  background: transparent !important;
+  border: none !important;
+  color: #cbbba5 !important;
+  cursor: pointer !important;
+  font-size: 12px !important;
+  padding: 2px 6px !important;
+  transition: all 0.2s ease !important;
+}
+
+.query-refresh-btn:hover {
+  color: #f0d48a !important;
+  transform: rotate(180deg) !important;
+}
+
+.query-history-box {
+  background: rgba(12, 8, 4, 0.75) !important;
+  border: 1px solid rgba(212, 166, 74, 0.22) !important;
+  border-radius: 10px !important;
+  padding: 12px !important;
+  min-height: 180px !important;
+  max-height: 250px !important;
+  overflow-y: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  box-sizing: border-box !important;
+}
+
+.query-placeholder {
+  margin: auto !important;
+  text-align: center !important;
+  padding: 16px !important;
+  color: #a89a85 !important;
+  font-size: 12.5px !important;
+}
+
+.query-om-icon {
+  display: block !important;
+  font-size: 14px !important;
+  color: #d4a64a !important;
+  margin-bottom: 6px !important;
+  font-family: var(--chrome-serif, serif) !important;
+}
+
+.query-stream {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+}
+
+/* User Message Bubble */
+.query-bubble-user {
+  align-self: flex-end !important;
+  max-width: 85% !important;
+  background: linear-gradient(135deg, rgba(212, 166, 74, 0.2) 0%, rgba(184, 134, 40, 0.12) 100%) !important;
+  border: 1px solid rgba(212, 166, 74, 0.35) !important;
+  border-radius: 12px 12px 2px 12px !important;
+  padding: 8px 12px !important;
+  color: #fdfaf2 !important;
+}
+
+.query-bubble-meta {
+  font-size: 10px !important;
+  color: #cbbba5 !important;
+  margin-top: 4px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 6px !important;
+  font-family: var(--chrome-mono, monospace) !important;
+}
+
+/* Admin Response Card */
+.query-bubble-admin {
+  align-self: flex-start !important;
+  max-width: 90% !important;
+  background: linear-gradient(135deg, rgba(38, 24, 12, 0.95) 0%, rgba(20, 12, 6, 0.95) 100%) !important;
+  border: 1px solid rgba(240, 212, 138, 0.5) !important;
+  border-left: 3px solid #d4a64a !important;
+  border-radius: 4px 12px 12px 12px !important;
+  padding: 10px 14px !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+}
+
+.query-admin-tag {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: #f0d48a !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  margin-bottom: 5px !important;
+  letter-spacing: 0.02em !important;
+}
+
+.query-bubble-text {
+  font-size: 13px !important;
+  line-height: 1.45 !important;
+  word-break: break-word !important;
+  white-space: pre-wrap !important;
+}
+
+/* Compose Area */
+.query-compose-box {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+}
+
+.query-input-label {
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  color: #d4a64a !important;
+  font-family: var(--chrome-mono, monospace) !important;
+}
+
+.query-textarea {
+  width: 100% !important;
+  background: #140d08 !important;
+  border: 1px solid rgba(212, 166, 74, 0.35) !important;
+  border-radius: 8px !important;
+  padding: 10px 12px !important;
+  color: #fdfaf2 !important;
+  font-size: 13px !important;
+  font-family: var(--chrome-sans, sans-serif) !important;
+  resize: vertical !important;
+  min-height: 65px !important;
+  max-height: 140px !important;
+  outline: none !important;
+  box-sizing: border-box !important;
+  transition: border-color 0.2s ease !important;
+}
+
+.query-textarea:focus {
+  border-color: #f0d48a !important;
+  box-shadow: 0 0 10px rgba(212, 166, 74, 0.25) !important;
+}
+
+.query-compose-footer {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+}
+
+.query-compose-hint {
+  font-size: 11px !important;
+  color: #a89a85 !important;
+  flex: 1 !important;
+  min-width: 180px !important;
+}
+
+.query-submit-btn {
+  background: linear-gradient(135deg, #d4a64a 0%, #b88628 100%) !important;
+  border: 1px solid #f0d48a !important;
+  color: #120b06 !important;
+  padding: 7px 16px !important;
+  border-radius: 18px !important;
+  font-size: 12.5px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 2px 10px rgba(212, 166, 74, 0.35) !important;
+}
+
+.query-submit-btn:hover {
+  background: linear-gradient(135deg, #f0d48a 0%, #d4a64a 100%) !important;
+  box-shadow: 0 0 16px rgba(212, 166, 74, 0.6) !important;
+  transform: translateY(-1px) !important;
+}
+
+.query-submit-btn:disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+</style>
+
+<script>
+(function() {
+  // Devotee Query Chamber Controller
+  const modal = document.getElementById('devotee-query-modal');
+  const closeBtn = document.getElementById('query-modal-close');
+  const refreshBtn = document.getElementById('query-refresh-btn');
+  const submitBtn = document.getElementById('query-submit-btn');
+  const textInput = document.getElementById('query-input-text');
+  const historyBox = document.getElementById('query-history-box');
+  const placeholder = document.getElementById('query-placeholder');
+  const stream = document.getElementById('query-stream');
+
+  let pollTimer = null;
+  let isOpen = false;
+
+  function getCsrfToken() {
+    return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ||
+           document.querySelector('input[name="csrf_token"]')?.value || '';
+  }
+
+  function updateHeaderBadge(count) {
+    const badges = document.querySelectorAll('#header-query-badge, #dropdown-query-badge, #drawer-query-badge');
+    badges.forEach(b => {
+      if (count > 0) {
+        b.textContent = count;
+        b.style.display = 'inline-flex';
+      } else {
+        b.style.display = 'none';
+      }
+    });
+  }
+
+  async function checkUnreadCount() {
+    try {
+      const res = await fetch('/api/chat/unread-count');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && typeof data.unread_count === 'number') {
+          updateHeaderBadge(data.unread_count);
+          if (isOpen && data.unread_count > 0) {
+            loadHistory(true);
+            markRead();
+          }
+        }
+      }
+    } catch (e) {
+      // Background poll silently ignore
+    }
+  }
+
+  async function markRead() {
+    try {
+      const csrf = getCsrfToken();
+      await fetch('/api/chat/mark-read', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrf
+        },
+        body: JSON.stringify({})
+      });
+      updateHeaderBadge(0);
+    } catch (e) {}
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  async function loadHistory(scrollDown = false) {
+    try {
+      const res = await fetch('/api/chat/history');
+      if (!res.ok) return;
+      const data = await res.json();
+      const messages = Array.isArray(data) ? data : (data.messages || []);
+
+      if (!stream) return;
+      stream.innerHTML = '';
+
+      if (messages.length === 0) {
+        if (placeholder) placeholder.style.display = 'block';
+        return;
+      }
+
+      if (placeholder) placeholder.style.display = 'none';
+
+      messages.forEach(msg => {
+        const isFromAdmin = msg.is_admin || msg.is_from_admin;
+        const div = document.createElement('div');
+        const text = escapeHtml(msg.message || msg.content || '');
+        const time = escapeHtml(msg.created_at || '');
+
+        if (isFromAdmin) {
+          div.className = 'query-bubble-admin';
+          div.innerHTML = `
+            <div class="query-admin-tag">
+              <i class="fas fa-shield-halved"></i>
+              <span>Guruji / Administrator Guidance</span>
+            </div>
+            <div class="query-bubble-text">${text}</div>
+            <div class="query-bubble-meta">${time}</div>
+          `;
+        } else {
+          div.className = 'query-bubble-user';
+          div.innerHTML = `
+            <div class="query-bubble-text">${text}</div>
+            <div class="query-bubble-meta">
+              <span>${time}</span>
+              <span title="Delivered to Admin">✓</span>
+            </div>
+          `;
+        }
+        stream.appendChild(div);
+      });
+
+      if (scrollDown && historyBox) {
+        historyBox.scrollTop = historyBox.scrollHeight;
+      }
+    } catch (e) {
+      console.error('Error loading query history:', e);
+    }
+  }
+
+  async function submitQuery() {
+    if (!textInput || !submitBtn) return;
+    const text = textInput.value.trim();
+    if (!text) {
+      textInput.focus();
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+
+    try {
+      const csrf = getCsrfToken();
+      const res = await fetch('/api/chat/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrf
+        },
+        body: JSON.stringify({ message: text })
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        textInput.value = '';
+        await loadHistory(true);
+      } else {
+        alert('Could not submit query: ' + (data.error || 'Server error'));
+      }
+    } catch (e) {
+      alert('Network error submitting query. Please try again.');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> <span>Submit Query</span>';
+    }
+  }
+
+  function openQueryModal() {
+    if (!modal) return;
+    isOpen = true;
+    modal.style.display = 'flex';
+    void modal.offsetWidth;
+    modal.classList.add('is-open');
+    loadHistory(true);
+    markRead();
+    if (textInput) setTimeout(() => textInput.focus(), 150);
+  }
+
+  function closeQueryModal() {
+    if (!modal) return;
+    isOpen = false;
+    modal.classList.remove('is-open');
+    setTimeout(() => {
+      modal.style.display = 'none';
+    }, 220);
+  }
+
+  // Bind Open Buttons
+  document.addEventListener('click', function(e) {
+    const trigger = e.target.closest('#open-query-modal-btn, #dropdown-query-btn, #drawer-query-btn, .open-query-modal-trigger');
+    if (trigger) {
+      e.preventDefault();
+      e.stopPropagation();
+      openQueryModal();
+    }
+  });
+
+  if (closeBtn) closeBtn.addEventListener('click', closeQueryModal);
+  if (refreshBtn) refreshBtn.addEventListener('click', () => loadHistory(true));
+  if (submitBtn) submitBtn.addEventListener('click', submitQuery);
+
+  if (textInput) {
+    textInput.addEventListener('keydown', function(e) {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        submitQuery();
+      }
+    });
+  }
+
+  if (modal) {
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) closeQueryModal();
+    });
+  }
+
+  window.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && modal && modal.classList.contains('is-open')) {
+      closeQueryModal();
+    }
+  });
+
+  // Start polling unread count every 7 seconds
+  setInterval(checkUnreadCount, 7000);
+  checkUnreadCount();
+})();
+</script>

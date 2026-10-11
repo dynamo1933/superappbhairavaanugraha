@@ -107,16 +107,26 @@
               {% endif %}
             </div>
 
-            <div class="auth-field">
+            <!-- Task 1: Separate Mobile Number with Country Code -->
+            <div class="auth-field phone-field-container">
               <label for="{{ form.phone.id }}">
-                <i class="fas fa-phone"></i> Mobile Phone / WhatsApp
+                <i class="fas fa-mobile-screen"></i> Mobile Phone / WhatsApp
               </label>
-              <div class="auth-input-wrap">
-                {{ form.phone(class="auth-input", placeholder="+91 98765 43210") }}
-                <i class="fas fa-mobile-screen auth-field-icon"></i>
+              <div class="phone-split-input-wrap">
+                <div class="phone-country-code-box">
+                  {{ form.country_code(class="auth-input auth-select phone-code-select", id="countryCodeSelect", title="Select Country Code") }}
+                  <i class="fas fa-chevron-down phone-code-arrow"></i>
+                </div>
+                <div class="phone-number-box">
+                  {{ form.phone(class="auth-input phone-number-input", placeholder="98765 43210", id="phoneInput", autocomplete="tel-national") }}
+                  <i class="fas fa-phone auth-field-icon"></i>
+                </div>
               </div>
               {% if form.phone.errors %}
                 <div class="auth-field-error">{{ form.phone.errors[0] }}</div>
+              {% endif %}
+              {% if form.country_code.errors %}
+                <div class="auth-field-error">{{ form.country_code.errors[0] }}</div>
               {% endif %}
             </div>
 
@@ -146,22 +156,9 @@
               {% endif %}
             </div>
 
-            <div class="auth-field">
-              <label for="{{ form.location.id }}">
-                <i class="fas fa-city"></i> City / State / Country <span class="req">*</span>
-              </label>
-              <div class="auth-input-wrap">
-                {{ form.location(class="auth-input", placeholder="e.g. Varanasi, UP, India", **{"required": True}) }}
-                <i class="fas fa-location-dot auth-field-icon"></i>
-              </div>
-              {% if form.location.errors %}
-                <div class="auth-field-error">{{ form.location.errors[0] }}</div>
-              {% endif %}
-            </div>
-
-            <div class="auth-field">
+            <div class="auth-field" style="grid-column: span 2;">
               <label for="{{ form.preferred_language.id }}">
-                <i class="fas fa-language"></i> Preferred Language <span class="req">*</span>
+                <i class="fas fa-language"></i> Preferred Language for Discourse & Guidance <span class="req">*</span>
               </label>
               <div class="auth-input-wrap">
                 {{ form.preferred_language(class="auth-input auth-select", **{"required": True}) }}
@@ -171,6 +168,95 @@
                 <div class="auth-field-error">{{ form.preferred_language.errors[0] }}</div>
               {% endif %}
             </div>
+          </div>
+
+          <!-- Task 2: Split City, State, Country -->
+          <div class="location-split-block">
+            <div class="location-block-header">
+              <label class="location-group-label">
+                <i class="fas fa-location-dot" style="color: var(--gold, #d4a64a);"></i> Location & Sacred Residence <span class="req">*</span>
+              </label>
+              <span class="location-hint">Specify City, State, and Country</span>
+            </div>
+            
+            <div class="location-grid-3">
+              <!-- City -->
+              <div class="auth-field">
+                <label for="{{ form.city.id }}" class="sub-label">
+                  <i class="fas fa-city"></i> City / Town <span class="req">*</span>
+                </label>
+                <div class="auth-input-wrap">
+                  {{ form.city(class="auth-input", placeholder="e.g. Varanasi / Mumbai", id="regCity", **{"required": True}) }}
+                  <i class="fas fa-building auth-field-icon"></i>
+                </div>
+                {% if form.city.errors %}
+                  <div class="auth-field-error">{{ form.city.errors[0] }}</div>
+                {% endif %}
+              </div>
+
+              <!-- State -->
+              <div class="auth-field">
+                <label for="{{ form.state.id }}" class="sub-label">
+                  <i class="fas fa-map"></i> State / Province <span class="req">*</span>
+                </label>
+                <div class="auth-input-wrap">
+                  {{ form.state(class="auth-input", placeholder="e.g. Uttar Pradesh", id="regState", list="stateDatalist", **{"required": True}) }}
+                  <i class="fas fa-map-location-dot auth-field-icon"></i>
+                </div>
+                <datalist id="stateDatalist">
+                  <option value="Andhra Pradesh"></option>
+                  <option value="Arunachal Pradesh"></option>
+                  <option value="Assam"></option>
+                  <option value="Bihar"></option>
+                  <option value="Chhattisgarh"></option>
+                  <option value="Delhi (NCT)"></option>
+                  <option value="Goa"></option>
+                  <option value="Gujarat"></option>
+                  <option value="Haryana"></option>
+                  <option value="Himachal Pradesh"></option>
+                  <option value="Jammu and Kashmir"></option>
+                  <option value="Jharkhand"></option>
+                  <option value="Karnataka"></option>
+                  <option value="Kerala"></option>
+                  <option value="Ladakh"></option>
+                  <option value="Madhya Pradesh"></option>
+                  <option value="Maharashtra"></option>
+                  <option value="Manipur"></option>
+                  <option value="Meghalaya"></option>
+                  <option value="Mizoram"></option>
+                  <option value="Nagaland"></option>
+                  <option value="Odisha"></option>
+                  <option value="Punjab"></option>
+                  <option value="Rajasthan"></option>
+                  <option value="Sikkim"></option>
+                  <option value="Tamil Nadu"></option>
+                  <option value="Telangana"></option>
+                  <option value="Tripura"></option>
+                  <option value="Uttar Pradesh"></option>
+                  <option value="Uttarakhand"></option>
+                  <option value="West Bengal"></option>
+                </datalist>
+                {% if form.state.errors %}
+                  <div class="auth-field-error">{{ form.state.errors[0] }}</div>
+                {% endif %}
+              </div>
+
+              <!-- Country -->
+              <div class="auth-field">
+                <label for="{{ form.country.id }}" class="sub-label">
+                  <i class="fas fa-globe-asia"></i> Country <span class="req">*</span>
+                </label>
+                <div class="auth-input-wrap">
+                  {{ form.country(class="auth-input auth-select", id="regCountry", **{"required": True}) }}
+                  <i class="fas fa-chevron-down auth-select-icon"></i>
+                </div>
+                {% if form.country.errors %}
+                  <div class="auth-field-error">{{ form.country.errors[0] }}</div>
+                {% endif %}
+              </div>
+            </div>
+            
+            {{ form.location(id="regLocationHidden", type="hidden") }}
           </div>
 
           <div class="auth-field" style="margin-top: 0.5rem;">
@@ -608,6 +694,125 @@ select.auth-select {
   z-index: 2;
 }
 
+/* ==============================================================================
+   SPLIT PHONE & LOCATION AESTHETICS (DARK-GOLD LUXURY)
+   ============================================================================== */
+.phone-split-input-wrap {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+  width: 100%;
+}
+
+.phone-country-code-box {
+  position: relative;
+  width: 145px;
+  flex-shrink: 0;
+}
+
+.phone-country-code-box select.phone-code-select {
+  width: 100% !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  cursor: pointer !important;
+  padding: 0.82rem 1.85rem 0.82rem 0.95rem !important;
+  font-size: 0.92rem !important;
+  font-family: var(--serif, Georgia, serif) !important;
+  background: rgba(18, 13, 9, 0.95) !important;
+  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.35)) !important;
+  border-radius: 8px !important;
+  color: var(--paper-bright, #fdfaf2) !important;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6) !important;
+  transition: all 0.25s ease !important;
+}
+
+.phone-country-code-box select.phone-code-select:focus {
+  border-color: var(--gold-3, #f0d48a) !important;
+  box-shadow: 0 0 15px rgba(212, 166, 74, 0.35), inset 0 2px 6px rgba(0, 0, 0, 0.6) !important;
+}
+
+.phone-code-arrow {
+  position: absolute;
+  right: 0.8rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gold, #d4a64a);
+  pointer-events: none;
+  font-size: 0.75rem;
+  z-index: 2;
+}
+
+.phone-number-box {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.phone-number-box input.phone-number-input {
+  width: 100% !important;
+  padding-left: 3.2rem !important;
+}
+
+.location-split-block {
+  margin-top: 0.6rem;
+  padding: 1.15rem 1.25rem 1.25rem;
+  background: rgba(14, 10, 6, 0.45);
+  border: 1px solid rgba(212, 166, 74, 0.22);
+  border-radius: 12px;
+}
+
+.location-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid rgba(212, 166, 74, 0.15);
+}
+
+.location-group-label {
+  font-size: 0.95rem;
+  color: var(--paper-bright, #fdfaf2);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.location-hint {
+  font-size: 0.78rem;
+  color: var(--gold-3, #f0d48a);
+  letter-spacing: 0.03em;
+  opacity: 0.85;
+}
+
+.location-grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.15rem;
+}
+
+.sub-label {
+  font-size: 0.86rem !important;
+  color: var(--paper-2, #d6c9a3) !important;
+}
+
+@media (max-width: 768px) {
+  .location-grid-3 {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+  .phone-country-code-box {
+    width: 118px !important;
+  }
+  .phone-country-code-box select.phone-code-select {
+    padding-left: 0.65rem !important;
+    padding-right: 1.5rem !important;
+    font-size: 0.85rem !important;
+  }
+}
+
 .avatar-dropzone {
   display: flex;
   align-items: center;
@@ -893,6 +1098,120 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
+
+  // 2-Way Synchronization between Country and Country Code
+  const countryCodeSelect = document.getElementById('countryCodeSelect');
+  const regCountry = document.getElementById('regCountry');
+  const regCity = document.getElementById('regCity');
+  const regState = document.getElementById('regState');
+  const regLocationHidden = document.getElementById('regLocationHidden');
+
+  const countryToCode = {
+      'India': '+91',
+      'United States': '+1',
+      'United Kingdom': '+44',
+      'Canada': '+1',
+      'Australia': '+61',
+      'United Arab Emirates': '+971',
+      'Nepal': '+977',
+      'Singapore': '+65',
+      'Malaysia': '+60',
+      'Germany': '+49',
+      'France': '+33',
+      'South Africa': '+27',
+      'New Zealand': '+64',
+      'Mauritius': '+230',
+      'Sri Lanka': '+94',
+      'Switzerland': '+41',
+      'Netherlands': '+31',
+      'Ireland': '+353',
+      'Japan': '+81',
+      'Trinidad and Tobago': '+1868',
+      'Guyana': '+592',
+      'Fiji': '+679',
+      'Bangladesh': '+880',
+      'Saudi Arabia': '+966',
+      'Oman': '+968',
+      'Kuwait': '+965',
+      'Qatar': '+974',
+      'Indonesia': '+62',
+      'Thailand': '+66',
+      'Italy': '+39',
+      'Spain': '+34',
+      'Sweden': '+46',
+      'Norway': '+47',
+      'Denmark': '+45',
+      'Brazil': '+55',
+      'Russia': '+7'
+    };
+
+    const codeToCountry = {
+      '+91': 'India',
+      '+1': 'United States',
+      '+44': 'United Kingdom',
+      '+61': 'Australia',
+      '+971': 'United Arab Emirates',
+      '+977': 'Nepal',
+      '+65': 'Singapore',
+      '+60': 'Malaysia',
+      '+49': 'Germany',
+      '+33': 'France',
+      '+27': 'South Africa',
+      '+64': 'New Zealand',
+      '+230': 'Mauritius',
+      '+94': 'Sri Lanka',
+      '+41': 'Switzerland',
+      '+31': 'Netherlands',
+      '+353': 'Ireland',
+      '+81': 'Japan',
+      '+1868': 'Trinidad and Tobago',
+      '+592': 'Guyana',
+      '+679': 'Fiji',
+      '+880': 'Bangladesh',
+      '+966': 'Saudi Arabia',
+      '+968': 'Oman',
+      '+965': 'Kuwait',
+      '+974': 'Qatar',
+      '+62': 'Indonesia',
+      '+66': 'Thailand',
+      '+39': 'Italy',
+      '+34': 'Spain',
+      '+46': 'Sweden',
+      '+47': 'Norway',
+      '+45': 'Denmark',
+      '+55': 'Brazil',
+      '+7': 'Russia'
+    };
+
+    if (regCountry && countryCodeSelect) {
+      regCountry.addEventListener('change', function() {
+        const match = countryToCode[this.value];
+        if (match) {
+          countryCodeSelect.value = match;
+        }
+      });
+
+      countryCodeSelect.addEventListener('change', function() {
+        const match = codeToCountry[this.value];
+        if (match && regCountry.value !== match) {
+          regCountry.value = match;
+        }
+      });
+    }
+
+    function syncLocation() {
+      if (regLocationHidden && regCity && regState && regCountry) {
+        const parts = [regCity.value.trim(), regState.value.trim(), regCountry.value.trim()].filter(Boolean);
+        regLocationHidden.value = parts.join(', ');
+      }
+    }
+
+    if (regCity && regState && regCountry) {
+      regCity.addEventListener('input', syncLocation);
+      regState.addEventListener('input', syncLocation);
+      regCountry.addEventListener('change', syncLocation);
+      syncLocation();
+    }
 });
 </script>
 {% endblock %}

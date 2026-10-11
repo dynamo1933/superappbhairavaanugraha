@@ -19,8 +19,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
   <!-- Master Stylesheets -->
-  <link rel="stylesheet" href="/static/css/superapp.css?v=3" />
-  <link rel="stylesheet" href="/static/css/unified-header.css?v=3" />
+  <link rel="stylesheet" href="/static/css/superapp.css?v=4" />
+  <link rel="stylesheet" href="/static/css/unified-header.css?v=5" />
   <link rel="stylesheet" href="/static/css/admin-dark-gold.css?v=3" />
 
   {% block extra_head %}{% endblock %}
@@ -94,6 +94,15 @@
           <span class="kbd">⌘K</span>
         </button>
 
+        <!-- Submit Queries Button for Devotees -->
+        {% if current_user.is_authenticated and not current_user.is_admin() %}
+        <button type="button" class="submit-query-btn" id="open-query-modal-btn" title="Submit Queries to Guruji / Administrator">
+          <i class="fas fa-feather-pointed"></i>
+          <span class="query-btn-text">Submit Queries</span>
+          <span class="query-notification-badge" id="header-query-badge" style="{% if not unread_user_chat_count or unread_user_chat_count == 0 %}display: none;{% endif %}">{{ unread_user_chat_count or 0 }}</span>
+        </button>
+        {% endif %}
+
         <!-- User Authentication & Profile Controls -->
         {% if current_user.is_authenticated %}
         <div class="user-menu-wrap">
@@ -124,12 +133,14 @@
             <a href="/auth/profile"><i class="fas fa-id-badge"></i> Spiritual Profile</a>
             <a href="/sadhana-paddhati"><i class="fas fa-route"></i> My Sādhana Path</a>
             <a href="/mandala-sadhana"><i class="fas fa-scroll"></i> Mandala Sādhana Vow</a>
-            <a href="/chat" style="display: flex; justify-content: space-between; align-items: center;">
-              <span><i class="fas fa-comments" style="color: var(--gold-3, #f0d48a);"></i> Spiritual Guidance Chat</span>
+            {% if not current_user.is_admin() %}
+            <a href="javascript:void(0)" id="dropdown-query-btn" style="display: flex; justify-content: space-between; align-items: center;">
+              <span><i class="fas fa-feather-pointed" style="color: var(--gold-3, #f0d48a);"></i> Submit Queries &amp; Guidance</span>
               {% if unread_user_chat_count and unread_user_chat_count > 0 %}
-                <span style="background: #eab308; color: #0c0a08; font-size: 0.68rem; font-weight: 700; padding: 2px 7px; border-radius: 999px; box-shadow: 0 0 8px rgba(234, 179, 8, 0.6);">{{ unread_user_chat_count }} new</span>
+                <span style="background: #eab308; color: #0c0a08; font-size: 0.68rem; font-weight: 700; padding: 2px 7px; border-radius: 999px; box-shadow: 0 0 8px rgba(234, 179, 8, 0.6);" id="dropdown-query-badge">{{ unread_user_chat_count }} new</span>
               {% endif %}
             </a>
+            {% endif %}
             
             {% if current_user.is_admin() %}
             <div class="divider"></div>
@@ -175,13 +186,24 @@
   </header>
 
   <!-- ==================== ASHTAMI ALERT RIBBON ==================== -->
-  <div class="ashtami-banner">
+  <div class="ashtami-banner" data-start-iso="2026-10-03T08:00:00+05:30" data-end-iso="2026-10-04T05:52:00+05:30" data-title="Krishna Paksha Ashtami">
     <div class="ashtami-inner">
-      <span class="pulse-dot"></span>
-      <span class="ashtami-text">Next Krishna Paksha Ashtami: <strong>Oct 03, 8:00 AM – Oct 04, 5:52 AM IST</strong></span>
+      <span class="pulse-dot" title="Live Sacred Tithi Gateway"></span>
+      <span class="ashtami-text">Next Krishna Paksha Ashtami: <strong class="ashtami-timing-val" id="ashtami-timing-val">Oct 03, 8:00 AM – Oct 04, 5:52 AM IST</strong></span>
+      
+      <!-- GMT Badge & Change Button -->
+      <button type="button" class="ashtami-gmt-btn" id="ashtami-gmt-btn" aria-haspopup="dialog" aria-expanded="false" title="Change GMT / Timezone (Auto-detected from country)">
+        <span class="gmt-globe">🌐</span>
+        <span class="gmt-val" id="ashtami-gmt-val">GMT+5:30 (India)</span>
+        <span class="gmt-change-pill">Change GMT ▾</span>
+      </button>
+
       <a href="/ashtami" class="ashtami-link">Explore Sacred Gateways →</a>
     </div>
   </div>
+
+  <!-- Sacred Timezone & GMT Modal -->
+  {% include "components/gmt_modal.html" ignore missing %}
 
   <!-- ==================== FLASH ALERTS ==================== -->
   {% with messages = get_flashed_messages(with_categories=true) %}
@@ -285,14 +307,16 @@
 
       {% if current_user.is_authenticated %}
       <li><a href="/auth/profile" style="color: var(--gold-bright);">ॐ My Profile ({{ current_user.username }})</a></li>
+      {% if not current_user.is_admin() %}
       <li>
-        <a href="/chat" style="color: #f0d48a; display: flex; justify-content: space-between; align-items: center;">
-          <span>💬 Spiritual Guidance Chat</span>
+        <a href="javascript:void(0)" id="drawer-query-btn" style="color: #f0d48a; display: flex; justify-content: space-between; align-items: center;">
+          <span><i class="fas fa-feather-pointed"></i> Submit Queries</span>
           {% if unread_user_chat_count and unread_user_chat_count > 0 %}
-            <span style="background: #eab308; color: #0c0a08; font-size: 0.68rem; font-weight: 700; padding: 1px 6px; border-radius: 999px;">{{ unread_user_chat_count }} new</span>
+            <span id="drawer-query-badge" style="background: #eab308; color: #0c0a08; font-size: 0.68rem; font-weight: 700; padding: 1px 6px; border-radius: 999px;">{{ unread_user_chat_count }} new</span>
           {% endif %}
         </a>
       </li>
+      {% endif %}
         {% if current_user.is_admin() %}
         <li><a href="/auth/admin/users" style="color: var(--gold);">⚡ Admin Management</a></li>
         <li><a href="/admin/mandala-sadhana">📜 Sādhana Vows</a></li>
@@ -309,10 +333,15 @@
     </ul>
   </div>
 
-  <!-- Spiritual Chat Drawer Widget for Logged In Sadhaks -->
-  {% if current_user.is_authenticated and not request.path.startswith('/admin/chat') %}
+  <!-- Spiritual Chat Drawer Widget for Admin Only -->
+  {% if current_user.is_authenticated and current_user.is_admin() and not request.path.startswith('/admin/chat') %}
     {% include "components/chat_widget.html" ignore missing %}
     <script src="/static/js/chat.js?v=3"></script>
+  {% endif %}
+
+  <!-- Devotee Query & Guidance Modal for Normal Users -->
+  {% if current_user.is_authenticated and not current_user.is_admin() %}
+    {% include "components/query_modal.html" ignore missing %}
   {% endif %}
 
   <!-- Master Script -->

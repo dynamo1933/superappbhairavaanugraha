@@ -51,9 +51,11 @@
           </div>
 
           <div class="auth-remember-row">
-            <label class="custom-auth-checkbox">
-              {{ form.remember_me(class="checkbox-native", id="remember_me") }}
-              <span class="auth-checkbox-box"></span>
+            <label class="custom-auth-checkbox" for="remember_me">
+              <span class="auth-checkbox-visual-wrap">
+                {{ form.remember_me(class="checkbox-native", id="remember_me") }}
+                <span class="auth-checkbox-box" aria-hidden="true"></span>
+              </span>
               <span class="auth-checkbox-label">Keep me remembered on this sacred device</span>
             </label>
           </div>
@@ -309,25 +311,37 @@ input.auth-input::placeholder {
   margin-top: -0.25rem;
 }
 
-.checkbox-native {
-  position: absolute !important;
-  opacity: 0 !important;
-  width: 0 !important;
-  height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  pointer-events: none !important;
-  appearance: none !important;
-  -webkit-appearance: none !important;
-}
-
 .custom-auth-checkbox {
   position: relative;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 10px;
   cursor: pointer;
   user-select: none;
+}
+
+.auth-checkbox-visual-wrap {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.checkbox-native {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  opacity: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  cursor: pointer !important;
+  z-index: 2 !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
 }
 
 .auth-checkbox-box {
@@ -339,7 +353,7 @@ input.auth-input::placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+  pointer-events: none;
   transition: all 0.2s ease;
 }
 
@@ -363,6 +377,7 @@ input.auth-input::placeholder {
 .auth-checkbox-label {
   font-size: 0.88rem;
   color: var(--paper-2, #d6c9a3);
+  cursor: pointer;
 }
 
 .auth-btn-row {
@@ -509,6 +524,24 @@ document.addEventListener('DOMContentLoaded', function() {
       const isPassword = passwordInput.type === 'password';
       passwordInput.type = isPassword ? 'text' : 'password';
       toggleIcon.className = isPassword ? 'fas fa-eye-slash' : 'fas fa-eye';
+    });
+  }
+
+  // Sacred device "Remember Me" persistent preference handling
+  const rememberCheckbox = document.getElementById('remember_me');
+  if (rememberCheckbox) {
+    const savedPref = localStorage.getItem('daiva_remember_device');
+    if (savedPref === 'true') {
+      rememberCheckbox.checked = true;
+    }
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+      loginForm.addEventListener('submit', function() {
+        localStorage.setItem('daiva_remember_device', rememberCheckbox.checked ? 'true' : 'false');
+      });
+    }
+    rememberCheckbox.addEventListener('change', function() {
+      localStorage.setItem('daiva_remember_device', rememberCheckbox.checked ? 'true' : 'false');
     });
   }
 });

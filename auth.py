@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify, send_file, send_from_directory, abort
+from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify, send_file, send_from_directory, abort, session
 from flask_login import login_user, logout_user, login_required, current_user
 from urllib.parse import urlparse
 from models import db, User, StageAccessRequest, MandalaSadhanaRegistration, OfflineDonation, ChatMessage
@@ -41,6 +41,7 @@ def login():
             return redirect(url_for('auth.login'))
         
         login_user(user, remember=form.remember_me.data)
+        session.permanent = bool(form.remember_me.data)
         user.last_active = datetime.utcnow()
         db.session.commit()
         next_page = request.args.get('next')
@@ -101,18 +102,41 @@ def register():
                 file.save(file_path)
                 profile_picture_path = f"uploads/profiles/{filename}"
         
+        # Construct phone with country code
+        raw_phone = (form.phone.data or '').strip()
+        code = (getattr(form, 'country_code', None) and form.country_code.data or '+91').strip()
+        if raw_phone:
+            if not raw_phone.startswith('+') and code and code != 'Other':
+                full_phone = f"{code} {raw_phone}"
+            else:
+                full_phone = raw_phone
+        else:
+            full_phone = None
+
+        # Construct combined location and extract city, state, country
+        clean_city = getattr(form, 'city', None) and (form.city.data or '').strip() or ''
+        clean_state = getattr(form, 'state', None) and (form.state.data or '').strip() or ''
+        clean_country = getattr(form, 'country', None) and (form.country.data or '').strip() or 'India'
+
+        loc_parts = [p for p in [clean_city, clean_state, clean_country] if p]
+        combined_location = ', '.join(loc_parts) if loc_parts else (form.location.data or '').strip()
+
         user = User(
             username=clean_username,
             email=clean_email,
             full_name=(form.full_name.data or '').strip(),
-            phone=(form.phone.data or '').strip() or None,
+            country_code=code,
+            phone=full_phone,
+            city=clean_city or None,
+            state=clean_state or None,
+            country=clean_country or 'India',
+            location=combined_location,
             address=(form.address.data or '').strip() or None,
             practice_level=form.practice_level.data,
             purpose=form.purpose.data,
             profile_picture=profile_picture_path,
             date_of_birth=form.date_of_birth.data,
             gender=form.gender.data,
-            location=(form.location.data or '').strip(),
             preferred_language=form.preferred_language.data,
             referral_source=(form.referral_source.data or '').strip() or None
         )
