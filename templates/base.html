@@ -186,6 +186,7 @@
   </header>
 
   <!-- ==================== ASHTAMI ALERT RIBBON ==================== -->
+  {% if not (request.path == '/ashtami' or (active_page is defined and active_page == 'ashtami')) %}
   <div class="ashtami-banner" data-start-iso="2026-10-03T08:00:00+05:30" data-end-iso="2026-10-04T05:52:00+05:30" data-title="Krishna Paksha Ashtami">
     <div class="ashtami-inner">
       <span class="pulse-dot" title="Live Sacred Tithi Gateway"></span>
@@ -201,6 +202,7 @@
       <a href="/ashtami" class="ashtami-link">Explore Sacred Gateways →</a>
     </div>
   </div>
+  {% endif %}
 
   <!-- Sacred Timezone & GMT Modal -->
   {% include "components/gmt_modal.html" ignore missing %}

@@ -388,13 +388,14 @@ function initDropdownTouchSupport() {
 function initAshtamiTimezoneEngine() {
   const banner = document.querySelector('.ashtami-banner');
   const timingVals = document.querySelectorAll('.ashtami-timing-val');
+  const pageTimingVal = document.getElementById('ashtami-page-timing-val');
 
   // If no banner and no timing display on page, exit
-  if (!banner && timingVals.length === 0) return;
+  if (!banner && timingVals.length === 0 && !pageTimingVal) return;
 
   // Canonical base timestamps (IST, UTC+05:30)
-  let startIso = (banner && banner.getAttribute('data-start-iso')) || '2026-10-03T08:00:00+05:30';
-  let endIso = (banner && banner.getAttribute('data-end-iso')) || '2026-10-04T05:52:00+05:30';
+  let startIso = (pageTimingVal && pageTimingVal.getAttribute('data-start-iso')) || (banner && banner.getAttribute('data-start-iso')) || '2026-10-03T08:00:00+05:30';
+  let endIso = (pageTimingVal && pageTimingVal.getAttribute('data-end-iso')) || (banner && banner.getAttribute('data-end-iso')) || '2026-10-04T05:52:00+05:30';
 
   // Comprehensive IANA Timezone to Country & Region Mapping
   const TZ_COUNTRY_MAP = {
