@@ -1042,6 +1042,14 @@
                             <i class="fas fa-play-circle"></i> Reactivate User
                         </button>
                         {% endif %}
+                        {% set pending_user_resets = user.password_reset_requests|selectattr('status', 'equalto', 'pending')|list if user.password_reset_requests else [] %}
+                        {% if pending_user_resets|length > 0 %}
+                        <div class="user-reset-alert-box" style="width: 100%; margin-bottom: 0.75rem; padding: 0.75rem 1rem; background: rgba(234, 179, 8, 0.15); border: 1px solid #eab308; border-radius: 8px; color: #fde047; font-size: 0.85rem;">
+                            <i class="fas fa-key"></i> <strong>Password Reset Request Pending:</strong> Requested {{ pending_user_resets[-1].requested_at.strftime('%b %d, %Y %I:%M %p') if pending_user_resets[-1].requested_at else 'recently' }}.
+                            {% if pending_user_resets[-1].note %}
+                            <div style="margin-top: 4px; font-style: italic; color: #d6c9a3;">"{{ pending_user_resets[-1].note }}"</div>
+                            {% endif %}
+                        </div>
                         {% endif %}
                         <!-- Change Password - Available for all users -->
                         <button class="action-button password" id="changePasswordBtn" data-user-id="{{ user.id }}">

@@ -437,3 +437,34 @@ class ChatMessage(db.Model):
             'is_from_admin': self.is_from_admin,
             'sender_name': self.sender.full_name if self.sender else 'Unknown'
         }
+
+class PasswordResetRequest(db.Model):
+    """Model for tracking password reset requests from devotees"""
+    __tablename__ = 'password_reset_request'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    status = db.Column(db.String(20), default='pending')  # 'pending', 'resolved', 'dismissed'
+    requested_at = db.Column(db.DateTime, default=datetime.utcnow)
+    resolved_at = db.Column(db.DateTime, nullable=True)
+    resolved_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    note = db.Column(db.Text, nullable=True)
+
+    # Relationships
+    user = db.relationship('User', foreign_keys=[user_id], backref='password_reset_requests')
+    resolver = db.relationship('User', foreign_keys=[resolved_by], backref='resolved_password_resets')
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'username': self.user.username if self.user else None,
+            'full_name': self.user.full_name if self.user else None,
+            'email': self.user.email if self.user else None,
+            'phone': self.user.phone if self.user else None,
+            'status': self.status,
+            'requested_at': self.requested_at.strftime('%Y-%m-%d %H:%M:%S') if self.requested_at else None,
+            'note': self.note
+        }
+
+    def __repr__(self):
+        return f'<PasswordResetRequest {self.user.username if self.user else self.user_id} - {self.status}>'

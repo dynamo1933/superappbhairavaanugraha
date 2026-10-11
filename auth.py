@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify, send_file, send_from_directory, abort, session
 from flask_login import login_user, logout_user, login_required, current_user
 from urllib.parse import urlparse
-from models import db, User, StageAccessRequest, MandalaSadhanaRegistration, OfflineDonation, ChatMessage
-from forms import LoginForm, RegistrationForm, AdminApprovalForm, UserSearchForm, EditProfileForm
+from models import db, User, StageAccessRequest, MandalaSadhanaRegistration, OfflineDonation, ChatMessage, PasswordResetRequest
+from forms import LoginForm, RegistrationForm, AdminApprovalForm, UserSearchForm, EditProfileForm, ForgotPasswordForm
 from datetime import datetime, timedelta
 import os
 from io import BytesIO
@@ -52,6 +52,82 @@ def login():
         return redirect(next_page)
     
     return render_template('auth/login.html', title='Login', form=form, page_title='Login - Daiva Anughara')
+
+@auth.route('/forgot-password', methods=['POST'])
+def forgot_password():
+    """Devotee Forgot Password submission: notifies administrator and logs request"""
+    try:
+        data = request.get_json(silent=True) or request.form.to_dict() or {}
+        identity = (data.get('identity') or '').strip()
+        note = (data.get('note') or '').strip()
+
+        if not identity:
+            return jsonify({
+                'success': False,
+                'message': 'Please provide your registered Username or Devotee Email address.'
+            }), 400
+
+        # Look up seeker by case-insensitive username or email
+        user = User.query.filter(
+            db.or_(
+                db.func.lower(User.username) == identity.lower(),
+                db.func.lower(User.email) == identity.lower()
+            )
+        ).first()
+
+        if not user:
+            return jsonify({
+                'success': False,
+                'message': 'No registered devotee record was found matching this username or email. Please verify your details or register as a Sadhak.'
+            }), 404
+
+        # Check for existing pending request or create new
+        existing_req = PasswordResetRequest.query.filter_by(user_id=user.id, status='pending').first()
+        if existing_req:
+            existing_req.requested_at = datetime.utcnow()
+            if note:
+                existing_req.note = note
+            reset_req = existing_req
+        else:
+            reset_req = PasswordResetRequest(
+                user_id=user.id,
+                status='pending',
+                note=note or 'Devotee requested password reset via the Sanctuary login portal.'
+            )
+            db.session.add(reset_req)
+
+        # Dispatch automated ChatMessage inquiry to admins
+        admins = User.query.filter_by(role='admin').all()
+        for admin in admins:
+            chat_msg = ChatMessage(
+                sender_id=user.id,
+                recipient_id=admin.id,
+                message=(
+                    f"🔑 [PASSWORD RESET REQUEST]\n"
+                    f"Seeker: {user.full_name or user.username} (@{user.username})\n"
+                    f"Email: {user.email}\n"
+                    f"Phone: {user.phone or 'Not provided'}\n"
+                    f"Requested: {datetime.utcnow().strftime('%b %d, %Y %I:%M %p UTC')}\n"
+                    f"Devotee Note: {note or 'Forgotten password assistance requested.'}\n"
+                    f"Action: Reset password in User Management (User ID: {user.id})."
+                ),
+                is_admin_message=False,
+                is_from_admin=False
+            )
+            db.session.add(chat_msg)
+
+        db.session.commit()
+
+        return jsonify({
+            'success': True,
+            'message': f'Password reset request submitted for {user.full_name or user.username}! Temple Administration has been notified to reset your password.',
+            'username': user.username,
+            'request_id': reset_req.id
+        })
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'message': f'An error occurred: {str(e)}'}), 500
 
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
@@ -201,12 +277,15 @@ def admin_users():
     
     # Get all pending stage access requests
     pending_requests = StageAccessRequest.query.filter_by(status='pending').order_by(StageAccessRequest.requested_at.desc()).all()
+    # Get all pending password reset requests
+    pending_password_resets = PasswordResetRequest.query.filter_by(status='pending').order_by(PasswordResetRequest.requested_at.desc()).all()
     
     return render_template('admin/users.html', 
                          title='User Management',
                          page_title='User Management - Daiva Anughara',
                          users=users,
                          pending_requests=pending_requests,
+                         pending_password_resets=pending_password_resets,
                          search_form=search_form,
                          approval_form=approval_form)
 
@@ -1395,6 +1474,23 @@ def approve_stage_request(request_id):
         db.session.rollback()
         return jsonify({'success': False, 'message': 'An error occurred. Please try again.'}), 500
 
+@auth.route('/admin/password-resets/<int:request_id>/dismiss', methods=['POST'])
+@login_required
+def admin_dismiss_password_reset(request_id):
+    """Admin endpoint to dismiss a password reset request without changing password"""
+    if not current_user.is_admin():
+        return jsonify({'success': False, 'message': 'Access denied. Admin privileges required.'}), 403
+    try:
+        req = PasswordResetRequest.query.get_or_404(request_id)
+        req.status = 'dismissed'
+        req.resolved_at = datetime.utcnow()
+        req.resolved_by = current_user.id
+        db.session.commit()
+        return jsonify({'success': True, 'message': f'Password reset request for {req.user.username if req.user else req.user_id} dismissed.'})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'message': str(e)}), 500
+
 @auth.route('/admin/user/<int:user_id>/change-password', methods=['POST'])
 @login_required
 def admin_change_password(user_id):
@@ -1424,11 +1520,32 @@ def admin_change_password(user_id):
         
         # Update password
         user.set_password(new_password)
+        
+        # Automatically mark all pending password reset requests for this user as resolved
+        pending_resets = PasswordResetRequest.query.filter_by(user_id=user.id, status='pending').all()
+        for pr in pending_resets:
+            pr.status = 'resolved'
+            pr.resolved_at = datetime.utcnow()
+            pr.resolved_by = current_user.id
+
+        # Send confirmation message to seeker in chat
+        try:
+            confirm_msg = ChatMessage(
+                sender_id=current_user.id,
+                recipient_id=user.id,
+                message=f"Om Namah Shivaya. Your password has been successfully reset by Administrator @{current_user.username}. You may now sign in with your updated credentials.",
+                is_admin_message=True,
+                is_from_admin=True
+            )
+            db.session.add(confirm_msg)
+        except Exception:
+            pass
+
         db.session.commit()
         
         return jsonify({
             'success': True,
-            'message': f'Password successfully changed for {user.username}'
+            'message': f'Password successfully changed for {user.username}. Reset request resolved.'
         })
         
     except Exception as e:

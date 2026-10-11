@@ -11,6 +11,10 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
 
+class ForgotPasswordForm(FlaskForm):
+    identity = StringField('Username or Email', validators=[DataRequired(), Length(min=3, max=120)], filters=[strip_filter])
+    note = TextAreaField('Note', validators=[Optional(), Length(max=500)], filters=[strip_filter])
+
 COUNTRY_CODE_CHOICES = [
     ('+91', '🇮🇳 +91 (India)'),
     ('+1', '🇺🇸 +1 (USA / Canada)'),

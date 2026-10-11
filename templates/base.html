@@ -115,8 +115,8 @@
             <span class="user-btn-name">{{ current_user.full_name.split()[0] if current_user.full_name else current_user.username }}</span>
             {% if current_user.is_admin() %}
               <span class="admin-badge-mini">ADMIN</span>
-              {% if (pending_users_count and pending_users_count > 0) or (unread_chat_count and unread_chat_count > 0) %}
-                <span title="{{ pending_users_count }} pending approvals / {{ unread_chat_count }} unread chats" style="width: 8px; height: 8px; border-radius: 50%; background: #eab308; display: inline-block; box-shadow: 0 0 6px #eab308;"></span>
+              {% if (pending_users_count and pending_users_count > 0) or (unread_chat_count and unread_chat_count > 0) or (pending_password_resets_count and pending_password_resets_count > 0) %}
+                <span title="{{ pending_users_count or 0 }} pending approvals / {{ pending_password_resets_count or 0 }} reset requests / {{ unread_chat_count or 0 }} unread chats" style="width: 8px; height: 8px; border-radius: 50%; background: #eab308; display: inline-block; box-shadow: 0 0 6px #eab308;"></span>
               {% endif %}
             {% else %}
               {% if unread_user_chat_count and unread_user_chat_count > 0 %}
@@ -147,8 +147,16 @@
             <div style="padding: 0.4rem 1.25rem 0.2rem; font-size: 0.7rem; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">Admin Desk</div>
             <a href="/auth/admin/users" style="display: flex; justify-content: space-between; align-items: center;">
               <span><i class="fas fa-users-gear"></i> User Management</span>
-              {% if pending_users_count and pending_users_count > 0 %}
-                <span style="background: #eab308; color: #0c0a08; font-size: 0.68rem; font-weight: 700; padding: 2px 7px; border-radius: 999px; box-shadow: 0 0 8px rgba(234, 179, 8, 0.6);">{{ pending_users_count }} pending</span>
+              {% if (pending_users_count and pending_users_count > 0) or (pending_password_resets_count and pending_password_resets_count > 0) %}
+                <span style="background: #eab308; color: #0c0a08; font-size: 0.68rem; font-weight: 700; padding: 2px 7px; border-radius: 999px; box-shadow: 0 0 8px rgba(234, 179, 8, 0.6);">
+                  {% if pending_password_resets_count and pending_password_resets_count > 0 and pending_users_count and pending_users_count > 0 %}
+                    {{ pending_users_count + pending_password_resets_count }} alerts
+                  {% elif pending_password_resets_count and pending_password_resets_count > 0 %}
+                    {{ pending_password_resets_count }} reset req
+                  {% else %}
+                    {{ pending_users_count }} pending
+                  {% endif %}
+                </span>
               {% endif %}
             </a>
             <a href="/admin/mandala-sadhana"><i class="fas fa-feather"></i> Sādhana Registrations</a>

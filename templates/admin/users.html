@@ -1648,6 +1648,9 @@
                                     {% else %}
                                         <span class="sacred-badge badge-pending"><i class="fas fa-hourglass-half"></i> Pending Vetting</span>
                                     {% endif %}
+                                    {% if user.password_reset_requests and (user.password_reset_requests|selectattr('status', 'equalto', 'pending')|list|length > 0) %}
+                                        <span class="sacred-badge badge-warning" style="background: rgba(234, 179, 8, 0.2); border: 1px solid #eab308; color: #fef08a;"><i class="fas fa-key"></i> Reset Requested</span>
+                                    {% endif %}
                                     <span class="sacred-badge badge-role">{{ user.role|title }}</span>
                                 </div>
 
@@ -1658,6 +1661,9 @@
                                     <a href="/admin/chat?user={{ user.id }}" class="card-action-icon-btn chat" title="Open Spiritual Mentorship Channel">
                                         <i class="fas fa-comments"></i>
                                     </a>
+                                    <button type="button" class="card-action-icon-btn password open-user-password-modal" data-user-id="{{ user.id }}" data-username="{{ user.username }}" title="Reset / Change Sacred Key" style="color: #fde047;">
+                                        <i class="fas fa-key"></i>
+                                    </button>
                                     {% if not user.is_admin() %}
                                         {% if user.is_approved and user.is_active %}
                                             <button type="button" class="card-action-icon-btn suspend suspend-user" data-user-id="{{ user.id }}" title="Suspend Sadhak Account">
@@ -1830,6 +1836,9 @@
                                         <a href="/admin/chat?user={{ user.id }}" class="card-action-icon-btn chat" title="Chat" style="width: 32px; height: 32px; font-size: 0.8rem;">
                                             <i class="fas fa-comments"></i>
                                         </a>
+                                        <button type="button" class="card-action-icon-btn password open-user-password-modal" data-user-id="{{ user.id }}" data-username="{{ user.username }}" title="Reset / Change Password" style="width: 32px; height: 32px; font-size: 0.8rem; color: #fde047;">
+                                            <i class="fas fa-key"></i>
+                                        </button>
                                         {% if not user.is_admin() %}
                                             {% if not user.is_approved and user.is_active %}
                                                 <button type="button" class="card-action-icon-btn approve approve-user" data-user-id="{{ user.id }}" title="Approve" style="width: 32px; height: 32px; font-size: 0.8rem;">
@@ -1852,6 +1861,51 @@
 
             <!-- Right Column: Sidebar Requests Queue & Demographics -->
             <div class="desk-sidebar-stack">
+                <!-- PASSWORD RESET REQUESTS QUEUE -->
+                {% if pending_password_resets and pending_password_resets|length > 0 %}
+                <div class="desk-sidebar-card" id="passwordResetsCard" style="border: 1px solid rgba(234, 179, 8, 0.45); box-shadow: 0 0 20px rgba(234, 179, 8, 0.12);">
+                    <div class="sidebar-card-header" style="background: rgba(234, 179, 8, 0.12); border-bottom: 1px solid rgba(234, 179, 8, 0.25);">
+                        <h3 style="color: #fde047;">
+                            <i class="fas fa-key" style="color: #fde047;"></i>
+                            <span>Password Reset Queue</span>
+                        </h3>
+                        <span class="sidebar-badge" style="background: rgba(234, 179, 8, 0.25); color: #fef08a; border: 1px solid rgba(234, 179, 8, 0.5);">{{ pending_password_resets|length }} Pending</span>
+                    </div>
+
+                    <div class="requests-queue-list">
+                        {% for req in pending_password_resets %}
+                        <div class="request-queue-item" id="reset-req-card-{{ req.id }}" style="border-left: 3px solid #eab308; padding: 0.85rem;">
+                            <div class="req-user-headline">
+                                <div class="req-avatar-mini" style="background: linear-gradient(135deg, #78350f, #451a03); color: #fde047;">
+                                    {{ (req.user.full_name or req.user.username)[:1].upper() if req.user else '?' }}
+                                </div>
+                                <div>
+                                    <div class="req-user-name" style="color: #fff; font-weight: 700;">{{ req.user.full_name or req.user.username if req.user else 'Unknown Seeker' }}</div>
+                                    <div style="font-size: 0.75rem; color: var(--desk-muted);">@{{ req.user.username if req.user else req.user_id }} · {{ req.user.email if req.user else '' }}</div>
+                                </div>
+                            </div>
+                            {% if req.note %}
+                            <div style="font-size: 0.78rem; color: var(--desk-paper-dim); background: rgba(0,0,0,0.3); padding: 5px 8px; border-radius: 6px; margin: 6px 0; font-style: italic;">
+                                "{{ req.note }}"
+                            </div>
+                            {% endif %}
+                            <div class="req-stage-callout" style="margin-top: 4px;">
+                                <span class="req-stage-time"><i class="fas fa-clock"></i> {{ req.requested_at.strftime('%b %d, %I:%M %p') if req.requested_at else 'Recently' }}</span>
+                            </div>
+                            <div class="req-btn-row" style="margin-top: 8px;">
+                                <button type="button" class="btn-req-action approve open-user-password-modal" data-user-id="{{ req.user_id }}" data-username="{{ req.user.username if req.user else '' }}" title="Set New Password">
+                                    <i class="fas fa-key"></i> Reset Password
+                                </button>
+                                <button type="button" class="btn-req-action reject dismiss-reset-request-btn" data-request-id="{{ req.id }}" title="Dismiss Request">
+                                    <i class="fas fa-times"></i> Dismiss
+                                </button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
                 <!-- 1. STAGE ACCESS REQUEST QUEUE -->
                 <div class="desk-sidebar-card">
                     <div class="sidebar-card-header requests-theme">
@@ -1958,6 +2012,37 @@
         <div class="modal-box-footer">
             <button type="button" class="btn-sacred-dark" onclick="closeConfirmModal()">Cancel</button>
             <button type="button" class="btn-sacred-gold" id="confirmActionBtn" style="background: linear-gradient(135deg, #ef4444, #991b1b); color: #fff; border-color: #f87171;">Confirm</button>
+        </div>
+    </div>
+</div>
+
+<!-- ADMIN USER PASSWORD RESET MODAL -->
+<div class="modal-overlay" id="adminPasswordModal" role="dialog" aria-modal="true" aria-labelledby="pwdModalHeaderTitle">
+    <div class="modal-box">
+        <div class="modal-box-header">
+            <h3 id="pwdModalHeaderTitle"><i class="fas fa-key" style="color: #fde047;"></i> Reset Seeker Password</h3>
+            <button type="button" class="modal-close-btn" onclick="closeAdminPasswordModal()" aria-label="Close">×</button>
+        </div>
+        <div class="modal-box-body">
+            <p style="margin-top: 0; margin-bottom: 1rem; color: var(--desk-paper-dim); font-size: 0.9rem;">
+                Set a new sacred password for <strong id="adminPwdModalUsername" style="color: #fde047;"></strong>.
+            </p>
+            <input type="hidden" id="adminPwdModalUserId" value="">
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; color: var(--desk-paper-dim); margin-bottom: 0.35rem;">New Password</label>
+                <input type="password" id="adminNewPassword" class="command-search-input" style="width: 100%; border-radius: 8px; padding: 0.65rem 0.85rem; background: rgba(14, 10, 6, 0.8); border: 1px solid var(--desk-gold-border); color: #fff;" placeholder="Minimum 6 characters" autocomplete="new-password">
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; color: var(--desk-paper-dim); margin-bottom: 0.35rem;">Confirm New Password</label>
+                <input type="password" id="adminConfirmPassword" class="command-search-input" style="width: 100%; border-radius: 8px; padding: 0.65rem 0.85rem; background: rgba(14, 10, 6, 0.8); border: 1px solid var(--desk-gold-border); color: #fff;" placeholder="Re-enter new password" autocomplete="new-password">
+            </div>
+            <div id="adminPwdError" style="color: #fca5a5; font-size: 0.82rem; margin-top: 0.5rem; display: none;"></div>
+        </div>
+        <div class="modal-box-footer">
+            <button type="button" class="btn-sacred-dark" onclick="closeAdminPasswordModal()">Cancel</button>
+            <button type="button" class="btn-sacred-gold" id="btnAdminSavePassword" onclick="saveAdminPassword()">
+                <i class="fas fa-save"></i> Save &amp; Resolve
+            </button>
         </div>
     </div>
 </div>
@@ -2651,6 +2736,137 @@ function showToast(message, type = 'success') {
         setTimeout(() => toast.remove(), 250);
     }, 4500);
 }
+
+// ==========================================================================
+// ADMIN USER PASSWORD RESET MODAL CONTROLLER
+// ==========================================================================
+function openAdminPasswordModal(userId, username) {
+    const modal = document.getElementById('adminPasswordModal');
+    if (!modal) return;
+    document.getElementById('adminPwdModalUserId').value = userId;
+    document.getElementById('adminPwdModalUsername').textContent = `@${username}`;
+    document.getElementById('adminNewPassword').value = '';
+    document.getElementById('adminConfirmPassword').value = '';
+    const errBox = document.getElementById('adminPwdError');
+    if (errBox) { errBox.style.display = 'none'; errBox.textContent = ''; }
+    modal.classList.add('active');
+    setTimeout(() => document.getElementById('adminNewPassword')?.focus(), 100);
+}
+
+function closeAdminPasswordModal() {
+    const modal = document.getElementById('adminPasswordModal');
+    if (modal) modal.classList.remove('active');
+}
+
+function saveAdminPassword() {
+    const userId = document.getElementById('adminPwdModalUserId').value;
+    const newPassword = document.getElementById('adminNewPassword').value.trim();
+    const confirmPassword = document.getElementById('adminConfirmPassword').value.trim();
+    const errBox = document.getElementById('adminPwdError');
+    const saveBtn = document.getElementById('btnAdminSavePassword');
+    const csrf = document.querySelector('input[name="csrf_token"]')?.value || '';
+
+    if (!newPassword) {
+        if (errBox) { errBox.textContent = 'Password is required.'; errBox.style.display = 'block'; }
+        return;
+    }
+    if (newPassword.length < 6) {
+        if (errBox) { errBox.textContent = 'Password must be at least 6 characters long.'; errBox.style.display = 'block'; }
+        return;
+    }
+    if (newPassword !== confirmPassword) {
+        if (errBox) { errBox.textContent = 'Passwords do not match.'; errBox.style.display = 'block'; }
+        return;
+    }
+
+    if (errBox) errBox.style.display = 'none';
+    if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+    }
+
+    fetch(`/auth/admin/user/${userId}/change-password`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': csrf
+        },
+        body: new URLSearchParams({
+            'new_password': newPassword,
+            'confirm_password': confirmPassword,
+            'csrf_token': csrf
+        })
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success) {
+            showToast(data.message, 'success');
+            closeAdminPasswordModal();
+            // Remove pending badge if present on card
+            const userCard = document.querySelector(`.seeker-dossier-card[data-user-id="${userId}"]`);
+            if (userCard) {
+                userCard.querySelectorAll('.badge-warning').forEach(b => b.remove());
+            }
+            // Remove from sidebar queue if present
+            document.querySelectorAll(`[id^="reset-req-card-"]`).forEach(card => {
+                if (card.querySelector(`[data-user-id="${userId}"]`)) card.remove();
+            });
+        } else {
+            if (errBox) { errBox.textContent = data.message || 'Error changing password.'; errBox.style.display = 'block'; }
+            showToast(data.message || 'Error changing password.', 'error');
+        }
+    })
+    .catch(err => {
+        if (errBox) { errBox.textContent = 'Network communication error.'; errBox.style.display = 'block'; }
+        showToast('Network communication error.', 'error');
+    })
+    .finally(() => {
+        if (saveBtn) {
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = '<i class="fas fa-save"></i> Save &amp; Resolve';
+        }
+    });
+}
+
+function dismissResetRequest(requestId) {
+    if (!confirm('Are you sure you want to dismiss this password reset request?')) return;
+    const csrf = document.querySelector('input[name="csrf_token"]')?.value || '';
+    fetch(`/auth/admin/password-resets/${requestId}/dismiss`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrf
+        }
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success) {
+            showToast(data.message, 'success');
+            const el = document.getElementById(`reset-req-card-${requestId}`);
+            if (el) el.remove();
+        } else {
+            showToast(data.message || 'Error dismissing request.', 'error');
+        }
+    })
+    .catch(() => showToast('Error dismissing request.', 'error'));
+}
+
+// Bind password modal open and dismiss buttons
+document.addEventListener('click', function(e) {
+    const pwdBtn = e.target.closest('.open-user-password-modal');
+    if (pwdBtn) {
+        const uid = pwdBtn.getAttribute('data-user-id');
+        const uname = pwdBtn.getAttribute('data-username') || '';
+        openAdminPasswordModal(uid, uname);
+        return;
+    }
+    const dismissBtn = e.target.closest('.dismiss-reset-request-btn');
+    if (dismissBtn) {
+        const rid = dismissBtn.getAttribute('data-request-id');
+        dismissResetRequest(rid);
+        return;
+    }
+});
 
 // Close modals on backdrop click or ESC key
 document.querySelectorAll('.modal-overlay').forEach(overlay => {

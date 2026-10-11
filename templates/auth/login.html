@@ -50,14 +50,17 @@
             {% endif %}
           </div>
 
-          <div class="auth-remember-row">
+          <div class="auth-remember-row auth-flex-between">
             <label class="custom-auth-checkbox" for="remember_me">
               <span class="auth-checkbox-visual-wrap">
                 {{ form.remember_me(class="checkbox-native", id="remember_me") }}
                 <span class="auth-checkbox-box" aria-hidden="true"></span>
               </span>
-              <span class="auth-checkbox-label">Keep me remembered on this sacred device</span>
+              <span class="auth-checkbox-label">Keep me remembered</span>
             </label>
+            <a href="javascript:void(0)" class="auth-forgot-link" id="openForgotModalBtn" title="Request Password Reset Assistance">
+              <i class="fas fa-key"></i> Forgot Password?
+            </a>
           </div>
 
           <div class="auth-btn-row">
@@ -80,6 +83,68 @@
         </div>
       </div>
 
+    </div>
+
+    <!-- ==================== FORGOT PASSWORD SACRED MODAL ==================== -->
+    <div class="forgot-modal-backdrop" id="forgotPasswordModal" aria-hidden="true" role="dialog" aria-labelledby="forgotModalTitle">
+      <div class="forgot-modal-dialog">
+        <div class="card-glow-edge"></div>
+        <div class="forgot-modal-header">
+          <div class="forgot-header-brand">
+            <div class="sacred-emblem-ring-mini">
+              <span class="emblem-om-mini">ॐ</span>
+            </div>
+            <div>
+              <h2 class="forgot-modal-title" id="forgotModalTitle">Sacred Access Recovery</h2>
+              <p class="forgot-modal-sub">Notify Temple Administration to Reset Credentials</p>
+            </div>
+          </div>
+          <button type="button" class="forgot-close-btn" id="closeForgotModalBtn" aria-label="Close dialog">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <div class="forgot-modal-body">
+          <p class="forgot-explainer">
+            Enter your registered <strong>Username</strong> or <strong>Devotee Email</strong>. A reset notification will be transmitted to the Temple Administration to reset your sacred key.
+          </p>
+
+          <div id="forgotAlertBox" class="forgot-alert" style="display: none;"></div>
+
+          <form id="forgotPasswordForm" class="forgot-form" novalidate>
+            <input type="hidden" name="csrf_token" id="forgotCsrfToken" value="{{ csrf_token() }}">
+
+            <div class="auth-field">
+              <label for="forgotIdentityInput">
+                <i class="fas fa-user-circle"></i> Username or Devotee Email <span class="req">*</span>
+              </label>
+              <div class="auth-input-wrap">
+                <input type="text" id="forgotIdentityInput" name="identity" class="auth-input" placeholder="e.g. seeker_bhairav or seeker@domain.com" required autocomplete="username">
+                <i class="fas fa-id-card auth-field-icon"></i>
+              </div>
+            </div>
+
+            <div class="auth-field" style="margin-top: 1rem;">
+              <label for="forgotNoteInput">
+                <i class="fas fa-pen-nib"></i> Note / Assistance Reason (Optional)
+              </label>
+              <div class="auth-input-wrap">
+                <textarea id="forgotNoteInput" name="note" class="auth-input auth-textarea" placeholder="Brief note for administrator (e.g. Lost password, please reset)..." rows="2"></textarea>
+              </div>
+            </div>
+
+            <div class="forgot-modal-footer">
+              <button type="button" class="forgot-btn-cancel" id="cancelForgotModalBtn">
+                Cancel
+              </button>
+              <button type="submit" class="auth-submit-btn forgot-submit-btn" id="submitForgotBtn">
+                <i class="fas fa-paper-plane"></i>
+                <span class="btn-text">Notify Admin &amp; Request Reset</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -311,6 +376,32 @@ input.auth-input::placeholder {
   margin-top: -0.25rem;
 }
 
+.auth-flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.auth-forgot-link {
+  color: var(--gold-3, #f0d48a);
+  font-size: 0.85rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.auth-forgot-link:hover {
+  color: #fff;
+  text-shadow: 0 0 10px rgba(212, 166, 74, 0.6);
+  transform: translateY(-1px);
+}
+
 .custom-auth-checkbox {
   position: relative;
   display: inline-flex;
@@ -511,6 +602,178 @@ input.auth-input::placeholder {
     padding: 0.8rem 1.25rem;
   }
 }
+/* ==================== FORGOT PASSWORD MODAL STYLES ==================== */
+.forgot-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 5, 3, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 99999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.forgot-modal-backdrop.is-active {
+  display: flex;
+  opacity: 1;
+}
+
+.forgot-modal-dialog {
+  position: relative;
+  background: rgba(22, 16, 12, 0.96);
+  border: 1px solid var(--gold-border, rgba(212, 166, 74, 0.45));
+  border-radius: 18px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(212, 166, 74, 0.25);
+  overflow: hidden;
+  transform: scale(0.95);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.forgot-modal-backdrop.is-active .forgot-modal-dialog {
+  transform: scale(1);
+}
+
+.forgot-modal-header {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(212, 166, 74, 0.18);
+  background: rgba(14, 10, 6, 0.6);
+}
+
+.forgot-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.sacred-emblem-ring-mini {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--gold, #d4a64a);
+  background: radial-gradient(circle, rgba(212, 166, 74, 0.25) 0%, rgba(14, 10, 6, 0.8) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 12px rgba(212, 166, 74, 0.3);
+}
+
+.emblem-om-mini {
+  color: var(--gold-bright, #f8e5b9);
+  font-size: 1.25rem;
+  font-family: var(--serif, serif);
+}
+
+.forgot-modal-title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--gold-bright, #f8e5b9);
+  font-family: var(--serif, serif);
+  letter-spacing: 0.5px;
+}
+
+.forgot-modal-sub {
+  margin: 2px 0 0;
+  font-size: 0.78rem;
+  color: var(--paper-dim, #b8ab96);
+}
+
+.forgot-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--paper-dim, #b8ab96);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.forgot-close-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.forgot-modal-body {
+  padding: 1.5rem;
+}
+
+.forgot-explainer {
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--paper, #e9dfc8);
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+  opacity: 0.92;
+}
+
+.auth-textarea {
+  resize: vertical;
+  min-height: 64px;
+  padding: 0.75rem 1rem !important;
+  font-family: inherit;
+}
+
+.forgot-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.forgot-btn-cancel {
+  background: transparent;
+  border: 1px solid rgba(212, 166, 74, 0.25);
+  color: var(--paper-dim, #b8ab96);
+  padding: 0.7rem 1.25rem;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.forgot-btn-cancel:hover {
+  border-color: var(--gold, #d4a64a);
+  color: var(--paper, #e9dfc8);
+}
+
+.forgot-submit-btn {
+  width: auto !important;
+  padding: 0.7rem 1.4rem !important;
+  font-size: 0.92rem !important;
+}
+
+.forgot-alert {
+  padding: 0.85rem 1.1rem;
+  border-radius: 10px;
+  margin-bottom: 1.25rem;
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.forgot-alert.alert-error {
+  background: rgba(220, 38, 38, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  color: #fca5a5;
+}
+
+.forgot-alert.alert-success {
+  background: rgba(22, 101, 52, 0.2);
+  border: 1px solid rgba(34, 197, 94, 0.5);
+  color: #86efac;
+}
 </style>
 
 <script>
@@ -543,6 +806,130 @@ document.addEventListener('DOMContentLoaded', function() {
     rememberCheckbox.addEventListener('change', function() {
       localStorage.setItem('daiva_remember_device', rememberCheckbox.checked ? 'true' : 'false');
     });
+  }
+
+  // ==================== FORGOT PASSWORD MODAL CONTROLLER ====================
+  const modal = document.getElementById('forgotPasswordModal');
+  const openBtn = document.getElementById('openForgotModalBtn');
+  const closeBtn = document.getElementById('closeForgotModalBtn');
+  const cancelBtn = document.getElementById('cancelForgotModalBtn');
+  const form = document.getElementById('forgotPasswordForm');
+  const identityInput = document.getElementById('forgotIdentityInput');
+  const noteInput = document.getElementById('forgotNoteInput');
+  const submitBtn = document.getElementById('submitForgotBtn');
+  const alertBox = document.getElementById('forgotAlertBox');
+
+  function openModal() {
+    if (!modal) return;
+    modal.classList.add('is-active');
+    modal.setAttribute('aria-hidden', 'false');
+    // Pre-fill with username from login form if already typed
+    const loginUsername = document.querySelector('input[name="username"]')?.value || '';
+    if (loginUsername && identityInput && !identityInput.value) {
+      identityInput.value = loginUsername;
+    }
+    if (alertBox) {
+      alertBox.style.display = 'none';
+      alertBox.className = 'forgot-alert';
+      alertBox.innerHTML = '';
+    }
+    setTimeout(() => identityInput?.focus(), 100);
+  }
+
+  function closeModal() {
+    if (!modal) return;
+    modal.classList.remove('is-active');
+    modal.setAttribute('aria-hidden', 'true');
+  }
+
+  if (openBtn) openBtn.addEventListener('click', openModal);
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+
+  // Close on backdrop click
+  if (modal) {
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) closeModal();
+    });
+  }
+
+  // Close on Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && modal && modal.classList.contains('is-active')) {
+      closeModal();
+    }
+  });
+
+  // Handle Form Submission
+  if (form) {
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const identity = (identityInput?.value || '').trim();
+      const note = (noteInput?.value || '').trim();
+      const csrf = document.getElementById('forgotCsrfToken')?.value || 
+                   document.querySelector('input[name="csrf_token"]')?.value || '';
+
+      if (!identity) {
+        showAlert('Please enter your registered Username or Devotee Email address.', 'error');
+        identityInput?.focus();
+        return;
+      }
+
+      // UI Loading state
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Transmitting...';
+      }
+
+      try {
+        const response = await fetch('/auth/forgot-password', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrf
+          },
+          body: JSON.stringify({
+            identity: identity,
+            note: note,
+            csrf_token: csrf
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          showAlert(`✓ ${data.message}`, 'success');
+          if (identityInput) identityInput.disabled = true;
+          if (noteInput) noteInput.disabled = true;
+          if (submitBtn) {
+            submitBtn.style.display = 'none';
+          }
+          if (cancelBtn) {
+            cancelBtn.innerHTML = '← Return to Sign In';
+            cancelBtn.className = 'auth-submit-btn forgot-submit-btn';
+          }
+        } else {
+          showAlert(data.message || 'Unable to submit request. Please verify your details.', 'error');
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> <span class="btn-text">Notify Admin &amp; Request Reset</span>';
+          }
+        }
+      } catch (err) {
+        showAlert('Network communication error. Please try again or check connection.', 'error');
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> <span class="btn-text">Notify Admin &amp; Request Reset</span>';
+        }
+      }
+    });
+  }
+
+  function showAlert(msg, type) {
+    if (!alertBox) return;
+    alertBox.style.display = 'block';
+    alertBox.className = `forgot-alert alert-${type}`;
+    alertBox.innerHTML = msg;
   }
 });
 </script>

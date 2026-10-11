@@ -178,9 +178,9 @@ else:
 # ==============================================================================
 from models import (
     db, User, DonationPurpose, OfflineDonation, MandalaSadhanaRegistration,
-    StageAccessRequest, ChatMessage
+    StageAccessRequest, ChatMessage, PasswordResetRequest
 )
-from auth import auth
+from auth import auth, forgot_password
 from forms import (
     DonationPurposeForm, OfflineDonationForm, DonationSearchForm,
     MandalaSadhanaRegistrationForm, MandalaSadhanaSearchForm
@@ -189,6 +189,7 @@ from google_sheets import get_sheets_manager
 
 db.init_app(app)
 csrf = CSRFProtect(app)
+csrf.exempt(forgot_password)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'auth.login'
@@ -301,12 +302,14 @@ def inject_admin_notifications():
     pending_users = 0
     pending_requests = 0
     unread_user_chat = 0
+    pending_password_resets = 0
     if current_user.is_authenticated:
         try:
             if current_user.is_admin():
                 unread_chat = ChatMessage.query.filter_by(is_admin_message=False, is_read=False).count()
                 pending_users = User.query.filter_by(is_approved=False, is_active=True, role='user').count()
                 pending_requests = StageAccessRequest.query.filter_by(status='pending').count()
+                pending_password_resets = PasswordResetRequest.query.filter_by(status='pending').count()
             else:
                 unread_user_chat = ChatMessage.query.filter_by(recipient_id=current_user.id, is_admin_message=True, is_read=False).count()
         except Exception:
@@ -315,7 +318,8 @@ def inject_admin_notifications():
         unread_chat_count=unread_chat,
         unread_user_chat_count=unread_user_chat,
         pending_users_count=pending_users,
-        pending_stage_requests=pending_requests
+        pending_stage_requests=pending_requests,
+        pending_password_resets_count=pending_password_resets
     )
 
 # ==============================================================================
