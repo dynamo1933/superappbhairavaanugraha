@@ -76,7 +76,33 @@ app = Flask(
 )
 app.config['TEMPLATES_AUTO_RELOAD'] = not IS_PRODUCTION
 app.jinja_env.auto_reload = not IS_PRODUCTION
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'bhairava-anugraha-superapp-sacred-key-2026')
+
+# Secret key configuration without hardcoded fallback
+secret_key = os.getenv('SECRET_KEY') or os.getenv('FLASK_SECRET_KEY')
+if not secret_key or secret_key.strip() in ('', 'your-secret-key-here-change-in-production', 'bhairava-anugraha-superapp-sacred-key-2026'):
+    secret_key = None
+    # Try reading persistent key from instance directory if available
+    secret_file = os.path.join(instance_dir, '.secret_key')
+    if os.path.exists(secret_file):
+        try:
+            with open(secret_file, 'r', encoding='utf-8') as sf:
+                secret_key = sf.read().strip()
+        except Exception:
+            secret_key = None
+    
+    # Generate cryptographically secure random key if still not set
+    if not secret_key:
+        import secrets
+        secret_key = secrets.token_hex(32)
+        try:
+            with open(secret_file, 'w', encoding='utf-8') as sf:
+                sf.write(secret_key)
+        except Exception:
+            pass
+        if IS_PRODUCTION:
+            print("[!] Security Notice: SECRET_KEY not provided in environment. Generated an ephemeral cryptographically secure secret.", file=sys.stderr)
+
+app.config['SECRET_KEY'] = secret_key
 app.config['UPLOAD_FOLDER'] = uploads_dir
 app.config['MAX_CONTENT_LENGTH'] = int(os.getenv('MAX_CONTENT_LENGTH', 16 * 1024 * 1024))
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
