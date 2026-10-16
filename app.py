@@ -106,6 +106,7 @@ app.config['SECRET_KEY'] = secret_key
 app.config['UPLOAD_FOLDER'] = uploads_dir
 app.config['MAX_CONTENT_LENGTH'] = int(os.getenv('MAX_CONTENT_LENGTH', 16 * 1024 * 1024))
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['WTF_CSRF_TIME_LIMIT'] = int(os.getenv('WTF_CSRF_TIME_LIMIT', 3600 * 24 * 7))  # 7-day CSRF validity
 
 # Production Security, Session, and Remember Cookie settings
 from datetime import timedelta
@@ -1493,6 +1494,20 @@ def format_date_filter(val, fmt='%B %d, %Y'):
                 pass
         return val[:10]
     return str(val)
+
+@app.errorhandler(CSRFError)
+def handle_csrf_error(e):
+    """Gracefully handle expired or invalid CSRF tokens without raw Bad Request crash"""
+    flash('Your security session timed out. Please sign in again.', 'warning')
+    if request.is_json or request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return jsonify({
+            'success': False,
+            'message': 'Security token expired. Please refresh the page and try again.'
+        }), 400
+    
+    # Redirect back to the referrer or login page so a fresh token is generated
+    target = request.referrer or url_for('auth.login')
+    return redirect(target)
 
 @app.errorhandler(404)
 def not_found_error(error):
