@@ -910,12 +910,17 @@
                 <div class="profile-header">
                     <div class="profile-avatar">
                         {% if user.profile_picture %}
-                        <img src="{{ url_for('static', filename=user.profile_picture) }}" alt="{{ user.full_name }}">
+                        <img src="{{ url_for('auth.profile_picture', user_id=user.id) }}" alt="{{ user.full_name or user.username }}" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';">
+                        <div style="width: 100%; height: 100%; display: none; align-items: center; justify-content: center; font-size: 2.2rem; font-weight: 700; color: #f0d48a; background: linear-gradient(135deg, rgba(212,166,74,0.3), rgba(20,16,24,0.9));">
+                            {{ (user.full_name or user.username or 'S')[:1].upper() }}
+                        </div>
                         {% else %}
-                        <img src="https://i.pravatar.cc/240?u={{ user.id }}" alt="{{ user.full_name }}">
+                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; font-weight: 700; color: #f0d48a; background: linear-gradient(135deg, rgba(212,166,74,0.3), rgba(20,16,24,0.9));">
+                            {{ (user.full_name or user.username or 'S')[:1].upper() }}
+                        </div>
                         {% endif %}
                     </div>
-                    <h2 class="profile-name">{{ user.full_name }}</h2>
+                    <h2 class="profile-name">{{ user.full_name or user.username }}</h2>
                     <p class="profile-username">@{{ user.username }}</p>
                     {% if user.spiritual_name %}
                     <p class="profile-spiritual">"{{ user.spiritual_name }}"</p>
@@ -956,11 +961,11 @@
                         </form>
                     </div>
 
-                    <!-- Basic Info -->
+                    <!-- Basic & Registration Info -->
                     <div class="info-section">
                         <div class="info-section-title">
                             <i class="fas fa-user"></i>
-                            <span>Basic Information</span>
+                            <span>Seeker Demographics</span>
                         </div>
                         <div class="info-row">
                             <div class="info-icon"><i class="fas fa-envelope"></i></div>
@@ -977,10 +982,61 @@
                             </div>
                         </div>
                         <div class="info-row">
-                            <div class="info-icon"><i class="fas fa-calendar"></i></div>
+                            <div class="info-icon"><i class="fas fa-venus-mars"></i></div>
                             <div class="info-content">
-                                <span class="info-label">Joined</span>
-                                <span class="info-value">{{ user.created_at.strftime('%B %d, %Y') }}</span>
+                                <span class="info-label">Gender</span>
+                                <span class="info-value">{{ user.gender or 'Not specified' }}</span>
+                            </div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-icon"><i class="fas fa-birthday-cake"></i></div>
+                            <div class="info-content">
+                                <span class="info-label">Date of Birth</span>
+                                <span class="info-value">{{ user.date_of_birth|format_date if user.date_of_birth else 'Not provided' }}</span>
+                            </div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <div class="info-content">
+                                <span class="info-label">Location / Sanctuary</span>
+                                <span class="info-value">{{ user.location or ([user.city, user.state, user.country]|select|join(', ')) or 'Not specified' }}</span>
+                            </div>
+                        </div>
+                        {% if user.address %}
+                        <div class="info-row">
+                            <div class="info-icon"><i class="fas fa-home"></i></div>
+                            <div class="info-content">
+                                <span class="info-label">Postal Address</span>
+                                <span class="info-value">{{ user.address }}</span>
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div class="info-row">
+                            <div class="info-icon"><i class="fas fa-language"></i></div>
+                            <div class="info-content">
+                                <span class="info-label">Preferred Language</span>
+                                <span class="info-value">{{ user.preferred_language or 'Not specified' }}</span>
+                            </div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-icon"><i class="fas fa-compass"></i></div>
+                            <div class="info-content">
+                                <span class="info-label">Referral Source</span>
+                                <span class="info-value">{{ user.referral_source or 'Direct Sanctuary Aspirant' }}</span>
+                            </div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-icon"><i class="fas fa-calendar-check"></i></div>
+                            <div class="info-content">
+                                <span class="info-label">Initiated / Joined</span>
+                                <span class="info-value">{{ user.created_at|format_date if user.created_at else 'Ancient' }}</span>
+                            </div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-icon"><i class="fas fa-clock"></i></div>
+                            <div class="info-content">
+                                <span class="info-label">Last Active</span>
+                                <span class="info-value">{{ user.last_active|format_date('%b %d, %Y %I:%M %p') if user.last_active else 'Never' }}</span>
                             </div>
                         </div>
                     </div>
@@ -1042,10 +1098,11 @@
                             <i class="fas fa-play-circle"></i> Reactivate User
                         </button>
                         {% endif %}
-                        {% set pending_user_resets = user.password_reset_requests|selectattr('status', 'equalto', 'pending')|list if user.password_reset_requests else [] %}
-                        {% if pending_user_resets|length > 0 %}
+                        {% endif %}
+                        {% set pending_user_resets = (user.password_reset_requests|selectattr('status', 'equalto', 'pending')|list) if user.password_reset_requests else [] %}
+                        {% if pending_user_resets and pending_user_resets|length > 0 %}
                         <div class="user-reset-alert-box" style="width: 100%; margin-bottom: 0.75rem; padding: 0.75rem 1rem; background: rgba(234, 179, 8, 0.15); border: 1px solid #eab308; border-radius: 8px; color: #fde047; font-size: 0.85rem;">
-                            <i class="fas fa-key"></i> <strong>Password Reset Request Pending:</strong> Requested {{ pending_user_resets[-1].requested_at.strftime('%b %d, %Y %I:%M %p') if pending_user_resets[-1].requested_at else 'recently' }}.
+                            <i class="fas fa-key"></i> <strong>Password Reset Request Pending:</strong> Requested {{ pending_user_resets[-1].requested_at|format_date('%b %d, %Y %I:%M %p') if pending_user_resets[-1].requested_at else 'recently' }}.
                             {% if pending_user_resets[-1].note %}
                             <div style="margin-top: 4px; font-style: italic; color: #d6c9a3;">"{{ pending_user_resets[-1].note }}"</div>
                             {% endif %}
@@ -1425,8 +1482,7 @@
                         <div class="request-item" data-request-id="{{ request.id }}">
                             <div class="request-stage-name">{{ request.get_stage_name() }}</div>
                             <div class="request-date">
-                                <i class="fas fa-calendar-alt"></i> Requested {{ request.requested_at.strftime('%B %d,
-                                %Y at %I:%M %p') }}
+                                <i class="fas fa-calendar-alt"></i> Requested {{ request.requested_at|format_date('%B %d, %Y at %I:%M %p') if request.requested_at else 'Recently' }}
                             </div>
                             <div class="request-buttons">
                                 <button class="request-btn approve btn-approve-request"

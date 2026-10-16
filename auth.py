@@ -336,18 +336,32 @@ def admin_user_detail(user_id):
         flash('Access denied. Admin privileges required.', 'error')
         return redirect(url_for('home'))
     
-    user = User.query.get_or_404(user_id)
-    # Get pending stage access requests for this user
-    pending_requests = StageAccessRequest.query.filter_by(
-        user_id=user_id,
-        status='pending'
-    ).order_by(StageAccessRequest.requested_at.desc()).all()
+    user = User.query.get(user_id)
+    if not user:
+        flash(f'Seeker record #{user_id} was not found or has been removed.', 'warning')
+        return redirect(url_for('auth.admin_users'))
     
-    return render_template('admin/user_detail.html', 
-                         title='User Detail', 
-                         page_title='User Detail - Daiva Anughara', 
-                         user=user,
-                         pending_requests=pending_requests)
+    # Get pending stage access requests for this user safely
+    try:
+        pending_requests = StageAccessRequest.query.filter_by(
+            user_id=user_id,
+            status='pending'
+        ).order_by(StageAccessRequest.requested_at.desc()).all()
+    except Exception as e:
+        print(f"[*] Note: Could not fetch pending requests for user {user_id}: {e}", file=sys.stderr)
+        pending_requests = []
+    
+    try:
+        return render_template('admin/user_detail.html', 
+                             title='User Detail', 
+                             page_title='User Detail - Daiva Anughara', 
+                             user=user,
+                             pending_requests=pending_requests)
+    except Exception as e:
+        import traceback
+        traceback.print_exc(file=sys.stderr)
+        flash(f'Notice: Could not load full seeker profile #{user_id} ({e}). Please try again or check seeker logs.', 'error')
+        return redirect(url_for('auth.admin_users'))
 
 @auth.route('/admin/user/<int:user_id>/stage-access', methods=['POST'])
 @login_required

@@ -1690,16 +1690,16 @@
                                     <i class="fas fa-calendar-alt"></i>
                                     <div class="detail-pill-texts">
                                         <span class="detail-pill-label">Initiated / Joined</span>
-                                        <span class="detail-pill-val">{{ user.created_at.strftime('%b %d, %Y') if user.created_at else 'Ancient' }}</span>
+                                        <span class="detail-pill-val">{{ user.created_at|format_date('%b %d, %Y') if user.created_at else 'Ancient' }}</span>
                                     </div>
                                 </div>
                                 <div class="detail-pill-box">
                                     <i class="fas fa-clock"></i>
                                     <div class="detail-pill-texts">
                                         <span class="detail-pill-label">Last Sādhana Activity</span>
-                                        <span class="detail-pill-val last-active-time" data-user-id="{{ user.id }}" data-timestamp="{{ user.last_active.isoformat() if user.last_active else '' }}">
+                                        <span class="detail-pill-val last-active-time" data-user-id="{{ user.id }}" data-timestamp="{{ user.last_active|string if user.last_active else '' }}">
                                             {% if user.last_active %}
-                                                {{ user.last_active.strftime('%b %d, %I:%M %p') }}
+                                                {{ user.last_active|format_date('%b %d, %I:%M %p') }}
                                             {% else %}
                                                 Never
                                             {% endif %}
@@ -1808,11 +1808,11 @@
                                     </span>
                                 </td>
                                 <td style="color: var(--desk-paper-dim); font-size: 0.82rem;">
-                                    {{ user.created_at.strftime('%b %d, %Y') if user.created_at else '—' }}
+                                    {{ user.created_at|format_date('%b %d, %Y') if user.created_at else '—' }}
                                 </td>
-                                <td class="last-active-time" data-timestamp="{{ user.last_active.isoformat() if user.last_active else '' }}">
+                                <td class="last-active-time" data-timestamp="{{ user.last_active|string if user.last_active else '' }}">
                                     {% if user.last_active %}
-                                        {{ user.last_active.strftime('%b %d, %I:%M %p') }}
+                                        {{ user.last_active|format_date('%b %d, %I:%M %p') }}
                                     {% else %}
                                         Never
                                     {% endif %}
@@ -1890,7 +1890,7 @@
                             </div>
                             {% endif %}
                             <div class="req-stage-callout" style="margin-top: 4px;">
-                                <span class="req-stage-time"><i class="fas fa-clock"></i> {{ req.requested_at.strftime('%b %d, %I:%M %p') if req.requested_at else 'Recently' }}</span>
+                                <span class="req-stage-time"><i class="fas fa-clock"></i> {{ req.requested_at|format_date('%b %d, %I:%M %p') if req.requested_at else 'Recently' }}</span>
                             </div>
                             <div class="req-btn-row" style="margin-top: 8px;">
                                 <button type="button" class="btn-req-action approve open-user-password-modal" data-user-id="{{ req.user_id }}" data-username="{{ req.user.username if req.user else '' }}" title="Set New Password">
@@ -1931,7 +1931,7 @@
                                 </div>
                                 <div class="req-stage-callout">
                                     <span class="req-stage-name"><i class="fas fa-feather"></i> {{ req.get_stage_name() }}</span>
-                                    <span class="req-stage-time">{{ req.requested_at.strftime('%b %d, %I:%M %p') if req.requested_at else 'Recently' }}</span>
+                                    <span class="req-stage-time">{{ req.requested_at|format_date('%b %d, %I:%M %p') if req.requested_at else 'Recently' }}</span>
                                 </div>
                                 <div class="req-btn-row">
                                     <button type="button" class="btn-req-action approve btn-approve-request" data-request-id="{{ req.id }}" title="Grant Stage Access">

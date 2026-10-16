@@ -192,11 +192,34 @@ class User(UserMixin, db.Model):
         start_date = start_dates.get(stage_number)
         completion_date = completion_dates.get(stage_number)
 
-        if start_date and completion_date:
-            return (completion_date - start_date).days
-        elif start_date and not completion_date:
-            # Stage started but not completed
-            return (datetime.utcnow() - start_date).days
+        try:
+            if isinstance(start_date, str):
+                for p in ('%Y-%m-%d %H:%M:%S.%f', '%Y-%m-%d %H:%M:%S', '%Y-%m-%dT%H:%M:%S', '%Y-%m-%d'):
+                    try:
+                        start_date = datetime.strptime(start_date, p)
+                        break
+                    except Exception:
+                        pass
+            if isinstance(completion_date, str):
+                for p in ('%Y-%m-%d %H:%M:%S.%f', '%Y-%m-%d %H:%M:%S', '%Y-%m-%dT%H:%M:%S', '%Y-%m-%d'):
+                    try:
+                        completion_date = datetime.strptime(completion_date, p)
+                        break
+                    except Exception:
+                        pass
+
+            if hasattr(start_date, 'tzinfo') and start_date and start_date.tzinfo:
+                start_date = start_date.replace(tzinfo=None)
+            if hasattr(completion_date, 'tzinfo') and completion_date and completion_date.tzinfo:
+                completion_date = completion_date.replace(tzinfo=None)
+
+            if start_date and completion_date:
+                return max(0, (completion_date - start_date).days)
+            elif start_date and not completion_date:
+                # Stage started but not completed
+                return max(0, (datetime.utcnow() - start_date).days)
+        except Exception:
+            return 0
         return 0
 
     def complete_stage(self, stage_number):

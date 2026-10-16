@@ -117,12 +117,13 @@ if db_url and "sqlite+libsql://" in db_url and "?" in db_url:
     if not parts[0].endswith("/"):
         db_url = f"{parts[0]}/?{parts[1]}"
 
-# Fallback to local SQLite if using sqlite+libsql but driver is not available
+# Load native Turso / LibSQL cloud driver if using sqlite+libsql://
 if db_url and db_url.startswith("sqlite+libsql://"):
     try:
-        import sqlalchemy_libsql
-    except ImportError:
-        print("[*] Note: 'sqlalchemy-libsql' driver is not installed. Using local SQLite database.", file=sys.stderr)
+        import turso_driver
+        print("[+] Turso / LibSQL cloud database driver loaded successfully.", file=sys.stderr)
+    except Exception as e:
+        print(f"[*] Note: Could not load 'turso_driver' ({e}). Using local SQLite database.", file=sys.stderr)
         db_url = None
 
 if IS_VERCEL:
@@ -1445,17 +1446,45 @@ def serve_media(filename):
     abort(404)
 
 # ==============================================================================
-# ERROR HANDLERS
+# JINJA TEMPLATE FILTERS & ERROR HANDLERS
 # ==============================================================================
+@app.template_filter('format_date')
+def format_date_filter(val, fmt='%B %d, %Y'):
+    """Safe date and datetime formatting filter for Jinja templates"""
+    if not val:
+        return '—'
+    if hasattr(val, 'strftime'):
+        try:
+            return val.strftime(fmt)
+        except Exception:
+            return str(val)
+    if isinstance(val, str):
+        for pattern in ('%Y-%m-%d %H:%M:%S.%f', '%Y-%m-%d %H:%M:%S', '%Y-%m-%dT%H:%M:%S', '%Y-%m-%d'):
+            try:
+                dt = datetime.strptime(val, pattern)
+                return dt.strftime(fmt)
+            except Exception:
+                pass
+        return val[:10]
+    return str(val)
+
 @app.errorhandler(404)
 def not_found_error(error):
     return render_template('404.html', page_title='Page Not Found - Bhairava Anugraha'), 404
 
+@app.errorhandler(403)
+def forbidden_error(error):
+    return render_template('404.html', page_title='Access Denied - Bhairava Anugraha'), 403
+
 @app.errorhandler(500)
 def internal_error(error):
-    db.session.rollback()
+    try:
+        db.session.rollback()
+    except Exception:
+        pass
     import traceback
     traceback.print_exc(file=sys.stderr)
+    return render_template('500.html', page_title='Internal Server Error - Bhairava Anugraha'), 500
 @app.after_request
 def apply_security_headers(response):
     """Enforce production security headers on all responses"""
