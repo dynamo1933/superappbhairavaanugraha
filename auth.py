@@ -420,7 +420,7 @@ def complete_user_stage(user_id):
     user = User.query.get_or_404(user_id)
     stage_number = int(request.form.get('stage_number', 0))
 
-    if stage_number < 1 or stage_number > 6:
+    if stage_number < 1 or stage_number > 9:
         flash('Invalid stage number', 'error')
         return redirect(url_for('auth.admin_user_detail', user_id=user_id))
 
@@ -438,14 +438,17 @@ def complete_user_stage(user_id):
     user.complete_stage(stage_number)
 
     # Grant access to next stage if this is not the last stage
-    if stage_number < 6:
+    if stage_number < 9:
         next_stage = stage_number + 1
         access_fields = {
             2: 'mandala_2_access',
             3: 'mandala_3_access',
             4: 'rudraksha_8_mukhi_access',
             5: 'rudraksha_11_mukhi_access',
-            6: 'rudraksha_14_mukhi_access'
+            6: 'rudraksha_14_mukhi_access',
+            7: 'pratham_charana_diksha_access',
+            8: 'dutiya_charana_access',
+            9: 'tritiya_charana_access'
         }
 
         if next_stage in access_fields:
@@ -467,7 +470,7 @@ def reset_user_stage(user_id):
     user = User.query.get_or_404(user_id)
     stage_number = int(request.form.get('stage_number', 0))
 
-    if stage_number < 1 or stage_number > 6:
+    if stage_number < 1 or stage_number > 9:
         flash('Invalid stage number', 'error')
         return redirect(url_for('auth.admin_user_detail', user_id=user_id))
 
@@ -478,7 +481,10 @@ def reset_user_stage(user_id):
         3: 'mandala_3_completed_at',
         4: 'rudraksha_8_mukhi_completed_at',
         5: 'rudraksha_11_mukhi_completed_at',
-        6: 'rudraksha_14_mukhi_completed_at'
+        6: 'rudraksha_14_mukhi_completed_at',
+        7: 'pratham_charana_diksha_completed_at',
+        8: 'dutiya_charana_completed_at',
+        9: 'tritiya_charana_completed_at'
     }
 
     start_fields = {
@@ -487,7 +493,10 @@ def reset_user_stage(user_id):
         3: 'mandala_3_started_at',
         4: 'rudraksha_8_mukhi_started_at',
         5: 'rudraksha_11_mukhi_started_at',
-        6: 'rudraksha_14_mukhi_started_at'
+        6: 'rudraksha_14_mukhi_started_at',
+        7: 'pratham_charana_diksha_started_at',
+        8: 'dutiya_charana_started_at',
+        9: 'tritiya_charana_started_at'
     }
 
     if stage_number in completion_fields:
@@ -495,7 +504,7 @@ def reset_user_stage(user_id):
         setattr(user, start_fields[stage_number], None)
 
     # If resetting a stage, also reset all subsequent stages
-    for i in range(stage_number + 1, 7):
+    for i in range(stage_number + 1, 10):
         if i in completion_fields:
             setattr(user, completion_fields[i], None)
             setattr(user, start_fields[i], None)
@@ -511,6 +520,12 @@ def reset_user_stage(user_id):
             user.rudraksha_11_mukhi_access = False
         elif i == 6:
             user.rudraksha_14_mukhi_access = False
+        elif i == 7:
+            user.pratham_charana_diksha_access = False
+        elif i == 8:
+            user.dutiya_charana_access = False
+        elif i == 9:
+            user.tritiya_charana_access = False
 
     db.session.commit()
 
@@ -1273,15 +1288,30 @@ def user_kpi_data():
     mandala_2_users = len([u for u in users if u.mandala_2_access])
     mandala_3_users = len([u for u in users if u.mandala_3_access])
 
-    # Calculate average days to approval
+    # Calculate average days to approval safely
     approved_users_with_approval_date = [u for u in users if u.is_approved and u.approved_at and u.created_at]
-    if approved_users_with_approval_date:
-        total_days_to_approval = sum([(u.approved_at - u.created_at).days for u in approved_users_with_approval_date])
-        average_days_to_approval = total_days_to_approval / len(approved_users_with_approval_date)
-    else:
-        average_days_to_approval = 0
+    total_days = 0
+    count_valid = 0
+    for u in approved_users_with_approval_date:
+        app_dt = u.approved_at
+        cr_dt = u.created_at
+        try:
+            if isinstance(app_dt, str):
+                app_dt = datetime.strptime(app_dt.split('.')[0], '%Y-%m-%d %H:%M:%S')
+            if isinstance(cr_dt, str):
+                cr_dt = datetime.strptime(cr_dt.split('.')[0], '%Y-%m-%d %H:%M:%S')
+            if hasattr(app_dt, 'tzinfo') and app_dt.tzinfo:
+                app_dt = app_dt.replace(tzinfo=None)
+            if hasattr(cr_dt, 'tzinfo') and cr_dt.tzinfo:
+                cr_dt = cr_dt.replace(tzinfo=None)
+            total_days += max(0, (app_dt - cr_dt).days)
+            count_valid += 1
+        except Exception:
+            pass
+    average_days_to_approval = (total_days / count_valid) if count_valid > 0 else 0
 
     data = {
+        'success': True,
         'kpis': {
             'total_users': total_users,
             'approved_users': approved_users,
